@@ -12,6 +12,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/base" />
+            <option value="$PROJECT_DIR$/wallet_connector/core" />
+            <option value="$PROJECT_DIR$/wallet_connector/dapp" />
+            <option value="$PROJECT_DIR$/wallet_connector/sdkdapp" />
           </set>
         </option>
       </GradleProjectSettings>
