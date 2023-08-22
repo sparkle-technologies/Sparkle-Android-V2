@@ -18,14 +18,16 @@ package com.cyberflow.base.net
 
 import com.drake.net.convert.JSONConvert
 import com.google.gson.GsonBuilder
+import org.json.JSONObject
 import java.lang.reflect.Type
 
-class GsonConverter : JSONConvert() {
+class GsonConverter : JSONConvert(code = "code", message = "msg", success = "0") {
     companion object {
         val gson = GsonBuilder().serializeNulls().create()
     }
 
     override fun <R> String.parseBody(succeed: Type): R? {
-        return gson.fromJson(this, succeed)
+        val data = JSONObject(this).getString("data")
+        return gson.fromJson(data, succeed)
     }
 }

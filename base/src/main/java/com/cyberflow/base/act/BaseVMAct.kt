@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.cyberflow.base.BaseApp
+import com.cyberflow.base.ext.COLOR_TRANSPARENT
+import com.cyberflow.base.ext.immersive
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.base.ext.notNull
 import java.lang.reflect.ParameterizedType
@@ -27,6 +29,7 @@ abstract class BaseVMAct<VM : BaseViewModel> : AppCompatActivity() {
             setContentView(layoutID())
         })
         viewModel = createViewModel(this)
+        immersive(COLOR_TRANSPARENT, true)
         initView(savedInstanceState)
         initData()
     }

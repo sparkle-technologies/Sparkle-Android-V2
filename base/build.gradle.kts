@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -76,5 +77,8 @@ dependencies {
 
     //image
     api("com.github.bumptech.glide:glide:4.15.1")
+
+    // cache mmkv
+    api("com.tencent:mmkv:1.3.0")
 
 }
