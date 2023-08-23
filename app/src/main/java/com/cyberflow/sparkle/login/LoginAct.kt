@@ -2,13 +2,8 @@ package com.cyberflow.sparkle.login
 
 import android.os.Bundle
 import android.util.Log
-import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.act.BaseVBAct
-import com.cyberflow.base.ext.COLOR_TRANSPARENT
-import com.cyberflow.base.ext.immersive
-import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
-import com.cyberflow.sparkle.databinding.ActivityMainBinding
 
 /**
  * 分包
@@ -24,13 +19,21 @@ class LoginAct : BaseVBAct<LoginVM, ActivityLoginBinding>() {
     )
 
     override fun initView(savedInstanceState: Bundle?) {
-        viewModel.userInfo.observe(this){
-            Log.e(TAG, "initView: $it" )
+        viewModel.userInfo.observe(this) {
+            Log.e(TAG, "initView: $it")
             mViewBind.tvMsg.text = "$it"
         }
 
         mViewBind.btnLogin.setOnClickListener {
             viewModel.login(testAccount[2], "MetaMask")
+        }
+
+        mViewBind.btnGoogleLogin.setOnClickListener {
+            viewModel.loginTwitter(this)
+        }
+
+        mViewBind.btnTwitterLogin.setOnClickListener {
+            viewModel.loginTwitter(this)
         }
     }
 
