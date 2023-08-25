@@ -63,6 +63,6 @@ dependencies {
 
     // for unipass - CA
     implementation("org.web3j:core:4.8.7-android")
-    implementation("com.github.UniPassID:custom-auth-android-sdk:v0.1.2")
+    implementation("com.github.UniPassID:android-custom-auth-sdk:v0.0.1-alpha.9")
 
 }

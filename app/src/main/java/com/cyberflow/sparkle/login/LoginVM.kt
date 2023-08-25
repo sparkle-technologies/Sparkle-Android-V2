@@ -3,20 +3,24 @@ package com.cyberflow.sparkle.login
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.scopeLife
+import androidx.lifecycle.viewModelScope
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.drake.net.Post
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
-import org.json.JSONObject
 
 class LoginVM : BaseViewModel() {
 
     var userInfo: MutableLiveData<UserLoginBean> = MutableLiveData()
 
-    fun login(address: String, wallet: String) = scopeLife {
+    fun login(authMsg: String, type: String) = scopeLife {
+
         userInfo.value = Post<UserLoginBean>(Api.SIGN_IN) {
-            json("auth_msg" to address, "type" to wallet)
+            //登录类型 MetaMask、WalletConnect、Coinbase、Twitter、Discord
+            //钱包地址 | Twitter授权code | Discord授权token
+            json("auth_msg" to authMsg, "type" to type)
         }.await()
     }
 
@@ -33,12 +37,17 @@ class LoginVM : BaseViewModel() {
                 // ((OAuthCredential)authResult.getCredential()).getAccessToken().
                 // The OAuth secret can be retrieved by calling:
                 // ((OAuthCredential)authResult.getCredential()).getSecret().
-                Log.e(TAG, "loginTwitter: success ${JSONObject.wrap(it).toString()}")
-                Log.e(TAG, " ${it.additionalUserInfo?.providerId}")
-                Log.e(TAG, " ${it.additionalUserInfo?.username}")
-                Log.e(TAG, " ${it.user?.email}")
-                Log.e(TAG, " ${it.credential?.signInMethod}")
+                Log.e(TAG, "loginTwitter: success $it")
 
+                Log.e(TAG, "additionalUserInfo?.providerId= ${it.additionalUserInfo?.providerId}")
+                Log.e(TAG, "additionalUserInfo?.username= ${it.additionalUserInfo?.username}")
+                Log.e(TAG, "it.credential?.accessToken= ${ (it.credential as? OAuthCredential)?.accessToken }")
+                Log.e(TAG, "it.user?.providerId= ${it.user?.providerId}")
+                Log.e(TAG, "it.credential?.signInMethod= ${it.credential?.signInMethod}")
+
+                viewModelScope.run {
+//                    login((it.credential as? OAuthCredential)?.accessToken ?: "", "Twitter") //TODO  接口还没好
+                }
             }
             .addOnFailureListener {
                 // Handle failure.

@@ -65,7 +65,7 @@ class LikeEtherJS {
             /// init smart account instance
             val smartAccountOption = SmartAccountOptions(
                 signer,
-//                null,
+                null,
                 appId,
                 unipassServerUrl,
                 arrayOf(
@@ -115,8 +115,7 @@ class LikeEtherJS {
             // token=0x569f5ff11e259c8e0639b4082a0db91581a6b83e, name=USDT, symbol=USDT, decimals=6, to=0xba1fa99a0ce4daede485b3195a609310bbd76b64, amount=178, error=null
             // token=0x87f0e95e11a49f56b329a1c143fb22430c07332a, name=USDC, symbol=USDC, decimals=6, to=0xba1fa99a0ce4daede485b3195a609310bbd76b64, amount=199, error=null
             // token=0x0000000000000000000000000000000000000000, name=MATIC, symbol=MATIC, decimals=18, to=0xba1fa99a0ce4daede485b3195a609310bbd76b64, amount=355302004263624, error=null
-            val sendTransactionOptions = SendingTransactionOptions(null)
-//            val sendTransactionOptions = SendingTransactionOptions(null, smartAccountOption.chainOptions[0].chainId.iD.toULong())
+            val sendTransactionOptions = SendingTransactionOptions(null, smartAccount.chainId().iD.toULong())
             if (simulateRet!!.isFeeRequired) {
                 sendTransactionOptions.fee =
                     simulateRet?.feeOptions?.find { it.token.lowercase() == TOKEN_USDC.lowercase() }
