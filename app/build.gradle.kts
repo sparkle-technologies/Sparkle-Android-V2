@@ -52,9 +52,17 @@ dependencies {
 
     implementation(project(mapOf("path" to ":base")))
 
-    // Import the BoM for the Firebase platform
+    // auth for twitter/google social login
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
-    // Add the dependency for the Firebase Authentication library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-auth-ktx")
+
+    // for web3Auth
+    implementation("com.github.web3auth:single-factor-auth-android:0.0.2")
+    implementation("org.torusresearch:fetch-node-details-java:3.1.0")
+    implementation("com.auth0.android:jwtdecode:2.0.2")
+
+    // for unipass - CA
+    implementation("org.web3j:core:4.8.7-android")
+    implementation("com.github.UniPassID:custom-auth-android-sdk:v0.1.2")
+
 }
