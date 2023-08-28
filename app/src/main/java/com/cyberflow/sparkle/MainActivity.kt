@@ -10,7 +10,7 @@ import com.cyberflow.sparkle.databinding.ActivityMainBinding
 class MainActivity : BaseDBAct<BaseViewModel, ActivityMainBinding>() {
 
     override fun initView(savedInstanceState: Bundle?) {
-        immersive(COLOR_TRANSPARENT, true)
+
     }
 
     override fun initData() {

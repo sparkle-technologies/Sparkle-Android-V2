@@ -1,5 +1,6 @@
 package com.cyberflow.sparkle.login.viewmodel
 
+import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.scopeLife
@@ -7,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.cyberflow.base.model.UserLoginBean
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.viewmodel.BaseViewModel
-import com.cyberflow.sparkle.login.view.LoginAct
 import com.drake.net.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
@@ -26,7 +26,7 @@ class LoginViewModel : BaseViewModel() {
         }.await()
     }
 
-    fun loginTwitter(act: LoginAct) {
+    fun loginTwitter(act: Activity) {
         val firebaseAuth = FirebaseAuth.getInstance()
         val provider = OAuthProvider.newBuilder("twitter.com")
         firebaseAuth
@@ -58,7 +58,7 @@ class LoginViewModel : BaseViewModel() {
             }
     }
 
-    fun loginGoogle(act: LoginAct) {
+    fun loginGoogle(act: Activity) {
         val firebaseAuth = FirebaseAuth.getInstance()
         val firebaseUser = firebaseAuth.currentUser
         if (firebaseUser == null) {
