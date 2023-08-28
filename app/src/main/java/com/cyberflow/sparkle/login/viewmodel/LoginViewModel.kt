@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
 
-class LoginVM : BaseViewModel() {
+class LoginViewModel : BaseViewModel() {
 
     var userInfo: MutableLiveData<UserLoginBean> = MutableLiveData()
 

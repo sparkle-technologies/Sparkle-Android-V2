@@ -6,7 +6,7 @@ import android.util.Log
 import com.auth0.android.jwt.JWT
 import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
-import com.cyberflow.sparkle.login.viewmodel.LoginVM
+import com.cyberflow.sparkle.login.viewmodel.LoginViewModel
 import com.web3auth.singlefactorauth.SingleFactorAuth
 import com.web3auth.singlefactorauth.types.LoginParams
 import com.web3auth.singlefactorauth.types.SingleFactorAuthArgs
@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException
 /**
  * 分包
  */
-class LoginAct : BaseVBAct<LoginVM, ActivityLoginBinding>() {
+class LoginAct : BaseVBAct<LoginViewModel, ActivityLoginBinding>() {
 
     val testAccount = arrayListOf(
         "0x150E4AB89Ddd5fa7f8Fb8cae501b48961Ce703A4",
