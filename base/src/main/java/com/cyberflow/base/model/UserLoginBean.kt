@@ -1,4 +1,4 @@
-package com.cyberflow.sparkle.login
+package com.cyberflow.base.model
 
 data class UserLoginBean(
     val id_token: String,

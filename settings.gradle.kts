@@ -30,13 +30,21 @@ dependencyResolutionManagement {
 rootProject.name = "Sparkle"
 include(":app")
 include(":base")
+include(":base_resources")
 
 // wallet-connector
 include(":core")
 include(":sdkdapp")
-include(":dapp")
 
+include(":dapp")
 project(":core").projectDir = File("wallet_connector/core")
 project(":sdkdapp").projectDir = File("wallet_connector/sdkdapp")
 project(":dapp").projectDir = File("wallet_connector/dapp")
-include(":base_resources")
+
+/**
+ * 开发规范
+ *  所有资源 图片 字体大小 颜色 尺寸都放 base_resources   一句话 所有静态资源都放这
+ *  所有工具类  架构  数据实体  都放进 base              一句话 所有处理数据都逻辑都放这
+ *  app 里面只会有具体的业务逻辑 不再分包 widget/自定义view和具体的业务放在一起
+ *      例如 login/{viewmodel, view, widget }         一句话 所有UI业务逻辑都放这
+ */

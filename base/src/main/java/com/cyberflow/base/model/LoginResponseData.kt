@@ -1,4 +1,4 @@
-package com.cyberflow.base.bean
+package com.cyberflow.base.model
 
 class LoginResponseData {
 

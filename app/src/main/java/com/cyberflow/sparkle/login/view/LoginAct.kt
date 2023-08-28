@@ -1,4 +1,4 @@
-package com.cyberflow.sparkle.login
+package com.cyberflow.sparkle.login.view
 
 import android.content.ContentValues
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.util.Log
 import com.auth0.android.jwt.JWT
 import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
+import com.cyberflow.sparkle.login.viewmodel.LoginVM
 import com.web3auth.singlefactorauth.SingleFactorAuth
 import com.web3auth.singlefactorauth.types.LoginParams
 import com.web3auth.singlefactorauth.types.SingleFactorAuthArgs

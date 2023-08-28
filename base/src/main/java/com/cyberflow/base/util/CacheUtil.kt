@@ -2,10 +2,10 @@ package com.cyberflow.base.util
 
 import android.content.Context
 import android.text.TextUtils
-import com.cyberflow.base.bean.LoginResponseData
-import com.cyberflow.base.bean.UserAvatarImages
+import com.cyberflow.base.model.LoginResponseData
+import com.cyberflow.base.model.UserAvatarImages
 import com.cyberflow.base.net.GsonConverter
-import com.cyberflow.base.bean.UserInfo
+import com.cyberflow.base.model.UserInfo
 import com.tencent.mmkv.MMKV
 
 

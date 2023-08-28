@@ -1,4 +1,4 @@
-package com.cyberflow.base.bean
+package com.cyberflow.base.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
