@@ -51,6 +51,7 @@ dependencies {
     api("com.google.android.material:material:1.4.0")
     api("androidx.constraintlayout:constraintlayout:2.1.0")
     api("com.kingja.loadsir:loadsir:1.3.8")
+    api("com.github.JessYanCoding:AndroidAutoSize:v1.2.1")
 
     // MVVM
     api("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
