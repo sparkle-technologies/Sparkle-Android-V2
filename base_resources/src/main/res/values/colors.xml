@@ -5,4 +5,8 @@
     <color name="color_000000">#000000</color>
     <color name="color_A8A0F9">#A8A0F9</color>
 
+    <color name="almost_black">#3b3831</color>
+    <color name="almost_black_background">#28292e</color>
+    <color name="button_green">#65ffcb</color>
+
 </resources>

@@ -24,6 +24,7 @@
             android:id="@+id/btn_wallet_login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_62"
+            style="@style/BoldItalicTitles"
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginEnd="@dimen/dp_20"
             android:layout_marginBottom="@dimen/dp_46"
@@ -62,6 +63,65 @@
             app:layout_constraintBottom_toBottomOf="@+id/iv_ig_login"
             app:layout_constraintLeft_toRightOf="@+id/iv_ig_login"
             app:layout_constraintTop_toTopOf="@+id/iv_ig_login" />
+
+
+
+
+        <ImageView
+            android:id="@+id/nextButtonShadow"
+            android:layout_width="200dp"
+            android:layout_height="66dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/nextButton"
+            app:layout_constraintEnd_toEndOf="@+id/nextButton"
+            app:layout_constraintStart_toStartOf="@+id/nextButton"
+            app:layout_constraintTop_toTopOf="@+id/nextButton"
+            app:srcCompat="@drawable/button_start_shadow" />
+
+        <TextView
+            android:id="@+id/nextButtonShadowTextView"
+            style="@style/BoldItalicTitles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:text="Login"
+            android:textAlignment="center"
+            android:textColor="@color/almost_black"
+            android:textSize="@dimen/sp_28"
+            app:layout_constraintBottom_toBottomOf="@+id/nextButtonShadow"
+            app:layout_constraintEnd_toEndOf="@+id/nextButtonShadow"
+            app:layout_constraintStart_toStartOf="@+id/nextButtonShadow"
+            app:layout_constraintTop_toTopOf="@+id/nextButtonShadow" />
+
+        <ImageButton
+            android:id="@+id/nextButton"
+            android:layout_width="200dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="86dp"
+            android:background="@null"
+            android:src="@drawable/button_start"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/nextButtonTextView"
+            style="@style/BoldItalicTitles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            android:includeFontPadding="false"
+            android:text="Login"
+            android:textAlignment="center"
+            android:textColor="@color/almost_black"
+            android:textSize="@dimen/sp_28"
+            app:layout_constraintBottom_toBottomOf="@+id/nextButton"
+            app:layout_constraintEnd_toEndOf="@+id/nextButton"
+            app:layout_constraintStart_toStartOf="@+id/nextButton"
+            app:layout_constraintTop_toTopOf="@+id/nextButton" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
