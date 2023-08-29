@@ -5,11 +5,20 @@
     <style name="BoldItalicTitles">
         <item name="android:fontFamily">@font/roboto_condensed_bold_italic</item>
     </style>
+
     <style name="RegItalic">
         <item name="android:fontFamily">@font/roboto_condensed_regular_italic</item>
     </style>
+
     <style name="RegText">
         <item name="android:fontFamily">@font/roboto</item>
     </style>
+
+
+    <declare-styleable name="shadowButton">
+        <attr name="view_shadow_distance" format="dimension" />
+        <attr name="view_text" format="string" />
+        <attr name="view_bg" format="reference" />
+    </declare-styleable>
 
 </resources>

@@ -27,41 +27,8 @@ class LoginAct : BaseVBAct<LoginViewModel, ActivityLoginBinding>() {
             Log.e(TAG, "initView:  button clicked")
         }
 
-        animBtn()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    private fun animBtn() {
-        mViewBind.nextButton.setOnClickListener {
-
-        }
-
-        mViewBind.nextButton.setOnTouchListener { v, motionEvent ->
-            staticButtonTouchAnim(motionEvent, mViewBind.nextButton, mViewBind.nextButtonShadow, mViewBind.nextButtonTextView,
-                R.drawable.button_start, R.drawable.button_start_shadow)
-             false
-        }
-    }
-
-
-    private fun staticButtonTouchAnim(
-        motionEvent: MotionEvent, button: ImageView, buttonShadow: ImageView, buttonText: TextView,
-        buttonBackground: Int, buttonShadowBackground: Int
-    ) {
-        when (motionEvent.action) {
-            MotionEvent.ACTION_DOWN -> {
-                button.visibility = View.INVISIBLE
-                buttonText.visibility = View.INVISIBLE
-                buttonShadow.setImageResource(buttonBackground)
-            }
-
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                button.visibility = View.VISIBLE
-                buttonText.visibility = View.VISIBLE
-                buttonShadow.setImageResource(buttonShadowBackground)
-            }
-        }
-    }
 
     override fun initData() {
 
