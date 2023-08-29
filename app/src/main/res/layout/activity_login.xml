@@ -8,8 +8,60 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lav_homepage"
+            android:layout_width="match_parent"
+            android:layout_height="378dp"
+            android:layout_marginTop="117dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="homepage.json"
+            app:lottie_imageAssetsFolder="images/"
+            app:lottie_loop="true" />
 
+        <android.widget.Button
+            android:id="@+id/btn_wallet_login"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_62"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_46"
+            android:background="@drawable/login_wallet_btn_shape"
+            android:text="Login with Wallet"
+            android:textColor="@color/color_000000"
+            android:textSize="@dimen/sp_17"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_ig_login"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:src="@drawable/login_ic_ig"
+            app:layout_constraintBottom_toTopOf="@+id/btn_wallet_login"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_google_login"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_25"
+            android:src="@drawable/login_ic_google"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_ig_login"
+            app:layout_constraintRight_toLeftOf="@+id/iv_ig_login"
+            app:layout_constraintTop_toTopOf="@+id/iv_ig_login" />
+
+        <ImageView
+            android:id="@+id/iv_twitter_login"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_25"
+            android:src="@drawable/login_ic_twitter"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_ig_login"
+            app:layout_constraintLeft_toRightOf="@+id/iv_ig_login"
+            app:layout_constraintTop_toTopOf="@+id/iv_ig_login" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

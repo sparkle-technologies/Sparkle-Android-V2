@@ -43,22 +43,22 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     // baisc
-    api("androidx.core:core-ktx:1.3.2")
-    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31")
+    api("androidx.core:core-ktx:1.10.1")
+    api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0")
 
     //UI & layout
-    api("androidx.appcompat:appcompat:1.3.1")
-    api("com.google.android.material:material:1.4.0")
-    api("androidx.constraintlayout:constraintlayout:2.1.0")
-    api("com.kingja.loadsir:loadsir:1.3.8")
+    api("androidx.appcompat:appcompat:1.6.1")
+    api("com.google.android.material:material:1.9.0")
+    api("androidx.constraintlayout:constraintlayout:2.1.4")
+    api("com.airbnb.android:lottie:5.1.1")
     api("com.github.JessYanCoding:AndroidAutoSize:v1.2.1")
 
     // MVVM
-    api("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    api("androidx.lifecycle:lifecycle-common-java8:2.3.1")
-//    api("androidx.lifecycle:lifecycle-extensions:2.3.1")
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
-    api("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+    api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    api("androidx.lifecycle:lifecycle-common-java8:2.6.1")
+//    api("androidx.lifecycle:lifecycle-extensions:2.6.1")
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    api("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
 //    api("androidx.collection:collection-ktx:1.2.0")
 
     // network

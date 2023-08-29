@@ -33,13 +33,13 @@ include(":base")
 include(":base_resources")
 
 // wallet-connector
-include(":core")
-include(":sdkdapp")
+//include(":core")
+//include(":sdkdapp")
+//include(":dapp")
 
-include(":dapp")
-project(":core").projectDir = File("wallet_connector/core")
-project(":sdkdapp").projectDir = File("wallet_connector/sdkdapp")
-project(":dapp").projectDir = File("wallet_connector/dapp")
+//project(":core").projectDir = File("wallet_connector/core")
+//project(":sdkdapp").projectDir = File("wallet_connector/sdkdapp")
+//project(":dapp").projectDir = File("wallet_connector/dapp")
 
 /**
  * 开发规范
