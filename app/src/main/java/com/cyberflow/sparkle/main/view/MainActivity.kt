@@ -1,11 +1,13 @@
 package com.cyberflow.sparkle.main.view
 
 import android.os.Bundle
+import android.widget.Toast
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.ext.COLOR_TRANSPARENT
 import com.cyberflow.base.ext.immersive
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
+import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 
 class MainActivity : BaseDBAct<BaseViewModel, ActivityMainBinding>() {
 
@@ -21,6 +23,12 @@ class MainActivity : BaseDBAct<BaseViewModel, ActivityMainBinding>() {
                 it.error = null
             }
         }
+
+        mDataBinding.loginBtnShadow.setClickListener(object : ShadowTxtButton.ShadowClickListener {
+            override fun clicked() {
+                Toast.makeText(this@MainActivity, "click me", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     override fun initData() {

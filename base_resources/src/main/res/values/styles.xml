@@ -13,7 +13,7 @@
     <style name="RegText">
         <item name="android:fontFamily">@font/roboto</item>
     </style>
-
+    <!-- FONTS end -->
 
     <declare-styleable name="shadowButton">
         <attr name="view_shadow_distance" format="dimension" />
@@ -21,12 +21,28 @@
         <attr name="view_bg" format="reference" />
     </declare-styleable>
 
+    <declare-styleable name="shadowImgButton">
+        <attr name="view_img_shadow_distance" format="dimension" />
+        <attr name="view_img_src" format="reference" />
+    </declare-styleable>
 
 
+    <!-- login & register input field -->
     <style name="OutlinedRoundedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded</item>
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded
+        </item>
         <item name="boxStrokeColor">@color/color_000000</item>
         <item name="boxStrokeWidth">@dimen/dp_1</item>
+
+        <item name="expandedHintEnabled">false</item>
+        <item name="android:textColorHint">@color/color_000000</item>
+        <item name="hintTextColor">@color/color_000000</item>
+        <item name="hintTextAppearance">@style/HintText</item>
+        <item name="errorTextAppearance">@style/error_appearance</item>
+        <item name="errorTextColor">@color/color_D93333</item>
+        <item name="errorEnabled">true</item>
+        <item name="errorIconDrawable">@null</item>
 
     </style>
 
@@ -42,5 +58,8 @@
     <style name="error_appearance" parent="@android:style/TextAppearance">
         <item name="android:textSize">@dimen/sp_12</item>
     </style>
+
+    <!-- login & register input field  end-->
+
 
 </resources>
