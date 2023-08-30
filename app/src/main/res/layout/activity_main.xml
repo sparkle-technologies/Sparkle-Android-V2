@@ -7,39 +7,77 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        android:background="@color/white">
 
-        <ImageView
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField"
+            style="@style/OutlinedRoundedBox"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginEnd="10dp"
+
+            android:hint="Nickname"
+
+            app:endIconMode="custom"
+            app:endIconDrawable="@mipmap/login_ic_nick_name"
+
+            app:helperTextEnabled="true"
+            app:helperText="Filling in specific time details for more accurate results."
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:expandedHintEnabled="false"
+            android:textColorHint="@color/color_000000"
+            app:hintTextColor="@color/color_000000"
+            app:hintTextAppearance="@style/HintText"
+
+            app:errorTextAppearance="@style/error_appearance"
+            app:errorTextColor="@color/color_D93333"
+
+            app:errorEnabled="true"
+            app:errorIconDrawable="@null"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".MainActivity">
+                android:layout_height="wrap_content"
+                android:hint="select your weapon pls" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Hello World!"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <android.widget.Button
+            android:id="@+id/btn"
+            style="@style/BoldItalicTitles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="60dp"
+            android:background="@drawable/login_wallet_btn_shape"
+            android:text="set error"
+            android:textColor="@color/color_000000"
+            android:textSize="@dimen/sp_17"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
+        <android.widget.Button
+            android:id="@+id/btn_clear"
+            style="@style/BoldItalicTitles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/login_wallet_btn_shape"
+            android:text="clear error"
+            android:textColor="@color/color_000000"
+            android:textSize="@dimen/sp_17"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

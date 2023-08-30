@@ -8,11 +8,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.base.resources.R
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginViewModel
+import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -27,6 +29,11 @@ class LoginAct : BaseVBAct<LoginViewModel, ActivityLoginBinding>() {
             Log.e(TAG, "initView:  button clicked")
         }
 
+        mViewBind.loginBtnShadow.setClickListener(object : ShadowTxtButton.ShadowClickListener {
+            override fun clicked() {
+                 Toast.makeText(this@LoginAct, "click me", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
 

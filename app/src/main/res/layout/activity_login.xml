@@ -65,6 +65,7 @@
             app:layout_constraintTop_toTopOf="@+id/iv_ig_login" />
 
         <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+            android:id="@+id/login_btn_shadow"
             android:layout_width="200dp"
             android:layout_height="46dp"
             android:layout_marginTop="86dp"

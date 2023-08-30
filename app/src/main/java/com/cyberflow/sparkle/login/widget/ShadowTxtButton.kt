@@ -2,18 +2,14 @@ package com.cyberflow.sparkle.login.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.R
 
@@ -37,9 +33,9 @@ class ShadowTxtButton : ConstraintLayout {
         initView()
     }
 
-    private var distance: Int = 0
-    private var txt: String = ""
-    private var bg: Int = 0
+    private var distance: Int = 0     // shadow width/height
+    private var txt: String = ""     // button text
+    private var bg: Int = 0          // button background drawable, default is R.drawable.button_start
     private fun attributes(attrs: AttributeSet?) {
         val mTypedArray = context.obtainStyledAttributes(
             attrs,
@@ -85,7 +81,7 @@ class ShadowTxtButton : ConstraintLayout {
         nextButtonTextView?.text = txt
 
         nextButton?.setOnClickListener {
-
+            listener?.clicked()
         }
 
         nextButton?.setOnTouchListener { v, motionEvent ->
@@ -99,6 +95,15 @@ class ShadowTxtButton : ConstraintLayout {
             )
             false
         }
+    }
+
+    interface ShadowClickListener{
+        fun clicked()
+    }
+
+    private var listener: ShadowClickListener? = null
+    fun setClickListener(listener: ShadowClickListener){
+        this.listener = listener
     }
 
     private fun staticButtonTouchAnim(
@@ -123,5 +128,4 @@ class ShadowTxtButton : ConstraintLayout {
             }
         }
     }
-
 }
