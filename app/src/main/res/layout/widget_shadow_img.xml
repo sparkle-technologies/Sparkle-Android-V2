@@ -19,8 +19,8 @@
 
     <ImageView
         android:id="@+id/nextButtonShadowTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:src="@drawable/login_ic_twitter"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/nextButtonShadow"
@@ -33,6 +33,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="2dp"
+        android:scaleType="fitXY"
         android:layout_marginBottom="2dp"
         android:background="@null"
         android:src="@drawable/login_ic_twitter"

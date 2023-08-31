@@ -8,30 +8,136 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+        <com.cyberflow.sparkle.login.widget.ShadowImgButton
+            android:id="@+id/btn_head"
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="@dimen/dp_80"
+            android:layout_marginTop="@dimen/dp_86"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:view_img_shadow_distance="@dimen/dp_1"
+            app:view_img_src="@drawable/register_ic_women" />
+
         <TextView
             android:id="@+id/tv_title"
+            style="@style/BoldNoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_20"
             android:text="Birthday"
             android:textSize="@dimen/sp_36"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toBottomOf="@+id/btn_head" />
 
         <TextView
+            android:id="@+id/tv_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_28"
-            android:layout_marginTop="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_3"
             android:layout_marginEnd="@dimen/dp_28"
-            android:text="Tell us your data of birth"
+            android:text="Tell us what is your date of birth"
             android:textSize="@dimen/sp_16"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_BirthDate"
+            style="@style/OutlinedRoundedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:hint="Birth Date"
+
+            app:endIconDrawable="@drawable/register_ic_date"
+            app:endIconMode="custom"
+
+            app:errorEnabled="false"
+
+            app:layout_constraintTop_toBottomOf="@+id/tv_desc">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_birth_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="Select your birthday"
+                android:textColor="@color/color_000000" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_BirthTime"
+            style="@style/OutlinedRoundedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:hint="Birth Time"
+
+            app:endIconDrawable="@drawable/register_ic_date"
+            app:endIconMode="custom"
+
+            app:errorEnabled="false"
+            app:helperText="Filling in specific time details for more accurate results."
+
+            app:helperTextEnabled="true"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_BirthDate">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_birth_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:hint="Select your birth time"
+                android:textColor="@color/color_000000" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <View
+            android:id="@+id/anchor_date"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/color_transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/outlinedTextField_BirthDate"
+            app:layout_constraintLeft_toLeftOf="@+id/outlinedTextField_BirthDate"
+            app:layout_constraintRight_toRightOf="@+id/outlinedTextField_BirthDate"
+            app:layout_constraintTop_toTopOf="@+id/outlinedTextField_BirthDate" />
+
+        <View
+            android:id="@+id/anchor_time"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/color_transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/outlinedTextField_BirthTime"
+            app:layout_constraintLeft_toLeftOf="@+id/outlinedTextField_BirthTime"
+            app:layout_constraintRight_toRightOf="@+id/outlinedTextField_BirthTime"
+            app:layout_constraintTop_toTopOf="@+id/outlinedTextField_BirthTime" />
+
+        <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+            android:id="@+id/btn_register_next"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_46"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:view_bg="@drawable/register_btn_next"
+            app:view_shadow_distance="1dp"
+            app:view_text="Next" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

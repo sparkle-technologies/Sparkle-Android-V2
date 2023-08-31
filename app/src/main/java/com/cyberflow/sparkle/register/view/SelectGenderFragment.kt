@@ -2,9 +2,7 @@ package com.cyberflow.sparkle.register.view
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.ViewModelProvider
-import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.fragment.BaseVBFragment
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.databinding.FragmentSelectGenderBinding
@@ -13,12 +11,11 @@ import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 
 class SelectGenderFragment : BaseVBFragment<BaseViewModel, FragmentSelectGenderBinding>() {
 
-    private var actVm: LoginRegisterViewModel? = null
-
     override fun initData() {
 
     }
 
+    private var actVm: LoginRegisterViewModel? = null
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
         actVm = ViewModelProvider(requireActivity()).get(LoginRegisterViewModel::class.java)

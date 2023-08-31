@@ -20,7 +20,7 @@
 
             android:hint="Nickname"
 
-            app:endIconDrawable="@mipmap/login_ic_nick_name"
+            app:endIconDrawable="@drawable/register_ic_date"
             app:endIconMode="custom"
 
             app:helperText="Filling in specific time details for more accurate results."
