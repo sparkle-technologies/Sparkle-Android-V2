@@ -10,15 +10,16 @@ import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.sparkle.databinding.ActivityRegiserBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 
-
 class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         var adapter = PageAdapter(supportFragmentManager, lifecycle)
         adapter.addFragment(SelectGenderFragment())
         adapter.addFragment(SelectBirthdayFragment())
+        adapter.addFragment(BirthPlaceFragment())
         adapter.addFragment(NickNameFragment())
         mViewBind.pager.apply {
+            isUserInputEnabled = false
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             this.adapter = adapter
         }

@@ -76,8 +76,10 @@
     <dimen name="dp_130">130dp</dimen>
 
     <dimen name="dp_138">138dp</dimen>
+    <dimen name="dp_154">154dp</dimen>
     <dimen name="dp_158">158dp</dimen>
     <dimen name="dp_190">190dp</dimen>
+    <dimen name="dp_204">204dp</dimen>
 
 
 

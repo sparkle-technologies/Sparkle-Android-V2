@@ -13,7 +13,7 @@
             style="@style/BoldNoto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_130"
+            android:layout_marginTop="@dimen/dp_204"
             android:text="Before you begin"
             android:textSize="@dimen/sp_36"
             android:textStyle="bold"
