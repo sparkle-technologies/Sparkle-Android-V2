@@ -17,6 +17,7 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
         var adapter = PageAdapter(supportFragmentManager, lifecycle)
         adapter.addFragment(SelectGenderFragment())
         adapter.addFragment(SelectBirthdayFragment())
+        adapter.addFragment(NickNameFragment())
         mViewBind.pager.apply {
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             this.adapter = adapter
@@ -25,15 +26,35 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
     }
 
     override fun initData() {
-        viewModel.page.observe(this){
-            Log.e(TAG, " get page changed $it " )
+        viewModel.previous.observe(this){
+            Log.e(TAG, " previous changed $it " )
+            goPrevious()
+        }
+
+        viewModel.next.observe(this){
+            Log.e(TAG, " next changed $it " )
             goNext()
+        }
+    }
+
+    private fun goPrevious(){
+        Log.e(TAG, "goPrevious: ", )
+        mViewBind.pager.apply {
+            if(currentItem > 0){
+                setCurrentItem(currentItem - 1, true)
+            }
         }
     }
 
     private fun goNext(){
         Log.e(TAG, "goNext: ", )
-        mViewBind.pager.setCurrentItem(mViewBind.pager.currentItem + 1, true)
+        mViewBind.pager.apply {
+            adapter?.also { a->
+                if(currentItem < a.itemCount - 1){
+                    setCurrentItem(currentItem + 1, true)
+                }
+            }
+        }
     }
 }
 

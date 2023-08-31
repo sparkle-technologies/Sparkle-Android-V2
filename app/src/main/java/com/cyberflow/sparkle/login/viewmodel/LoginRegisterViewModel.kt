@@ -84,9 +84,14 @@ class LoginRegisterViewModel : BaseViewModel() {
     }
 
 
-    var page: MutableLiveData<Int> = MutableLiveData()
+    var previous: MutableLiveData<Int> = MutableLiveData()
+    var next: MutableLiveData<Int> = MutableLiveData()
+
+    fun clickPrevious() {
+        previous.value = next.value?.minus(1)
+    }
 
     fun clickNext() {
-        page.value = page.value?.plus(1)
+        next.value = next.value?.plus(1)
     }
 }
