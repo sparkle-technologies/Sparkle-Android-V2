@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
-import com.cyberflow.sparkle.login.viewmodel.LoginViewModel
+import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.view.RegisterAct
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 
-class LoginAct : BaseVBAct<LoginViewModel, ActivityLoginBinding>() {
+class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()

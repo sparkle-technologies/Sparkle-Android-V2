@@ -5,6 +5,20 @@
     <color name="color_000000">#000000</color>
     <color name="color_A8A0F9">#A8A0F9</color>
     <color name="color_D93333">#D93333</color>
+    <color name="color_EAFFFF">#EAFFFF</color>
+    <color name="color_FFDDDD">#FFDDDD</color>
+
+
+    <color name="red">#FFff3333</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="textSecond">#737373</color>
 
     <color name="color_transparent">#00000000</color>
 
@@ -13,6 +27,5 @@
     <color name="button_green">#65ffcb</color>
 
     <color name="mtrl_textinput_default_box_stroke_color">@color/color_000000</color> <!--default boxStrokeColor-->
-
 
 </resources>

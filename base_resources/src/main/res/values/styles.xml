@@ -6,6 +6,10 @@
         <item name="android:fontFamily">@font/roboto_condensed_bold_italic</item>
     </style>
 
+    <style name="BoldNoto">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+    </style>
+
     <style name="RegItalic">
         <item name="android:fontFamily">@font/roboto_condensed_regular_italic</item>
     </style>

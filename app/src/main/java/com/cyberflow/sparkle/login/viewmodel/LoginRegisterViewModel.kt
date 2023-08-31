@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
 
-class LoginViewModel : BaseViewModel() {
+class LoginRegisterViewModel : BaseViewModel() {
 
     var userInfo: MutableLiveData<UserLoginBean> = MutableLiveData()
 
@@ -81,5 +81,12 @@ class LoginViewModel : BaseViewModel() {
             .addOnFailureListener {
                 // Handle failure.
             }
+    }
+
+
+    var page: MutableLiveData<Int> = MutableLiveData()
+
+    fun clickNext() {
+        page.value = page.value?.plus(1)
     }
 }

@@ -3,6 +3,7 @@
 
     <dimen name="activity_animation_duration">5000</dimen>
 
+    <dimen name="dp_negative_6">-6dp</dimen>
     <dimen name="dp_0_1">0.1dp</dimen>
     <dimen name="dp_0_5">0.5dp</dimen>
     <dimen name="dp_1">1dp</dimen>
@@ -69,6 +70,13 @@
     <dimen name="dp_62">62dp</dimen>
 
     <dimen name="dp_73">73dp</dimen>
+    <dimen name="dp_128">128dp</dimen>
+    <dimen name="dp_130">130dp</dimen>
+
+    <dimen name="dp_138">138dp</dimen>
+    <dimen name="dp_158">158dp</dimen>
+    <dimen name="dp_190">190dp</dimen>
+
 
 
     <dimen name="sp_10">10sp</dimen>
