@@ -7,7 +7,7 @@
     <color name="color_D93333">#D93333</color>
     <color name="color_EAFFFF">#EAFFFF</color>
     <color name="color_FFDDDD">#FFDDDD</color>
-
+    <color name="color_F1F1FB">#F1F1FB</color>
 
     <color name="red">#FFff3333</color>
     <color name="black">#FF000000</color>
@@ -27,5 +27,29 @@
     <color name="button_green">#65ffcb</color>
 
     <color name="mtrl_textinput_default_box_stroke_color">@color/color_000000</color> <!--default boxStrokeColor-->
+
+
+    <color name="date_picker_divider">#11112233</color>
+    <color name="date_picker_text_light">#4B4396</color>
+    <color name="date_picker_text_dark">#333333</color>
+    <color name="white_1st">#FFFFFF</color>
+    <color name="white_2nd">#F5F5F5</color>
+    <color name="white_3rd">#F1F1FB</color>
+    <color name="white_4th">#4DFFFFFF</color>
+    <color name="white_5ve">#B7FFFFFF</color>
+    <color name="gray_1st">#484849</color>
+    <color name="gray_2nd">#FFF2F3F5</color>
+    <color name="gray_3rd">#E2E2E2</color>
+    <color name="gray_4th">#66484849</color>
+    <color name="gray_5ve">#7D7D80</color>
+    <color name="black_1st">#000000</color>
+    <color name="black_2nd">#2A2A2B</color>
+    <color name="black_3rd">#1A000000</color>
+    <color name="status_bar">@color/black_1st</color>
+    <color name="purple_1st">#4B4396</color>
+    <color name="purple_2nd">#4D4b4396</color>
+    <color name="purple_3rd">#A14b4396</color>
+    <color name="purple_4th">#B5E1E2ED</color>
+    <color name="red_1st">#D93333</color>
 
 </resources>
