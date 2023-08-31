@@ -71,4 +71,7 @@ dependencies {
     implementation("org.web3j:core:4.8.7-android")
     implementation("com.github.UniPassID:android-custom-auth-sdk:v0.0.1-alpha.9")
 
+    // for UI
+    implementation("com.tbuonomo:dotsindicator:5.0")     // viewpager2 indicator
+
 }
