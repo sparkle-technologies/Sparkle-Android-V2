@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -61,6 +62,7 @@ dependencies {
     // auth for twitter/google social login
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.android.libraries.places:places:3.1.0")
 
     // for web3Auth
     implementation("com.github.web3auth:single-factor-auth-android:0.0.2")

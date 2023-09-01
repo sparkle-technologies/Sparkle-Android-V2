@@ -8,9 +8,9 @@ import com.cyberflow.sparkle.databinding.FragmentRegisterBirthPlaceBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.register.widget.searchplace.SearchPlaceDialog
 
-class BirthPlaceFragment :
-    BaseVBFragment<LoginRegisterViewModel, FragmentRegisterBirthPlaceBinding>() {
+class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegisterBirthPlaceBinding>() {
     override fun initData() {
 
     }
@@ -50,6 +50,12 @@ class BirthPlaceFragment :
     }
 
     private fun selectPlace(){
-
+        val searchPlaceDialog = SearchPlaceDialog(getString(com.cyberflow.base.resources.R.string.current))
+        searchPlaceDialog.setCallBack(object : SearchPlaceDialog.ICallBack {
+            override fun callback(placeStr: String?, latitude: String?, longitude: String?) {
+                mViewBind.etBirthPlace.setText(placeStr)
+            }
+        })
+        searchPlaceDialog.show(requireActivity().supportFragmentManager, "current")
     }
 }
