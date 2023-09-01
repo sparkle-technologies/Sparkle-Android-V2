@@ -23,7 +23,6 @@ class NickNameFragment :
 
     var error = true
     override fun initView(savedInstanceState: Bundle?) {
-
         mViewBind.btnHead.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 mViewBind.outlinedTextField.also {
@@ -40,8 +39,20 @@ class NickNameFragment :
         })
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked() {
+
                 actVm?.clickNext()
             }
         })
+    }
+
+    // TODO 这里逻辑不确定  待产品确认
+    private fun submitRegister(){
+        val txt = mViewBind.etNiceName.text.toString().trim()
+
+        if(txt.length in 1..30){
+
+        }else{
+
+        }
     }
 }

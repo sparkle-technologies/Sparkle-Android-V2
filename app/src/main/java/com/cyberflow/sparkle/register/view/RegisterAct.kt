@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.cyberflow.base.act.BaseVBAct
+import com.cyberflow.base.model.RegisterRequestBean
 import com.cyberflow.sparkle.databinding.ActivityRegiserBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 
@@ -36,6 +37,12 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
             Log.e(TAG, " next changed $it " )
             goNext()
         }
+
+        viewModel.userInfo.observe(this){
+            // succeed get userinfo after register, so go main page now
+
+        }
+        viewModel.registerBean = RegisterRequestBean()  // init request bean
     }
 
     private fun goPrevious(){

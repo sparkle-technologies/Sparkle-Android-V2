@@ -11,6 +11,7 @@ import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.widget.daytimepicker.CustomDatePicker
 import com.cyberflow.sparkle.register.widget.daytimepicker.DateFormatUtils
+import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -28,7 +29,6 @@ class SelectBirthdayFragment :
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-
         mViewBind.btnHead.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 // yyyy-MM-dd
@@ -42,7 +42,19 @@ class SelectBirthdayFragment :
 
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked() {
-                actVm?.clickNext()
+                if(selectDate.isNullOrEmpty()){
+                    Snackbar.make(mViewBind.btnRegisterNext, "please select birth date", Snackbar.LENGTH_SHORT).show()
+                    return
+                }
+                if(selectTime.isNullOrEmpty()){
+                    Snackbar.make(mViewBind.btnRegisterNext, "please select birth time", Snackbar.LENGTH_SHORT).show()
+                    return
+                }
+                actVm?.apply {
+                    registerBean?.birthdate = selectDate
+                    registerBean?.birth_time = selectTime
+                    clickNext()
+                }
             }
         })
     }

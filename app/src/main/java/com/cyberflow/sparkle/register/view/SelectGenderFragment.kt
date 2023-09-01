@@ -31,6 +31,7 @@ class SelectGenderFragment : BaseVBFragment<BaseViewModel, FragmentSelectGenderB
 
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked() {
+                actVm?.registerBean?.gender = gender
                 actVm?.clickNext()
             }
         })
@@ -38,8 +39,12 @@ class SelectGenderFragment : BaseVBFragment<BaseViewModel, FragmentSelectGenderB
         click(false, false)
     }
 
+    private var gender = 0
 
     private fun click(clickMan: Boolean, clickWomen: Boolean) {
+        if(clickMan && !clickWomen) gender = 1
+        if(!clickMan && clickWomen) gender = 2
+
         mViewBind.ivManShadow.setImageResource(if (clickMan) com.cyberflow.base.resources.R.drawable.button_start_shadow else com.cyberflow.base.resources.R.drawable.register_bg_gender_white)
         mViewBind.ivManBg.setImageResource(if (clickMan) com.cyberflow.base.resources.R.drawable.register_bg_gender_man else com.cyberflow.base.resources.R.drawable.register_bg_gender_white)
 

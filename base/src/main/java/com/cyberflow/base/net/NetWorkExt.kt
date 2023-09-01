@@ -7,6 +7,7 @@ import com.cyberflow.base.util.CacheUtil
 import com.drake.net.NetConfig
 import com.drake.net.okhttp.setConverter
 import com.drake.net.okhttp.setDebug
+import com.drake.net.okhttp.setErrorHandler
 import com.drake.net.okhttp.setRequestInterceptor
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -22,6 +23,7 @@ fun initNetSpark() {
         readTimeout(20, TimeUnit.SECONDS)
         writeTimeout(30, TimeUnit.SECONDS)
         setDebug(true)
+        setErrorHandler(NetworkingErrorHandler())
 //        setConverter(SerializationConverter())
         setConverter(GsonConverter())
         addInterceptor(HeaderInterceptor())
