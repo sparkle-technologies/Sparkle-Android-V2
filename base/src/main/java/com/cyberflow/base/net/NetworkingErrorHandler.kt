@@ -1,5 +1,6 @@
 package com.cyberflow.base.net
 
+import android.util.Log
 import com.drake.net.Net
 import com.drake.net.exception.ConvertException
 import com.drake.net.exception.DownloadFileException
@@ -18,6 +19,9 @@ import java.net.UnknownHostException
 
 class NetworkingErrorHandler : NetErrorHandler {
     override fun onError(e: Throwable) {
+
+        Log.e("NetworkingErrorHandler", "onError: " )
+
         val message = when (e) {
             is UnknownHostException -> "UnknownHostException"
             is URLParseException -> "URLParseException"
@@ -43,6 +47,7 @@ class NetworkingErrorHandler : NetErrorHandler {
             else -> "OtherError"
         }
         Net.debug(e)
+        Log.e("TAG", "onError: message= $message" )
         TipUtils.toast(message)
     }
 }

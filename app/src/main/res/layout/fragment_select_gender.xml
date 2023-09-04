@@ -104,7 +104,6 @@
             app:layout_constraintTop_toTopOf="@+id/iv_women_bg"
             app:srcCompat="@drawable/register_ic_women" />
 
-
         <com.cyberflow.sparkle.login.widget.ShadowTxtButton
             android:id="@+id/btn_register_next"
             android:layout_width="match_parent"
@@ -116,6 +115,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:view_bg="@drawable/register_btn_next"
+            app:view_disable_bg="@drawable/register_btn_next_disable"
+            app:view_disable="true"
             app:view_shadow_distance="1dp"
             app:view_text="Next" />
 

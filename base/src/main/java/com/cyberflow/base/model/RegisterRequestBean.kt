@@ -10,3 +10,6 @@ data class RegisterRequestBean(
     var profile_permission: Int = 1,  // default = 1-everyone 2-everyone in sparkle 3-only friend 4-only me
     var signature: String = ""
 )
+
+const val GENDER_MAN = 1
+const val GENDER_WOMEN = 2

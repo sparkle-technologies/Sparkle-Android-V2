@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseVBFragment
+import com.cyberflow.base.model.GENDER_MAN
+import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.sparkle.databinding.FragmentSelectBirthdayBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
@@ -19,7 +21,14 @@ import java.util.Locale
 class SelectBirthdayFragment :
     BaseVBFragment<LoginRegisterViewModel, FragmentSelectBirthdayBinding>() {
     override fun initData() {
-
+        actVm?.registerBean?.gender?.apply {
+            if(this == GENDER_MAN){
+                mViewBind.btnHead.updateSrc(com.cyberflow.base.resources.R.drawable.register_ic_man)
+            }
+            if(this == GENDER_WOMEN){
+                mViewBind.btnHead.updateSrc(com.cyberflow.base.resources.R.drawable.register_ic_women)
+            }
+        }
     }
 
     private var actVm: LoginRegisterViewModel? = null
@@ -41,15 +50,16 @@ class SelectBirthdayFragment :
         mViewBind.anchorTime.setOnClickListener { selectTime() }
 
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
-            override fun clicked() {
-                if(selectDate.isNullOrEmpty()){
+            override fun clicked(disable: Boolean) {
+                 if(selectDate.isNullOrEmpty()){
                     Snackbar.make(mViewBind.btnRegisterNext, "please select birth date", Snackbar.LENGTH_SHORT).show()
                     return
                 }
                 if(selectTime.isNullOrEmpty()){
                     Snackbar.make(mViewBind.btnRegisterNext, "please select birth time", Snackbar.LENGTH_SHORT).show()
                     return
-                }
+               }
+                if(disable) return
                 actVm?.apply {
                     registerBean?.birthdate = selectDate
                     registerBean?.birth_time = selectTime
@@ -59,6 +69,11 @@ class SelectBirthdayFragment :
         })
     }
 
+    private fun updateBtnNextStatus(){
+
+        mViewBind.btnRegisterNext.disableBg(selectDate.isNullOrEmpty() || selectTime.isNullOrEmpty())
+
+    }
 
     private var mDatePicker: CustomDatePicker? = null
     private var selectDate: String = ""
@@ -91,6 +106,7 @@ class SelectBirthdayFragment :
             context, { timestamp ->
                 selectDate = DateFormatUtils.long2Str(timestamp, false)
                 mViewBind.etBirthDate.setText(selectDate)
+                updateBtnNextStatus()
             },
             beginTimestamp,
             endTimestamp
@@ -120,6 +136,7 @@ class SelectBirthdayFragment :
                             Locale.getDefault()
                         ).format(date)
                     )
+                    updateBtnNextStatus()
                 },
                 beginTime,
                 endTime

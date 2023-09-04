@@ -46,10 +46,7 @@ class ShadowImgButton : ConstraintLayout {
             )
         )
 
-        src = mTypedArray.getResourceId(
-            com.cyberflow.base.resources.R.styleable.shadowImgButton_view_img_src,
-            com.cyberflow.base.resources.R.drawable.login_ic_twitter
-        )
+        src = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowImgButton_view_img_src, 0)
 
         mTypedArray.recycle()
     }
@@ -73,8 +70,7 @@ class ShadowImgButton : ConstraintLayout {
         layoutParams2.setMargins(0, 0, distance, distance)
         nextButton?.layoutParams = layoutParams2
 
-        nextButtonShadowTextView?.setImageResource(src)
-        nextButton?.setImageResource(src)
+        updateSrc(src)
 
         nextButton?.setOnClickListener {
             listener?.clicked()
@@ -88,6 +84,14 @@ class ShadowImgButton : ConstraintLayout {
                 nextButton
             )
             false
+        }
+    }
+
+    fun updateSrc(pic: Int){
+        if(src != 0){
+            this.src = pic
+            nextButtonShadowTextView?.setImageResource(src)
+            nextButton?.setImageResource(src)
         }
     }
 

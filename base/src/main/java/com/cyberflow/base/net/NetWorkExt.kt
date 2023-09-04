@@ -24,7 +24,7 @@ fun initNetSpark() {
         writeTimeout(30, TimeUnit.SECONDS)
         setDebug(true)
         setErrorHandler(NetworkingErrorHandler())
-//        setConverter(SerializationConverter())
+        setConverter(SerializationConverter())
         setConverter(GsonConverter())
         addInterceptor(HeaderInterceptor())
         addInterceptor(ResponseHeaderInterceptor())

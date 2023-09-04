@@ -135,6 +135,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:view_bg="@drawable/register_btn_next"
+            app:view_disable_bg="@drawable/register_btn_next_disable"
+            app:view_disable="true"
             app:view_shadow_distance="1dp"
             app:view_text="Next" />
 

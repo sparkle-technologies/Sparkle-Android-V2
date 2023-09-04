@@ -18,7 +18,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:view_img_shadow_distance="@dimen/dp_1"
-            app:view_img_src="@drawable/register_ic_women" />
+            app:view_img_src="@drawable/register_ic_man" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -69,6 +69,8 @@
                 android:id="@+id/et_nice_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="30"
+                android:maxLines="1"
                 android:hint="What should we call you?" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -99,8 +101,12 @@
             app:layout_constraintLeft_toRightOf="@+id/btn_register_previous"
             app:layout_constraintRight_toRightOf="parent"
             app:view_bg="@drawable/register_btn_next"
+            app:view_disable_bg="@drawable/register_btn_next_disable"
+            app:view_disable="true"
             app:view_shadow_distance="1dp"
-            app:view_text="Next" />
+            app:view_text_color="@color/almost_black"
+            app:view_text_disable_color="@color/color_7D7D80"
+            app:view_text="Done" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

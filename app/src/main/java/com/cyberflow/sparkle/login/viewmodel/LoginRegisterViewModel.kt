@@ -32,8 +32,9 @@ class LoginRegisterViewModel : BaseViewModel() {
     var registerBean : RegisterRequestBean? = null
 
     fun register() = scopeLife {
+        Log.e(TAG, "register: ${GsonConverter.gson.toJson(registerBean)}" )
         userInfo.value = Post<UserLoginBean>(Api.COMPLETE_INFO) {
-            json(GsonConverter.gson.toJson(registerBean))
+            json(GsonConverter.gson.toJson(registerBean, RegisterRequestBean::class.java))
         }.await()
     }
 

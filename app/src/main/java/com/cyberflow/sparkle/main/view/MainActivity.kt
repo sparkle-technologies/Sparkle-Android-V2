@@ -25,7 +25,7 @@ class MainActivity : BaseDBAct<BaseViewModel, ActivityMainBinding>() {
         }
 
         mDataBinding.loginBtnShadow.setClickListener(object : ShadowTxtButton.ShadowClickListener {
-            override fun clicked() {
+            override fun clicked(d: Boolean) {
                 Toast.makeText(this@MainActivity, "click me", Toast.LENGTH_LONG).show()
             }
         })

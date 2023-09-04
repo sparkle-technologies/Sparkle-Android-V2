@@ -35,7 +35,11 @@ class ShadowTxtButton : ConstraintLayout {
 
     private var distance: Int = 0     // shadow width/height
     private var txt: String = ""     // button text
+    private var txt_color: Int = 0
+    private var txt_disable_color: Int = 0
     private var bg: Int = 0          // button background drawable, default is R.drawable.button_start
+    private var bgDisable: Int = 0
+    private var disable: Boolean = false
     private fun attributes(attrs: AttributeSet?) {
         val mTypedArray = context.obtainStyledAttributes(
             attrs,
@@ -47,9 +51,17 @@ class ShadowTxtButton : ConstraintLayout {
                 2.0f
             )
         )
-        txt = mTypedArray.getString(com.cyberflow.base.resources.R.styleable.shadowButton_view_text)
-            .orEmpty()
-        bg = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_bg, com.cyberflow.base.resources.R.drawable.button_start)
+        txt = mTypedArray.getString(com.cyberflow.base.resources.R.styleable.shadowButton_view_text).orEmpty()
+
+        txt_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_color, com.cyberflow.base.resources.R.color.almost_black)
+
+        txt_disable_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_disable_color, com.cyberflow.base.resources.R.color.color_7D7D80)
+
+        bg = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_bg, com.cyberflow.base.resources.R.drawable.register_btn_next)
+
+        bgDisable = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_disable_bg, com.cyberflow.base.resources.R.drawable.register_btn_next_disable)
+
+        disable = mTypedArray.getBoolean(com.cyberflow.base.resources.R.styleable.shadowButton_view_disable, false)
 
         mTypedArray.recycle()
     }
@@ -75,13 +87,13 @@ class ShadowTxtButton : ConstraintLayout {
         layoutParams2.setMargins(0, 0, distance, distance)
         nextButton?.layoutParams = layoutParams2
 
-        nextButton?.setImageResource(bg)
+        disableBg(disable)
 
         nextButtonShadowTextView?.text = txt
         nextButtonTextView?.text = txt
 
         nextButton?.setOnClickListener {
-            listener?.clicked()
+            listener?.clicked(disable)
         }
 
         nextButton?.setOnTouchListener { v, motionEvent ->
@@ -90,15 +102,32 @@ class ShadowTxtButton : ConstraintLayout {
                 nextButton,
                 nextButtonShadow,
                 nextButtonTextView,
-                bg,
+                if(disable) bgDisable else bg,
                 com.cyberflow.base.resources.R.drawable.button_start_shadow
             )
             false
         }
     }
 
+    fun disableBg(disable: Boolean){
+        this.disable = disable
+        if(disable){
+            txt_disable_color.apply {
+                nextButtonShadowTextView?.setTextColor(this)
+                nextButtonTextView?.setTextColor(this)
+            }
+            nextButton?.setImageResource(bgDisable)
+        }else{
+            txt_color.apply {
+                nextButtonShadowTextView?.setTextColor(this)
+                nextButtonTextView?.setTextColor(this)
+            }
+            nextButton?.setImageResource(bg)
+        }
+    }
+
     interface ShadowClickListener{
-        fun clicked()
+        fun clicked(disable: Boolean = false)
     }
 
     private var listener: ShadowClickListener? = null

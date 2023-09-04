@@ -21,7 +21,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         initAnim()
 
         mViewBind.btnWalletLogin.setClickListener(object : ShadowTxtButton.ShadowClickListener {
-            override fun clicked() {
+            override fun clicked(dis: Boolean) {
                 Log.e(TAG, "initView:  button clicked")
                 val intent = Intent(this@LoginAct, RegisterAct::class.java)
                 startActivity(intent)
