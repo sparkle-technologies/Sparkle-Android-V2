@@ -1,7 +1,10 @@
 package com.cyberflow.base.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class LocationInfo(
-    val latitude: Int,
-    val location: String,
-    val longitude: Int
+    var latitude: Int = 0,
+    var location: String = "",
+    var longitude: Int = 0
 )

@@ -20,7 +20,7 @@ import java.net.UnknownHostException
 class NetworkingErrorHandler : NetErrorHandler {
     override fun onError(e: Throwable) {
 
-        Log.e("NetworkingErrorHandler", "onError: " )
+        Log.e("NetworkingErrorHandler", "onError: $e" )
 
         val message = when (e) {
             is UnknownHostException -> "UnknownHostException"
@@ -40,7 +40,9 @@ class NetworkingErrorHandler : NetErrorHandler {
                         .withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY)
                         .navigation()*/
                 }
-                HttpResponseErrorCode.handleErrorCode(e.tag as Int)
+                Log.e("NetworkingErrorHandler", "onError: e.tag=${e.tag}" )
+
+                HttpResponseErrorCode.handleErrorCode(e.tag.toString().toInt())
             }
             is HttpFailureException -> "HttpFailureException"
             is NetException -> "NetException"

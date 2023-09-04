@@ -5,6 +5,7 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.cyberflow.base.BaseApp
 import com.cyberflow.base.util.CacheUtil
 import com.drake.net.NetConfig
+import com.drake.net.interceptor.LogRecordInterceptor
 import com.drake.net.okhttp.setConverter
 import com.drake.net.okhttp.setDebug
 import com.drake.net.okhttp.setErrorHandler
@@ -25,7 +26,8 @@ fun initNetSpark() {
         setDebug(true)
         setErrorHandler(NetworkingErrorHandler())
         setConverter(SerializationConverter())
-        setConverter(GsonConverter())
+//        setConverter(GsonConverter())
+        addInterceptor(LogRecordInterceptor(true))
         addInterceptor(HeaderInterceptor())
         addInterceptor(ResponseHeaderInterceptor())
         addInterceptor(ChuckerInterceptor(BaseApp.instance!!))
@@ -37,6 +39,7 @@ class HeaderInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val original: Request = chain.request()
         val token = CacheUtil.getUserInfo()?.token.orEmpty()
+        Log.e(TAG, "intercept: x-token=$token" )
         val requestBuilder: Request.Builder = original.newBuilder()
             .addHeader("x-token", token)
         val request: Request = requestBuilder.build()

@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseVBFragment
-import com.cyberflow.base.model.BirthplaceInfo
 import com.cyberflow.base.model.GENDER_MAN
 import com.cyberflow.base.model.GENDER_WOMEN
+import com.cyberflow.base.model.LocationInfo
 import com.cyberflow.sparkle.databinding.FragmentRegisterBirthPlaceBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
@@ -66,10 +66,10 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
                 Log.e("TAG", "callback: placeStr=$placeStr latitude=$latitude longitude=$longitude" )
                 placeStr?.also {
                     actVm?.registerBean?.apply {
-                        if(birthplace_info == null ) birthplace_info = BirthplaceInfo()
+                        if(birthplace_info == null ) birthplace_info = LocationInfo()
                         birthplace_info?.location = placeStr
-                        birthplace_info?.latitude = latitude ?: ""
-                        birthplace_info?.longitude = longitude ?: ""
+                        birthplace_info?.latitude = (latitude?.toDoubleOrNull() ?: 0.0f).toInt()
+                        birthplace_info?.longitude = (longitude?.toDoubleOrNull() ?: 0.0f).toInt()
                     }
                     mViewBind.etBirthPlace.setText(placeStr)
                     mViewBind.btnRegisterNext.disableBg(false)

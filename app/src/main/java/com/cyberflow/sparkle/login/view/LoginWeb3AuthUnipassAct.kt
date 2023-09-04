@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import com.auth0.android.jwt.JWT
 import com.cyberflow.base.act.BaseVBAct
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.sparkle.databinding.ActivityLoginWebauthUnipassTestBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.web3auth.singlefactorauth.SingleFactorAuth
@@ -18,19 +19,22 @@ import java.util.concurrent.ExecutionException
 
 class LoginWeb3AuthUnipassAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginWebauthUnipassTestBinding>() {
 
-    val testAccount = arrayListOf(
-        "0x150E4AB89Ddd5fa7f8Fb8cae501b48961Ce703A4",
-        "0x0c42ad43BEEDaCe4927E1065c10C776f2C604b5C",
-        "0x73cf3CB3dc0D6872878a316509aFb7510E7cd44d",
-        "0xE1c026085863e37321DbF7871c6d28a79153c888",
-        "0xDc58a843c8096943Ca2899b31Db004eB8B417C13",  //account5  new one
-    )
+    companion object{
+        val testAccount = arrayListOf(
+            "0x150E4AB89Ddd5fa7f8Fb8cae501b48961Ce703A4",
+            "0x0c42ad43BEEDaCe4927E1065c10C776f2C604b5C",
+            "0x73cf3CB3dc0D6872878a316509aFb7510E7cd44d",
+            "0xE1c026085863e37321DbF7871c6d28a79153c888",
+            "0xDc58a843c8096943Ca2899b31Db004eB8B417C13",  //account5  new one
+        )
+    }
 
     override fun initView(savedInstanceState: Bundle?) {
         viewModel.userInfo.observe(this) {
             Log.e(TAG, "initView: $it")
             mViewBind.tvMsg.text = "$it"
-            it.id_token.also { id_token ->
+            CacheUtil.setUserInfo(it)
+            it.id_token?.also { id_token ->
                 Log.e(TAG, "got  id_token from login :  $id_token")
                 signInJWT(id_token)
             }

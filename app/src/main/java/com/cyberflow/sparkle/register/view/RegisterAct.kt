@@ -47,8 +47,6 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
         viewModel.registerBean = RegisterRequestBean()  // init request bean
     }
 
-
-
     private fun goPrevious(){
         Log.e(TAG, "goPrevious: ", )
         mViewBind.pager.apply {

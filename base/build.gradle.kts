@@ -2,6 +2,8 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    id("kotlin-kapt")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -25,11 +27,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -67,6 +69,7 @@ dependencies {
     api("com.squareup.okhttp3:okhttp:4.11.0")
     api("com.github.liangjingkanji:Net:3.6.1")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+
     api("com.google.code.gson:gson:2.10.1")
 
     // listview

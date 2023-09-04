@@ -3,7 +3,7 @@ package com.cyberflow.base.model
 data class RegisterRequestBean(
     var birth_time: String = "",
     var birthdate: String = "",
-    var birthplace_info: BirthplaceInfo? = null ,
+    var birthplace_info: LocationInfo? = null ,
     var gender: Int = 0,    // 1：Man 2：Women
     var location_info: LocationInfo? = null,
     var nick: String = "",

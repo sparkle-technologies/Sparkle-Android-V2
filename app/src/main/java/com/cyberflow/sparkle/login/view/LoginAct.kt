@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseVBAct
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
+import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.view.RegisterAct
 import kotlinx.coroutines.launch
@@ -19,6 +21,11 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()
+        mViewBind.btnTwitterLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+                viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")
+            }
+        })
 
         mViewBind.btnWalletLogin.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(dis: Boolean) {
@@ -30,7 +37,13 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
     }
 
     override fun initData() {
+        viewModel.userInfo.observe(this) {
+            Log.e(TAG, "initView: $it")
+            CacheUtil.setUserInfo(it)
 
+            val token = CacheUtil.getUserInfo()?.token.orEmpty()
+            Log.e(TAG, "got  token from login :  $token")
+        }
     }
 
 

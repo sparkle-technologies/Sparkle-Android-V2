@@ -3,10 +3,10 @@ package com.cyberflow.sparkle.login.viewmodel
 import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.scopeLife
+import androidx.lifecycle.scopeNetLife
 import androidx.lifecycle.viewModelScope
+import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.model.RegisterRequestBean
-import com.cyberflow.base.model.UserLoginBean
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.net.GsonConverter
 import com.cyberflow.base.viewmodel.BaseViewModel
@@ -14,15 +14,13 @@ import com.drake.net.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
-import com.google.gson.Gson
-import org.json.JSONObject
 
 class LoginRegisterViewModel : BaseViewModel() {
 
-    var userInfo: MutableLiveData<UserLoginBean> = MutableLiveData()
+    var userInfo: MutableLiveData<LoginResponseData> = MutableLiveData()
 
-    fun login(authMsg: String, type: String) = scopeLife {
-        userInfo.value = Post<UserLoginBean>(Api.SIGN_IN) {
+    fun login(authMsg: String, type: String) = scopeNetLife {
+        userInfo.value = Post<LoginResponseData>(Api.SIGN_IN) {
             //登录类型 MetaMask、WalletConnect、Coinbase、Twitter、Discord
             //钱包地址 | Twitter授权code | Discord授权token
             json("auth_msg" to authMsg, "type" to type)
@@ -31,10 +29,9 @@ class LoginRegisterViewModel : BaseViewModel() {
 
     var registerBean : RegisterRequestBean? = null
 
-    fun register() = scopeLife {
-        Log.e(TAG, "register: ${GsonConverter.gson.toJson(registerBean)}" )
-        userInfo.value = Post<UserLoginBean>(Api.COMPLETE_INFO) {
-            json(GsonConverter.gson.toJson(registerBean, RegisterRequestBean::class.java))
+    fun register() = scopeNetLife {
+        userInfo.value = Post<LoginResponseData>(Api.COMPLETE_INFO) {
+            json(GsonConverter.gson.toJson(registerBean))
         }.await()
     }
 

@@ -2,6 +2,7 @@ package com.cyberflow.base.util
 
 import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.model.UserAvatarImages
 import com.cyberflow.base.net.GsonConverter
@@ -27,9 +28,12 @@ object CacheUtil {
         }
     }
 
-    fun getSimpleUserInfo(): UserInfo {
+    fun getSimpleUserInfo(): UserInfo? {
         val result = UserInfo()
         getUserInfo()?.apply {
+            if(user == null) {
+                return null
+            }
             result.gender = user.gender
             result.birthdate = user.birthdate
             result.birth_time = user.birth_time
@@ -45,15 +49,20 @@ object CacheUtil {
     fun setUserInfo(obj: LoginResponseData?) {
         val kv = getMMKV()
         if (obj == null) {
+            Log.e("TAG", "setUserInfo:obj is null" )
             kv.encode(USERINFO, "")
         } else {
             val json = GsonConverter.gson.toJson(obj)
+            Log.e("TAG", "setUserInfo: $obj" )
             kv.encode(USERINFO, json)
         }
     }
 
     fun isLoggedInAndHasUserInfoCompleted(): Boolean {
         getUserInfo()?.apply {
+            if(user == null ){
+                return false
+            }
             val necessary1 = token?.isNotEmpty()
             val necessary2 = user.open_uid?.isNotEmpty()
             val necessary3 = user.nft_list?.any { it.url.isNotEmpty() }
