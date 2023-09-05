@@ -9,7 +9,6 @@ import com.cyberflow.base.model.GENDER_MAN
 import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.sparkle.databinding.FragmentSelectBirthdayBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.widget.daytimepicker.CustomDatePicker
 import com.cyberflow.sparkle.register.widget.daytimepicker.DateFormatUtils
@@ -23,10 +22,10 @@ class SelectBirthdayFragment :
     override fun initData() {
         actVm?.registerBean?.gender?.apply {
             if(this == GENDER_MAN){
-                mViewBind.btnHead.updateSrc(com.cyberflow.base.resources.R.drawable.register_ic_man)
+                mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_man_divider)
             }
             if(this == GENDER_WOMEN){
-                mViewBind.btnHead.updateSrc(com.cyberflow.base.resources.R.drawable.register_ic_women)
+                mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_women_divider)
             }
         }
     }
@@ -38,13 +37,13 @@ class SelectBirthdayFragment :
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        mViewBind.btnHead.setClickListener(object : ShadowImgButton.ShadowClickListener {
+       /* mViewBind.btnHead.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 // yyyy-MM-dd
                 mViewBind.etBirthDate.setText("")
                 mViewBind.etBirthTime.setText("")
             }
-        })
+        })*/
 
         mViewBind.anchorDate.setOnClickListener { selectDate() }
         mViewBind.anchorTime.setOnClickListener { selectTime() }

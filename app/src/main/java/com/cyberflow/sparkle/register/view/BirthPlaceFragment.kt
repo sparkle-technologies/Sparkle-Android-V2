@@ -10,18 +10,18 @@ import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.base.model.LocationInfo
 import com.cyberflow.sparkle.databinding.FragmentRegisterBirthPlaceBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.widget.searchplace.SearchPlaceDialog
+import com.google.android.material.snackbar.Snackbar
 
 class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegisterBirthPlaceBinding>() {
     override fun initData() {
         actVm?.registerBean?.gender?.apply {
             if(this == GENDER_MAN){
-                mViewBind.btnHead.updateSrc(com.cyberflow.base.resources.R.drawable.register_ic_man)
+                mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_man_divider)
             }
             if(this == GENDER_WOMEN){
-                mViewBind.btnHead.updateSrc(com.cyberflow.base.resources.R.drawable.register_ic_women)
+                mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_women_divider)
             }
         }
     }
@@ -38,12 +38,6 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
             actVm?.clickNext()
         }*/
 
-        mViewBind.btnHead.setClickListener(object : ShadowImgButton.ShadowClickListener {
-            override fun clicked() {
-
-            }
-        })
-
         mViewBind.anchor.setOnClickListener {
             selectPlace()
         }
@@ -55,6 +49,10 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
         })
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(disable: Boolean) {
+                if(disable){
+                    Snackbar.make(mViewBind.btnRegisterNext, "please select your birth place", Snackbar.LENGTH_SHORT).show()
+                    return
+                }
                 actVm?.clickNext()
             }
         })
