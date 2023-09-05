@@ -8,6 +8,7 @@ import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.databinding.FragmentSelectGenderBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.google.android.material.snackbar.Snackbar
 
 class SelectGenderFragment : BaseVBFragment<BaseViewModel, FragmentSelectGenderBinding>() {
 
@@ -31,6 +32,10 @@ class SelectGenderFragment : BaseVBFragment<BaseViewModel, FragmentSelectGenderB
 
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(disable: Boolean) {
+                if(disable){
+                    Snackbar.make(mViewBind.btnRegisterNext, "please select gender", Snackbar.LENGTH_SHORT).show()
+                    return
+                }
                 actVm?.registerBean?.gender = gender
                 actVm?.clickNext()
             }

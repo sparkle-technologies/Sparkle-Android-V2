@@ -12,5 +12,6 @@
     <string name="location">Location</string>
     <string name="birth_place">Birth Place</string>
     <string name="Place">Place</string>
+    <string name="input_your_birth_place">input your birth place</string>
 
 </resources>

@@ -1,14 +1,20 @@
 package com.cyberflow.sparkle.register.widget.searchplace
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import com.cyberflow.base.util.KeyboardUtil
+import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.DialogSearchPlaceBinding
+import com.drake.brv.utils.linear
+import com.drake.brv.utils.models
+import com.drake.brv.utils.setup
 import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
@@ -17,12 +23,6 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
-import com.cyberflow.sparkle.R
-import com.drake.brv.utils.divider
-import com.drake.brv.utils.linear
-import com.drake.brv.utils.models
-import com.drake.brv.utils.setup
-import com.google.android.material.snackbar.Snackbar
 
 private const val TAG = "SearchPlaceDialog"
 
@@ -56,38 +56,46 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
             addType<PlaceResult>(R.layout.item_google_place)
             onBind {
                 findView<TextView>(R.id.tv_place_result).text = getModel<PlaceResult>().placeName
-                findView<TextView>(R.id.tv_place_result).background = if(selectIdx == layoutPosition) ResourcesCompat.getDrawable(resources, com.cyberflow.base.resources.R.drawable.register_bg_gender_light, null) else null
-                findView<View>(R.id.line).visibility = if(layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
+                findView<TextView>(R.id.tv_place_result).background =
+                    if (selectIdx == layoutPosition) ResourcesCompat.getDrawable(
+                        resources,
+                        com.cyberflow.base.resources.R.drawable.register_bg_gender_light,
+                        null
+                    ) else null
+                findView<View>(R.id.line).visibility =
+                    if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
             }
             R.id.tv_place_result.onClick {
-                val model  = getModel<PlaceResult>()
+                val model = getModel<PlaceResult>()
                 selectIdx = layoutPosition
                 notifyItemChanged(layoutPosition)
-                Log.e(TAG, "you choose:  $model" )
-
+                Log.e(TAG, "you choose:  $model")
+                onPlaceClicked(model.placeName, model.placeId)
             }
         }
         binding.tvTitle.text = title
-        binding.ivBtnBack.setOnClickListener { dismiss() }
-        addEditTextListener()
-    }
+        binding.llBack.setOnClickListener { dismiss() }
+        binding.tvCancel.setOnClickListener { dismiss() }
 
+        binding.edtSearchPlace.apply {
 
-    @SuppressLint("LongLogTag")
-    private fun addEditTextListener() {
-        binding.edtSearchPlace.requestFocus()
-        binding.edtSearchPlace.addTextChangedListener {
-            if (!it.isNullOrEmpty()) {
-                binding.ivClear.visibility = View.VISIBLE
-                binding.rvPlaceResult.visibility = View.VISIBLE
-                searchPlace(it.toString())
-            } else {
-                binding.ivClear.visibility = View.GONE
+            addTextChangedListener {
+                if (!it.isNullOrEmpty()) {
+                    binding.rvPlaceResult.visibility = View.VISIBLE
+                    searchPlace(it.toString())
+                } else {
+                    binding.rvPlaceResult.visibility = View.INVISIBLE
+                }
             }
-        }
+            setOnFocusChangeListener { v, hasFocus ->
+                Log.e(TAG, "initView: hasFocus = $hasFocus")
+                if (!hasFocus) return@setOnFocusChangeListener
 
-        binding.ivClear.setOnClickListener {
-            binding.edtSearchPlace.setText("")
+                post {
+                    KeyboardUtil.show(this)
+                }
+            }
+            requestFocus()
         }
     }
 
@@ -118,11 +126,13 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
             }
     }
 
-
     override fun onPlaceClicked(place: String, placeId: String) {
         //设置内容，并清除焦点
-        binding.edtSearchPlace.setText(place)
-        binding.edtSearchPlace.clearFocus()
+        binding.edtSearchPlace.apply {
+            setText(place)
+            clearFocus()
+            KeyboardUtil.hide(this)
+        }
         binding.rvPlaceResult.visibility = View.INVISIBLE
         getPlaceDetails(place, placeId)
     }
@@ -153,10 +163,18 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
         if (dialog != null) {
             val width = ViewGroup.LayoutParams.MATCH_PARENT
             val height = ViewGroup.LayoutParams.MATCH_PARENT
-            dialog.window!!.setLayout(width, height)
-            dialog.window!!.setDimAmount(0.0f)
-            dialog.window!!.setWindowAnimations(com.cyberflow.base.resources.R.style.Theme_CenterDialog)
+            dialog.window?.apply {
+                setLayout(width, height)
+                setDimAmount(0.0f)
+                setWindowAnimations(com.cyberflow.base.resources.R.style.Theme_CenterDialog)
+            }
         }
+    }
+
+
+    override fun dismiss() {
+        KeyboardUtil.hide(binding.edtSearchPlace)
+        super.dismiss()
     }
 
     private var icb: ICallBack? = null
@@ -168,6 +186,4 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
     interface ICallBack {
         fun callback(placeStr: String?, latitude: String?, longitude: String?)
     }
-
-
 }
