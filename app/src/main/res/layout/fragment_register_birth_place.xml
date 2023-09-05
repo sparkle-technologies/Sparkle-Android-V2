@@ -17,6 +17,7 @@
             android:paddingStart="@dimen/dp_18"
             android:paddingEnd="@dimen/dp_18"
             android:text="Later"
+            android:visibility="gone"
             android:textColor="@color/color_4B4396"
             android:textSize="@dimen/sp_18"
             app:layout_constraintRight_toRightOf="parent"

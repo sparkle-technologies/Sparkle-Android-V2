@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.cyberflow.sparkle.databinding.DialogSearchPlaceBinding
 import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.Places
@@ -18,22 +18,23 @@ import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.cyberflow.sparkle.R
+import com.drake.brv.utils.divider
+import com.drake.brv.utils.linear
+import com.drake.brv.utils.models
+import com.drake.brv.utils.setup
+import com.google.android.material.snackbar.Snackbar
 
 private const val TAG = "SearchPlaceDialog"
 
 class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultCallback {
 
-    private val placeListView: RecyclerView get() = binding.rvPlaceResult
+    private var _binding: DialogSearchPlaceBinding? = null
+    private val binding: DialogSearchPlaceBinding get() = _binding!!
     private var placeList = arrayListOf<PlaceResult>()
-    private lateinit var adapter: PlaceListAdapter
-    private var icb: ICallBack? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(
-            DialogFragment.STYLE_NORMAL,
-            com.cyberflow.base.resources.R.style.AppTheme_FullScreenDialog
-        )
+        setStyle(STYLE_NORMAL, com.cyberflow.base.resources.R.style.AppTheme_FullScreenDialog)
     }
 
     override fun onCreateView(
@@ -47,30 +48,30 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
         return view
     }
 
-    private var _binding: DialogSearchPlaceBinding? = null
-    private val binding: DialogSearchPlaceBinding get() = _binding!!
+    private var selectIdx = -1
 
     private fun initView(view: View) {
         _binding = DialogSearchPlaceBinding.bind(view)
-        adapter = PlaceListAdapter(placeList, this)
-        placeListView?.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        placeListView?.adapter = adapter
+        binding.rvPlaceResult.linear().setup {
+            addType<PlaceResult>(R.layout.item_google_place)
+            onBind {
+                findView<TextView>(R.id.tv_place_result).text = getModel<PlaceResult>().placeName
+                findView<TextView>(R.id.tv_place_result).background = if(selectIdx == layoutPosition) ResourcesCompat.getDrawable(resources, com.cyberflow.base.resources.R.drawable.register_bg_gender_light, null) else null
+                findView<View>(R.id.line).visibility = if(layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
+            }
+            R.id.tv_place_result.onClick {
+                val model  = getModel<PlaceResult>()
+                selectIdx = layoutPosition
+                notifyItemChanged(layoutPosition)
+                Log.e(TAG, "you choose:  $model" )
+
+            }
+        }
         binding.tvTitle.text = title
         binding.ivBtnBack.setOnClickListener { dismiss() }
         addEditTextListener()
     }
 
-    override fun onStart() {
-        super.onStart()
-        val dialog = dialog
-        if (dialog != null) {
-            val width = ViewGroup.LayoutParams.MATCH_PARENT
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
-            dialog.window!!.setLayout(width, height)
-            dialog.window!!.setDimAmount(0.0f)
-            dialog.window!!.setWindowAnimations(com.cyberflow.base.resources.R.style.Theme_CenterDialog)
-        }
-    }
 
     @SuppressLint("LongLogTag")
     private fun addEditTextListener() {
@@ -107,7 +108,8 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
                     val placeId = prediction.placeId
                     val placeResultModel = PlaceResult(placeName, placeId)
                     placeList.add(placeResultModel)
-                    adapter.setList(placeList)
+                    selectIdx = -1
+                    binding.rvPlaceResult.models = placeList
                 }
             }.addOnFailureListener { exception: Exception? ->
                 if (exception is ApiException) {
@@ -116,9 +118,6 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
             }
     }
 
-    fun setCallBack(cb: ICallBack) {
-        icb = cb
-    }
 
     override fun onPlaceClicked(place: String, placeId: String) {
         //设置内容，并清除焦点
@@ -148,7 +147,27 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
             }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val dialog = dialog
+        if (dialog != null) {
+            val width = ViewGroup.LayoutParams.MATCH_PARENT
+            val height = ViewGroup.LayoutParams.MATCH_PARENT
+            dialog.window!!.setLayout(width, height)
+            dialog.window!!.setDimAmount(0.0f)
+            dialog.window!!.setWindowAnimations(com.cyberflow.base.resources.R.style.Theme_CenterDialog)
+        }
+    }
+
+    private var icb: ICallBack? = null
+
+    fun setCallBack(cb: ICallBack) {
+        icb = cb
+    }
+
     interface ICallBack {
         fun callback(placeStr: String?, latitude: String?, longitude: String?)
     }
+
+
 }

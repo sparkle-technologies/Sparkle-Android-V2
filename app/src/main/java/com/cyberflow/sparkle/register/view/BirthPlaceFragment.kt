@@ -33,9 +33,10 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        /* UI changed the design, so wait, in case sth happen again
         mViewBind.tvLater.setOnClickListener {
             actVm?.clickNext()
-        }
+        }*/
 
         mViewBind.btnHead.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
@@ -60,7 +61,7 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
     }
 
     private fun selectPlace(){
-        val searchPlaceDialog = SearchPlaceDialog(getString(com.cyberflow.base.resources.R.string.current))
+        val searchPlaceDialog = SearchPlaceDialog(getString(com.cyberflow.base.resources.R.string.birth_place))
         searchPlaceDialog.setCallBack(object : SearchPlaceDialog.ICallBack {
             override fun callback(placeStr: String?, latitude: String?, longitude: String?) {
                 Log.e("TAG", "callback: placeStr=$placeStr latitude=$latitude longitude=$longitude" )
@@ -76,6 +77,6 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
                 }
             }
         })
-        searchPlaceDialog.show(requireActivity().supportFragmentManager, "current")
+        searchPlaceDialog.show(requireActivity().supportFragmentManager, "Birth Place")
     }
 }

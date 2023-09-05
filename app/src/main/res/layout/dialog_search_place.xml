@@ -6,32 +6,31 @@
     android:layout_height="match_parent"
     android:background="@color/white_3rd">
 
-    <RelativeLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/rl_title_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="18dp"
         android:layout_marginTop="10dp"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/iv_btn_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="match_parent"
             android:background="@drawable/svg_btn_left" />
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_11"
             android:textColor="#2A2A2B"
             android:textSize="17sp"
             android:textStyle="bold"
-            tools:text="@string/current" />
-    </RelativeLayout>
-
+            tools:text="@string/birth_place" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <EditText
         android:id="@+id/edt_search_place"
@@ -62,12 +61,20 @@
         app:layout_constraintTop_toTopOf="@id/edt_search_place"
         app:srcCompat="@drawable/svg_clear" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_place_result"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="22dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/edt_search_place" />
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_20"
+        app:layout_constraintTop_toBottomOf="@id/edt_search_place">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_place_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/register_bg_gender_white" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

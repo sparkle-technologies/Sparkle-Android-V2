@@ -10,7 +10,7 @@
     <string name="done">Done</string>
 
     <string name="location">Location</string>
-    <string name="current">Current</string>
+    <string name="birth_place">Birth Place</string>
     <string name="Place">Place</string>
 
 </resources>
