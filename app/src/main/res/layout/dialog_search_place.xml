@@ -91,6 +91,18 @@
         app:layout_constraintRight_toRightOf="@+id/bg_white"
         app:layout_constraintTop_toTopOf="@+id/bg_white" />
 
+    <ImageView
+        android:id="@+id/iv_clear"
+        android:layout_width="@dimen/dp_27"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingEnd="@dimen/dp_5"
+        android:src="@drawable/svg_ic_clear"
+        app:layout_constraintBottom_toBottomOf="@+id/edt_search_place"
+        app:layout_constraintRight_toRightOf="@+id/edt_search_place"
+        app:layout_constraintTop_toTopOf="@+id/edt_search_place" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

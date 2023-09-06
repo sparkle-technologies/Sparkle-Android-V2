@@ -83,11 +83,11 @@
             android:layout_marginEnd="@dimen/dp_20"
             android:hint="Birth Time"
 
-            app:endIconDrawable="@drawable/register_ic_date"
+            app:endIconDrawable="@drawable/register_ic_time"
             app:endIconMode="custom"
 
             app:errorEnabled="false"
-            app:helperText="Filling in specific time details for more accurate results."
+            app:helperText="Time is important for determining your horoscope."
 
             app:helperTextEnabled="true"
             app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_BirthDate">

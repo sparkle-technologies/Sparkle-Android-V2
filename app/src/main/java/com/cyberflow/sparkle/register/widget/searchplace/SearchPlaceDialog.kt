@@ -76,14 +76,18 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
         binding.tvTitle.text = title
         binding.llBack.setOnClickListener { dismiss() }
         binding.tvCancel.setOnClickListener { dismiss() }
+        binding.ivClear.setOnClickListener {
+            binding.edtSearchPlace.setText("")
+        }
 
         binding.edtSearchPlace.apply {
-
             addTextChangedListener {
                 if (!it.isNullOrEmpty()) {
                     binding.rvPlaceResult.visibility = View.VISIBLE
+                    binding.ivClear.visibility = View.VISIBLE
                     searchPlace(it.toString())
                 } else {
+                    binding.ivClear.visibility = View.INVISIBLE
                     binding.rvPlaceResult.visibility = View.INVISIBLE
                 }
             }
