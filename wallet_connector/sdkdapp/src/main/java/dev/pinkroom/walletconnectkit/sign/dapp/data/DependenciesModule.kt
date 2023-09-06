@@ -5,7 +5,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.google.gson.Gson
 import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
-import dev.pinkroom.walletconnectkit.sign.dapp.BuildConfig
+//import dev.pinkroom.walletconnectkit.sign.dapp.BuildConfig
 import dev.pinkroom.walletconnectkit.sign.dapp.data.repository.PreferencesRepository
 import dev.pinkroom.walletconnectkit.sign.dapp.data.repository.WalletRepository
 import dev.pinkroom.walletconnectkit.sign.dapp.data.service.ExplorerService
@@ -42,11 +42,11 @@ internal class DependenciesModule(context: Context, config: WalletConnectKitConf
 
     private fun createBaseHttpClientBuilder(): OkHttpClient.Builder {
         val httpClientBuilder = OkHttpClient.Builder()
-        if (BuildConfig.DEBUG) {
+//        if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             httpClientBuilder.addInterceptor(loggingInterceptor)
-        }
+//        }
         return httpClientBuilder
     }
 }

@@ -21,6 +21,18 @@
             app:lottie_loop="true" />
 
 
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="32dp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@+id/lav_homepage" />
+
+
         <com.cyberflow.sparkle.login.widget.ShadowTxtButton
             android:id="@+id/btn_wallet_login"
             android:layout_width="match_parent"

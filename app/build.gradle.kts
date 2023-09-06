@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "com.cyberflow.sparkle"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.cyberflow.sparkle"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -62,6 +62,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.libraries.places:places:3.1.0")
+
+    // for wallet-connector, it integrates with metamask, trust wallet, coinbase wallet etc
+    implementation(project(mapOf("path" to ":dapp")))
 
     // for web3Auth
     implementation("com.github.web3auth:single-factor-auth-android:0.0.2")
