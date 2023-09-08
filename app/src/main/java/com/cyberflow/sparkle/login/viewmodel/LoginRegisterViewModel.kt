@@ -14,6 +14,7 @@ import com.drake.net.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
+import com.orhanobut.logger.Logger
 
 class LoginRegisterViewModel : BaseViewModel() {
 
@@ -38,7 +39,11 @@ class LoginRegisterViewModel : BaseViewModel() {
 
     fun loginTwitter(act: Activity) {
         val firebaseAuth = FirebaseAuth.getInstance()
+
+
         val provider = OAuthProvider.newBuilder("twitter.com")
+        // 参数包括 client_id、response_type、redirect_uri、state、scope 和 response_mode
+
         firebaseAuth
             .startActivityForSignInWithProvider(act, provider.build())
             .addOnSuccessListener {
@@ -49,17 +54,35 @@ class LoginRegisterViewModel : BaseViewModel() {
                 // ((OAuthCredential)authResult.getCredential()).getAccessToken().
                 // The OAuth secret can be retrieved by calling:
                 // ((OAuthCredential)authResult.getCredential()).getSecret().
-                Log.e(TAG, "loginTwitter: success $it")
+
+//                loge( "loginTwitter: success ${GsonConverter.gson.toJson(it)}")
+
+                Logger.e(GsonConverter.gson.toJson(it))
 
                 Log.e(TAG, "additionalUserInfo?.providerId= ${it.additionalUserInfo?.providerId}")
                 Log.e(TAG, "additionalUserInfo?.username= ${it.additionalUserInfo?.username}")
+
                 Log.e(TAG, "it.credential?.accessToken= ${ (it.credential as? OAuthCredential)?.accessToken }")
-                Log.e(TAG, "it.user?.providerId= ${it.user?.providerId}")
-                Log.e(TAG, "it.credential?.signInMethod= ${it.credential?.signInMethod}")
+                Log.e(TAG, "it.credential?.secret= ${ (it.credential as? OAuthCredential)?.secret  }")
+                Log.e(TAG, "it.credential?.idToken= ${ (it.credential as? OAuthCredential)?.idToken  }")
+
+                Log.e(TAG, "it.credential?.provider= ${ (it.credential as? OAuthCredential)?.provider  }")
+                Log.e(TAG, "it.credential?.signInMethod= ${ (it.credential as? OAuthCredential)?.signInMethod  }")
 
                 viewModelScope.run {
 //                    login((it.credential as? OAuthCredential)?.accessToken ?: "", "Twitter") //TODO  接口还没好
                 }
+
+                Logger.e("  currentUser?.providerId=${firebaseAuth.currentUser?.providerId}")
+                Logger.e("  currentUser?.uid=${firebaseAuth.currentUser?.uid}")
+
+
+                /*firebaseAuth.currentUser?.getIdToken(true)?.addOnCompleteListener {
+                    if(it.isSuccessful){
+                        val idToken = it.result?.token ?: ""
+                        Log.e(TAG, "loginTwitter: --------- idToken=$idToken" )
+                    }
+                }*/
             }
             .addOnFailureListener {
                 // Handle failure.
@@ -69,28 +92,7 @@ class LoginRegisterViewModel : BaseViewModel() {
     }
 
     fun loginGoogle(act: Activity) {
-        val firebaseAuth = FirebaseAuth.getInstance()
-        val firebaseUser = firebaseAuth.currentUser
-        if (firebaseUser == null) {
-            Log.e(TAG, " firebaseUser is null")
-            return
-        }
-        Log.e(TAG, "loginGoogle: ${firebaseUser.toString()}")
-        val provider = OAuthProvider.newBuilder("twitter.com")
-        firebaseUser
-            .startActivityForReauthenticateWithProvider(act, provider.build())
-            .addOnSuccessListener {
-                // User is re-authenticated with fresh tokens and
-                // should be able to perform sensitive operations
-                // like account deletion and email or password
-                // update.
-                Log.e(TAG, " ${it.additionalUserInfo.toString()}")
-                Log.e(TAG, " ${it.user.toString()}")
-                Log.e(TAG, " ${it.credential.toString()}")
-            }
-            .addOnFailureListener {
-                // Handle failure.
-            }
+
     }
 
 

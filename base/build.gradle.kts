@@ -71,6 +71,7 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
     api("com.google.code.gson:gson:2.10.1")
+    api("com.orhanobut:logger:2.2.0")
 
     // listview
     api("com.github.liangjingkanji:BRV:1.5.0")

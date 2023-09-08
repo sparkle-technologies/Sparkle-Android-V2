@@ -86,7 +86,7 @@ class LoginWeb3AuthUnipassAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginW
         val jwt = JWT(idToken)
         val issuer = jwt.issuer //get registered claims
         Log.d(ContentValues.TAG, "Issuer = $issuer")
-        val open_id = jwt.getClaim("open_id").asString() //get sub claims
+        val open_id = jwt.getClaim("open_id").asString() // get sub claims
         Log.d(ContentValues.TAG, "open_id = $open_id")
 
         loginParams = LoginParams("Sparkle-Custom-Auth-01", "$open_id", "$idToken")

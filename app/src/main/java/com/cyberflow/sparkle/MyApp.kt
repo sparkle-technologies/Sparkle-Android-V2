@@ -4,6 +4,8 @@ import com.cyberflow.base.BaseApp
 import com.cyberflow.base.net.initNetSpark
 import com.cyberflow.base.util.CacheUtil
 import com.google.android.libraries.places.api.Places
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 
 class MyApp : BaseApp() {
     override fun onCreate() {
@@ -12,6 +14,8 @@ class MyApp : BaseApp() {
         initNetSpark()
         CacheUtil.init(this)
         initGooglePlace()
+
+        Logger.addLogAdapter(AndroidLogAdapter())
     }
 
 

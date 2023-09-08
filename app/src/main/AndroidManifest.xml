@@ -23,7 +23,7 @@
             android:value="640" />
 
         <activity
-            android:name=".login.view.LoginAct"
+            android:name=".main.view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
