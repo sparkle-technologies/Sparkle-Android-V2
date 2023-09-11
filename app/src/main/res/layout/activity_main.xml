@@ -93,7 +93,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@+id/bgMenu" />
 
-
         <com.cyberflow.sparkle.login.widget.ShadowImgButton
             android:id="@+id/btn_add_friends"
             android:layout_width="@dimen/dp_40"
@@ -106,187 +105,8 @@
             app:view_img_src="@drawable/main_ic_add_friends" />
 
 
-        <!--   <androidx.constraintlayout.widget.ConstraintLayout
-               android:layout_width="163dp"
-               android:layout_height="203dp"
-               app:layout_constraintBottom_toBottomOf="parent"
-               app:layout_constraintLeft_toLeftOf="parent"
-               app:layout_constraintRight_toRightOf="parent"
-               app:layout_constraintTop_toTopOf="parent">
-
-               <View
-                   android:layout_width="144dp"
-                   android:layout_height="70dp"
-                   android:background="@drawable/main_bg_top_menu_selected"
-                   app:layout_constraintBottom_toBottomOf="parent"
-                   app:layout_constraintLeft_toLeftOf="parent"
-                   app:layout_constraintRight_toRightOf="parent" />
-
-               <View
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:layout_marginBottom="@dimen/dp_4"
-                   android:background="@drawable/register_bg_gender_white" />
-
-               <ImageView
-                   android:id="@+id/iv"
-                   android:layout_width="match_parent"
-                   android:layout_height="@dimen/dp_128"
-                   android:layout_marginTop="@dimen/dp_8"
-                   android:src="@drawable/pic_cora"
-                   app:layout_constraintTop_toTopOf="parent" />
-
-               <TextView
-                   android:id="@+id/tv_role"
-                   android:layout_width="0dp"
-                   android:layout_height="@dimen/dp_21"
-                   android:layout_marginStart="@dimen/dp_5"
-                   android:layout_marginTop="@dimen/dp_3"
-                   android:layout_marginEnd="@dimen/dp_25"
-                   android:ellipsize="end"
-                   android:gravity="center_vertical"
-                   android:maxLines="1"
-                   android:text="some birds aren't meant to be caged. Their feathers are just too bright."
-                   android:textColor="@color/color_7D7D80"
-                   android:textSize="@dimen/sp_10"
-                   app:layout_constraintLeft_toLeftOf="parent"
-                   app:layout_constraintRight_toLeftOf="@+id/iv_tag"
-                   app:layout_constraintTop_toBottomOf="@+id/iv" />
-
-               <ImageView
-                   android:id="@+id/iv_tag"
-                   android:layout_width="@dimen/dp_20"
-                   android:layout_height="@dimen/dp_20"
-                   android:layout_marginEnd="@dimen/dp_7"
-                   android:src="@drawable/main_contact_vip"
-                   app:layout_constraintBottom_toBottomOf="@+id/tv_role"
-                   app:layout_constraintRight_toRightOf="parent"
-                   app:layout_constraintTop_toTopOf="@+id/tv_role" />
-
-               <TextView
-                   android:id="@+id/tv_name"
-                   android:layout_width="0dp"
-                   android:layout_height="@dimen/dp_21"
-                   android:layout_marginStart="@dimen/dp_5"
-                   android:layout_marginTop="@dimen/dp_3"
-                   android:layout_marginEnd="@dimen/dp_5"
-                   android:ellipsize="end"
-                   android:gravity="center_vertical"
-                   android:maxLines="1"
-                   android:text="Cora-Official"
-                   android:textColor="@color/color_000000"
-                   android:textSize="@dimen/sp_18"
-                   android:textStyle="bold"
-                   app:layout_constraintLeft_toLeftOf="parent"
-                   app:layout_constraintRight_toRightOf="parent"
-                   app:layout_constraintTop_toBottomOf="@+id/tv_role" />
-
-               <View
-                   android:id="@+id/line"
-                   android:layout_width="@dimen/dp_40"
-                   android:layout_height="@dimen/dp_8"
-                   android:background="@drawable/main_vertical_divider"
-                   app:layout_constraintRight_toRightOf="parent"
-                   app:layout_constraintTop_toTopOf="parent" />
-
-               <ImageView
-                   android:id="@+id/bg_msg"
-                   android:layout_width="@dimen/dp_30"
-                   android:layout_height="@dimen/dp_30"
-                   android:src="@drawable/main_bg_msg_circle"
-                   app:layout_constraintLeft_toLeftOf="@+id/line"
-                   app:layout_constraintRight_toRightOf="@+id/line"
-                   app:layout_constraintTop_toBottomOf="@+id/line" />
-
-               <ImageView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:src="@drawable/main_ic_msg"
-                   app:layout_constraintBottom_toBottomOf="@+id/bg_msg"
-                   app:layout_constraintLeft_toLeftOf="@+id/bg_msg"
-                   app:layout_constraintRight_toRightOf="@+id/bg_msg"
-                   app:layout_constraintTop_toTopOf="@+id/bg_msg" />
-
-           </androidx.constraintlayout.widget.ConstraintLayout>
-
-           <androidx.constraintlayout.widget.ConstraintLayout
-               android:layout_width="105dp"
-               android:layout_height="177dp"
-               android:layout_marginBottom="50dp"
-               app:layout_constraintBottom_toBottomOf="parent"
-               app:layout_constraintLeft_toLeftOf="parent"
-               app:layout_constraintRight_toRightOf="parent">
-
-               <View
-                   android:layout_width="94dp"
-                   android:layout_height="60dp"
-                   android:background="@drawable/main_bg_top_menu_selected"
-                   app:layout_constraintBottom_toBottomOf="parent"
-                   app:layout_constraintLeft_toLeftOf="parent"
-                   app:layout_constraintRight_toRightOf="parent" />
-
-               <View
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent"
-                   android:layout_marginBottom="@dimen/dp_4"
-                   android:background="@drawable/register_bg_gender_white" />
-
-               <ImageView
-                   android:id="@+id/iv_contact"
-                   android:layout_width="match_parent"
-                   android:layout_height="@dimen/dp_128"
-                   android:layout_marginTop="@dimen/dp_3"
-                   android:src="@drawable/contact_pic"
-                   app:layout_constraintTop_toTopOf="parent" />
-
-               <TextView
-                   android:id="@+id/tv_contact_name"
-                   android:layout_width="0dp"
-                   android:layout_height="@dimen/dp_21"
-                   android:layout_marginStart="@dimen/dp_5"
-                   android:layout_marginEnd="@dimen/dp_5"
-                   android:ellipsize="end"
-                   android:gravity="center"
-                   android:maxLines="1"
-                   android:text="Harry"
-                   android:textColor="@color/color_000000"
-                   android:textSize="@dimen/sp_16"
-                   android:textStyle="bold"
-                   app:layout_constraintBottom_toBottomOf="parent"
-                   app:layout_constraintLeft_toLeftOf="parent"
-                   app:layout_constraintRight_toRightOf="parent"
-                   app:layout_constraintTop_toBottomOf="@+id/iv_contact" />
-
-               <View
-                   android:id="@+id/contact_line"
-                   android:layout_width="@dimen/dp_30"
-                   android:layout_height="@dimen/dp_8"
-                   android:background="@drawable/main_vertical_divider"
-                   app:layout_constraintRight_toRightOf="parent"
-                   app:layout_constraintTop_toTopOf="parent" />
-
-               <ImageView
-                   android:id="@+id/bg_contact_msg"
-                   android:layout_width="@dimen/dp_18"
-                   android:layout_height="@dimen/dp_18"
-                   android:src="@drawable/main_bg_msg_circle"
-                   app:layout_constraintLeft_toLeftOf="@+id/contact_line"
-                   app:layout_constraintRight_toRightOf="@+id/contact_line"
-                   app:layout_constraintTop_toBottomOf="@+id/contact_line" />
-
-               <ImageView
-                   android:layout_width="@dimen/dp_10"
-                   android:layout_height="@dimen/dp_8"
-                   android:src="@drawable/main_ic_msg"
-                   app:layout_constraintBottom_toBottomOf="@+id/bg_contact_msg"
-                   app:layout_constraintLeft_toLeftOf="@+id/bg_contact_msg"
-                   app:layout_constraintRight_toRightOf="@+id/bg_contact_msg"
-                   app:layout_constraintTop_toTopOf="@+id/bg_contact_msg" />
-
-           </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_20"
@@ -296,6 +116,5 @@
             app:layout_constraintTop_toBottomOf="@+id/bgMenu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </layout>
