@@ -26,6 +26,7 @@ class LoginWeb3AuthUnipassAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginW
             "0x73cf3CB3dc0D6872878a316509aFb7510E7cd44d",
             "0xE1c026085863e37321DbF7871c6d28a79153c888",
             "0xDc58a843c8096943Ca2899b31Db004eB8B417C13",  //account5  new one
+            "0x54b8c68c3856a6eaf1c1d5fbf5697ffbcfa9d6d6",  //ios test account
         )
     }
 
@@ -41,7 +42,7 @@ class LoginWeb3AuthUnipassAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginW
         }
 
         mViewBind.btnLogin.setOnClickListener {
-            viewModel.login(testAccount[2], "MetaMask")
+            viewModel.login(testAccount[5], "MetaMask")
         }
 
         mViewBind.btnGoogleLogin.setOnClickListener {

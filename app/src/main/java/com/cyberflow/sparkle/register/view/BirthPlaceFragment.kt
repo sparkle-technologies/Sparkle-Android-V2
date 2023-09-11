@@ -67,8 +67,8 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
                     actVm?.registerBean?.apply {
                         if(birthplace_info == null ) birthplace_info = LocationInfo()
                         birthplace_info?.location = placeStr
-                        birthplace_info?.latitude = (latitude?.toDoubleOrNull() ?: 0.0f).toInt()
-                        birthplace_info?.longitude = (longitude?.toDoubleOrNull() ?: 0.0f).toInt()
+                        birthplace_info?.latitude = latitude?.toDoubleOrNull() ?: 0.0
+                        birthplace_info?.longitude = longitude?.toDoubleOrNull() ?: 0.0
                     }
                     mViewBind.etBirthPlace.setText(placeStr)
                     mViewBind.btnRegisterNext.disableBg(false)
