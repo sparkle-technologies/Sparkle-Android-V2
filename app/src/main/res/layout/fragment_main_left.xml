@@ -116,7 +116,9 @@
                 android:id="@+id/line_left"
                 android:layout_width="@dimen/dp_1"
                 android:layout_height="0dp"
-                android:background="@drawable/main_vertical_divider"
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_marginBottom="@dimen/dp_4"
+                android:background="@drawable/dash_line_divider_vertical"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
                 app:layout_constraintLeft_toRightOf="@+id/bg_love"
                 app:layout_constraintRight_toLeftOf="@+id/bg_fortune"
@@ -126,7 +128,9 @@
                 android:id="@+id/line_right"
                 android:layout_width="@dimen/dp_1"
                 android:layout_height="0dp"
-                android:background="@drawable/main_vertical_divider"
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_marginBottom="@dimen/dp_4"
+                android:background="@drawable/dash_line_divider_vertical"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
                 app:layout_constraintLeft_toRightOf="@+id/bg_fortune"
                 app:layout_constraintRight_toLeftOf="@+id/bg_career"
@@ -155,6 +159,42 @@
                 app:layout_constraintLeft_toRightOf="@+id/line_right"
                 app:layout_constraintRight_toRightOf="@+id/bg_page"
                 app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+
+            <!-- for love -->
+
+
+            <TextView
+                android:id="@+id/tv_love"
+                style="@style/main_page_tv_title"
+                android:drawableLeft="@drawable/main_ic_love"
+                android:text="49"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_love"
+                app:layout_constraintLeft_toLeftOf="@+id/bg_love"
+                app:layout_constraintRight_toRightOf="@+id/bg_love"
+                app:layout_constraintTop_toTopOf="@+id/bg_love" />
+
+
+            <TextView
+                android:id="@+id/tv_fortune"
+                style="@style/main_page_tv_title"
+                android:drawableLeft="@drawable/main_ic_fortune"
+                android:text="69"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                app:layout_constraintLeft_toLeftOf="@+id/bg_fortune"
+                app:layout_constraintRight_toRightOf="@+id/bg_fortune"
+                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+            <TextView
+                android:id="@+id/tv_career"
+                style="@style/main_page_tv_title"
+                android:drawableLeft="@drawable/main_ic_career"
+                android:text="29"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_career"
+                app:layout_constraintLeft_toLeftOf="@+id/bg_career"
+                app:layout_constraintRight_toRightOf="@+id/bg_career"
+                app:layout_constraintTop_toTopOf="@+id/bg_career" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
