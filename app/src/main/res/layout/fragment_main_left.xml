@@ -41,6 +41,9 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <!--  semi circle progress bar -->
+
             <com.cyberflow.sparkle.main.widget.SemiCircleArcProgressBar
                 android:id="@+id/smc"
                 android:layout_width="150dp"
@@ -86,7 +89,77 @@
                 app:layout_constraintRight_toRightOf="@+id/line_smc" />
 
 
+            <!-- love  fortune  career -->
+
+            <View
+                android:id="@+id/bg_page"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_33"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_17"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:background="@drawable/main_bg_page_white_200_radius"
+                app:layout_constraintTop_toBottomOf="@+id/line_smc" />
+
+            <View
+                android:id="@+id/bg_fortune"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="@dimen/dp_2"
+                android:background="@drawable/main_bg_page_white_0_radius"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_page"
+                app:layout_constraintLeft_toRightOf="@+id/line_left"
+                app:layout_constraintRight_toLeftOf="@+id/line_right"
+                app:layout_constraintTop_toTopOf="@+id/bg_page" />
+
+            <View
+                android:id="@+id/line_left"
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="0dp"
+                android:background="@drawable/main_vertical_divider"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                app:layout_constraintLeft_toRightOf="@+id/bg_love"
+                app:layout_constraintRight_toLeftOf="@+id/bg_fortune"
+                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+            <View
+                android:id="@+id/line_right"
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="0dp"
+                android:background="@drawable/main_vertical_divider"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                app:layout_constraintLeft_toRightOf="@+id/bg_fortune"
+                app:layout_constraintRight_toLeftOf="@+id/bg_career"
+                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+            <View
+                android:id="@+id/bg_love"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/dp_2"
+                android:layout_marginEnd="@dimen/dp_2"
+                android:background="@drawable/main_bg_page_half_left_200_radius"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                app:layout_constraintLeft_toLeftOf="@+id/bg_page"
+                app:layout_constraintRight_toLeftOf="@+id/line_left"
+                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+            <View
+                android:id="@+id/bg_career"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/dp_2"
+                android:layout_marginEnd="@dimen/dp_2"
+                android:background="@drawable/main_bg_page_half_right_200_radius"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                app:layout_constraintLeft_toRightOf="@+id/line_right"
+                app:layout_constraintRight_toRightOf="@+id/bg_page"
+                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!-- unconfirmed demand -->
 
         <ImageView
             android:id="@+id/iv_bg_score"
