@@ -3,6 +3,7 @@
 
     <color name="color_090a11">#090A11</color>
     <color name="color_000000">#000000</color>
+    <color name="color_000000_57">#00000091</color>
     <color name="color_A8A0F9">#A8A0F9</color>
     <color name="color_D93333">#D93333</color>
     <color name="color_EAFFFF">#EAFFFF</color>
@@ -12,6 +13,7 @@
     <color name="color_4B4396">#4B4396</color>
     <color name="color_7D7D80">#7D7D80</color>
     <color name="color_F5F4FF">#F5F4FF</color>
+    <color name="color_8B82DB">#8B82DB</color>
 
     <color name="red">#FFff3333</color>
     <color name="black">#FF000000</color>

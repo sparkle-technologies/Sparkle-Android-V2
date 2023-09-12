@@ -7,33 +7,128 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
-            android:text="hello chicago!"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/iv_owl"
+            android:layout_width="120dp"
+            android:layout_height="173dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/main_ic_owl"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <com.cyberflow.sparkle.main.widget.SemiCircleArcProgressBar
-            android:id="@+id/smc"
-            android:layout_width="300dp"
-            android:layout_height="165dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="-30dp"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@drawable/register_bg_gender_white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:percent="70"
-            app:progressBarColor="@android:color/holo_blue_dark"
-            app:progressBarWidth="55"
-            app:progressPlaceHolderColor="@android:color/holo_orange_light"
-            app:progressPlaceHolderWidth="15" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_owl">
+
+            <TextView
+                android:id="@+id/tv_horoscope_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_31"
+                android:text="Today‘s Horoscope"
+                android:textColor="@color/color_000000"
+                android:textSize="@dimen/sp_18"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.cyberflow.sparkle.main.widget.SemiCircleArcProgressBar
+                android:id="@+id/smc"
+                android:layout_width="150dp"
+                android:layout_height="83dp"
+                android:layout_marginTop="@dimen/dp_10"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_horoscope_title"
+                app:progressBarColor="@color/color_8B82DB"
+                app:progressBarWidth="17"
+                app:progressPlaceHolderColor="@color/color_000000"
+                app:progressPlaceHolderWidth="25" />
+
+            <View
+                android:id="@+id/line_smc"
+                android:layout_width="160dp"
+                android:layout_height="@dimen/dp_2"
+                android:background="@drawable/main_bg_luck_point"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/smc" />
+
+            <TextView
+                android:id="@+id/iv_luck_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lucky Point"
+                android:textColor="@color/gray_5ve"
+                android:textSize="@dimen/sp_10"
+                app:layout_constraintBottom_toTopOf="@+id/line_smc"
+                app:layout_constraintLeft_toLeftOf="@+id/line_smc"
+                app:layout_constraintRight_toRightOf="@+id/line_smc" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="72"
+                android:textColor="@color/color_000000"
+                android:textSize="40sp"
+                android:textStyle="italic|bold"
+                app:layout_constraintBottom_toTopOf="@+id/iv_luck_point"
+                app:layout_constraintLeft_toLeftOf="@+id/line_smc"
+                app:layout_constraintRight_toRightOf="@+id/line_smc" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/iv_bg_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/main_bg_below_owl"
+            app:layout_constraintBottom_toTopOf="@+id/lay_main"
+            app:layout_constraintLeft_toLeftOf="@+id/lay_main"
+            app:layout_constraintRight_toRightOf="@+id/lay_main"
+            app:layout_constraintTop_toTopOf="@+id/lay_main" />
+
+        <View
+            android:id="@+id/anchor"
+            android:layout_width="@dimen/dp_0_1"
+            android:layout_height="@dimen/dp_0_1"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_bg_score"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_bg_score"
+            app:layout_constraintRight_toRightOf="@+id/iv_bg_score"
+            app:layout_constraintTop_toTopOf="@+id/iv_bg_score" />
+
+        <ImageView
+            android:id="@+id/iv_score"
+            android:layout_width="@dimen/dp_21"
+            android:layout_height="@dimen/dp_21"
+            android:layout_marginEnd="@dimen/dp_6"
+            android:src="@drawable/main_ic_score"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_bg_score"
+            app:layout_constraintRight_toLeftOf="@+id/anchor"
+            app:layout_constraintTop_toTopOf="@+id/iv_bg_score" />
+
+        <TextView
+            android:id="@+id/tv_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_6"
+            android:text="377"
+            android:textColor="@color/color_000000"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_bg_score"
+            app:layout_constraintLeft_toRightOf="@+id/anchor"
+            app:layout_constraintTop_toTopOf="@+id/iv_bg_score" />
 
         <Button
             android:id="@+id/btn"

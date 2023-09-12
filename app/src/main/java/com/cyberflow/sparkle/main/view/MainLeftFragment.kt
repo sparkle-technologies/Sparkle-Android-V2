@@ -21,10 +21,10 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        mDatabind.smc.setPercentWithAnimation(100)
+        mDatabind.smc.setPercentWithAnimation(50)
 
         mDatabind.btn.setOnClickListener {
-            mDatabind.smc.setPercentWithAnimation(80)
+            mDatabind.smc.setPercentWithAnimation(100)
         }
     }
 

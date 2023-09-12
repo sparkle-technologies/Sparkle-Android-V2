@@ -8,16 +8,21 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class SemiCircleArcProgressBar extends View {
+
+    private final static String TAG = "SemiCircleArcProgressBar";
+
     private int padding = 25;
 
     private int progressPlaceHolderColor;
@@ -52,17 +57,62 @@ public class SemiCircleArcProgressBar extends View {
         setAttrs(context, attrs);
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
+    private void initPaint() {
+        linePaint = getPaint(Color.BLACK, 3);
+        strokePaint = getPaint(progressPlaceHolderColor, progressPlaceHolderWidth);
+        paint = getPaint(progressBarColor, progressBarWidth);
+    }
+
+    private void initLength(){
         padding = progressBarWidth > progressPlaceHolderWidth ? progressBarWidth + 5 : progressPlaceHolderWidth + 5;
         top = padding;
         left = padding;
         right = getMeasuredWidth();
         bottom = getMeasuredHeight() * 2;
 
-        float progressAmount = percent * (float) 1.8;
-        canvas.drawArc(getProgressBarRectF(), 180, 180, false, getPaint(progressPlaceHolderColor, progressPlaceHolderWidth));      //arg2: For the starting point, the starting point is 0 degrees from the positive direction of the x coordinate system. How many angles are arg3 selected to rotate clockwise?
-        canvas.drawArc(getProgressBarRectF(), 180, progressAmount, false, getPaint(progressBarColor, progressBarWidth));      //arg2: For the starting point, the starting point is 0 degrees from the positive direction of the x coordinate system. How many angles are arg3 selected to rotate clockwise?
+        progressAmount = percent * (float) 1.8;
+
+        Log.e(TAG, "init: progressAmount=" + progressAmount);
+        int padd = progressPlaceHolderWidth / 5;
+        rec = getProgressBarRectF();
+
+        float _readisW = rec.width() / 2;
+        float _readisH = rec.height() / 2;
+
+        Log.e(TAG, "initLength: readisW=" + _readisW + "\t readisH=" + _readisH + "\t padd=" + padd);
+
+        float centerX = rec.left + rec.width() / 2;
+        float centerY = rec.top + rec.height() / 2;
+
+        float radisWUp = _readisW + padd;
+        float radisHUp = _readisH + padd;
+
+        float radisWDown = _readisW - padd;
+        float radisHDown = _readisH - padd;
+
+        recUp = new RectF(centerX - radisWUp, centerY - radisHUp, centerX + radisWUp, centerY + radisHUp);
+        recDown = new RectF(centerX - radisWDown, centerY - radisHDown, centerX + radisWDown, centerY + radisHDown);
+    }
+
+    private float progressAmount = 0f;
+    private RectF recUp, recDown, rec;
+    private Paint linePaint, strokePaint, paint;
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        initLength();
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        // step 1
+        canvas.drawArc(recUp, 170, 200, false, linePaint);
+        canvas.drawArc(recDown, 170, 200, false, linePaint);
+
+        // step 2
+        canvas.drawArc(getProgressBarRectF(), 170, progressAmount + 20, false, strokePaint);
+        canvas.drawArc(getProgressBarRectF(), 170, progressAmount + 20, false, paint);
     }
 
 
@@ -78,6 +128,8 @@ public class SemiCircleArcProgressBar extends View {
         } finally {
             typedArray.recycle();
         }
+
+        initPaint();
     }
 
     private Paint getPaint(int color, int strokeWidth) {
@@ -95,29 +147,9 @@ public class SemiCircleArcProgressBar extends View {
         return new RectF(left, top, right - padding, bottom - (padding * 2));
     }
 
-    //Setters
-    public void setProgressPlaceHolderColor(int color) {
-        progressPlaceHolderColor = color;
-        postInvalidate();
-    }
-
-    public void setProgressBarColor(int color) {
-        progressBarColor = color;
-        postInvalidate();
-    }
-
-    public void setProgressPlaceHolderWidth(int width) {
-        progressPlaceHolderWidth = width;
-        postInvalidate();
-    }
-
-    public void setProgressBarWidth(int width) {
-        progressBarWidth = width;
-        postInvalidate();
-    }
-
     public void setPercent(int percent) {
         this.percent = percent;
+        progressAmount = percent * (float) 1.8;
         postInvalidate();
     }
 
