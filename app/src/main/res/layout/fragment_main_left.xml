@@ -163,7 +163,6 @@
 
             <!-- for love -->
 
-
             <TextView
                 android:id="@+id/tv_love"
                 style="@style/main_page_tv_title"
