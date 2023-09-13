@@ -46,6 +46,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                     if (position == 0) return 6
                     if (position == 1) return 3
                     if (position == 2) return 3
+                    if (position == 3) return 6
                     else return 2
                 }
             }
@@ -78,7 +79,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
             }
 
             // 可选项, 粘性监听器
-            onHoverAttachListener = object : OnHoverAttachListener {
+          /*  onHoverAttachListener = object : OnHoverAttachListener {
                 override fun attachHover(v: View) {
                     ViewCompat.setElevation(v, 10F) // 悬停时显示阴影
                 }
@@ -86,7 +87,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                 override fun detachHover(v: View) {
                     ViewCompat.setElevation(v, 0F) // 非悬停时隐藏阴影
                 }
-            }
+            }*/
         }.models = getData()
 
     }
@@ -96,7 +97,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
             HoverHeaderModel(title = "Official", itemHover = false),
             OfficialModel(),
             OfficialModel(),
-            HoverHeaderModel(title = "Contacts", itemHover = true),
+            HoverHeaderModel(title = "Contacts", itemHover = false),
             ContactModel(),
             ContactModel(),
             ContactModel(),

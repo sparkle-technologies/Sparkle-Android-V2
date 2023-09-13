@@ -106,7 +106,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="@dimen/dp_2"
-                android:background="@drawable/main_bg_page_white_0_radius"
+                android:background="@drawable/main_bg_page_selected_0_radius"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_page"
                 app:layout_constraintLeft_toRightOf="@+id/line_left"
                 app:layout_constraintRight_toLeftOf="@+id/line_right"
@@ -196,6 +196,19 @@
                 app:layout_constraintTop_toTopOf="@+id/bg_career" />
 
 
+            <!-- for item -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_10"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bg_page"
+                tools:listitem="@layout/item_horoscope" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -242,13 +255,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/iv_bg_score"
             app:layout_constraintLeft_toRightOf="@+id/anchor"
             app:layout_constraintTop_toTopOf="@+id/iv_bg_score" />
-
-        <Button
-            android:id="@+id/btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="click me"
-            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
