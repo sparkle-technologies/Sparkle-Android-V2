@@ -30,8 +30,8 @@
                 android:id="@+id/barLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/dp_15"
-                android:background="@color/color_transparent">
+                android:background="@color/color_transparent"
+                android:paddingTop="@dimen/dp_15">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/lay_pan"
@@ -84,16 +84,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Lucky Point"
-                        android:textColor="@color/gray_5ve"
+                        android:textColor="@color/color_000000_57"
                         android:textSize="@dimen/sp_10"
                         app:layout_constraintBottom_toTopOf="@+id/line_smc"
                         app:layout_constraintLeft_toLeftOf="@+id/line_smc"
                         app:layout_constraintRight_toRightOf="@+id/line_smc" />
 
                     <TextView
+                        android:id="@+id/tv_range"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="72"
+                        android:text="100"
                         android:textColor="@color/color_000000"
                         android:textSize="40sp"
                         android:textStyle="italic|bold"
