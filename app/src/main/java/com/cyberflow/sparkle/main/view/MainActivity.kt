@@ -19,6 +19,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
     private var lastLeft = false
     private var lastRight = false
 
+    // the principle is : try to make logic clear, more code is acceptable
     private fun clickTopMenu(left: Boolean, right: Boolean) {
         if(left && right) return // avoid same click
         if(lastRight == right && lastLeft == left) return

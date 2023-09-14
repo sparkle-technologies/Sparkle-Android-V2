@@ -102,11 +102,23 @@
                 app:layout_constraintTop_toBottomOf="@+id/line_smc" />
 
             <View
+                android:id="@+id/bg_tmp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/dp_2"
+                android:layout_marginEnd="@dimen/dp_2"
+                android:background="@drawable/main_bg_page_half_left_200_radius"
+                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                app:layout_constraintLeft_toLeftOf="@+id/bg_page"
+                app:layout_constraintRight_toLeftOf="@+id/line_left"
+                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+            <View
                 android:id="@+id/bg_fortune"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="@dimen/dp_2"
-                android:background="@drawable/main_bg_page_selected_0_radius"
+                android:background="@null"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_page"
                 app:layout_constraintLeft_toRightOf="@+id/line_left"
                 app:layout_constraintRight_toLeftOf="@+id/line_right"
@@ -142,7 +154,7 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="@dimen/dp_2"
                 android:layout_marginEnd="@dimen/dp_2"
-                android:background="@drawable/main_bg_page_half_left_200_radius"
+                android:background="@null"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
                 app:layout_constraintLeft_toLeftOf="@+id/bg_page"
                 app:layout_constraintRight_toLeftOf="@+id/line_left"
@@ -154,7 +166,7 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="@dimen/dp_2"
                 android:layout_marginEnd="@dimen/dp_2"
-                android:background="@drawable/main_bg_page_half_right_200_radius"
+                android:background="@null"
                 app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
                 app:layout_constraintLeft_toRightOf="@+id/line_right"
                 app:layout_constraintRight_toRightOf="@+id/bg_page"
