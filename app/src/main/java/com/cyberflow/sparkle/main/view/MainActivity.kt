@@ -40,8 +40,6 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         if(right)  goNext()
     }
 
-
-
     override fun initView(savedInstanceState: Bundle?) {
         mDataBinding.viewMenuLeft.setOnClickListener { clickTopMenu(true, false) }
         mDataBinding.viewMenuRight.setOnClickListener { clickTopMenu(false, true) }

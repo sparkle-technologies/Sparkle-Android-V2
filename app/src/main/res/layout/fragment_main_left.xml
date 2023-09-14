@@ -17,211 +17,232 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/lay_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="-30dp"
-            android:layout_marginEnd="@dimen/dp_20"
             android:background="@drawable/register_bg_gender_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_owl">
 
-            <TextView
-                android:id="@+id/tv_horoscope_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_31"
-                android:text="Today‘s Horoscope"
-                android:textColor="@color/color_000000"
-                android:textSize="@dimen/sp_18"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <!--  semi circle progress bar -->
-
-            <com.cyberflow.sparkle.main.widget.SemiCircleArcProgressBar
-                android:id="@+id/smc"
-                android:layout_width="150dp"
-                android:layout_height="83dp"
-                android:layout_marginTop="@dimen/dp_10"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_horoscope_title"
-                app:progressBarColor="@color/color_8B82DB"
-                app:progressBarWidth="17"
-                app:progressPlaceHolderColor="@color/color_000000"
-                app:progressPlaceHolderWidth="25" />
-
-            <View
-                android:id="@+id/line_smc"
-                android:layout_width="160dp"
-                android:layout_height="@dimen/dp_2"
-                android:background="@drawable/main_bg_luck_point"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/smc" />
-
-            <TextView
-                android:id="@+id/iv_luck_point"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lucky Point"
-                android:textColor="@color/gray_5ve"
-                android:textSize="@dimen/sp_10"
-                app:layout_constraintBottom_toTopOf="@+id/line_smc"
-                app:layout_constraintLeft_toLeftOf="@+id/line_smc"
-                app:layout_constraintRight_toRightOf="@+id/line_smc" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="72"
-                android:textColor="@color/color_000000"
-                android:textSize="40sp"
-                android:textStyle="italic|bold"
-                app:layout_constraintBottom_toTopOf="@+id/iv_luck_point"
-                app:layout_constraintLeft_toLeftOf="@+id/line_smc"
-                app:layout_constraintRight_toRightOf="@+id/line_smc" />
-
-
-            <!-- love  fortune  career -->
-
-            <View
-                android:id="@+id/bg_page"
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_33"
-                android:layout_marginStart="@dimen/dp_10"
-                android:layout_marginTop="@dimen/dp_17"
-                android:layout_marginEnd="@dimen/dp_10"
-                android:background="@drawable/main_bg_page_white_200_radius"
-                app:layout_constraintTop_toBottomOf="@+id/line_smc" />
-
-            <View
-                android:id="@+id/bg_tmp"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/dp_2"
-                android:layout_marginEnd="@dimen/dp_2"
-                android:background="@drawable/main_bg_page_half_left_200_radius"
-                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
-                app:layout_constraintLeft_toLeftOf="@+id/bg_page"
-                app:layout_constraintRight_toLeftOf="@+id/line_left"
-                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
-
-            <View
-                android:id="@+id/bg_fortune"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/dp_2"
-                android:background="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/bg_page"
-                app:layout_constraintLeft_toRightOf="@+id/line_left"
-                app:layout_constraintRight_toLeftOf="@+id/line_right"
-                app:layout_constraintTop_toTopOf="@+id/bg_page" />
+                android:background="@color/color_transparent">
 
-            <View
-                android:id="@+id/line_left"
-                android:layout_width="@dimen/dp_1"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/dp_4"
-                android:layout_marginBottom="@dimen/dp_4"
-                android:background="@drawable/dash_line_divider_vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
-                app:layout_constraintLeft_toRightOf="@+id/bg_love"
-                app:layout_constraintRight_toLeftOf="@+id/bg_fortune"
-                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:layout_marginBottom="@dimen/dp_3"
+                    app:layout_scrollFlags="exitUntilCollapsed|scroll|enterAlwaysCollapsed">
 
-            <View
-                android:id="@+id/line_right"
-                android:layout_width="@dimen/dp_1"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/dp_4"
-                android:layout_marginBottom="@dimen/dp_4"
-                android:background="@drawable/dash_line_divider_vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
-                app:layout_constraintLeft_toRightOf="@+id/bg_fortune"
-                app:layout_constraintRight_toLeftOf="@+id/bg_career"
-                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+                    <TextView
+                        android:id="@+id/tv_horoscope_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_11"
+                        android:text="Today‘s Horoscope"
+                        android:textColor="@color/color_000000"
+                        android:textSize="@dimen/sp_18"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/bg_love"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/dp_2"
-                android:layout_marginEnd="@dimen/dp_2"
-                android:background="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
-                app:layout_constraintLeft_toLeftOf="@+id/bg_page"
-                app:layout_constraintRight_toLeftOf="@+id/line_left"
-                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+                    <!--  semi circle progress bar -->
 
-            <View
-                android:id="@+id/bg_career"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/dp_2"
-                android:layout_marginEnd="@dimen/dp_2"
-                android:background="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
-                app:layout_constraintLeft_toRightOf="@+id/line_right"
-                app:layout_constraintRight_toRightOf="@+id/bg_page"
-                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+                    <com.cyberflow.sparkle.main.widget.SemiCircleArcProgressBar
+                        android:id="@+id/smc"
+                        android:layout_width="150dp"
+                        android:layout_height="83dp"
+                        android:layout_marginTop="@dimen/dp_10"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_horoscope_title"
+                        app:progressBarColor="@color/color_8B82DB"
+                        app:progressBarWidth="17"
+                        app:progressPlaceHolderColor="@color/color_000000"
+                        app:progressPlaceHolderWidth="25" />
+
+                    <View
+                        android:id="@+id/line_smc"
+                        android:layout_width="160dp"
+                        android:layout_height="@dimen/dp_2"
+                        android:background="@drawable/main_bg_luck_point"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/smc" />
+
+                    <TextView
+                        android:id="@+id/iv_luck_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lucky Point"
+                        android:textColor="@color/gray_5ve"
+                        android:textSize="@dimen/sp_10"
+                        app:layout_constraintBottom_toTopOf="@+id/line_smc"
+                        app:layout_constraintLeft_toLeftOf="@+id/line_smc"
+                        app:layout_constraintRight_toRightOf="@+id/line_smc" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="72"
+                        android:textColor="@color/color_000000"
+                        android:textSize="40sp"
+                        android:textStyle="italic|bold"
+                        app:layout_constraintBottom_toTopOf="@+id/iv_luck_point"
+                        app:layout_constraintLeft_toLeftOf="@+id/line_smc"
+                        app:layout_constraintRight_toRightOf="@+id/line_smc" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- love  fortune  career -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_transparent"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_25"
+                    android:layout_marginEnd="@dimen/dp_10">
+
+                    <View
+                        android:id="@+id/bg_page"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_33"
+                        android:background="@drawable/main_bg_page_white_200_radius"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/bg_tmp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/dp_2"
+                        android:layout_marginEnd="@dimen/dp_2"
+                        android:background="@drawable/main_bg_page_half_left_200_radius"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_page"
+                        app:layout_constraintRight_toLeftOf="@+id/line_left"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+                    <View
+                        android:id="@+id/bg_fortune"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/dp_2"
+                        android:background="@null"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_page"
+                        app:layout_constraintLeft_toRightOf="@+id/line_left"
+                        app:layout_constraintRight_toLeftOf="@+id/line_right"
+                        app:layout_constraintTop_toTopOf="@+id/bg_page" />
+
+                    <View
+                        android:id="@+id/line_left"
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:layout_marginBottom="@dimen/dp_4"
+                        android:background="@drawable/dash_line_divider_vertical"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toRightOf="@+id/bg_love"
+                        app:layout_constraintRight_toLeftOf="@+id/bg_fortune"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+                    <View
+                        android:id="@+id/line_right"
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:layout_marginBottom="@dimen/dp_4"
+                        android:background="@drawable/dash_line_divider_vertical"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toRightOf="@+id/bg_fortune"
+                        app:layout_constraintRight_toLeftOf="@+id/bg_career"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+                    <View
+                        android:id="@+id/bg_love"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/dp_2"
+                        android:layout_marginEnd="@dimen/dp_2"
+                        android:background="@null"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_page"
+                        app:layout_constraintRight_toLeftOf="@+id/line_left"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+                    <View
+                        android:id="@+id/bg_career"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/dp_2"
+                        android:layout_marginEnd="@dimen/dp_2"
+                        android:background="@null"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toRightOf="@+id/line_right"
+                        app:layout_constraintRight_toRightOf="@+id/bg_page"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
 
 
-            <!-- for love -->
+                    <!-- for love -->
 
-            <TextView
-                android:id="@+id/tv_love"
-                style="@style/main_page_tv_title"
-                android:drawableLeft="@drawable/main_ic_love"
-                android:text="49"
-                app:layout_constraintBottom_toBottomOf="@+id/bg_love"
-                app:layout_constraintLeft_toLeftOf="@+id/bg_love"
-                app:layout_constraintRight_toRightOf="@+id/bg_love"
-                app:layout_constraintTop_toTopOf="@+id/bg_love" />
+                    <TextView
+                        android:id="@+id/tv_love"
+                        style="@style/main_page_tv_title"
+                        android:drawableLeft="@drawable/main_ic_love"
+                        android:text="49"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_love"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_love"
+                        app:layout_constraintRight_toRightOf="@+id/bg_love"
+                        app:layout_constraintTop_toTopOf="@+id/bg_love" />
 
 
-            <TextView
-                android:id="@+id/tv_fortune"
-                style="@style/main_page_tv_title"
-                android:drawableLeft="@drawable/main_ic_fortune"
-                android:text="69"
-                app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
-                app:layout_constraintLeft_toLeftOf="@+id/bg_fortune"
-                app:layout_constraintRight_toRightOf="@+id/bg_fortune"
-                app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+                    <TextView
+                        android:id="@+id/tv_fortune"
+                        style="@style/main_page_tv_title"
+                        android:drawableLeft="@drawable/main_ic_fortune"
+                        android:text="69"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_fortune"
+                        app:layout_constraintRight_toRightOf="@+id/bg_fortune"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
 
-            <TextView
-                android:id="@+id/tv_career"
-                style="@style/main_page_tv_title"
-                android:drawableLeft="@drawable/main_ic_career"
-                android:text="29"
-                app:layout_constraintBottom_toBottomOf="@+id/bg_career"
-                app:layout_constraintLeft_toLeftOf="@+id/bg_career"
-                app:layout_constraintRight_toRightOf="@+id/bg_career"
-                app:layout_constraintTop_toTopOf="@+id/bg_career" />
+                    <TextView
+                        android:id="@+id/tv_career"
+                        style="@style/main_page_tv_title"
+                        android:drawableLeft="@drawable/main_ic_career"
+                        android:text="29"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_career"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_career"
+                        app:layout_constraintRight_toRightOf="@+id/bg_career"
+                        app:layout_constraintTop_toTopOf="@+id/bg_career" />
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
 
             <!-- for item -->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="-40dp"
+                android:paddingTop="@dimen/dp_40"
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginEnd="@dimen/dp_10"
                 android:layout_marginBottom="@dimen/dp_10"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bg_page"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 tools:listitem="@layout/item_horoscope" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <!-- unconfirmed demand -->
 
