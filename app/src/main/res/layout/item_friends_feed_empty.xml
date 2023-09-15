@@ -38,8 +38,7 @@
             app:view_bg="@drawable/main_bg_add_friends_empty_white"
             app:view_shadow_distance="1dp"
             app:view_text="Add Friends"
-            app:view_text_color="@color/black"
-            app:view_text_disable_color="@color/black" />
+            app:view_text_color="@color/black" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

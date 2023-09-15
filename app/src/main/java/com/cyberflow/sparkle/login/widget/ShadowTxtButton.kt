@@ -3,6 +3,7 @@ package com.cyberflow.sparkle.login.widget
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -55,7 +56,7 @@ class ShadowTxtButton : ConstraintLayout {
 
         txt_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_color, com.cyberflow.base.resources.R.color.black)
 
-        txt_disable_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_disable_color, com.cyberflow.base.resources.R.color.color_7D7D80)
+        txt_disable_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_disable_color, com.cyberflow.base.resources.R.color.black)
 
         bg = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_bg, com.cyberflow.base.resources.R.drawable.register_btn_next)
 
@@ -110,6 +111,7 @@ class ShadowTxtButton : ConstraintLayout {
     }
 
     fun disableBg(disable: Boolean){
+        Log.e("TAG", "disableBg: disable=$disable", )
         this.disable = disable
         if(disable){
             txt_disable_color.apply {

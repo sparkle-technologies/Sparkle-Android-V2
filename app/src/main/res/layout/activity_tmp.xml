@@ -53,6 +53,19 @@
             app:view_text="Login Me" />
 
 
+        <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+            android:layout_width="@dimen/dp_204"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginTop="@dimen/dp_25"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_btn_shadow"
+            app:view_bg="@drawable/main_bg_add_friends_empty_white"
+            app:view_shadow_distance="1dp"
+            app:view_text="Add Friends"
+            app:view_text_color="@color/black" />
+
+
         <android.widget.Button
             android:id="@+id/btn"
             style="@style/BoldItalicTitles"

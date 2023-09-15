@@ -52,11 +52,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         }.setup {
                             addType<String>(R.layout.item_official)
                             onClick(R.id.root) {
-                                Snackbar.make(
-                                    this.itemView,
-                                    "click official",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
+                                Snackbar.make(this.itemView, "click official", Snackbar.LENGTH_SHORT).show()
                                 when (this.layoutPosition) {
                                     0 -> {
                                         mDatabind.rv.models = getData(true)
@@ -79,6 +75,10 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                             setDivider(10, true)
                         }.setup {
                             addType<String>(R.layout.item_friends_feed)
+                            addType<FriendsAddModel>(R.layout.item_friends_feed_add)
+                            onClick(R.id.bg_new_friend){
+                                Snackbar.make(itemView, "TODO -->  go IM add friend", Snackbar.LENGTH_SHORT).show()
+                            }
                         }
                     }
 
@@ -119,17 +119,22 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         "Cora",
                         "King",
                         "Cora",
+
                         "King",
                         "Cora",
                         "King",
+
                         "Cora",
                         "King",
                         "Cora",
+
                         "King",
                         "Cora",
                         "King",
+
                         "Cora",
-                        "King"
+                        "King",
+                        FriendsAddModel()
                     )
                 )
         )

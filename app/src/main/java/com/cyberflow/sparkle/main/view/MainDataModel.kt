@@ -6,7 +6,8 @@ class HeaderModel(val title: String, override var itemPosition: Int = 0) : ItemP
 
 class OfficialModel(var names: List<String>, override var itemPosition: Int = 0) : ItemPosition
 
-class FriendsModel(var names: List<String>, override var itemPosition: Int = 0) : ItemPosition
+class FriendsModel(var names: List<Any>, override var itemPosition: Int = 0) : ItemPosition
+class FriendsAddModel(override var itemPosition: Int = 0) : ItemPosition
 
 class FriendsEmptyModel(override var itemPosition: Int = 0) : ItemPosition
 

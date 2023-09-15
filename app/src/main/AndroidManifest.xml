@@ -22,8 +22,18 @@
             android:name="design_height_in_dp"
             android:value="640" />
 
-        <activity
+        <!--<activity
             android:name=".main.view.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>-->
+
+        <activity
+            android:name=".TmpActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
