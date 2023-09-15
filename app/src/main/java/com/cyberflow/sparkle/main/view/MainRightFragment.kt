@@ -69,7 +69,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                     R.layout.main_friends_feed -> {
                         getBinding<MainFriendsFeedBinding>().rv.divider {
                             orientation = DividerOrientation.HORIZONTAL
-                            setDivider(20, true)
+                            setDivider(14, true)
                         }.divider {
                             orientation = DividerOrientation.VERTICAL
                             setDivider(10, true)

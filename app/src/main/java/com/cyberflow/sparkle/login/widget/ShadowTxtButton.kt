@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.R
 
@@ -54,9 +55,9 @@ class ShadowTxtButton : ConstraintLayout {
         )
         txt = mTypedArray.getString(com.cyberflow.base.resources.R.styleable.shadowButton_view_text).orEmpty()
 
-        txt_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_color, com.cyberflow.base.resources.R.color.black)
+        txt_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_color, com.cyberflow.base.resources.R.color.almost_black)
 
-        txt_disable_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_disable_color, com.cyberflow.base.resources.R.color.black)
+        txt_disable_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_disable_color, com.cyberflow.base.resources.R.color.color_7D7D80)
 
         bg = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_bg, com.cyberflow.base.resources.R.drawable.register_btn_next)
 
@@ -114,13 +115,13 @@ class ShadowTxtButton : ConstraintLayout {
         Log.e("TAG", "disableBg: disable=$disable", )
         this.disable = disable
         if(disable){
-            txt_disable_color.apply {
+            ResourcesCompat.getColor(resources, txt_disable_color, null).apply {
                 ivNormal?.setTextColor(this)
                 tvClicking?.setTextColor(this)
             }
             ivClicking?.setImageResource(bgDisable)
         }else{
-            txt_color.apply {
+            ResourcesCompat.getColor(resources, txt_color, null).apply {
                 ivNormal?.setTextColor(this)
                 tvClicking?.setTextColor(this)
             }

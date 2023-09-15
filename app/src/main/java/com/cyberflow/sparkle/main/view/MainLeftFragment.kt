@@ -1,12 +1,12 @@
 package com.cyberflow.sparkle.main.view
 
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnTouchListener
+import android.view.animation.LinearInterpolator
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.util.dp2px
@@ -109,7 +109,15 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
         val dd = Random.nextInt(100)
         Log.e("TAG", "anima: dd = $dd")
         mDatabind.smc.setPercentWithAnimation(dd)
-        mDatabind.tvRange.text = dd.toString()
+
+        ValueAnimator.ofInt(0, dd).apply {
+            duration = (12 * dd).toLong()
+            interpolator = LinearInterpolator()
+            addUpdateListener {
+                mDatabind.tvRange.text = it.animatedValue.toString()
+            }
+            start()
+        }
 
 //        Log.e("Click", "anima:  index=$index  lastIndex=$lastIndex")
 
