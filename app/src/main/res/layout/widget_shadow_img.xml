@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/nextButtonShadow"
+        android:id="@+id/ivBgShadow"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="2dp"
@@ -18,18 +18,18 @@
         app:srcCompat="@drawable/button_circle_shadow" />
 
     <ImageView
-        android:id="@+id/nextButtonShadowTextView"
+        android:id="@+id/ivNormal"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/login_ic_twitter"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/nextButtonShadow"
-        app:layout_constraintEnd_toEndOf="@+id/nextButtonShadow"
-        app:layout_constraintStart_toStartOf="@+id/nextButtonShadow"
-        app:layout_constraintTop_toTopOf="@+id/nextButtonShadow" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivBgShadow"
+        app:layout_constraintEnd_toEndOf="@+id/ivBgShadow"
+        app:layout_constraintStart_toStartOf="@+id/ivBgShadow"
+        app:layout_constraintTop_toTopOf="@+id/ivBgShadow" />
 
     <ImageButton
-        android:id="@+id/nextButton"
+        android:id="@+id/ivClicking"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="2dp"

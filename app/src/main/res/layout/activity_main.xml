@@ -114,9 +114,9 @@
             app:layout_constraintBottom_toBottomOf="@+id/bgMenu"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/bgMenu"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
             app:view_img_shadow_distance="1dp"
             app:view_img_src="@drawable/main_ic_add_friends" />
-
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"
@@ -127,6 +127,20 @@
             android:layout_marginEnd="@dimen/dp_20"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bgMenu" />
+
+        <FrameLayout
+            android:id="@+id/lay_dialog_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_26"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_friends">
+
+            <include layout="@layout/include_main_top_right_add" />
+
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

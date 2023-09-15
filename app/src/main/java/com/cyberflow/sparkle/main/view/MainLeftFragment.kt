@@ -33,16 +33,22 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
         actVm = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
     }
 
+    var stateEmpty = false
     override fun initView(savedInstanceState: Bundle?) {
         mDatabind.smc.setPercentWithAnimation(100)
 
         mDatabind.ivOwl.setOnClickListener {
             mDatabind.smc.setPercentWithAnimation(50)
         }
+        mDatabind.ivBgScore.setOnClickListener {
+            val data = listOf(HoroscopeHeadItem(),EmptyItem())
+            mDatabind.rv.linear().models = data
+        }
 
         mDatabind.rv.linear().setup {
             addType<HoroscopeItem>(R.layout.item_horoscope)
             addType<HoroscopeHeadItem>(R.layout.item_horoscope_head)
+            addType<EmptyItem>(R.layout.item_horoscope_empty)
             onClick(R.id.left) { anima(0) }
             onClick(R.id.center) { anima(1) }
             onClick(R.id.right) { anima(2) }
@@ -101,7 +107,7 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
     private var lastIndex = 0
     private fun anima(index: Int) {
         val dd = Random.nextInt(100)
-        Log.e("TAG", "anima: dd = $dd", )
+        Log.e("TAG", "anima: dd = $dd")
         mDatabind.smc.setPercentWithAnimation(dd)
         mDatabind.tvRange.text = dd.toString()
 

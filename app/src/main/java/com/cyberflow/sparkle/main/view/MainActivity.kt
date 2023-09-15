@@ -3,6 +3,7 @@ package com.cyberflow.sparkle.main.view
 import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.dp2px
@@ -10,44 +11,66 @@ import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.register.view.PageAdapter
 import com.google.android.material.snackbar.Snackbar
+import com.cyberflow.sparkle.R
+import com.cyberflow.sparkle.login.widget.ShadowImgButton
+import com.cyberflow.sparkle.main.widget.NumView
 
 class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
     private var dis = 0f
-    private var fromLeft2Right : ObjectAnimator? = null
-    private var fromRight2Left : ObjectAnimator? = null
+    private var fromLeft2Right: ObjectAnimator? = null
+    private var fromRight2Left: ObjectAnimator? = null
     private var lastLeft = false
     private var lastRight = false
 
     // the principle is : try to make logic clear, more code is acceptable
     private fun clickTopMenu(left: Boolean, right: Boolean) {
-        if(left && right) return // avoid same click
-        if(lastRight == right && lastLeft == left) return
+        if (left && right) return // avoid same click
+        if (lastRight == right && lastLeft == left) return
         lastLeft = left
         lastRight = right
 
-        if(left){
+        if (left) {
             fromRight2Left?.start()
         }
 
-        if(right){
+        if (right) {
             fromLeft2Right?.start()
         }
 
         mDataBinding.ivMenuLeft.setImageResource((if (left) com.cyberflow.base.resources.R.drawable.svg_ic_horoscope_select else com.cyberflow.base.resources.R.drawable.svg_ic_horoscope_unselect))
         mDataBinding.ivMenuRight.setImageResource((if (right) com.cyberflow.base.resources.R.drawable.svg_ic_contact_select else com.cyberflow.base.resources.R.drawable.svg_ic_contact_unselect))
-        if(left) goPrevious()
-        if(right)  goNext()
+        if (left) goPrevious()
+        if (right) goNext()
     }
 
     override fun initView(savedInstanceState: Bundle?) {
         mDataBinding.viewMenuLeft.setOnClickListener { clickTopMenu(true, false) }
         mDataBinding.viewMenuRight.setOnClickListener { clickTopMenu(false, true) }
+
         mDataBinding.ivHead.setOnClickListener {
             Snackbar.make(mDataBinding.ivHead, "click me", Snackbar.LENGTH_SHORT).show()
         }
-        mDataBinding.btnAddFriends.setOnClickListener {
-            Snackbar.make(mDataBinding.ivHead, "add friends", Snackbar.LENGTH_SHORT).show()
+
+        mDataBinding.btnAddFriends.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+                mDataBinding.layDialogAdd.apply {
+                    visibility = if (this.visibility == View.VISIBLE) {
+                        View.GONE
+                    } else {
+                        View.VISIBLE
+                    }
+                }
+            }
+        })
+
+        mDataBinding.layDialogAdd.apply {
+            findViewById<View>(R.id.lay_add_friends).setOnClickListener {
+                Snackbar.make(mDataBinding.ivHead, "add friends", Snackbar.LENGTH_SHORT).show()
+            }
+            findViewById<View>(R.id.lay_contacts).setOnClickListener {
+                Snackbar.make(mDataBinding.ivHead, "contacts", Snackbar.LENGTH_SHORT).show()
+            }
         }
 
         var adapter = PageAdapter(supportFragmentManager, lifecycle)
@@ -68,20 +91,20 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         clickTopMenu(true, false)
     }
 
-    private fun goPrevious(){
-        Log.e(TAG, "goPrevious: ", )
+    private fun goPrevious() {
+        Log.e(TAG, "goPrevious: ")
         mDataBinding.pager.apply {
-            if(currentItem > 0){
+            if (currentItem > 0) {
                 setCurrentItem(currentItem - 1, true)
             }
         }
     }
 
-    private fun goNext(){
-        Log.e(TAG, "goNext: ", )
+    private fun goNext() {
+        Log.e(TAG, "goNext: ")
         mDataBinding.pager.apply {
-            adapter?.also { a->
-                if(currentItem < a.itemCount - 1){
+            adapter?.also { a ->
+                if (currentItem < a.itemCount - 1) {
                     setCurrentItem(currentItem + 1, true)
                 }
             }

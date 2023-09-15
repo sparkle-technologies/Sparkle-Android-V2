@@ -34,6 +34,7 @@ class ShadowImgButton : ConstraintLayout {
 
     private var distance: Int = 0     // shadow width/height
     private var src: Int = 0
+    private var bg: Int = 0
     private fun attributes(attrs: AttributeSet?) {
         val mTypedArray = context.obtainStyledAttributes(
             attrs,
@@ -46,52 +47,62 @@ class ShadowImgButton : ConstraintLayout {
             )
         )
 
-        src = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowImgButton_view_img_src, 0)
+        src = mTypedArray.getResourceId(
+            com.cyberflow.base.resources.R.styleable.shadowImgButton_view_img_src,
+            0
+        )
+        bg = mTypedArray.getResourceId(
+            com.cyberflow.base.resources.R.styleable.shadowImgButton_view_bg_src,
+            0
+        )
 
         mTypedArray.recycle()
     }
 
-    private var nextButtonShadow: ImageView? = null
-    private var nextButtonShadowTextView: ImageView? = null
-    private var nextButton: ImageButton? = null
+    private var ivBgShadow: ImageView? = null
+    private var ivNormal: ImageView? = null
+    private var ivClicking: ImageButton? = null
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
         LayoutInflater.from(context).inflate(R.layout.widget_shadow_img, this, true)
-        nextButtonShadow = findViewById(R.id.nextButtonShadow)
-        nextButtonShadowTextView = findViewById(R.id.nextButtonShadowTextView)
-        nextButton = findViewById(R.id.nextButton)
+        ivBgShadow = findViewById(R.id.ivBgShadow)
+        ivNormal = findViewById(R.id.ivNormal)
+        ivClicking = findViewById(R.id.ivClicking)
 
-        val layoutParams1 = nextButtonShadow?.layoutParams as LayoutParams
+        val layoutParams1 = ivBgShadow?.layoutParams as LayoutParams
         layoutParams1.setMargins(distance, distance, 0, 0)
-        nextButtonShadow?.layoutParams = layoutParams1
+        ivBgShadow?.layoutParams = layoutParams1
 
-        val layoutParams2 = nextButton?.layoutParams as LayoutParams
+        val layoutParams2 = ivClicking?.layoutParams as LayoutParams
         layoutParams2.setMargins(0, 0, distance, distance)
-        nextButton?.layoutParams = layoutParams2
+        ivClicking?.layoutParams = layoutParams2
 
+        if (bg != 0) {
+            ivBgShadow?.setImageResource(bg)
+        }
         updateSrc(src)
 
-        nextButton?.setOnClickListener {
+        ivClicking?.setOnClickListener {
             listener?.clicked()
         }
 
-        nextButton?.setOnTouchListener { v, motionEvent ->
+        ivClicking?.setOnTouchListener { v, motionEvent ->
             staticButtonTouchAnim(
                 motionEvent,
-                nextButtonShadow,
-                nextButtonShadowTextView,
-                nextButton
+                ivBgShadow,
+                ivNormal,
+                ivClicking
             )
             false
         }
     }
 
-    fun updateSrc(pic: Int){
-        if(src != 0){
+    fun updateSrc(pic: Int) {
+        if (src != 0) {
             this.src = pic
-            nextButtonShadowTextView?.setImageResource(src)
-            nextButton?.setImageResource(src)
+            ivNormal?.setImageResource(src)
+            ivClicking?.setImageResource(src)
         }
     }
 

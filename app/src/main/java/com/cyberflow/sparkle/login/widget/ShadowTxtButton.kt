@@ -66,42 +66,42 @@ class ShadowTxtButton : ConstraintLayout {
         mTypedArray.recycle()
     }
 
-    private var nextButtonShadow: ImageView? = null
-    private var nextButtonShadowTextView: TextView? = null
-    private var nextButton: ImageButton? = null
-    private var nextButtonTextView: TextView? = null
+    private var ivBgShadow: ImageView? = null
+    private var ivNormal: TextView? = null
+    private var ivClicking: ImageButton? = null
+    private var tvClicking: TextView? = null
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initView() {
         LayoutInflater.from(context).inflate(R.layout.widget_shadow_button, this, true)
-        nextButtonShadow = findViewById(R.id.nextButtonShadow)
-        nextButtonShadowTextView = findViewById(R.id.nextButtonShadowTextView)
-        nextButton = findViewById(R.id.nextButton)
-        nextButtonTextView = findViewById(R.id.nextButtonTextView)
+        ivBgShadow = findViewById(R.id.ivBgShadow)
+        ivNormal = findViewById(R.id.ivNormal)
+        ivClicking = findViewById(R.id.ivClicking)
+        tvClicking = findViewById(R.id.tvClicking)
 
-        val layoutParams1 = nextButtonShadow?.layoutParams as LayoutParams
+        val layoutParams1 = ivBgShadow?.layoutParams as LayoutParams
         layoutParams1.setMargins(distance, distance, 0, 0)
-        nextButtonShadow?.layoutParams = layoutParams1
+        ivBgShadow?.layoutParams = layoutParams1
 
-        val layoutParams2 = nextButton?.layoutParams as LayoutParams
+        val layoutParams2 = ivClicking?.layoutParams as LayoutParams
         layoutParams2.setMargins(0, 0, distance, distance)
-        nextButton?.layoutParams = layoutParams2
+        ivClicking?.layoutParams = layoutParams2
 
         disableBg(disable)
 
-        nextButtonShadowTextView?.text = txt
-        nextButtonTextView?.text = txt
+        ivNormal?.text = txt
+        tvClicking?.text = txt
 
-        nextButton?.setOnClickListener {
+        ivClicking?.setOnClickListener {
             listener?.clicked(disable)
         }
 
-        nextButton?.setOnTouchListener { v, motionEvent ->
+        ivClicking?.setOnTouchListener { v, motionEvent ->
             staticButtonTouchAnim(
                 motionEvent,
-                nextButton,
-                nextButtonShadow,
-                nextButtonTextView,
+                ivClicking,
+                ivBgShadow,
+                tvClicking,
                 if(disable) bgDisable else bg,
                 com.cyberflow.base.resources.R.drawable.button_start_shadow
             )
@@ -113,16 +113,16 @@ class ShadowTxtButton : ConstraintLayout {
         this.disable = disable
         if(disable){
             txt_disable_color.apply {
-                nextButtonShadowTextView?.setTextColor(this)
-                nextButtonTextView?.setTextColor(this)
+                ivNormal?.setTextColor(this)
+                tvClicking?.setTextColor(this)
             }
-            nextButton?.setImageResource(bgDisable)
+            ivClicking?.setImageResource(bgDisable)
         }else{
             txt_color.apply {
-                nextButtonShadowTextView?.setTextColor(this)
-                nextButtonTextView?.setTextColor(this)
+                ivNormal?.setTextColor(this)
+                tvClicking?.setTextColor(this)
             }
-            nextButton?.setImageResource(bg)
+            ivClicking?.setImageResource(bg)
         }
     }
 

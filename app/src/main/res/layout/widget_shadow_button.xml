@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/nextButtonShadow"
+        android:id="@+id/ivBgShadow"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="2dp"
@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/button_start_shadow" />
 
     <TextView
-        android:id="@+id/nextButtonShadowTextView"
+        android:id="@+id/ivNormal"
         style="@style/BoldItalicTitles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,13 +27,13 @@
         android:textAlignment="center"
         android:textColor="@color/almost_black"
         android:textSize="@dimen/sp_17"
-        app:layout_constraintBottom_toBottomOf="@+id/nextButtonShadow"
-        app:layout_constraintEnd_toEndOf="@+id/nextButtonShadow"
-        app:layout_constraintStart_toStartOf="@+id/nextButtonShadow"
-        app:layout_constraintTop_toTopOf="@+id/nextButtonShadow" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivBgShadow"
+        app:layout_constraintEnd_toEndOf="@+id/ivBgShadow"
+        app:layout_constraintStart_toStartOf="@+id/ivBgShadow"
+        app:layout_constraintTop_toTopOf="@+id/ivBgShadow" />
 
     <ImageButton
-        android:id="@+id/nextButton"
+        android:id="@+id/ivClicking"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="2dp"
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/nextButtonTextView"
+        android:id="@+id/tvClicking"
         style="@style/BoldItalicTitles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,10 +55,10 @@
         android:textAlignment="center"
         android:textColor="@color/almost_black"
         android:textSize="@dimen/sp_17"
-        app:layout_constraintBottom_toBottomOf="@+id/nextButton"
-        app:layout_constraintEnd_toEndOf="@+id/nextButton"
-        app:layout_constraintStart_toStartOf="@+id/nextButton"
-        app:layout_constraintTop_toTopOf="@+id/nextButton" />
+        app:layout_constraintBottom_toBottomOf="@+id/ivClicking"
+        app:layout_constraintEnd_toEndOf="@+id/ivClicking"
+        app:layout_constraintStart_toStartOf="@+id/ivClicking"
+        app:layout_constraintTop_toTopOf="@+id/ivClicking" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
