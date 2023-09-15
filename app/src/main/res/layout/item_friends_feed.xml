@@ -6,7 +6,7 @@
 
         <variable
             name="m"
-            type="com.cyberflow.sparkle.main.view.ContactModel" />
+            type="com.cyberflow.sparkle.main.view.FriendsModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

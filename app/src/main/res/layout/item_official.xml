@@ -6,10 +6,11 @@
 
         <variable
             name="m"
-            type="com.cyberflow.sparkle.main.view.OfficialModel" />
+            type="java.lang.String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="203dp"
         android:layout_marginBottom="@dimen/dp_15">

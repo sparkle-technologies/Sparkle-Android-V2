@@ -53,7 +53,7 @@ class ShadowTxtButton : ConstraintLayout {
         )
         txt = mTypedArray.getString(com.cyberflow.base.resources.R.styleable.shadowButton_view_text).orEmpty()
 
-        txt_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_color, com.cyberflow.base.resources.R.color.almost_black)
+        txt_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_color, com.cyberflow.base.resources.R.color.black)
 
         txt_disable_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_disable_color, com.cyberflow.base.resources.R.color.color_7D7D80)
 
@@ -80,11 +80,11 @@ class ShadowTxtButton : ConstraintLayout {
         tvClicking = findViewById(R.id.tvClicking)
 
         val layoutParams1 = ivBgShadow?.layoutParams as LayoutParams
-        layoutParams1.setMargins(distance, distance, 0, 0)
+        layoutParams1.setMargins(0, distance, 0, 0)
         ivBgShadow?.layoutParams = layoutParams1
 
         val layoutParams2 = ivClicking?.layoutParams as LayoutParams
-        layoutParams2.setMargins(0, 0, distance, distance)
+        layoutParams2.setMargins(0, 0, 0, distance)
         ivClicking?.layoutParams = layoutParams2
 
         disableBg(disable)

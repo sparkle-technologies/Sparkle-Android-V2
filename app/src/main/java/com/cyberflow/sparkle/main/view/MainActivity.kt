@@ -13,7 +13,6 @@ import com.cyberflow.sparkle.register.view.PageAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
-import com.cyberflow.sparkle.main.widget.NumView
 
 class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 

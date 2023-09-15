@@ -2,22 +2,22 @@ package com.cyberflow.sparkle.main.view
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.View
-import androidx.core.view.ViewCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainRightBinding
+import com.cyberflow.sparkle.databinding.ItemFriendsFeedEmptyBinding
+import com.cyberflow.sparkle.databinding.MainFriendsFeedBinding
+import com.cyberflow.sparkle.databinding.MainOfficialBinding
+import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.drake.brv.annotaion.DividerOrientation
-import com.drake.brv.layoutmanager.HoverGridLayoutManager
-import com.drake.brv.listener.OnHoverAttachListener
-import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.divider
+import com.drake.brv.utils.linear
+import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
-import com.drake.net.utils.TipUtils
+import com.google.android.material.snackbar.Snackbar
 
 class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding>() {
 
@@ -37,92 +37,101 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
     }
 
     private fun initListView() {
-        val layoutManager = HoverGridLayoutManager(requireContext(), 6)
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return if (mDatabind.rv.bindingAdapter.isHover(position)) {
-                    6
-                } else {
-                    if (position == 0) return 6
-                    if (position == 1) return 3
-                    if (position == 2) return 3
-                    if (position == 3) return 6
-                    else return 2
-                }
-            }
-        }
-        mDatabind.rv.layoutManager = layoutManager
 
-        mDatabind.rv.divider {
-            orientation = DividerOrientation.VERTICAL
-            setDivider(10, true)
-            onEnabled {
-                itemViewType == R.layout.item_official || itemViewType == R.layout.item_contact
-            }
-        }.divider {
-            orientation = DividerOrientation.HORIZONTAL
-            setDivider(20, true)
-            onEnabled {
-                itemViewType == R.layout.item_contact
-            }
-        }.setup {
-            addType<OfficialModel>(R.layout.item_official)
-            addType<ContactModel>(R.layout.item_contact)
-            addType<HoverHeaderModel>(R.layout.item_hover_header)
-
-            // 点击事件
-            onClick(R.id.item) {
+        mDatabind.rv.linear().setup {
+            addType<HeaderModel>(R.layout.item_hover_header)
+            addType<OfficialModel>(R.layout.main_official)
+            addType<FriendsModel>(R.layout.main_friends_feed)
+            addType<FriendsEmptyModel>(R.layout.item_friends_feed_empty)
+            onCreate {
                 when (itemViewType) {
-                    R.layout.item_hover_header -> TipUtils.toast("悬停条目")
-                    else -> TipUtils.toast("普通条目")
+                    R.layout.main_official -> {
+                        getBinding<MainOfficialBinding>().rv.divider {
+                            orientation = DividerOrientation.VERTICAL
+                            setDivider(10, true)
+                        }.setup {
+                            addType<String>(R.layout.item_official)
+                            onClick(R.id.root) {
+                                Snackbar.make(
+                                    this.itemView,
+                                    "click official",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
+                                when (this.layoutPosition) {
+                                    0 -> {
+                                        mDatabind.rv.models = getData(true)
+                                    }
+
+                                    1 -> {
+                                        mDatabind.rv.models = getData(false)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    R.layout.main_friends_feed -> {
+                        getBinding<MainFriendsFeedBinding>().rv.divider {
+                            orientation = DividerOrientation.HORIZONTAL
+                            setDivider(20, true)
+                        }.divider {
+                            orientation = DividerOrientation.VERTICAL
+                            setDivider(10, true)
+                        }.setup {
+                            addType<String>(R.layout.item_friends_feed)
+                        }
+                    }
+
+                    R.layout.item_friends_feed_empty -> {
+                        getBinding<ItemFriendsFeedEmptyBinding>().btnAddFriend.setClickListener(object : ShadowTxtButton.ShadowClickListener {
+                                override fun clicked(disable: Boolean) {
+                                    Snackbar.make(itemView, "TODO -->  go IM add friend", Snackbar.LENGTH_SHORT).show()
+                                }
+                        })
+                    }
                 }
             }
 
-            // 可选项, 粘性监听器
-          /*  onHoverAttachListener = object : OnHoverAttachListener {
-                override fun attachHover(v: View) {
-                    ViewCompat.setElevation(v, 10F) // 悬停时显示阴影
-                }
+            onBind {
+                when (itemViewType) {
+                    R.layout.main_official -> {
+                        val model = getModel<OfficialModel>()
+                        getBinding<MainOfficialBinding>().rv.models = model.names
+                    }
 
-                override fun detachHover(v: View) {
-                    ViewCompat.setElevation(v, 0F) // 非悬停时隐藏阴影
+                    R.layout.main_friends_feed -> {
+                        val model = getModel<FriendsModel>()
+                        getBinding<MainFriendsFeedBinding>().rv.models = model.names
+                    }
                 }
-            }*/
+            }
         }.models = getData()
-
     }
 
-    private fun getData(): List<Any> {
+    private fun getData(empty: Boolean = false): List<Any> {
         return listOf(
-            HoverHeaderModel(title = "Official", itemHover = false),
-            OfficialModel(),
-            OfficialModel(),
-            HoverHeaderModel(title = "Contacts", itemHover = false),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel(),
-            ContactModel()
+            HeaderModel(title = "Official"),
+            OfficialModel(arrayListOf("Cora", "King")),
+            HeaderModel(title = "Friends Feed"),
+            if (empty) FriendsEmptyModel() else
+                FriendsModel(
+                    arrayListOf(
+                        "Cora",
+                        "King",
+                        "Cora",
+                        "King",
+                        "Cora",
+                        "King",
+                        "Cora",
+                        "King",
+                        "Cora",
+                        "King",
+                        "Cora",
+                        "King",
+                        "Cora",
+                        "King"
+                    )
+                )
         )
     }
-
 }
