@@ -13,6 +13,7 @@ import com.cyberflow.sparkle.databinding.ActivityLoginBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.main.view.MainActivity
 import com.cyberflow.sparkle.register.view.RegisterAct
 import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
 import dev.pinkroom.walletconnectkit.core.accounts
@@ -29,6 +30,15 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()
         initWalletConnect()
+
+        mViewBind.btnIgLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+
+                val intent = Intent(this@LoginAct, MainActivity::class.java)
+                startActivity(intent)
+            }
+        })
+
         mViewBind.btnTwitterLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")

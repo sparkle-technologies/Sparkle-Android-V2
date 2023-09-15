@@ -54,6 +54,7 @@ dependencies {
     api("androidx.constraintlayout:constraintlayout:2.1.4")
     api("com.airbnb.android:lottie:5.1.1")
     api("com.github.JessYanCoding:AndroidAutoSize:v1.2.1")
+    api("com.github.liangjingkanji:spannable:1.2.7")
 
     // MVVM
     api("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")

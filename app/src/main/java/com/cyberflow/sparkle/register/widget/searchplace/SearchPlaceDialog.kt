@@ -15,6 +15,8 @@ import com.cyberflow.sparkle.databinding.DialogSearchPlaceBinding
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.drake.spannable.replaceSpanFirst
+import com.drake.spannable.span.ColorSpan
 import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
@@ -50,20 +52,23 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
 
     private var selectIdx = -1
 
+    private var inputTxt = ""
+    private fun getSpan(txt: String): CharSequence {
+        if(inputTxt.isNullOrEmpty()) return ""
+
+        return txt.replaceSpanFirst(inputTxt, ignoreCase = true){
+           ColorSpan("#8B82DB")
+        }
+    }
+
     private fun initView(view: View) {
         _binding = DialogSearchPlaceBinding.bind(view)
         binding.rvPlaceResult.linear().setup {
             addType<PlaceResult>(R.layout.item_google_place)
             onBind {
-                findView<TextView>(R.id.tv_place_result).text = getModel<PlaceResult>().placeName
-                findView<TextView>(R.id.tv_place_result).background =
-                    if (selectIdx == layoutPosition) ResourcesCompat.getDrawable(
-                        resources,
-                        com.cyberflow.base.resources.R.drawable.register_bg_gender_light,
-                        null
-                    ) else null
-                findView<View>(R.id.line).visibility =
-                    if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
+                findView<TextView>(R.id.tv_place_result).text = getSpan(getModel<PlaceResult>().placeName)
+                findView<TextView>(R.id.tv_place_result).background = if (selectIdx == layoutPosition) ResourcesCompat.getDrawable(resources, com.cyberflow.base.resources.R.drawable.register_bg_gender_light, null) else null
+                findView<View>(R.id.line).visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
             }
             R.id.tv_place_result.onClick {
                 val model = getModel<PlaceResult>()
@@ -104,6 +109,8 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
     }
 
     private fun searchPlace(query: String) {
+        inputTxt = query
+
         val placeList = arrayListOf<PlaceResult>()
         val placesClient = Places.createClient(context)   // create place client here
         val token = AutocompleteSessionToken.newInstance()
