@@ -18,6 +18,7 @@ import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.google.android.material.snackbar.Snackbar
+import kotlin.random.Random
 
 class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding>() {
 
@@ -33,11 +34,11 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
 
     override fun initView(savedInstanceState: Bundle?) {
 
+
         initListView()
     }
 
     private fun initListView() {
-
         mDatabind.rv.linear().setup {
             addType<HeaderModel>(R.layout.item_hover_header)
             addType<OfficialModel>(R.layout.main_official)
@@ -105,10 +106,25 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                     }
                 }
             }
-        }.models = getData()
+        }
+
+        mDatabind.page.setEnableLoadMore(false)
+        mDatabind.page.onRefresh {
+            postDelayed({       // simulate request data for 2s
+                mDatabind.rv.models = getData()
+                mDatabind.page.finishRefresh()
+            }, 2000)
+        }
+        refresh()
+    }
+
+
+    fun refresh() {
+        mDatabind.page.autoRefresh()
     }
 
     private fun getData(empty: Boolean = false): List<Any> {
+        val r = Random.nextInt(10)
         return listOf(
             HeaderModel(title = "Official"),
             OfficialModel(arrayListOf("Cora", "King")),
@@ -116,24 +132,24 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
             if (empty) FriendsEmptyModel() else
                 FriendsModel(
                     arrayListOf(
-                        "Cora",
-                        "King",
-                        "Cora",
+                        "Cora-$r",
+                        "King-$r",
+                        "Cora-$r",
 
-                        "King",
-                        "Cora",
-                        "King",
+                        "King-$r",
+                        "Cora-$r",
+                        "King-$r",
 
-                        "Cora",
-                        "King",
-                        "Cora",
+                        "Cora-$r",
+                        "King-$r",
+                        "Cora-$r",
 
-                        "King",
-                        "Cora",
-                        "King",
+                        "King-$r",
+                        "Cora-$r",
+                        "King-$r",
 
-                        "Cora",
-                        "King",
+                        "Cora-$r",
+                        "King-$r",
                         FriendsAddModel()
                     )
                 )

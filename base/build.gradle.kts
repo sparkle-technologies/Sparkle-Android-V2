@@ -76,6 +76,7 @@ dependencies {
 
     // listview
     api("com.github.liangjingkanji:BRV:1.5.0")
+    api("io.github.scwang90:refresh-header-classics:2.0.5")
 
     // network request logging
     debugImplementation("com.github.chuckerteam.chucker:library:3.5.2")
