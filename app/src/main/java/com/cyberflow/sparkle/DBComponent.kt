@@ -1,7 +1,11 @@
 package com.cyberflow.sparkle
 
 import android.graphics.Color
+import android.util.Log
+import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
+import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.main.widget.NumView
 
 object DBComponent {
@@ -14,5 +18,13 @@ object DBComponent {
             num = _num.orEmpty()
         } catch (_: Exception) {
         }
+    }
+
+    @BindingAdapter("layoutMarginBottomTop")
+    @JvmStatic
+    fun setLayoutMarginBottom(view: View, dimen: Float) {
+        val layoutParams = view.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.topMargin = dimen.toInt()
+        view.layoutParams = layoutParams
     }
 }

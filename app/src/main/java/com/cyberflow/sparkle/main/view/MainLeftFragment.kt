@@ -10,6 +10,7 @@ import android.view.animation.LinearInterpolator
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.DailyHoroScopeData
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
@@ -22,7 +23,6 @@ import com.drake.brv.utils.setup
 import kotlin.math.abs
 import kotlin.random.Random
 
-// should I make a cache for this page?
 class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>() {
 
     override fun initData() {
@@ -67,7 +67,6 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-
         mDatabind.ivOwl.setOnClickListener {
 //            mDatabind.smc.setPercentWithAnimation(50)
         }
@@ -113,7 +112,7 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
                     }
                 }
             }
-        }.models = getData()
+        }
 
         mDatabind.bgLove.setOnClickListener { anima(INDEX_LOVE) }
         mDatabind.bgFortune.setOnClickListener { anima(INDEX_FORTUNE) }

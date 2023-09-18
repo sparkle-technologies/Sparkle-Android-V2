@@ -3,6 +3,7 @@ package com.cyberflow.base.util
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
+import com.cyberflow.base.model.DailyHoroScopeData
 import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.model.UserAvatarImages
 import com.cyberflow.base.net.GsonConverter
@@ -16,6 +17,7 @@ object CacheUtil {
     private const val USERINFO = "sparkle_user_info"
     private const val NATIVE_MIX_IMGS = "sparkle_native_mix_imgs"
     const val WALLET_NAME = "sparkle_wallet_name"
+    private const val DAILY_HOROSCOPE_INFO = "sparkle_daily_horoscope_info"
 
 
     fun getUserInfo(): LoginResponseData? {
@@ -57,6 +59,29 @@ object CacheUtil {
             kv.encode(USERINFO, json)
         }
     }
+
+    /*fun setHoroscopeData(obj: DailyHoroScopeData?) {
+        val kv = getMMKV()
+        if (obj == null) {
+            Log.e("TAG", "setHoroscopeData:obj is null" )
+            kv.encode(DAILY_HOROSCOPE_INFO, "")
+        } else {
+            val json = GsonConverter.gson.toJson(obj)
+            Log.e("TAG", "setHoroscopeData: $obj" )
+            kv.encode(DAILY_HOROSCOPE_INFO, json)
+        }
+    }
+
+    fun getHoroscopeData(): DailyHoroScopeData? {
+        val kv = getMMKV()
+        val str = kv.decodeString(DAILY_HOROSCOPE_INFO)
+        return if (TextUtils.isEmpty(str)) {
+            null
+        } else {
+            GsonConverter.gson.fromJson<DailyHoroScopeData>(str, DailyHoroScopeData::class.java)
+        }
+    }*/
+
 
     fun isLoggedInAndHasUserInfoCompleted(): Boolean {
         getUserInfo()?.apply {
