@@ -283,7 +283,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_6"
-            android:text="377"
+            android:text="666"
             android:textColor="@color/color_000000"
             android:textSize="@dimen/sp_15"
             android:textStyle="bold"

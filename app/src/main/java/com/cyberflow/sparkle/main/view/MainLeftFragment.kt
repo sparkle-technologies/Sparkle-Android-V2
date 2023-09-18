@@ -9,6 +9,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseDBFragment
+import com.cyberflow.base.model.DailyHoroScopeData
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
@@ -21,10 +22,42 @@ import com.drake.brv.utils.setup
 import kotlin.math.abs
 import kotlin.random.Random
 
+// should I make a cache for this page?
 class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>() {
 
     override fun initData() {
+        actVm?.apply {
+            horoScopeData.observe(this@MainLeftFragment) {
+                freshData(it)
+            }
+            getDailyHoroscope()
+        }
+    }
 
+    private fun freshData(data: DailyHoroScopeData?) {
+        data?.also {
+            mDatabind.apply {
+                showTotalAnima(it.total_score)
+
+                tvLove.text = it.love_score.toString()
+                tvFortune.text = it.wealth_score.toString()
+                tvCareer.text = it.career_score.toString()
+                anima(INDEX_LOVE)
+            }
+        }
+    }
+
+    private fun showTotalAnima(dd: Int) {
+        mDatabind.smc.setPercentWithAnimation(dd)
+
+        ValueAnimator.ofInt(0, dd).apply {
+            duration = (12 * dd).toLong()
+            interpolator = LinearInterpolator()
+            addUpdateListener {
+                mDatabind.tvRange.text = it.animatedValue.toString()
+            }
+            start()
+        }
     }
 
     private var actVm: MainViewModel? = null
@@ -33,25 +66,23 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
         actVm = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
     }
 
-    var stateEmpty = false
     override fun initView(savedInstanceState: Bundle?) {
-        mDatabind.smc.setPercentWithAnimation(100)
 
         mDatabind.ivOwl.setOnClickListener {
-            mDatabind.smc.setPercentWithAnimation(50)
+//            mDatabind.smc.setPercentWithAnimation(50)
         }
         mDatabind.ivBgScore.setOnClickListener {
-            val data = listOf(HoroscopeHeadItem(),EmptyItem())
-            mDatabind.rv.linear().models = data
+//            val data = listOf(HoroscopeHeadItem(), EmptyItem())
+//            mDatabind.rv.linear().models = data
         }
 
         mDatabind.rv.linear().setup {
             addType<HoroscopeItem>(R.layout.item_horoscope)
             addType<HoroscopeHeadItem>(R.layout.item_horoscope_head)
             addType<EmptyItem>(R.layout.item_horoscope_empty)
-            onClick(R.id.left) { anima(0) }
-            onClick(R.id.center) { anima(1) }
-            onClick(R.id.right) { anima(2) }
+            onClick(R.id.left) { anima(INDEX_LOVE) }
+            onClick(R.id.center) { anima(INDEX_FORTUNE) }
+            onClick(R.id.right) { anima(INDEX_CAREER) }
             onBind {
 //                Log.e("TAG", "modelCount: $modelCount  layoutPosition: $layoutPosition ")
                 when (itemViewType) {
@@ -84,9 +115,9 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
             }
         }.models = getData()
 
-        mDatabind.bgLove.setOnClickListener { anima(0) }
-        mDatabind.bgFortune.setOnClickListener { anima(1) }
-        mDatabind.bgCareer.setOnClickListener { anima(2) }
+        mDatabind.bgLove.setOnClickListener { anima(INDEX_LOVE) }
+        mDatabind.bgFortune.setOnClickListener { anima(INDEX_FORTUNE) }
+        mDatabind.bgCareer.setOnClickListener { anima(INDEX_CAREER) }
 
         mDatabind.barLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
 //            Log.e("TAG", "verticalOffset: $verticalOffset" )
@@ -97,28 +128,14 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
         }
     }
 
-
     private val arrays = arrayOf(
         com.cyberflow.base.resources.R.drawable.main_bg_page_half_left_200_radius,
         com.cyberflow.base.resources.R.drawable.main_bg_page_selected_0_radius,
         com.cyberflow.base.resources.R.drawable.main_bg_page_half_right_200_radius
     )
 
-    private var lastIndex = 0
-    private fun anima(index: Int) {
-        val dd = Random.nextInt(100)
-        Log.e("TAG", "anima: dd = $dd")
-        mDatabind.smc.setPercentWithAnimation(dd)
-
-        ValueAnimator.ofInt(0, dd).apply {
-            duration = (12 * dd).toLong()
-            interpolator = LinearInterpolator()
-            addUpdateListener {
-                mDatabind.tvRange.text = it.animatedValue.toString()
-            }
-            start()
-        }
-
+    private var lastIndex = -1
+    private fun anima(index: Int = INDEX_LOVE) {
 //        Log.e("Click", "anima:  index=$index  lastIndex=$lastIndex")
 
         if (index == lastIndex) return
@@ -144,15 +161,53 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
         anim.start()
     }
 
-    val des = arrayOf(
-        "During this period of time, you will have great challenges no matter from the spiritual or material level change.",
-        "Some birds are not meant to be caged, that's all. Their feathers are too bright, their songs too sweet and wild. ",
-        "but still, the place where you live is that much more drab and empty for their departure. --------- I Love You - Billie Eilish ------ " +
-                "when the summary time What a waste of time I can't even remember now  And what was I so worried about? It's such a beautiful world"
-    )
 
-    private fun getData(index: Int = 0): List<Any> {
-        return listOf(
+    companion object {
+        const val INDEX_LOVE = 0
+        const val INDEX_FORTUNE = 1
+        const val INDEX_CAREER = 2
+    }
+
+    // 数据转化
+    private fun getData(index: Int = INDEX_LOVE): List<Any> {
+        val result = arrayListOf<Any>()
+        actVm?.horoScopeData?.value?.also {
+            val data = when (index) {
+                INDEX_LOVE -> {
+                    it.love_progress_list.map { horo ->
+                        HoroscopeItem(name = horo.title, desc = horo.content, line = index)
+                    }
+                }
+
+                INDEX_FORTUNE -> {
+                    it.wealth_progress_list.map { horo ->
+                        HoroscopeItem(name = horo.title, desc = horo.content, line = index)
+                    }
+                }
+
+                INDEX_CAREER -> {
+                    it.career_progress_list.map { horo ->
+                        HoroscopeItem(name = horo.title, desc = horo.content, line = index)
+                    }
+                }
+
+                else -> {
+                    arrayListOf<Any>()
+                }
+            }
+
+            if (data.isNotEmpty()) {
+                result.add(HoroscopeHeadItem())
+                result.addAll(data)
+            } else {
+                result.add(HoroscopeHeadItem())
+                result.add(EmptyItem())
+            }
+        }
+
+        return result
+
+        /*return listOf(
             HoroscopeHeadItem(),
             HoroscopeItem(name = "Pattern $index", desc = des[(index) % des.size], line = index),
             HoroscopeItem(name = "Pattern $index", desc = des[(index) % des.size], line = index),
@@ -165,6 +220,13 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
             HoroscopeItem(name = "Pattern $index", desc = des[(index) % des.size], line = index),
             HoroscopeItem(name = "Pattern $index", desc = des[(index) % des.size], line = index),
             HoroscopeItem(name = "Pattern $index", desc = des[(index) % des.size], line = index),
-        )
+        )*/
     }
+
+    val des = arrayOf(
+        "During this period of time, you will have great challenges no matter from the spiritual or material level change.",
+        "Some birds are not meant to be caged, that's all. Their feathers are too bright, their songs too sweet and wild. ",
+        "but still, the place where you live is that much more drab and empty for their departure. --------- I Love You - Billie Eilish ------ " +
+                "when the summary time What a waste of time I can't even remember now  And what was I so worried about? It's such a beautiful world"
+    )
 }

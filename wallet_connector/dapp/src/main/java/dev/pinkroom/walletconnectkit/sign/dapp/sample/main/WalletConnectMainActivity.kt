@@ -63,7 +63,7 @@ fun Content(walletConnectKit: WalletConnectKit) {
 
         WalletConnectKitButton(walletConnectKit)
 
-    /*if (activeSessions.isEmpty()) {
+        /*if (activeSessions.isEmpty()) {
             WalletConnectKitButton(walletConnectKit)
         } else {
             // do sth  具体 操作在  AccountActions

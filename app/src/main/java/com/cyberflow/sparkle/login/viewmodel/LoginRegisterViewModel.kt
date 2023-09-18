@@ -40,7 +40,6 @@ class LoginRegisterViewModel : BaseViewModel() {
     fun loginTwitter(act: Activity) {
         val firebaseAuth = FirebaseAuth.getInstance()
 
-
         val provider = OAuthProvider.newBuilder("twitter.com")
         // 参数包括 client_id、response_type、redirect_uri、state、scope 和 response_mode
 

@@ -33,7 +33,6 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
         mViewBind.btnIgLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-
                 val intent = Intent(this@LoginAct, MainActivity::class.java)
                 startActivity(intent)
             }
