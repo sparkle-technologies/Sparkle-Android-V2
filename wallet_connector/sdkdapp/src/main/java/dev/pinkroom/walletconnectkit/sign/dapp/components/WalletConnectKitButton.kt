@@ -380,7 +380,7 @@ private fun LoadingView() = Column(
 }
 
 private fun Modifier.defaultContentModifier() = this
-    .size(168.dp, 28.dp)
+    .size(268.dp, 40.dp)
     .padding(4.dp)
 
 private val WalletConnectColor = Color(0xFF3496ff)

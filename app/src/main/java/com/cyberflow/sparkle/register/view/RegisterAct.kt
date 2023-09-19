@@ -1,5 +1,6 @@
 package com.cyberflow.sparkle.register.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,13 @@ import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.main.view.MainActivity
 
 class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() {
+
+    companion object{
+        fun go(context: Context){
+            val intent = Intent(context, RegisterAct::class.java)
+            context.startActivity(intent)
+        }
+    }
 
     override fun initView(savedInstanceState: Bundle?) {
         var adapter = PageAdapter(supportFragmentManager, lifecycle)
@@ -48,7 +56,7 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
             val token = CacheUtil.getUserInfo()?.token.orEmpty()
             Log.e(TAG, "got new token from login :  $token")
 
-            goMainPage()
+            MainActivity.go(this)
         }
         viewModel.registerBean = RegisterRequestBean()  // init request bean
     }
@@ -72,12 +80,6 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
             }
         }
     }
-
-    private fun goMainPage() {
-        val intent = Intent(this@RegisterAct, MainActivity::class.java)
-        startActivity(intent)
-    }
-
 }
 
 class PageAdapter(fm: FragmentManager, lifecycle: androidx.lifecycle.Lifecycle) :

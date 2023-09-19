@@ -1,23 +1,18 @@
 package com.cyberflow.sparkle.login.view
 
 import android.animation.Animator
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.main.view.MainActivity
 import com.cyberflow.sparkle.register.view.RegisterAct
 import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
 import dev.pinkroom.walletconnectkit.core.accounts
-import dev.pinkroom.walletconnectkit.core.sessions
 import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
 import dev.pinkroom.walletconnectkit.sign.dapp.sample.main.Content
 import kotlinx.coroutines.launch
@@ -29,39 +24,45 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()
+
+        if(CacheUtil.getUserInfo()?.user?.open_uid?.isNotEmpty() == true){
+            MainActivity.go(this)
+            return
+        }
+
         initWalletConnect()
+
+        mViewBind.btnGoogleLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+                walletConnectKit.disconnect {
+                    it.printStackTrace()
+                    Log.e(TAG, "clicked:  $it")
+                }
+            }
+        })
 
         mViewBind.btnIgLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                val intent = Intent(this@LoginAct, MainActivity::class.java)
-                startActivity(intent)
+                /* val intent = Intent(this@LoginAct, MainActivity::class.java)
+                 startActivity(intent)*/
             }
         })
 
         mViewBind.btnTwitterLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")
-            }
-        })
-
-        mViewBind.btnWalletLogin.setClickListener(object : ShadowTxtButton.ShadowClickListener {
-            override fun clicked(dis: Boolean) {
-                Log.e(TAG, "initView:  button clicked")
-                val intent = Intent(this@LoginAct, RegisterAct::class.java)
-                startActivity(intent)
+//                viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")
             }
         })
     }
 
-
-
     override fun initData() {
         viewModel.userInfo.observe(this) {
-            Log.e(TAG, "initView: $it")
             CacheUtil.setUserInfo(it)
-
-            val token = CacheUtil.getUserInfo()?.token.orEmpty()
-            Log.e(TAG, "got  token from login :  $token")
+            if (it.user?.open_uid.isNullOrEmpty()) {
+                RegisterAct.go(this)
+            }else{
+                MainActivity.go(this)
+            }
         }
     }
 
@@ -93,11 +94,6 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                         //                   )},
                         //     metaData=AppMetaData(name=MetaMask Wallet, description=MetaMask Wallet Integration, url=https://metamask.io/, icons=[], redirect=null, verifyUrl=null))
                         Log.e(TAG, "session foreach: $session ")
-                        if (System.currentTimeMillis() > session.expiry) {
-                            // need login again
-                            Toast.makeText(this@LoginAct, "wallet session expired", Toast.LENGTH_LONG).show()
-                            return@collect
-                        }
                         // Account(
                         //  topic=7524cc32f3a334290c29d256423d2a9ddb795a31c4e7b4a22deeef6e71fb8e84,
                         //  address=0x150E4AB89Ddd5fa7f8Fb8cae501b48961Ce703A4,
@@ -109,16 +105,13 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
                     val address = it.flatMap { it.accounts }.map { it.address to it }
                     address.forEach {
-                        Log.e(TAG, "address foreach:  ${it.first}   ${it.second} " )
+                        Log.e(TAG, "address foreach:  ${it.first}   ${it.second} ")
                     }
 
                     val activated = walletConnectKit.activeAccount
-                    activated?.also {ac->
-                        val name = sessions.first().metaData?.name.orEmpty()
-                        var wallet = ""
-                        when(name){
-                            "MetaMask Wallet" -> wallet = "MetaMask"
-                        }
+                    activated?.also { ac ->
+//                        val name = sessions.first().metaData?.name.orEmpty()
+                        var wallet = "MetaMask"
                         viewModel.login(ac.address, wallet)
                     }
                 }

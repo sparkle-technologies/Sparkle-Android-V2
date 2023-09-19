@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 data class DailyHoroScopeData(
     val total_score: Int,
     val love_score: Int,
-    val love_progress_list: List<HoroProgress>,
+    val love_progress_list: List<HoroProgress>?,
     val wealth_score: Int,
-    val wealth_progress_list: List<HoroProgress>,
+    val wealth_progress_list: List<HoroProgress>?,
     val career_score: Int,
-    val career_progress_list: List<HoroProgress>
+    val career_progress_list: List<HoroProgress>?
 )
 
 @Serializable

@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.lifecycle.ViewModelProvider
@@ -25,13 +26,12 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
     override fun initData() {
         actVm?.apply {
             horoScopeData.observe(this@MainLeftFragment) {
+                Log.e("TAG", "horoScopeData.observe " )
                 mDatabind.state.showContent()
                 freshData(it)
             }
             mDatabind.state.showLoading()
-            getDailyHoroscope().catch {
-                mDatabind.state.showError()
-            }
+            getDailyHoroscope()
         }
     }
 
@@ -174,19 +174,19 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
         actVm?.horoScopeData?.value?.also {
             val data = when (index) {
                 INDEX_LOVE -> {
-                    it.love_progress_list.map { horo ->
+                    it.love_progress_list?.map { horo ->
                         HoroscopeItem(name = horo.title, desc = horo.content, line = index)
                     }
                 }
 
                 INDEX_FORTUNE -> {
-                    it.wealth_progress_list.map { horo ->
+                    it.wealth_progress_list?.map { horo ->
                         HoroscopeItem(name = horo.title, desc = horo.content, line = index)
                     }
                 }
 
                 INDEX_CAREER -> {
-                    it.career_progress_list.map { horo ->
+                    it.career_progress_list?.map { horo ->
                         HoroscopeItem(name = horo.title, desc = horo.content, line = index)
                     }
                 }
@@ -196,12 +196,12 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
                 }
             }
 
-            if (data.isNotEmpty()) {
-                result.add(HoroscopeHeadItem())
-                result.addAll(data)
-            } else {
+            if(data.isNullOrEmpty()){
                 result.add(HoroscopeHeadItem())
                 result.add(EmptyItem())
+            }else{
+                result.add(HoroscopeHeadItem())
+                result.addAll(data)
             }
         }
 

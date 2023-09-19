@@ -1,6 +1,8 @@
 package com.cyberflow.sparkle.main.view
 
 import android.animation.ObjectAnimator
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,6 +19,13 @@ import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.widget.DoubleClickListener
 
 class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
+
+    companion object{
+        fun go(context: Context){
+            val intent = Intent(context, MainActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 
     private var dis = 0f
     private var fromLeft2Right: ObjectAnimator? = null
