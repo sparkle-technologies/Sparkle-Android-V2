@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
 import com.orhanobut.logger.Logger
+import org.json.JSONObject
 
 class LoginRegisterViewModel : BaseViewModel() {
 
@@ -69,19 +70,11 @@ class LoginRegisterViewModel : BaseViewModel() {
                 Log.e(TAG, "it.credential?.signInMethod= ${ (it.credential as? OAuthCredential)?.signInMethod  }")
 
                 viewModelScope.run {
-//                    login((it.credential as? OAuthCredential)?.accessToken ?: "", "Twitter") //TODO  接口还没好
-                }
-
-                Logger.e("  currentUser?.providerId=${firebaseAuth.currentUser?.providerId}")
-                Logger.e("  currentUser?.uid=${firebaseAuth.currentUser?.uid}")
-
-
-                /*firebaseAuth.currentUser?.getIdToken(true)?.addOnCompleteListener {
-                    if(it.isSuccessful){
-                        val idToken = it.result?.token ?: ""
-                        Log.e(TAG, "loginTwitter: --------- idToken=$idToken" )
+                    (it.credential as? OAuthCredential)?.apply {
+                        val auth_msg = JSONObject(mapOf("access_token" to accessToken, "access_token_secret" to secret)).toString()
+                        login(auth_msg, "Twitter")
                     }
-                }*/
+                }
             }
             .addOnFailureListener {
                 // Handle failure.

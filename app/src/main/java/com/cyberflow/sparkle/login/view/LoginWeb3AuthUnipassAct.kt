@@ -59,7 +59,7 @@ class LoginWeb3AuthUnipassAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginW
     }
 
 
-    /*************************************************************************************/
+    /************************************** 这个以后再弄  得搞个新接口刷新JWT ***********************************************/
 
     private lateinit var singleFactorAuth: SingleFactorAuth
     private lateinit var singleFactorAuthArgs: SingleFactorAuthArgs
@@ -71,8 +71,7 @@ class LoginWeb3AuthUnipassAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginW
         singleFactorAuthArgs = SingleFactorAuthArgs(TorusNetwork.TESTNET)
         singleFactorAuth = SingleFactorAuth(singleFactorAuthArgs)
 
-        val sessionResponse: CompletableFuture<TorusKey> =
-            singleFactorAuth.initialize(this.applicationContext)
+        val sessionResponse: CompletableFuture<TorusKey> = singleFactorAuth.initialize(this.applicationContext)
         sessionResponse.whenComplete { torusKey, error ->
             if (torusKey != null) {
                 publicAddress = torusKey?.publicAddress.toString()

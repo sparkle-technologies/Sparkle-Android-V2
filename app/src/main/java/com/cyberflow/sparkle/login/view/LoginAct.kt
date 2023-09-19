@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
@@ -43,14 +44,13 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
         mViewBind.btnIgLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                /* val intent = Intent(this@LoginAct, MainActivity::class.java)
-                 startActivity(intent)*/
+                //viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")
             }
         })
 
         mViewBind.btnTwitterLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-//                viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")
+                viewModel.loginTwitter(this@LoginAct)
             }
         })
     }
@@ -58,6 +58,9 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
     override fun initData() {
         viewModel.userInfo.observe(this) {
             CacheUtil.setUserInfo(it)
+
+            MyApp.instance.signInJWT(it.id_token)
+
             if (it.user?.open_uid.isNullOrEmpty()) {
                 RegisterAct.go(this)
             }else{
