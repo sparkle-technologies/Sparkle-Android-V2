@@ -1,6 +1,8 @@
 package com.cyberflow.sparkle.login.view
 
 import android.animation.Animator
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
@@ -12,8 +14,10 @@ import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.view.MainActivity
 import com.cyberflow.sparkle.register.view.RegisterAct
+import com.cyberflow.sparkle.setting.view.SettingsActivity
 import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
 import dev.pinkroom.walletconnectkit.core.accounts
+import dev.pinkroom.walletconnectkit.core.sessions
 import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
 import dev.pinkroom.walletconnectkit.sign.dapp.sample.main.Content
 import kotlinx.coroutines.launch
@@ -23,10 +27,20 @@ import kotlin.coroutines.suspendCoroutine
 
 class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
+    companion object {
+        fun go(context: Context) {
+            val intent = Intent(context, LoginAct::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            context.startActivity(intent)
+        }
+    }
+
+
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()
 
-        if(CacheUtil.getUserInfo()?.user?.open_uid?.isNotEmpty() == true){
+        if (CacheUtil.getUserInfo()?.user?.open_uid?.isNotEmpty() == true) {
             MainActivity.go(this)
             return
         }
@@ -35,10 +49,11 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
         mViewBind.btnGoogleLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                walletConnectKit.disconnect {
+                MyApp.instance.walletConnectKit?.disconnect {
                     it.printStackTrace()
                     Log.e(TAG, "clicked:  $it")
                 }
+
             }
         })
 
@@ -63,7 +78,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
             if (it.user?.open_uid.isNullOrEmpty()) {
                 RegisterAct.go(this)
-            }else{
+            } else {
                 MainActivity.go(this)
             }
         }
@@ -71,18 +86,12 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     /********************* wallet connect ******************************/
 
-    private lateinit var walletConnectKit: WalletConnectKit
     private fun initWalletConnect() {
-        val config = WalletConnectKitConfig(
-            projectId = "216dc6e2b36be94b855cd28ea41fda6d",
-            appUrl = "https://sparkle.fun",
-        )
-        walletConnectKit = WalletConnectKit.builder(this).config(config).build()
         mViewBind.composeView.setContent {
-            Content(walletConnectKit)
+            MyApp.instance.walletConnectKit?.let { Content(it) }
         }
         lifecycleScope.launch {
-            walletConnectKit.activeSessions.collect {
+            MyApp.instance.walletConnectKit?.activeSessions?.collect {
                 if (it.isNotEmpty()) {
                     it.forEach { session ->
                         // Session(
@@ -111,9 +120,10 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                         Log.e(TAG, "address foreach:  ${it.first}   ${it.second} ")
                     }
 
-                    val activated = walletConnectKit.activeAccount
+                    val activated = MyApp.instance.walletConnectKit?.activeAccount
                     activated?.also { ac ->
-//                        val name = sessions.first().metaData?.name.orEmpty()
+                        val name = sessions.first().metaData?.name.orEmpty()
+                        CacheUtil.savaString(CacheUtil.LOGIN_METHOD, name)
                         var wallet = "MetaMask"
                         viewModel.login(ac.address, wallet)
                     }

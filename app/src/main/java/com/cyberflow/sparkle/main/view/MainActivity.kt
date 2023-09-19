@@ -17,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.widget.DoubleClickListener
+import com.cyberflow.sparkle.setting.view.SettingsActivity
 
 class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
@@ -72,7 +73,8 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         })
 
         mDataBinding.ivHead.setOnClickListener {
-            Snackbar.make(mDataBinding.ivHead, "click me", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(mDataBinding.ivHead, "go setting", Snackbar.LENGTH_SHORT).show()
+            SettingsActivity.go(this)
         }
 
         mDataBinding.btnAddFriends.setClickListener(object : ShadowImgButton.ShadowClickListener {

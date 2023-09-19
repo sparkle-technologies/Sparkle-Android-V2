@@ -19,6 +19,11 @@ object CacheUtil {
     const val WALLET_NAME = "sparkle_wallet_name"
     private const val DAILY_HOROSCOPE_INFO = "sparkle_daily_horoscope_info"
 
+    const val UNIPASS_PUBK = "sparkle_unipass_pubk"
+    const val UNIPASS_PRIK = "sparkle_unipass_prik"
+
+    const val LOGIN_METHOD = "sparkle_login_method"
+
 
     fun getUserInfo(): LoginResponseData? {
         val kv = getMMKV()
@@ -33,7 +38,7 @@ object CacheUtil {
     fun getSimpleUserInfo(): UserInfo? {
         val result = UserInfo()
         getUserInfo()?.apply {
-            if(user == null) {
+            if (user == null) {
                 return null
             }
             result.gender = user.gender
@@ -51,11 +56,11 @@ object CacheUtil {
     fun setUserInfo(obj: LoginResponseData?) {
         val kv = getMMKV()
         if (obj == null) {
-            Log.e("TAG", "setUserInfo:obj is null" )
+            Log.e("TAG", "setUserInfo:obj is null")
             kv.encode(USERINFO, "")
         } else {
             val json = GsonConverter.gson.toJson(obj)
-            Log.e("TAG", "setUserInfo: $obj" )
+            Log.e("TAG", "setUserInfo: $obj")
             kv.encode(USERINFO, json)
         }
     }
@@ -85,7 +90,7 @@ object CacheUtil {
 
     fun isLoggedInAndHasUserInfoCompleted(): Boolean {
         getUserInfo()?.apply {
-            if(user == null ){
+            if (user == null) {
                 return false
             }
             val necessary1 = token?.isNotEmpty()

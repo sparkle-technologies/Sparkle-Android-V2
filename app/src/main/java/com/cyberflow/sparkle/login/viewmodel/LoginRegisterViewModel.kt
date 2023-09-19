@@ -9,8 +9,10 @@ import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.model.RegisterRequestBean
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.net.GsonConverter
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.drake.net.Post
+import com.drake.net.utils.TipUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
@@ -72,6 +74,7 @@ class LoginRegisterViewModel : BaseViewModel() {
                 viewModelScope.run {
                     (it.credential as? OAuthCredential)?.apply {
                         val auth_msg = JSONObject(mapOf("access_token" to accessToken, "access_token_secret" to secret)).toString()
+                        CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "Twitter")
                         login(auth_msg, "Twitter")
                     }
                 }
@@ -79,6 +82,7 @@ class LoginRegisterViewModel : BaseViewModel() {
             .addOnFailureListener {
                 // Handle failure.
                 it.printStackTrace()
+                TipUtils.toast("twitter login failed, please try again")
                 Log.e(TAG, "loginTwitter: fail")
             }
     }

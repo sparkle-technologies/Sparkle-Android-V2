@@ -8,7 +8,6 @@ import com.cyberflow.base.act.BaseVMAct
 import com.cyberflow.base.net.initNetSpark
 import com.cyberflow.base.util.CacheUtil
 import com.drake.brv.utils.BRV
-import com.drake.net.utils.scope
 import com.google.android.libraries.places.api.Places
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
@@ -19,6 +18,8 @@ import com.web3auth.singlefactorauth.SingleFactorAuth
 import com.web3auth.singlefactorauth.types.LoginParams
 import com.web3auth.singlefactorauth.types.SingleFactorAuthArgs
 import com.web3auth.singlefactorauth.types.TorusKey
+import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
+import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
 import org.torusresearch.fetchnodedetails.types.TorusNetwork
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutionException
@@ -38,6 +39,7 @@ class MyApp : BaseApp() {
         initNetSpark()
         CacheUtil.init(this)
         initGooglePlace()
+        initWalletConnect()
         initWeb3Auth()
         initRefresh()
         Logger.addLogAdapter(AndroidLogAdapter())
@@ -55,6 +57,15 @@ class MyApp : BaseApp() {
         SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
             ClassicsFooter(this)
         }
+    }
+
+    var walletConnectKit : WalletConnectKit? = null
+    private fun initWalletConnect(){
+        val config = WalletConnectKitConfig(
+            projectId = "216dc6e2b36be94b855cd28ea41fda6d",
+            appUrl = "https://sparkle.fun",
+        )
+        walletConnectKit = WalletConnectKit.builder(this).config(config).build()
     }
 
     /************************************** 这个以后再弄  得搞个新接口刷新JWT ***********************************************/
@@ -96,9 +107,15 @@ class MyApp : BaseApp() {
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
-            publicAddress = torusKey?.publicAddress.toString()
-            Log.e(TAG, "Private Key: ${torusKey?.privateKey?.toString(16)}".trimIndent())
-            Log.e(TAG, "Public Address: $publicAddress".trimIndent())
+            publicAddress = "${torusKey?.publicAddress.toString()}".trimIndent()
+            val privateKey = "${torusKey?.privateKey?.toString(16)}}".trimIndent()
+
+            Log.e(TAG, "Public Address: $publicAddress")
+            Log.e(TAG, "Private Key: $privateKey")
+
+            CacheUtil.savaString(CacheUtil.UNIPASS_PUBK, publicAddress)
+            CacheUtil.savaString(CacheUtil.UNIPASS_PRIK, privateKey)
+
         }.start()
     }
 }
