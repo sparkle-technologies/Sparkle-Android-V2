@@ -4,13 +4,11 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.DailyHoroScopeData
-import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
@@ -21,16 +19,19 @@ import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import kotlin.math.abs
-import kotlin.random.Random
 
 class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>() {
 
     override fun initData() {
         actVm?.apply {
             horoScopeData.observe(this@MainLeftFragment) {
+                mDatabind.state.showContent()
                 freshData(it)
             }
-            getDailyHoroscope()
+            mDatabind.state.showLoading()
+            getDailyHoroscope().catch {
+                mDatabind.state.showError()
+            }
         }
     }
 

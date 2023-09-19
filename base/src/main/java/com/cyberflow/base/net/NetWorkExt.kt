@@ -9,7 +9,6 @@ import com.drake.net.interceptor.LogRecordInterceptor
 import com.drake.net.okhttp.setConverter
 import com.drake.net.okhttp.setDebug
 import com.drake.net.okhttp.setErrorHandler
-import com.drake.net.okhttp.setRequestInterceptor
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response

@@ -11,10 +11,10 @@ class MainViewModel : BaseViewModel() {
 
     var horoScopeData: MutableLiveData<DailyHoroScopeData> = MutableLiveData()
 
+
     fun getDailyHoroscope() = scopeNetLife {
         horoScopeData.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {
 
         }.await()
     }
-
 }
