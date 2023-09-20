@@ -42,15 +42,15 @@ class LoginWeb3AuthUnipassAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginW
         }
 
         mViewBind.btnLogin.setOnClickListener {
-            viewModel.login(testAccount[5], "MetaMask")
+//            viewModel.login(testAccount[5], "MetaMask")
         }
 
         mViewBind.btnGoogleLogin.setOnClickListener {
-            viewModel.loginGoogle(this)
+//            viewModel.loginGoogle(this)
         }
 
         mViewBind.btnTwitterLogin.setOnClickListener {
-            viewModel.loginTwitter(this)
+//            viewModel.loginTwitter(this)
         }
     }
 

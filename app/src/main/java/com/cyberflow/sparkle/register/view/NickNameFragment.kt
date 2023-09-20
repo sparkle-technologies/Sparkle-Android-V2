@@ -2,14 +2,22 @@ package com.cyberflow.sparkle.register.view
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseVBFragment
 import com.cyberflow.base.model.GENDER_MAN
 import com.cyberflow.base.model.GENDER_WOMEN
+import com.cyberflow.base.model.LoginResponseData
+import com.cyberflow.base.net.Api
+import com.cyberflow.base.net.GsonConverter
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.sparkle.databinding.FragmentRegisterNicknameBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.main.view.MainActivity
+import com.drake.net.Post
+import com.drake.net.utils.scopeDialog
 
 class NickNameFragment :
     BaseVBFragment<LoginRegisterViewModel, FragmentRegisterNicknameBinding>() {
@@ -71,14 +79,23 @@ class NickNameFragment :
         })
     }
 
-    // 只能输入表情符和号字母空格，汉字
-    // const reg = /^(\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDE4F]|[a-zA-Z\s]|[\u4e00-\u9fa5])+$/
-    // const reg = /^([\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9a-zA-Z\s]|[\u4e00-\u9fa5])+$/
     private fun submitRegister() {
         val txt = mViewBind.etNiceName.text.toString().trim()
         actVm?.apply {
             registerBean?.nick = txt
-            register()
+            scopeDialog {
+                val data = Post<LoginResponseData>(Api.COMPLETE_INFO) {
+                    json(GsonConverter.gson.toJson(registerBean))
+                }.await()
+                data?.let {
+                    CacheUtil.setUserInfo(it)
+
+                    val token = CacheUtil.getUserInfo()?.token.orEmpty()
+                    Log.e("NickNameFragment", "got new token from login :  $token")
+
+                    MainActivity.go(requireActivity())
+                }
+            }
         }
     }
 }

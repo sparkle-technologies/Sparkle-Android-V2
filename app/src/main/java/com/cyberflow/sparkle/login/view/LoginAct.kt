@@ -7,17 +7,27 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseVBAct
+import com.cyberflow.base.model.LoginResponseData
+import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.view.MainActivity
 import com.cyberflow.sparkle.register.view.RegisterAct
+import com.drake.net.Post
+import com.drake.net.utils.TipUtils
+import com.drake.net.utils.scopeDialog
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthCredential
+import com.google.firebase.auth.OAuthProvider
 import dev.pinkroom.walletconnectkit.core.accounts
 import dev.pinkroom.walletconnectkit.core.sessions
 import dev.pinkroom.walletconnectkit.sign.dapp.sample.main.Content
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -32,7 +42,6 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             context.startActivity(intent)
         }
     }
-
 
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()
@@ -59,24 +68,80 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
         mViewBind.btnTwitterLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                viewModel.loginTwitter(this@LoginAct)
+                loginTwitter()
             }
         })
     }
 
     override fun initData() {
-        viewModel.userInfo.observe(this) {
-            CacheUtil.setUserInfo(it)
 
-            MyApp.instance.signInJWT(it.id_token)
-
-            if (it.user?.open_uid.isNullOrEmpty()) {
-                RegisterAct.go(this)
-            } else {
-                MainActivity.go(this)
-            }
-        }
     }
+
+    private fun request(authMsg: String, type: String){
+         scopeDialog {
+             val data = Post<LoginResponseData>(Api.SIGN_IN) {
+                  //登录类型 MetaMask、WalletConnect、Coinbase、Twitter、Discord
+                  //钱包地址 | Twitter授权code | Discord授权token
+                  json("auth_msg" to authMsg, "type" to type)
+              }.await()
+
+             data?.let {
+                 CacheUtil.setUserInfo(it)
+                 MyApp.instance.signInJWT(it.id_token)
+                 if (it.user?.open_uid.isNullOrEmpty()) {
+                     RegisterAct.go(this@LoginAct)
+                 } else {
+                     MainActivity.go(this@LoginAct)
+                 }
+             }
+          }
+    }
+
+    /********************* twitter ******************************/
+    fun loginTwitter() {
+        val firebaseAuth = FirebaseAuth.getInstance()
+
+        val provider = OAuthProvider.newBuilder("twitter.com")
+        // 参数包括 client_id、response_type、redirect_uri、state、scope 和 response_mode
+
+        firebaseAuth
+            .startActivityForSignInWithProvider(this, provider.build())
+            .addOnSuccessListener {
+                // User is signed in.
+                // IdP data available in
+                // authResult.getAdditionalUserInfo().getProfile().
+                // The OAuth access token can also be retrieved:
+                // ((OAuthCredential)authResult.getCredential()).getAccessToken().
+                // The OAuth secret can be retrieved by calling:
+                // ((OAuthCredential)authResult.getCredential()).getSecret().
+
+//                Logger.e(GsonConverter.gson.toJson(it))
+
+                Log.e(BaseViewModel.TAG, "additionalUserInfo?.providerId= ${it.additionalUserInfo?.providerId}")
+                Log.e(BaseViewModel.TAG, "additionalUserInfo?.username= ${it.additionalUserInfo?.username}")
+
+                Log.e(BaseViewModel.TAG, "it.credential?.accessToken= ${ (it.credential as? OAuthCredential)?.accessToken }")
+                Log.e(BaseViewModel.TAG, "it.credential?.secret= ${ (it.credential as? OAuthCredential)?.secret  }")
+                Log.e(BaseViewModel.TAG, "it.credential?.idToken= ${ (it.credential as? OAuthCredential)?.idToken  }")
+
+                Log.e(BaseViewModel.TAG, "it.credential?.provider= ${ (it.credential as? OAuthCredential)?.provider  }")
+                Log.e(BaseViewModel.TAG, "it.credential?.signInMethod= ${ (it.credential as? OAuthCredential)?.signInMethod  }")
+
+                (it.credential as? OAuthCredential)?.apply {
+                    val auth_msg = JSONObject(mapOf("access_token" to accessToken, "access_token_secret" to secret)).toString()
+                    CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "Twitter")
+                    request(auth_msg, "Twitter")
+                }
+
+            }
+            .addOnFailureListener {
+                // Handle failure.
+                it.printStackTrace()
+                TipUtils.toast("twitter login failed, please try again")
+                Log.e(BaseViewModel.TAG, "loginTwitter: fail")
+            }
+    }
+
 
     /********************* wallet connect ******************************/
 
@@ -120,15 +185,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                         val name = sessions.first().metaData?.name.orEmpty()
                         CacheUtil.savaString(CacheUtil.LOGIN_METHOD, name)
                         var wallet = "MetaMask"
-                       /* scopeDialog {
-                           val data = Post<LoginResponseData>(Api.SIGN_IN) {
-                                //登录类型 MetaMask、WalletConnect、Coinbase、Twitter、Discord
-                                //钱包地址 | Twitter授权code | Discord授权token
-                                json("auth_msg" to ac.address, "type" to wallet)
-                            }.await()
-                            viewModel.userInfo.postValue(data)
-                        }*/
-                        viewModel.login(ac.address, wallet)
+                        request(ac.address, wallet)
                     }
                 }
             }
