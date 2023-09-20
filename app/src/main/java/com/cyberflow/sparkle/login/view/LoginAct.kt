@@ -14,11 +14,8 @@ import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.view.MainActivity
 import com.cyberflow.sparkle.register.view.RegisterAct
-import com.cyberflow.sparkle.setting.view.SettingsActivity
-import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
 import dev.pinkroom.walletconnectkit.core.accounts
 import dev.pinkroom.walletconnectkit.core.sessions
-import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
 import dev.pinkroom.walletconnectkit.sign.dapp.sample.main.Content
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
@@ -49,10 +46,6 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
         mViewBind.btnGoogleLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                MyApp.instance.walletConnectKit?.disconnect {
-                    it.printStackTrace()
-                    Log.e(TAG, "clicked:  $it")
-                }
 
             }
         })
@@ -60,6 +53,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         mViewBind.btnIgLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 //viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")
+
             }
         })
 
@@ -90,6 +84,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         mViewBind.composeView.setContent {
             MyApp.instance.walletConnectKit?.let { Content(it) }
         }
+
         lifecycleScope.launch {
             MyApp.instance.walletConnectKit?.activeSessions?.collect {
                 if (it.isNotEmpty()) {
@@ -125,6 +120,14 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                         val name = sessions.first().metaData?.name.orEmpty()
                         CacheUtil.savaString(CacheUtil.LOGIN_METHOD, name)
                         var wallet = "MetaMask"
+                       /* scopeDialog {
+                           val data = Post<LoginResponseData>(Api.SIGN_IN) {
+                                //登录类型 MetaMask、WalletConnect、Coinbase、Twitter、Discord
+                                //钱包地址 | Twitter授权code | Discord授权token
+                                json("auth_msg" to ac.address, "type" to wallet)
+                            }.await()
+                            viewModel.userInfo.postValue(data)
+                        }*/
                         viewModel.login(ac.address, wallet)
                     }
                 }
