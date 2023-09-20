@@ -132,7 +132,6 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                     CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "Twitter")
                     request(auth_msg, "Twitter")
                 }
-
             }
             .addOnFailureListener {
                 // Handle failure.
@@ -181,6 +180,9 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                     }
 
                     val activated = MyApp.instance.walletConnectKit?.activeAccount
+
+                    Log.e(TAG, "initWalletConnect: $activated " )
+
                     activated?.also { ac ->
                         val name = sessions.first().metaData?.name.orEmpty()
                         CacheUtil.savaString(CacheUtil.LOGIN_METHOD, name)

@@ -84,5 +84,4 @@ dependencies {
     // for UI
     implementation("com.tbuonomo:dotsindicator:5.0")     // viewpager2 indicator
 
-
 }
