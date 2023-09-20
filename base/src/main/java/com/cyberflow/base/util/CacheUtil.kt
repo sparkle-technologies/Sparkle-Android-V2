@@ -3,7 +3,6 @@ package com.cyberflow.base.util
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
-import com.cyberflow.base.model.DailyHoroScopeData
 import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.model.UserAvatarImages
 import com.cyberflow.base.net.GsonConverter

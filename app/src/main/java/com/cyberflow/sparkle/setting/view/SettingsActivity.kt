@@ -13,10 +13,6 @@ import com.cyberflow.sparkle.databinding.ActivitySettingBinding
 import com.cyberflow.sparkle.login.view.LoginAct
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.google.firebase.auth.FirebaseAuth
-import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
-import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
-import java.lang.StringBuilder
-import kotlin.concurrent.thread
 
 class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 

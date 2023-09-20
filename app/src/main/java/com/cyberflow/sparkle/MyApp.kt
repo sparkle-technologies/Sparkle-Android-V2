@@ -35,14 +35,18 @@ class MyApp : BaseApp() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        val st = System.currentTimeMillis()
         BRV.modelId = BR.m
-        initNetSpark()
+        initNetSpark(cacheDir)
         CacheUtil.init(this)
         initGooglePlace()
         initWalletConnect()
         initWeb3Auth()
         initRefresh()
         Logger.addLogAdapter(AndroidLogAdapter())
+
+        val et = System.currentTimeMillis()
+        Log.e(TAG, "onCreate: time cost: ${et - st}" )
     }
 
 
