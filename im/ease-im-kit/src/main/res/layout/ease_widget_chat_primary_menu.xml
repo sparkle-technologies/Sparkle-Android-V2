@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@color/color_f1f1fb"
+    android:elevation="12dp"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_sender_avatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="18dp"
+            android:src="@drawable/ease_default_avatar" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/edittext_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:visibility="visible">
+
+            <com.hyphenate.easeui.modules.chat.EaseInputEditText
+                android:id="@+id/et_sendmessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ease_send_message_et_bg"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:hint="@string/send_message"
+                android:imeOptions="actionSend"
+                android:maxLines="6"
+                android:minHeight="48dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="100dp"
+                android:textColor="@color/color_2a2a2b"
+                android:textColorHint="@color/color_bcbdc6"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/ease_chat_primary_menu_icon_size"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RelativeLayout
+                    android:id="@+id/rl_face"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="16dp">
+
+                    <ImageView
+                        android:id="@+id/iv_face_normal"
+                        android:layout_width="@dimen/ease_chat_primary_menu_more_icon_size"
+                        android:layout_height="@dimen/ease_chat_primary_menu_more_icon_size"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_chat_smile_face"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/iv_face_checked"
+                        android:layout_width="@dimen/ease_chat_primary_menu_more_icon_size"
+                        android:layout_height="@dimen/ease_chat_primary_menu_more_icon_size"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ease_chatting_setmode_keyboard_btn"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="32dp"
+                    android:layout_height="32dp">
+
+                    <CheckBox
+                        android:id="@+id/btn_more"
+                        android:layout_width="@dimen/ease_chat_primary_menu_more_icon_size"
+                        android:layout_height="@dimen/ease_chat_primary_menu_more_icon_size"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_chat_add"
+                        android:button="@null"
+                        android:visibility="visible" />
+
+                    <CheckBox
+                        android:id="@+id/btn_send"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_chat_send"
+                        android:button="@null"
+                        android:visibility="gone" />
+
+                </FrameLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

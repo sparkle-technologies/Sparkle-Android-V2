@@ -34,7 +34,12 @@ include(":base_resources")
 
 // IM
 include(":chat")
+include(":ease-im-kit")
+include(":selector")
+
 project(":chat").projectDir = File("im/chat")
+project(":ease-im-kit").projectDir = File("im/ease-im-kit")
+project(":selector").projectDir = File("im/selector")
 
 // wallet-connector
 include(":core")

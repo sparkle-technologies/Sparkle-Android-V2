@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.hyphenate.easeui.modules.chat.EaseChatLayout
+        android:id="@+id/layout_chat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lay_send_token"
+        android:layout_width="match_parent"
+        android:clickable="true"
+        android:elevation="1dp"
+        android:visibility="gone"
+        android:layout_height="match_parent"
+        android:background="@drawable/chat_send_token_bg_shape"
+        android:paddingTop="11dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/token_transfer"
+            android:textColor="@color/color_2a2a2b"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:text="@string/cancel"
+            android:textColor="@color/color_4b4396"
+            android:textSize="17sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="76dp"
+            android:background="@drawable/ease_default_avatar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/lay_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+            app:layout_constraintLeft_toRightOf="@+id/iv_avatar"
+            app:layout_constraintTop_toTopOf="@+id/iv_avatar">
+
+            <TextView
+                android:id="@+id/tv_receiver_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Eleanor Pena"
+                android:textColor="@color/color_2a2a2b"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_receiver_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0xb98...3c5e"
+                android:textColor="@color/color_7d7d80"
+                android:textSize="14sp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:src="@drawable/ic_chat_arror"
+            app:layout_constraintBottom_toBottomOf="@+id/lay_info"
+            app:layout_constraintLeft_toRightOf="@+id/lay_info" />
+
+
+        <TextView
+            android:id="@+id/tv_amount_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:text="@string/amount_sparkle"
+            android:textColor="@color/color_bcbdc6"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/iv_avatar" />
+
+        <TextView
+            android:id="@+id/tv_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="22dp"
+            android:text="100,000.00"
+            android:textColor="@color/color_2a2a2b"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_amount_hint"
+            app:layout_constraintRight_toLeftOf="@+id/iv_clear_amount"
+            app:layout_constraintTop_toBottomOf="@+id/tv_amount_hint" />
+
+        <ImageView
+            android:id="@+id/iv_clear_amount"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="28dp"
+            android:src="@drawable/ic_chat_clear"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_amount"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_amount" />
+
+        <View
+            android:id="@+id/iv_divier"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="28dp"
+            android:background="@color/color_0000001a"
+            app:layout_constraintTop_toBottomOf="@+id/tv_amount" />
+
+        <View
+            android:id="@+id/bg_selected_token"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/chat_send_coin_bg_shape"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_divier"
+            app:layout_constraintRight_toRightOf="@+id/iv_divier"
+            app:layout_constraintTop_toBottomOf="@+id/iv_divier" />
+
+
+        <ImageView
+            android:id="@+id/iv_token_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/ic_chat_coin"
+            app:layout_constraintBottom_toBottomOf="@+id/bg_selected_token"
+            app:layout_constraintLeft_toLeftOf="@+id/bg_selected_token"
+            app:layout_constraintTop_toTopOf="@+id/bg_selected_token" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_token_icon"
+            app:layout_constraintLeft_toRightOf="@+id/iv_token_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_token_icon">
+
+            <TextView
+                android:id="@+id/tv_token_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sparkle_coin"
+                android:textColor="@color/color_2a2a2b"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_token_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Balance: 100,000"
+                android:textColor="@color/color_7d7d80"
+                android:textSize="14sp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_chat_arror"
+            app:layout_constraintBottom_toBottomOf="@+id/bg_selected_token"
+            app:layout_constraintRight_toRightOf="@+id/bg_selected_token"
+            app:layout_constraintTop_toTopOf="@+id/bg_selected_token" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="50dp"
+            android:background="@color/color_f1f1fb"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:paddingStart="8dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bg_selected_token">
+
+
+            <com.hyphenate.easeui.modules.chat.EaseInputEditText
+                android:id="@+id/et_add_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ease_send_message_et_bg"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical"
+                android:hint="@string/add_your_message"
+                android:imeOptions="actionSend"
+                android:maxLines="1"
+                android:minHeight="48dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:textColor="@color/color_2a2a2b"
+                android:textColorHint="@color/color_bcbdc6"
+                android:textSize="16sp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_num_1"
+                style="@style/style_tv_input_num"
+                android:layout_marginEnd="4dp"
+                android:text="1"
+                app:layout_constraintHorizontal_weight="10"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/tv_num_2"
+                app:layout_constraintTop_toBottomOf="@+id/et_add_message" />
+
+            <TextView
+                android:id="@+id/tv_num_2"
+                style="@style/style_tv_input_num"
+                android:text="2"
+                app:layout_constraintHorizontal_weight="10"
+                app:layout_constraintLeft_toRightOf="@+id/tv_num_1"
+                app:layout_constraintRight_toLeftOf="@+id/tv_num_3"
+                app:layout_constraintTop_toBottomOf="@+id/et_add_message" />
+
+            <TextView
+                android:id="@+id/tv_num_3"
+                style="@style/style_tv_input_num"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:text="3"
+                app:layout_constraintHorizontal_weight="10"
+                app:layout_constraintLeft_toRightOf="@+id/tv_num_2"
+                app:layout_constraintRight_toLeftOf="@+id/iv_delete"
+                app:layout_constraintTop_toBottomOf="@+id/et_add_message" />
+
+            <ImageView
+                android:id="@+id/iv_delete"
+                style="@style/style_tv_input_num"
+                android:text="3"
+                android:padding="6dp"
+                android:src="@drawable/ic_chat_delete"
+                app:layout_constraintHorizontal_weight="16"
+                app:layout_constraintLeft_toRightOf="@+id/tv_num_3"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_add_message" />
+
+
+            <TextView
+                android:id="@+id/tv_num_4"
+                style="@style/style_tv_input_num_next"
+                android:text="4"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_num_1"
+                app:layout_constraintRight_toRightOf="@+id/tv_num_1"
+                app:layout_constraintTop_toBottomOf="@+id/tv_num_1" />
+
+            <TextView
+                android:id="@+id/tv_num_5"
+                style="@style/style_tv_input_num_next"
+                android:text="5"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_num_2"
+                app:layout_constraintRight_toRightOf="@+id/tv_num_2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_num_2" />
+
+            <TextView
+                android:id="@+id/tv_num_6"
+                style="@style/style_tv_input_num_next"
+                android:text="6"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_num_3"
+                app:layout_constraintRight_toRightOf="@+id/tv_num_3"
+                app:layout_constraintTop_toBottomOf="@+id/tv_num_3" />
+
+            <TextView
+                android:id="@+id/tv_transfer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/chat_input_number_transfer_bg_shape"
+                android:gravity="center"
+                android:text="Transfer"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_num_dot"
+                app:layout_constraintLeft_toLeftOf="@+id/iv_delete"
+                app:layout_constraintRight_toRightOf="@+id/iv_delete"
+                app:layout_constraintTop_toTopOf="@+id/tv_num_6" />
+
+            <TextView
+                android:id="@+id/tv_num_7"
+                style="@style/style_tv_input_num_next"
+                android:text="7"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_num_4"
+                app:layout_constraintRight_toRightOf="@+id/tv_num_4"
+                app:layout_constraintTop_toBottomOf="@+id/tv_num_4" />
+
+            <TextView
+                android:id="@+id/tv_num_8"
+                style="@style/style_tv_input_num_next"
+                android:text="8"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_num_5"
+                app:layout_constraintRight_toRightOf="@+id/tv_num_5"
+                app:layout_constraintTop_toBottomOf="@+id/tv_num_5" />
+
+            <TextView
+                android:id="@+id/tv_num_9"
+                style="@style/style_tv_input_num_next"
+                android:text="9"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_num_6"
+                app:layout_constraintRight_toRightOf="@+id/tv_num_6"
+                app:layout_constraintTop_toBottomOf="@+id/tv_num_6" />
+
+            <TextView
+                android:id="@+id/tv_num_0"
+                style="@style/style_tv_input_num_next"
+                android:text="0"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_num_7"
+                app:layout_constraintRight_toRightOf="@+id/tv_num_8"
+                app:layout_constraintTop_toBottomOf="@+id/tv_num_7" />
+
+            <TextView
+                android:id="@+id/tv_num_dot"
+                style="@style/style_tv_input_num_next"
+                android:text="."
+                app:layout_constraintLeft_toLeftOf="@+id/tv_num_9"
+                app:layout_constraintRight_toRightOf="@+id/tv_num_9"
+                app:layout_constraintTop_toBottomOf="@+id/tv_num_9" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

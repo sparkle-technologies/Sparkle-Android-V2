@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chat_menu_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:orientation="vertical">
+
+
+    <com.hyphenate.easeui.modules.chat.EaseChatPrimaryMenu
+        android:id="@+id/inputContainerLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.hyphenate.easeui.input.KeyboardHeightFrameLayout
+        android:id="@+id/emotionContainerFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_custom_keyboard_size"
+        android:visibility="gone">
+
+        <!--表情-->
+        <com.hyphenate.easeui.modules.chat.EaseEmojiconMenu
+            android:id="@+id/emotionLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.hyphenate.easeui.input.KeyboardHeightFrameLayout>
+
+
+    <com.hyphenate.easeui.input.KeyboardHeightFrameLayout
+        android:id="@+id/extContainerFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/default_custom_keyboard_size"
+        android:visibility="gone">
+
+        <!--更多内容-->
+        <com.hyphenate.easeui.modules.chat.EaseChatExtendMenu
+            android:id="@+id/extViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+    </com.hyphenate.easeui.input.KeyboardHeightFrameLayout>
+
+
+</LinearLayout>

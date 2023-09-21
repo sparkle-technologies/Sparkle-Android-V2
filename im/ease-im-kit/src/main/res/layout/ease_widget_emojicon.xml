@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_face_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.hyphenate.easeui.widget.emojicon.EaseEmojiconPagerView
+        android:id="@+id/pager_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingBottom="23dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.hyphenate.easeui.widget.emojicon.EaseEmojiconIndicatorView
+        android:id="@+id/indicator_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/pager_view" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#CFCFCF"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/indicator_view" />
+
+    <com.hyphenate.easeui.widget.emojicon.EaseEmojiconScrollTabBar
+        android:id="@+id/tab_bar"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/indicator_view" />
+
+    <Button
+        android:id="@+id/btn_send"
+        android:layout_width="64dp"
+        android:layout_height="34dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/next_btn_shape"
+        android:text="@string/button_send"
+        android:textAllCaps="false"
+        android:elevation="2dp"
+        android:textColor="@color/white_2nd"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/btn_ic_delete"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_send"
+        app:layout_constraintRight_toLeftOf="@+id/btn_send"
+        app:layout_constraintTop_toTopOf="@+id/btn_send" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
