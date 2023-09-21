@@ -18,18 +18,30 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        ndk{
+        ndk {
             abiFilters.add("armeabi-v7a")
             abiFilters.add("arm64-v8a")
         }
 
         javaCompileOptions {
             annotationProcessorOptions {
-               argument("room.schemaLocation", "$projectDir/schemas")
-               argument("room.incremental", "true")
-               argument("room.expandProjection", "true")
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
+                arguments["room.incremental"] = "true"
+                arguments["room.expandProjection"] = "true"
             }
         }
+
+        buildConfigField("String", "APP_SERVER_PROTOCOL", "\"https\"")
+        buildConfigField("String", "APP_SERVER_DOMAIN", "\"a1.easemob.com\"")
+        buildConfigField("String", "APP_BASE_USER", "\"/inside/app/user/\"")
+        buildConfigField("String", "APP_SERVER_LOGIN", "\"login/V2\"")
+        buildConfigField("String", "APP_SERVER_REGISTER", "\"register\"")
+        buildConfigField("String", "APP_SERVE_CHECK_RESET", "\"reset/password\"")
+        buildConfigField("String", "APP_SERVE_CHANGE_PWD", "\"/password\"")
+        buildConfigField("String", "APP_SEND_SMS_FROM_SERVER", "\"/inside/app/sms/send\"")
+        buildConfigField("String", "APP_VERIFICATION_CODE", "\"/inside/app/image/\"")
+
+        manifestPlaceholders["EASEMOB_APPKEY"] = "1111230615161307#demo"
     }
 
     buildTypes {
@@ -45,10 +57,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    
+
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 }
 

@@ -23,7 +23,6 @@ import com.cyberflow.sparkle.chat.common.utils.FetchUserRunnable;
 import com.cyberflow.sparkle.chat.common.utils.PreferenceManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailabilityLight;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
@@ -408,14 +407,14 @@ public class DemoHelper {
                     // 由外部实现代码判断设备是否支持FCM推送
                     if (pushType == EMPushType.FCM) {
                         EMLog.d("FCM", "GooglePlayServiceCode:" + GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context));
-                        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                        /*FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
                             if(!task.isSuccessful()){
                                 return;
                             }
                             String token = task.getResult();
                             EMLog.d("FCM", token);
                             EMClient.getInstance().sendFCMTokenToServer(token);
-                        });
+                        });*/
                         return demoModel.isUseFCM() && GoogleApiAvailabilityLight.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS;
                     }
                     return super.isSupportPush(pushType, pushConfig);

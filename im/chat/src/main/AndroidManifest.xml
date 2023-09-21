@@ -36,7 +36,7 @@
         android:theme="@style/Theme.Sparkle">
 
         <activity
-            android:name=".ChatActivity"
+            android:name=".ui.IMTestActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,6 +45,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.ChatActivity"/>
+
+        <meta-data
+            android:name="EASEMOB_APPKEY"
+            android:value="${EASEMOB_APPKEY}" />
 
         <!-- 声明 SDK 所需的 service 的核心功能-->
         <service

@@ -18,8 +18,8 @@ import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import com.therouter.router.Route
 
 
-private const val NAME = "test"
-private const val PWD = "test"
+private const val NAME = "test5"
+private const val PWD = "test5"
 
 @Route(path = PageConst.IM.SERVICE_IM_TEST)
 class IMTestActivity : BaseDBAct<IMTestViewModel, ActivityImTestBinding>() {
@@ -57,7 +57,7 @@ class IMTestActivity : BaseDBAct<IMTestViewModel, ActivityImTestBinding>() {
         }
         mDataBinding.btnLogin.click {
             var name = mDataBinding.etFrom.text.toString()
-            viewModel.login(name, name)
+            viewModel.login(name, "123")
         }
         mDataBinding.btnLogout.click {
             if (DemoHelper.getInstance().isSDKInit) {

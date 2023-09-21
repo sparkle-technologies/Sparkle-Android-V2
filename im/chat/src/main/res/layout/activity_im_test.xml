@@ -63,14 +63,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="22sp"
-                android:text="lover" />
+                android:text="test5" />
 
             <EditText
                 android:id="@+id/et_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="22sp"
-                android:text="war" />
+                android:text="test1" />
 
             <EditText
                 android:id="@+id/et_content"
