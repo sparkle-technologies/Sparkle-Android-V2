@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cyberflow.mimolite.common.app.mvi.LoadingDialogHolder;
-import com.cyberflow.sparkle.common.util.GlideEngine;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMFileMessageBody;
@@ -19,7 +17,9 @@ import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
+import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder;
 import com.hyphenate.easeui.utils.EaseFileUtils;
+import com.hyphenate.easeui.utils.GlideEngine;
 import com.hyphenate.easeui.utils.PicSelectorHelper;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowImage;
 import com.hyphenate.util.EMLog;

@@ -1,6 +1,5 @@
 package com.luck.picture.lib.config;
 
-import com.luck.picture.lib.BuildConfig;
 
 /**
  * @author：luck
@@ -11,7 +10,7 @@ public final class PictureConfig {
 
     public static final String SP_NAME = "PictureSpUtils";
 
-    private static final String KEY = BuildConfig.LIBRARY_PACKAGE_NAME;
+    private static final String KEY = "com.luck.picture.lib";
 
     public final static String EXTRA_RESULT_SELECTION = "extra_result_media";
 

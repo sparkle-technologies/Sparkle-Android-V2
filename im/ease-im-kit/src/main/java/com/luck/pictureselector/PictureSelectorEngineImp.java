@@ -1,10 +1,13 @@
 package com.luck.pictureselector;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
-import com.cyberflow.sparkle.common.util.GlideEngine;
+import androidx.annotation.RequiresApi;
+
 import com.hyphenate.easeui.R;
+import com.hyphenate.easeui.utils.GlideEngine;
 import com.luck.picture.lib.basic.IBridgeLoaderFactory;
 import com.luck.picture.lib.config.InjectResourceSource;
 import com.luck.picture.lib.engine.CompressEngine;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
  * @date：2020/4/22 12:15 PM
  * @describe：PictureSelectorEngineImp
  */
+@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class PictureSelectorEngineImp implements PictureSelectorEngine {
     private static final String TAG = PictureSelectorEngineImp.class.getSimpleName();
 
@@ -35,6 +39,7 @@ public class PictureSelectorEngineImp implements PictureSelectorEngine {
      *
      * @return
      */
+
     @Override
     public ImageEngine createImageLoaderEngine() {
         // TODO 这种情况是内存极度不足的情况下，比如开启开发者选项中的不保留活动或后台进程限制，导致ImageEngine被回收

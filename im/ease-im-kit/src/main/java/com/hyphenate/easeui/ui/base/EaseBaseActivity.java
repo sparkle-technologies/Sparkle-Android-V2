@@ -16,21 +16,24 @@ package com.hyphenate.easeui.ui.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.cyberflow.mimolite.common.util.SystemUIUtil;
+
 import com.hyphenate.easeui.R;
 
 public class EaseBaseActivity extends AppCompatActivity {
 
     protected InputMethodManager inputMethodManager;
 
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     @Override
     protected void onCreate(Bundle arg0) {
         super.onCreate(arg0);
@@ -55,6 +58,7 @@ public class EaseBaseActivity extends AppCompatActivity {
 //        EaseUI.getInstance().getNotifier().reset();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     protected void hideSoftKeyboard() {
         if (getWindow().getAttributes().softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (getCurrentFocus() != null)
@@ -88,7 +92,7 @@ public class EaseBaseActivity extends AppCompatActivity {
      * @param colorId           颜色资源路径
      */
     public void setFitSystemForTheme(boolean fitSystemForTheme, @ColorRes int colorId, boolean isDark) {
-        SystemUIUtil.INSTANCE.hideActionBarAndTitleBar(this);
-        SystemUIUtil.INSTANCE.show(getWindow(), new SystemUIUtil.ThemeDrawByDeveloper(fitSystemForTheme, isDark, colorId));
+//        SystemUIUtil.INSTANCE.hideActionBarAndTitleBar(this);
+//        SystemUIUtil.INSTANCE.show(getWindow(), new SystemUIUtil.ThemeDrawByDeveloper(fitSystemForTheme, isDark, colorId));
     }
 }

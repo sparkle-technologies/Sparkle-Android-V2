@@ -5,8 +5,30 @@ plugins {
 }
 
 android {
+
     namespace 'com.hyphenate.easeui'
+    compileSdk = 34
+
+    defaultConfig {
+        minSdk = 24
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
     buildFeatures.dataBinding = true
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
 }
 
 dependencies {
@@ -27,5 +49,6 @@ dependencies {
     implementation project(path: ':selector')
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
     api 'io.github.lucksiege:camerax:v3.11.1'
+    api 'com.vanniktech:emoji-ios:0.18.0-SNAPSHOT'
     implementation "com.google.android.exoplayer:exoplayer:2.18.0"
 }

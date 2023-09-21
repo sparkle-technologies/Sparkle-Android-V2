@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.cyberflow.mimolite.common.app.mvi.LoadingDialogHolder;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
@@ -22,10 +21,10 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.ui.EaseShowLocalVideoActivity;
 import com.hyphenate.easeui.ui.EaseShowVideoActivity;
+import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder;
 import com.hyphenate.easeui.utils.EaseFileUtils;
 import com.hyphenate.easeui.widget.chatrow.EaseChatRowVideo;
 import com.hyphenate.util.EMLog;
-import com.luck.picture.lib.utils.ToastUtils;
 
 import java.io.File;
 

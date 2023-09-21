@@ -30,13 +30,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.FutureTarget;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.cyberflow.mimolite.common.app.BaseYXApp;
-import com.google.android.gms.common.util.ScopeUtil;
+import com.cyberflow.base.BaseApp;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
@@ -49,7 +46,6 @@ import com.hyphenate.easeui.widget.photoview.EasePhotoView;
 import com.hyphenate.util.EMLog;
 import com.luck.picture.lib.utils.ToastUtils;
 
-import java.io.File;
 
 /**
  * download and show original image
@@ -131,7 +127,7 @@ public class EaseShowBigImageActivity extends EaseBaseActivity {
         Handler handler = new Handler(thread.getLooper());
         Runnable runnable = () -> {
             try {
-                String result = EaseFileUtils.storeImage(bitmap, BaseYXApp.instance.getApplicationContext());
+                String result = EaseFileUtils.storeImage(bitmap, BaseApp.getInstance().getApplicationContext());
                 runOnUiThread(() -> {
                     Toast.makeText(this, result, Toast.LENGTH_LONG).show();
                 });

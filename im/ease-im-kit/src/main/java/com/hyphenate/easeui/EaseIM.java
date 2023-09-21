@@ -1,6 +1,5 @@
 package com.hyphenate.easeui;
 
-import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.os.Build;

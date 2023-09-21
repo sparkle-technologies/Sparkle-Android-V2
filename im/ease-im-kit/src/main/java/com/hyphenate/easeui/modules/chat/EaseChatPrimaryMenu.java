@@ -2,6 +2,7 @@ package com.hyphenate.easeui.modules.chat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -15,6 +16,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.RequiresApi;
 
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.modules.chat.interfaces.EaseChatPrimaryMenuListener;
@@ -149,6 +152,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     @Override
     public void onTextInsert(CharSequence text) {
         int start = editText.getSelectionStart();
@@ -177,7 +181,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         if(hasFocus){
             editText.setHint("");
         }else{
-            editText.setHint(getContext().getString(com.cyberflow.sparkle.lib_resource.R.string.send_message));
+            editText.setHint(getContext().getString(com.cyberflow.base.resources.R.string.send_message));
         }
     }
 

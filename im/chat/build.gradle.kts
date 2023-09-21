@@ -9,11 +9,24 @@ android {
     defaultConfig {
         applicationId = "com.cyberflow.sparkle.chat"
         minSdk = 24
-        targetSdk = 33
+
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk{
+            abiFilters.add("armeabi-v7a")
+            abiFilters.add("arm64-v8a")
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+               argument("room.schemaLocation", "$projectDir/schemas")
+               argument("room.incremental", "true")
+               argument("room.expandProjection", "true")
+            }
+        }
     }
 
     buildTypes {

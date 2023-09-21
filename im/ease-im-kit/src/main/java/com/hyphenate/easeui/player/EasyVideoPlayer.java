@@ -1,5 +1,7 @@
 package com.hyphenate.easeui.player;
 
+import static com.cyberflow.base.util.DisplayUtilKt.dp2px;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -39,13 +41,14 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.view.ViewCompat;
 
-import com.cyberflow.mimolite.common.util.DisplayUtil;
+import com.cyberflow.base.util.DisplayUtil;
 import com.hyphenate.easeui.R;
 
 import java.io.IOException;
@@ -54,6 +57,7 @@ import java.io.IOException;
  * 简易视频播放器，参考：https://github.com/mmbadimunei/easyVideoPlayer
  * 可以实现播放进度控制，播放暂停与继续播放等功能
  */
+@RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class EasyVideoPlayer extends FrameLayout implements EasyIUserMethods,
         TextureView.SurfaceTextureListener,
         MediaPlayer.OnPreparedListener,
@@ -142,6 +146,7 @@ public class EasyVideoPlayer extends FrameLayout implements EasyIUserMethods,
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
+
 
     private void init(Context context, AttributeSet attrs) {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -329,6 +334,7 @@ public class EasyVideoPlayer extends FrameLayout implements EasyIUserMethods,
         mClickFrame.setEnabled(enabled);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void showControls() {
         if (mControlsDisabled || isControlsShown() || mSeeker == null) return;
@@ -351,6 +357,7 @@ public class EasyVideoPlayer extends FrameLayout implements EasyIUserMethods,
                 .start();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void hideControls() {
         if (true) return;
@@ -740,7 +747,8 @@ public class EasyVideoPlayer extends FrameLayout implements EasyIUserMethods,
         mControlsFrame = li.inflate(R.layout.easy_include_controls, this, false);
         final LayoutParams controlsLp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         controlsLp.gravity = Gravity.BOTTOM;
-        controlsLp.bottomMargin = DisplayUtil.INSTANCE.dp2px(120);
+
+        controlsLp.bottomMargin = dp2px(120);
         addView(mControlsFrame, controlsLp);
 
         // Retrieve controls
