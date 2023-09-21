@@ -7,4 +7,6 @@ plugins {
     id("com.android.library") version "8.1.0" apply false
     id("com.google.gms.google-services") version "4.3.15" apply false
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin") version "2.0.1" apply false
+    id("cn.therouter.agp8") version "1.2.0-rc1" apply false
+
 }

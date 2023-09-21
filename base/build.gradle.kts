@@ -1,8 +1,6 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-parcelize")
-    id("kotlin-kapt")
     id("kotlinx-serialization")
 }
 
@@ -41,8 +39,8 @@ android {
 }
 
 dependencies {
-
     api("androidx.core:core-ktx:1.10.1")
+    api("androidx.activity:activity-ktx:1.6.1")
     api("androidx.appcompat:appcompat:1.6.1")
     api("com.google.android.material:material:1.9.0")
     testImplementation("junit:junit:4.13.2")

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/adaptive_10dp"
+        android:background="@drawable/demo_dialog_report_edit_shape"
+        android:orientation="vertical"
+        android:padding="@dimen/adaptive_10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/em_margin_20"
+            android:layout_marginEnd="@dimen/em_margin_20"
+            android:layout_marginBottom="@dimen/adaptive_3dp"
+            android:padding="@dimen/adaptive_6dp"
+            android:text="@string/cancel"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/em_margin_20"
+            android:layout_marginLeft="@dimen/em_margin_30"
+            android:layout_marginEnd="@dimen/em_margin_20"
+            android:layout_marginRight="@dimen/em_margin_30"
+            android:background="@drawable/demo_bg_window_edit"
+            android:gravity="left|top"
+            android:maxHeight="140dp"
+            android:maxLength="500"
+            android:minHeight="135dp"
+            android:padding="@dimen/adaptive_8dp"
+            android:textSize="@dimen/adaptive_16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/adaptive_40dp"
+            android:layout_marginStart="@dimen/em_margin_20"
+            android:layout_marginTop="@dimen/adaptive_15dp"
+            android:layout_marginEnd="@dimen/em_margin_20"
+            android:layout_marginBottom="@dimen/adaptive_5dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/adaptive_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/demo_bg_window_confirm"
+                android:text="@string/confirm" />
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/adaptive_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/demo_bg_window_cancel"
+                android:text="@string/cancel" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

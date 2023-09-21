@@ -1,5 +1,8 @@
 plugins {
     id("com.android.application")
+    id("therouter")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -71,5 +74,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
 
     implementation("pub.devrel:easypermissions:3.0.0")
+
+    kapt("cn.therouter:apt:1.2.0-rc1")
+    implementation("cn.therouter:router:1.2.0-rc1")
 
 }

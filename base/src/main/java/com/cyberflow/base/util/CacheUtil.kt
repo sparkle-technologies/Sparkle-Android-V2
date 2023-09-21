@@ -4,9 +4,8 @@ import android.content.Context
 import android.text.TextUtils
 import android.util.Log
 import com.cyberflow.base.model.LoginResponseData
-import com.cyberflow.base.model.UserAvatarImages
-import com.cyberflow.base.net.GsonConverter
 import com.cyberflow.base.model.UserInfo
+import com.cyberflow.base.net.GsonConverter
 import com.tencent.mmkv.MMKV
 
 
@@ -100,25 +99,7 @@ object CacheUtil {
         return false
     }
 
-    fun getNativeImgs(): UserAvatarImages? {
-        val kv = getMMKV()
-        val userStr = kv.decodeString(NATIVE_MIX_IMGS)
-        return if (TextUtils.isEmpty(userStr)) {
-            null
-        } else {
-            GsonConverter.gson.fromJson<UserAvatarImages>(userStr, UserAvatarImages::class.java)
-        }
-    }
 
-    fun setNativeImgs(obj: UserAvatarImages?) {
-        val kv = getMMKV()
-        if (obj == null) {
-            kv.encode(NATIVE_MIX_IMGS, "")
-        } else {
-            val json = GsonConverter.gson.toJson(obj)
-            kv.encode(NATIVE_MIX_IMGS, json)
-        }
-    }
 
 
     fun init(context: Context) {
