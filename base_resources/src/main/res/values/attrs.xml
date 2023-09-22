@@ -10,10 +10,11 @@
     </declare-styleable>
 
     <declare-styleable name="NumView">
-        <attr name="num_view_color" format="string" />
+        <attr name="num_view_color" format="color" />
         <attr name="num_view_strokeColor" format="color" />
         <attr name="num_view_strokeWidth" format="dimension" />
         <attr name="num_text_size" format="dimension" />
+        <attr name="num_text_color" format="color" />
     </declare-styleable>
 
 </resources>

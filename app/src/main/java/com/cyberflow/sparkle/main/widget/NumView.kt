@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
+import com.cyberflow.base.util.sp2px
 import kotlin.math.min
 
 class NumView constructor(
@@ -23,6 +24,7 @@ class NumView constructor(
     var strokeColor = 0
     var strokeWidth = 0f
     var textSize = 0f
+    var textColor = 0
     var num = ""
         set(value) {
             field = value
@@ -44,10 +46,10 @@ class NumView constructor(
             attrs,
             com.cyberflow.base.resources.R.styleable.NumView
         )
-        attrArray.getString(com.cyberflow.base.resources.R.styleable.NumView_num_view_color)
-            ?.also {
-                color = Color.parseColor(it)
-            }
+        color = attrArray.getColor(
+            com.cyberflow.base.resources.R.styleable.NumView_num_view_color,
+            Color.WHITE
+        )
         strokeColor = attrArray.getColor(
             com.cyberflow.base.resources.R.styleable.NumView_num_view_strokeColor,
             Color.WHITE
@@ -58,7 +60,14 @@ class NumView constructor(
         )
         textSize = attrArray.getDimension(
             com.cyberflow.base.resources.R.styleable.NumView_num_text_size,
-            120.0f
+            16.0f
+        )
+
+        textSize = sp2px(textSize).toFloat()
+
+        textColor = attrArray.getColor(
+            com.cyberflow.base.resources.R.styleable.NumView_num_text_color,
+            Color.BLACK
         )
 
         attrArray.recycle()
@@ -82,14 +91,14 @@ class NumView constructor(
         canvas?.drawCircle(width.toFloat() / 2, height.toFloat() / 2, radius, paint)
 
         //2. 画外面的
-        paint.color = Color.WHITE
+        paint.color = strokeColor
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = strokeWidth
         val strokeRadius = radius
         canvas?.drawCircle(width.toFloat() / 2, height.toFloat() / 2, strokeRadius, paint)
 
         // 3. 画里面的数字
-        paint.color = Color.WHITE
+        paint.color = textColor
         paint.textSize = textSize
         paint.style = Paint.Style.FILL
         paint.textAlign = Paint.Align.CENTER

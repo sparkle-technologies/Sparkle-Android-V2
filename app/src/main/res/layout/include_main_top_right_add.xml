@@ -96,7 +96,12 @@
                 android:id="@+id/tv_num"
                 android:layout_width="@dimen/dp_23"
                 android:layout_height="@dimen/dp_23"
-                android:layout_marginStart="@dimen/dp_5" />
+                android:layout_marginStart="@dimen/dp_5"
+                app:num_text_color="@color/black"
+                app:num_text_size="@dimen/sp_4"
+                app:num_view_color="@color/color_FFDD5B"
+                app:num_view_strokeColor="@color/black"
+                app:num_view_strokeWidth="@dimen/dp_1" />
 
         </LinearLayout>
 

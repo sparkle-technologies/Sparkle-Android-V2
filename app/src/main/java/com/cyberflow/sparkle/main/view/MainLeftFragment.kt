@@ -57,7 +57,7 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
             })
         }
 
-        setAlarm()
+//        setAlarm()   // todo: crash at high level device
     }
 
     private fun requestData() {

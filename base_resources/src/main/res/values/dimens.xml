@@ -91,6 +91,9 @@
 
 
 
+    <dimen name="sp_3">3sp</dimen>
+    <dimen name="sp_4">4sp</dimen>
+    <dimen name="sp_5">5sp</dimen>
     <dimen name="sp_8_6">8.6sp</dimen>
     <dimen name="sp_10">10sp</dimen>
     <dimen name="sp_11">11sp</dimen>
