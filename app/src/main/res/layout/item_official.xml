@@ -74,7 +74,7 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="Cora-Official"
+            android:text="@{m}"
             android:textColor="@color/color_000000"
             android:textSize="@dimen/sp_18"
             android:textStyle="bold"

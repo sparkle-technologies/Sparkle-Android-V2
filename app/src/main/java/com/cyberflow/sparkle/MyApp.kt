@@ -36,6 +36,7 @@ class MyApp : BaseApp() {
         initGooglePlace()
         initRefresh()
         Logger.addLogAdapter(AndroidLogAdapter())
+
         Log.e(TAG, "onCreate:  time cost: ${System.currentTimeMillis() - st}")
     }
 

@@ -48,6 +48,12 @@ class SelectBirthdayFragment :
         mViewBind.anchorDate.setOnClickListener { selectDate() }
         mViewBind.anchorTime.setOnClickListener { selectTime() }
 
+        mViewBind.btnRegisterPrevious.setClickListener(object : ShadowTxtButton.ShadowClickListener {
+            override fun clicked(disable: Boolean) {
+                actVm?.clickPrevious()
+            }
+        })
+
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(disable: Boolean) {
                  if(selectDate.isNullOrEmpty()){
@@ -86,14 +92,15 @@ class SelectBirthdayFragment :
         if (selectDate.isNotEmpty()) {
             mDatePicker?.show(selectDate)
         } else {
-            mDatePicker?.show(DateFormatUtils.long2Str(System.currentTimeMillis(), false))
+            // DateFormatUtils.long2Str(System.currentTimeMillis(), false)
+            mDatePicker?.show("2000-01-01")
         }
     }
 
     private fun selectTime() {
         Log.e("TAG", "selectTime: ")
         initTimePicker()
-        mDatePicker?.show("2023-11-11 ${selectTime.ifEmpty { "00:00:00" }}")
+        mDatePicker?.show("2023-11-11 ${selectTime.ifEmpty { "12:00:00" }}")
     }
 
     private fun initDatePicker() {

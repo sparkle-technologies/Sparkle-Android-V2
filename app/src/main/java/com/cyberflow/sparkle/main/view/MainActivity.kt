@@ -6,8 +6,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.bumptech.glide.Glide
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.R
@@ -15,15 +17,14 @@ import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.widget.DoubleClickListener
-import com.cyberflow.sparkle.main.widget.ZoomOutPageTransformer
 import com.cyberflow.sparkle.register.view.PageAdapter
 import com.cyberflow.sparkle.setting.view.SettingsActivity
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
-    companion object{
-        fun go(context: Context){
+    companion object {
+        fun go(context: Context) {
             val intent = Intent(context, MainActivity::class.java)
             context.startActivity(intent)
         }
@@ -114,7 +115,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
                     else clickTopMenu(false, true, true)
                 }
             })
-            setPageTransformer(ZoomOutPageTransformer())
+            setPageTransformer(MarginPageTransformer(100))
         }
 
         dis = dp2px(82f).toFloat()
@@ -144,7 +145,15 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         }
     }
 
+    // Context context, int radius, int margin, int mBorderWidth, int mBorderColor, int position
     override fun initData() {
+        Glide.with(this)
+            .load(R.drawable.avatar)
+//            .circleCrop()
+//            .diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false)
+            .skipMemoryCache(true)
+            .into(mDataBinding.ivHead)
+
 
     }
 }

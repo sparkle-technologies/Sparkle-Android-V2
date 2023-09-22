@@ -80,7 +80,6 @@
         android:drawableLeft="@drawable/svg_ic_search"
         android:drawablePadding="@dimen/dp_6"
         android:gravity="center_vertical"
-        android:hint="@string/input_your_birth_place"
         android:maxLines="1"
         android:singleLine="true"
         android:textColor="@color/color_000000"

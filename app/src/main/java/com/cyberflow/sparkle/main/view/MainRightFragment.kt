@@ -2,6 +2,7 @@ package com.cyberflow.sparkle.main.view
 
 import android.app.Activity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.viewmodel.BaseViewModel
@@ -52,8 +53,18 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                             setDivider(10, true)
                         }.setup {
                             addType<String>(R.layout.item_official)
+                            onBind {
+                                if (layoutPosition == 0)
+                                    findView<ImageView>(R.id.iv).setImageResource(R.drawable.pic_cora)
+                                else
+                                    findView<ImageView>(R.id.iv).setImageResource(R.drawable.pic_king)
+                            }
                             onClick(R.id.root) {
-                                Snackbar.make(this.itemView, "click official", Snackbar.LENGTH_SHORT).show()
+                                Snackbar.make(
+                                    this.itemView,
+                                    "click official",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
                                 when (this.layoutPosition) {
                                     0 -> {
                                         mDatabind.rv.models = getData(true)
@@ -77,18 +88,27 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         }.setup {
                             addType<String>(R.layout.item_friends_feed)
                             addType<FriendsAddModel>(R.layout.item_friends_feed_add)
-                            onClick(R.id.bg_new_friend){
-                                Snackbar.make(itemView, "TODO -->  go IM add friend", Snackbar.LENGTH_SHORT).show()
+                            onClick(R.id.bg_new_friend) {
+                                Snackbar.make(
+                                    itemView,
+                                    "TODO -->  go IM add friend",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
 
                     R.layout.item_friends_feed_empty -> {
-                        getBinding<ItemFriendsFeedEmptyBinding>().btnAddFriend.setClickListener(object : ShadowTxtButton.ShadowClickListener {
+                        getBinding<ItemFriendsFeedEmptyBinding>().btnAddFriend.setClickListener(
+                            object : ShadowTxtButton.ShadowClickListener {
                                 override fun clicked(disable: Boolean) {
-                                    Snackbar.make(itemView, "TODO -->  go IM add friend", Snackbar.LENGTH_SHORT).show()
+                                    Snackbar.make(
+                                        itemView,
+                                        "TODO -->  go IM add friend",
+                                        Snackbar.LENGTH_SHORT
+                                    ).show()
                                 }
-                        })
+                            })
                     }
                 }
             }
@@ -127,7 +147,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
         val r = Random.nextInt(10)
         return listOf(
             HeaderModel(title = "Official"),
-            OfficialModel(arrayListOf("Cora", "King")),
+            OfficialModel(arrayListOf("Cora-Official", "King-Official")),
             HeaderModel(title = "Friends Feed"),
             if (empty) FriendsEmptyModel() else
                 FriendsModel(
