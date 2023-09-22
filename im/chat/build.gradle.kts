@@ -1,7 +1,7 @@
 plugins {
-    id("com.android.application")
-    id("therouter")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
+//    id("therouter")
     id("org.jetbrains.kotlin.kapt")
 }
 
@@ -10,11 +10,11 @@ android {
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.cyberflow.sparkle.chat"
+//        applicationId = "com.cyberflow.sparkle.chat"
         minSdk = 24
 
-        versionCode = 1
-        versionName = "1.0"
+//        versionCode = 1
+//        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

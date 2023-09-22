@@ -28,7 +28,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Sparkle"
-//include(":app")
+include(":app")
 include(":base")
 include(":base_resources")
 

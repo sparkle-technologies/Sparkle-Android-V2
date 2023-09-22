@@ -14,7 +14,7 @@ class IMMessageServiceImpl : IMMessageService {
 
     private val im get() = IMManager.instance
 
-    fun init(context: Context) {
+    override fun init(context: Context) {
         Log.e(TAG, "init")
         val app = context.applicationContext as Application
         im.init(app)
@@ -30,3 +30,4 @@ class IMMessageServiceImpl : IMMessageService {
         im.logout(callback)
     }
 }
+

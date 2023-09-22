@@ -102,7 +102,7 @@
                         app:layout_constraintBottom_toTopOf="@+id/tv_luck_point"
                         app:layout_constraintLeft_toLeftOf="@+id/line_smc"
                         app:layout_constraintRight_toRightOf="@+id/line_smc"
-                        tools:text="100" />
+                        android:text="--" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -205,8 +205,7 @@
                         app:layout_constraintLeft_toLeftOf="@+id/bg_love"
                         app:layout_constraintRight_toRightOf="@+id/bg_love"
                         app:layout_constraintTop_toTopOf="@+id/bg_love"
-                        tools:text="49" />
-
+                        android:text="--" />
 
                     <TextView
                         android:id="@+id/tv_fortune"
@@ -216,7 +215,7 @@
                         app:layout_constraintLeft_toLeftOf="@+id/bg_fortune"
                         app:layout_constraintRight_toRightOf="@+id/bg_fortune"
                         app:layout_constraintTop_toTopOf="@+id/bg_fortune"
-                        tools:text="69" />
+                        android:text="--" />
 
                     <TextView
                         android:id="@+id/tv_career"
@@ -226,7 +225,7 @@
                         app:layout_constraintLeft_toLeftOf="@+id/bg_career"
                         app:layout_constraintRight_toRightOf="@+id/bg_career"
                         app:layout_constraintTop_toTopOf="@+id/bg_career"
-                        tools:text="29" />
+                        android:text="--" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -241,7 +240,7 @@
                 android:layout_marginTop="-20dp"
                 android:layout_marginEnd="@dimen/dp_10"
                 android:layout_marginBottom="@dimen/dp_10"
-                app:error_layout="@layout/layout_error"
+                app:error_layout="@layout/layout_error_top"
                 app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
                 app:loading_layout="@layout/layout_loading_top">
 

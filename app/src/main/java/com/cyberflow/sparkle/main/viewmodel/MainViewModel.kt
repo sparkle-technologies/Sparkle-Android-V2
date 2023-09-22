@@ -13,8 +13,6 @@ class MainViewModel : BaseViewModel() {
 
 
     fun getDailyHoroscope() = scopeNetLife {
-        horoScopeData.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {
-
-        }.await()
+        horoScopeData.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
     }
 }

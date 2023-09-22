@@ -48,6 +48,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
         if (CacheUtil.getUserInfo()?.user?.open_uid?.isNotEmpty() == true) {
             MainActivity.go(this)
+            finish()
             return
         }
 
@@ -92,6 +93,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                      RegisterAct.go(this@LoginAct)
                  } else {
                      MainActivity.go(this@LoginAct)
+                     finish()
                  }
              }
           }

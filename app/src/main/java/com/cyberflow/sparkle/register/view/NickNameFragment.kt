@@ -94,6 +94,7 @@ class NickNameFragment :
                     Log.e("NickNameFragment", "got new token from login :  $token")
 
                     MainActivity.go(requireActivity())
+                    requireActivity().finish()
                 }
             }
         }

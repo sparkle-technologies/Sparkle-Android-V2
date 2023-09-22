@@ -10,14 +10,14 @@ import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.dp2px
-import com.cyberflow.sparkle.databinding.ActivityMainBinding
-import com.cyberflow.sparkle.main.viewmodel.MainViewModel
-import com.cyberflow.sparkle.register.view.PageAdapter
-import com.google.android.material.snackbar.Snackbar
 import com.cyberflow.sparkle.R
+import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
+import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.widget.DoubleClickListener
+import com.cyberflow.sparkle.register.view.PageAdapter
 import com.cyberflow.sparkle.setting.view.SettingsActivity
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 

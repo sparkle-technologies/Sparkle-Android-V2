@@ -10,15 +10,19 @@ import android.view.animation.LinearInterpolator
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.DailyHoroScopeData
+import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainLeftBinding
 import com.cyberflow.sparkle.databinding.ItemHoroscopeBinding
+import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.drake.net.Post
+import com.drake.net.utils.scope
 import kotlin.math.abs
 
 class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>() {
@@ -30,8 +34,23 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
                 mDatabind.state.showContent()
                 freshData(it)
             }
-            mDatabind.state.showLoading()
-            getDailyHoroscope()
+            mDatabind.state.scope {
+                actVm?.horoScopeData?.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
+            }
+//            mDatabind.state.showLoading()
+//            getDailyHoroscope()
+        }
+
+        mDatabind.state.onError {
+            findViewById<ShadowTxtButton>(R.id.btn).setClickListener(object : ShadowTxtButton.ShadowClickListener{
+                override fun clicked(disable: Boolean) {
+                    mDatabind.state.scope {
+                        actVm?.horoScopeData?.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
+                    }
+//                    mDatabind.state.showLoading()
+//                    actVm?.getDailyHoroscope()
+                }
+            })
         }
     }
 

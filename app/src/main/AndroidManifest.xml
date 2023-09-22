@@ -43,7 +43,7 @@
              </intent-filter>
          </activity>-->
 
-        <activity android:name=".main.view.MainActivity" />
+        <activity android:name=".main.view.MainActivity" android:launchMode="singleTask" />
 
         <activity android:name=".register.view.RegisterAct" />
 

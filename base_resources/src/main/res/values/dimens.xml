@@ -75,7 +75,9 @@
     <dimen name="dp_73">73dp</dimen>
     <dimen name="dp_80">80dp</dimen>
     <dimen name="dp_86">86dp</dimen>
+    <dimen name="dp_90">90dp</dimen>
     <dimen name="dp_103">103dp</dimen>
+    <dimen name="dp_122">122dp</dimen>
     <dimen name="dp_128">128dp</dimen>
     <dimen name="dp_130">130dp</dimen>
 
