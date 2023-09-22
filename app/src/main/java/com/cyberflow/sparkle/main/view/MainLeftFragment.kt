@@ -3,14 +3,24 @@ package com.cyberflow.sparkle.main.view
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.DailyHoroScopeData
 import com.cyberflow.base.net.Api
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
@@ -23,6 +33,7 @@ import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.drake.net.Post
 import com.drake.net.utils.scope
+import java.util.Calendar
 import kotlin.math.abs
 
 class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>() {
@@ -30,29 +41,29 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
     override fun initData() {
         actVm?.apply {
             horoScopeData.observe(this@MainLeftFragment) {
-                Log.e("TAG", "horoScopeData.observe " )
+                Log.e("TAG", "horoScopeData.observe ")
                 mDatabind.state.showContent()
                 freshData(it)
             }
-            mDatabind.state.showLoading()
-            mDatabind.state.scope {
-                actVm?.horoScopeData?.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
-            }
-//            mDatabind.state.showLoading()
-//            getDailyHoroscope()
+            requestData()
         }
 
         mDatabind.state.onError {
-            findViewById<ShadowTxtButton>(R.id.btn).setClickListener(object : ShadowTxtButton.ShadowClickListener{
+            findViewById<ShadowTxtButton>(R.id.btn).setClickListener(object :
+                ShadowTxtButton.ShadowClickListener {
                 override fun clicked(disable: Boolean) {
-                    mDatabind.state.showLoading()
-                    mDatabind.state.scope {
-                        actVm?.horoScopeData?.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
-                    }
-//                    mDatabind.state.showLoading()
-//                    actVm?.getDailyHoroscope()
+                    requestData()
                 }
             })
+        }
+
+        setAlarm()
+    }
+
+    private fun requestData() {
+        mDatabind.state.showLoading()
+        mDatabind.state.scope {
+            actVm?.horoScopeData?.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
         }
     }
 
@@ -187,6 +198,58 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
         const val INDEX_LOVE = 0
         const val INDEX_FORTUNE = 1
         const val INDEX_CAREER = 2
+
+        const val ALARM_EVENT = "com.cyberflow.sparkle.main.view.MainLeftFragment.AlarmReceiver"
+        const val LIVEDATA_BUS_EVENT = "alarm_refresh_horoscope"
+    }
+
+    private var alarmReceiver: AlarmReceiver? = null
+
+
+    class AlarmReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            Toast.makeText(context, "There's A New Day Coming", Toast.LENGTH_LONG).show()
+            Log.e("TAG", "AlarmReceiver onReceive: ")
+            LiveDataBus.get().with(LIVEDATA_BUS_EVENT).postValue("AlarmReceiver ${System.currentTimeMillis()}")
+        }
+    }
+
+    private fun setAlarm() {
+        val intent = Intent(ALARM_EVENT)
+        val pIntent = PendingIntent.getBroadcast(
+            requireActivity(),
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        (requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager).also {
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.HOUR_OF_DAY, 23)
+            calendar.set(Calendar.MINUTE, 59)
+            calendar.set(Calendar.SECOND, 59)
+            it.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pIntent)
+        }
+
+        LiveDataBus.get().with(LIVEDATA_BUS_EVENT).observe(this) {
+            requestData()
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            alarmReceiver = AlarmReceiver()
+            IntentFilter(ALARM_EVENT).also {
+                requireActivity().registerReceiver(alarmReceiver, it)
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireActivity().unregisterReceiver(alarmReceiver)
+        }
     }
 
     // 数据转化
@@ -217,10 +280,10 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
                 }
             }
 
-            if(data.isNullOrEmpty()){
+            if (data.isNullOrEmpty()) {
                 result.add(HoroscopeHeadItem())
                 result.add(EmptyItem())
-            }else{
+            } else {
                 result.add(HoroscopeHeadItem())
                 result.addAll(data)
             }

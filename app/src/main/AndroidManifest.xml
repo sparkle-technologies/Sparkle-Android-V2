@@ -33,17 +33,30 @@
             </intent-filter>
         </activity>
 
-        <!-- <activity
-             android:name=".TmpActivity"
-             android:exported="true">
-             <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
 
-                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
-         </activity>-->
+        <!--<activity
+            android:name=".TmpActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        <activity android:name=".main.view.MainActivity" android:launchMode="singleTask" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>-->
+
+
+        <receiver
+            android:name=".main.view.MainLeftFragment$AlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.cyberflow.sparkle.main.view.MainLeftFragment.AlarmReceiver" />
+            </intent-filter>
+        </receiver>
+
+
+        <activity
+            android:name=".main.view.MainActivity"
+            android:launchMode="singleTask" />
 
         <activity android:name=".register.view.RegisterAct" />
 

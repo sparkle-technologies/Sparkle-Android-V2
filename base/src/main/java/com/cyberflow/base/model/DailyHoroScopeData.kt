@@ -17,6 +17,4 @@ data class DailyHoroScopeData(
 data class HoroProgress(
     val content: String,
     val title: String,
-    val star_time: Long,
-    val end_time: Long,
 )
