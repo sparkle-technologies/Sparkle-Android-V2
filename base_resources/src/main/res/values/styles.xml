@@ -22,8 +22,10 @@
     <declare-styleable name="shadowButton">
         <attr name="view_shadow_distance" format="dimension" />
         <attr name="view_text" format="string" />
+        <attr name="view_left_drawable" format="reference" />
         <attr name="view_text_color" format="color" />
         <attr name="view_text_disable_color" format="color" />
+
         <attr name="view_bg" format="reference" />
         <attr name="view_disable" format="boolean" />
         <attr name="view_disable_bg" format="reference" />

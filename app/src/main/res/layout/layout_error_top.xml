@@ -46,7 +46,8 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/content"
             app:view_bg="@drawable/main_bg_add_friends_empty_white"
-            app:view_shadow_distance="2dp"
+            app:view_left_drawable="@drawable/main_ic_reload"
+            app:view_shadow_distance="1dp"
             app:view_text="Reload"
             app:view_text_color="@color/color_000000" />
 

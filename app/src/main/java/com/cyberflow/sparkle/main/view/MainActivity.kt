@@ -15,6 +15,7 @@ import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.widget.DoubleClickListener
+import com.cyberflow.sparkle.main.widget.ZoomOutPageTransformer
 import com.cyberflow.sparkle.register.view.PageAdapter
 import com.cyberflow.sparkle.setting.view.SettingsActivity
 import com.google.android.material.snackbar.Snackbar
@@ -113,6 +114,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
                     else clickTopMenu(false, true, true)
                 }
             })
+            setPageTransformer(ZoomOutPageTransformer())
         }
 
         dis = dp2px(82f).toFloat()

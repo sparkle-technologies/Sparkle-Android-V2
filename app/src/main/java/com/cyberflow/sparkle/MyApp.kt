@@ -26,35 +26,66 @@ import java.util.concurrent.ExecutionException
 
 class MyApp : BaseApp() {
 
-    private val TAG = "MyApp"
 
     companion object {
+
+        const val TAG = "MyApp"
+
         lateinit var instance: MyApp
+
     }
 
     override fun onCreate() {
         super.onCreate()
         instance = this
-        val st = System.currentTimeMillis()
+        var st = System.currentTimeMillis()
+
+        Log.e(TAG, "onCreate: ---0--- time cost: ${System.currentTimeMillis() - st}")
+        st = System.currentTimeMillis()
+
         BRV.modelId = BR.m
-        initNetSpark(cacheDir)
+        initNetSpark(cacheDir) // 34ms
+
+        Log.e(TAG, "onCreate: ---1--- time cost: ${System.currentTimeMillis() - st}")
+        st = System.currentTimeMillis()
+
         CacheUtil.init(this)
+
+        Log.e(TAG, "onCreate: ---2--- time cost: ${System.currentTimeMillis() - st}")
+        st = System.currentTimeMillis()
+
         initGooglePlace()
-        initWalletConnect()
-        initWeb3Auth()
+
+        Log.e(TAG, "onCreate: ---3--- time cost: ${System.currentTimeMillis() - st}")
+        st = System.currentTimeMillis()
+
+        initWalletConnect()  // 2495ms
+
+        Log.e(TAG, "onCreate: ---4--- time cost: ${System.currentTimeMillis() - st}")
+        st = System.currentTimeMillis()
+
+        initWeb3Auth()  // 739ms
+
+        Log.e(TAG, "onCreate: ---5--- time cost: ${System.currentTimeMillis() - st}")
+        st = System.currentTimeMillis()
+
         initRefresh()
+
+        Log.e(TAG, "onCreate: ---6--- time cost: ${System.currentTimeMillis() - st}")
+        st = System.currentTimeMillis()
+
         Logger.addLogAdapter(AndroidLogAdapter())
 
-        val et = System.currentTimeMillis()
-        Log.e(TAG, "onCreate: time cost: ${et - st}" )
+        Log.e(TAG, "onCreate: ---7--- time cost: ${System.currentTimeMillis() - st}")
+        st = System.currentTimeMillis()
     }
 
 
-    private fun initGooglePlace(){
+    private fun initGooglePlace() {
         Places.initialize(instance, "AIzaSyBx6ZuxE0RHbQRU7Ef7cxzHdh3VtinWE8I")
     }
 
-    private fun initRefresh(){
+    private fun initRefresh() {
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout ->
             ClassicsHeader(this)
         }
@@ -63,13 +94,18 @@ class MyApp : BaseApp() {
         }
     }
 
-    var walletConnectKit : WalletConnectKit? = null
-    private fun initWalletConnect(){
+    var walletConnectKit: WalletConnectKit? = null
+
+    // TheRouterFlowTask.APP_ONCREATE：当Application的onCreate()执行后初始化
+    // TheRouterFlowTask.APP_ONSPLASH：当应用的首个Activity.onCreate()执行后初始化
+//    @FlowTask(taskName = "walletConnect", dependsOn = TheRouterFlowTask.APP_ONSPLASH, async = true)
+    fun initWalletConnect() {
+        Log.e(TAG, "initWalletConnect: ")
         val config = WalletConnectKitConfig(
             projectId = "216dc6e2b36be94b855cd28ea41fda6d",
             appUrl = "https://sparkle.fun",
         )
-        walletConnectKit = WalletConnectKit.builder(this).config(config).build()
+        walletConnectKit = WalletConnectKit.builder(instance).config(config).build()
     }
 
     /************************************** 这个以后再弄  得搞个新接口刷新JWT ***********************************************/
@@ -80,15 +116,20 @@ class MyApp : BaseApp() {
     private var torusKey: TorusKey? = null
     private var publicAddress: String = ""
 
-    private fun initWeb3Auth(){
+//    @FlowTask(taskName = "web3auth", dependsOn = TheRouterFlowTask.APP_ONSPLASH, async = true)
+    fun initWeb3Auth() {
+        Log.e(TAG, "initWeb3Auth: ")
         singleFactorAuthArgs = SingleFactorAuthArgs(TorusNetwork.TESTNET)
         singleFactorAuth = SingleFactorAuth(singleFactorAuthArgs)
 
-        val sessionResponse: CompletableFuture<TorusKey> = singleFactorAuth.initialize(this.applicationContext)
+        val sessionResponse: CompletableFuture<TorusKey> = singleFactorAuth.initialize(instance)
         sessionResponse.whenComplete { torusKey, error ->
             if (torusKey != null) {
                 publicAddress = torusKey?.publicAddress.toString()
-                Log.e(BaseVMAct.TAG, "Private Key: ${torusKey.privateKey?.toString(16)}".trimIndent())
+                Log.e(
+                    BaseVMAct.TAG,
+                    "Private Key: ${torusKey.privateKey?.toString(16)}".trimIndent()
+                )
             } else {
                 Log.e(BaseVMAct.TAG, error.message ?: "Something went wrong")
             }

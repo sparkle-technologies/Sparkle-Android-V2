@@ -8,16 +8,17 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.cyberflow.base.BaseApp
 import com.cyberflow.base.ext.COLOR_TRANSPARENT
 import com.cyberflow.base.ext.immersive
-import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.base.ext.notNull
+import com.cyberflow.base.viewmodel.BaseViewModel
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 abstract class BaseVMAct<VM : BaseViewModel> : AppCompatActivity() {
 
-    companion object{
+    companion object {
         val TAG = javaClass.simpleName.toString()
     }
+
     abstract fun layoutID(): Int
     lateinit var viewModel: VM
 

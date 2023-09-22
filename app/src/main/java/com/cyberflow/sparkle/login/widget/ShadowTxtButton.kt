@@ -42,6 +42,8 @@ class ShadowTxtButton : ConstraintLayout {
     private var bg: Int = 0          // button background drawable, default is R.drawable.button_start
     private var bgDisable: Int = 0
     private var disable: Boolean = false
+    private var drawableLeft: Int = -1
+
     private fun attributes(attrs: AttributeSet?) {
         val mTypedArray = context.obtainStyledAttributes(
             attrs,
@@ -65,11 +67,13 @@ class ShadowTxtButton : ConstraintLayout {
 
         disable = mTypedArray.getBoolean(com.cyberflow.base.resources.R.styleable.shadowButton_view_disable, false)
 
+        drawableLeft = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_left_drawable, -1)
+
         mTypedArray.recycle()
     }
 
     private var ivBgShadow: ImageView? = null
-    private var ivNormal: TextView? = null
+    private var tvNormal: TextView? = null
     private var ivClicking: ImageButton? = null
     private var tvClicking: TextView? = null
 
@@ -77,7 +81,7 @@ class ShadowTxtButton : ConstraintLayout {
     private fun initView() {
         LayoutInflater.from(context).inflate(R.layout.widget_shadow_button, this, true)
         ivBgShadow = findViewById(R.id.ivBgShadow)
-        ivNormal = findViewById(R.id.ivNormal)
+        tvNormal = findViewById(R.id.tvNormal)
         ivClicking = findViewById(R.id.ivClicking)
         tvClicking = findViewById(R.id.tvClicking)
 
@@ -91,8 +95,20 @@ class ShadowTxtButton : ConstraintLayout {
 
         disableBg(disable)
 
-        ivNormal?.text = txt
+        tvNormal?.text = txt
         tvClicking?.text = txt
+
+        if(drawableLeft > 0){
+            tvNormal?.apply {
+                setCompoundDrawablesWithIntrinsicBounds(drawableLeft, 0, 0, 0)
+                compoundDrawablePadding = resources.getDimension(com.cyberflow.base.resources.R.dimen.dp_8).toInt()
+            }
+
+            tvClicking?.apply {
+                setCompoundDrawablesWithIntrinsicBounds(drawableLeft, 0, 0, 0)
+                compoundDrawablePadding = resources.getDimension(com.cyberflow.base.resources.R.dimen.dp_8).toInt()
+            }
+        }
 
         ivClicking?.setOnClickListener {
             listener?.clicked(disable)
@@ -116,13 +132,13 @@ class ShadowTxtButton : ConstraintLayout {
         this.disable = disable
         if(disable){
             ResourcesCompat.getColor(resources, txt_disable_color, null).apply {
-                ivNormal?.setTextColor(this)
+                tvNormal?.setTextColor(this)
                 tvClicking?.setTextColor(this)
             }
             ivClicking?.setImageResource(bgDisable)
         }else{
             ResourcesCompat.getColor(resources, txt_color, null).apply {
-                ivNormal?.setTextColor(this)
+                tvNormal?.setTextColor(this)
                 tvClicking?.setTextColor(this)
             }
             ivClicking?.setImageResource(bg)

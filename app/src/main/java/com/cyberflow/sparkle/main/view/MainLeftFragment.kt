@@ -34,6 +34,7 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
                 mDatabind.state.showContent()
                 freshData(it)
             }
+            mDatabind.state.showLoading()
             mDatabind.state.scope {
                 actVm?.horoScopeData?.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
             }
@@ -44,6 +45,7 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
         mDatabind.state.onError {
             findViewById<ShadowTxtButton>(R.id.btn).setClickListener(object : ShadowTxtButton.ShadowClickListener{
                 override fun clicked(disable: Boolean) {
+                    mDatabind.state.showLoading()
                     mDatabind.state.scope {
                         actVm?.horoScopeData?.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
                     }

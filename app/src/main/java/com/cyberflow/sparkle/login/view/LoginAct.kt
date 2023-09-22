@@ -78,6 +78,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     }
 
+
     private fun request(authMsg: String, type: String){
          scopeDialog {
              val data = Post<LoginResponseData>(Api.SIGN_IN) {

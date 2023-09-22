@@ -17,10 +17,11 @@
         app:srcCompat="@drawable/button_start_shadow" />
 
     <TextView
-        android:id="@+id/ivNormal"
+        android:id="@+id/tvNormal"
         style="@style/BoldItalicTitles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:includeFontPadding="false"
         android:text="Login"
         android:textAlignment="center"
@@ -48,6 +49,7 @@
         style="@style/BoldItalicTitles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:includeFontPadding="false"
         android:text="Login"
         android:textAlignment="center"
