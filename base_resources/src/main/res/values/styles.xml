@@ -2,21 +2,23 @@
 
 
     <!-- FONTS -->
-    <style name="BoldItalicTitles">
-        <item name="android:fontFamily">@font/roboto_condensed_bold_italic</item>
+
+    <style name="font_light" parent="TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">@font/poppins_light</item>
     </style>
 
-    <style name="BoldNoto">
-        <item name="android:fontFamily">@font/noto_sans_bold</item>
+    <style name="font_semi_bold" parent="TextAppearance.AppCompat.Large">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
     </style>
 
-    <style name="RegItalic">
-        <item name="android:fontFamily">@font/roboto_condensed_regular_italic</item>
+    <style name="font_bold" parent="TextAppearance.AppCompat.Large">
+        <item name="android:fontFamily">@font/poppins_bold</item>
     </style>
 
-    <style name="RegText">
-        <item name="android:fontFamily">@font/roboto</item>
+    <style name="font_italic_bold" parent="TextAppearance.AppCompat.Large">
+        <item name="android:fontFamily">@font/sigmarone</item>
     </style>
+
     <!-- FONTS end -->
 
     <declare-styleable name="shadowButton">

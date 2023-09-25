@@ -69,7 +69,6 @@
 
         <android.widget.Button
             android:id="@+id/btn"
-            style="@style/BoldItalicTitles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -84,7 +83,6 @@
 
         <android.widget.Button
             android:id="@+id/btn_clear"
-            style="@style/BoldItalicTitles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
