@@ -1,8 +1,9 @@
 package com.cyberflow.sparkle.main.view
 
+import com.drake.brv.item.ItemHover
 import com.drake.brv.item.ItemPosition
 
-class HeaderModel(val title: String, override var itemPosition: Int = 0) : ItemPosition
+class HeaderModel(val title: String, override var itemHover: Boolean = true) : ItemHover
 
 class OfficialModel(var names: List<String>, override var itemPosition: Int = 0) : ItemPosition
 

@@ -2,7 +2,6 @@ package com.cyberflow.sparkle.main.view
 
 import android.app.Activity
 import android.os.Bundle
-import android.widget.ImageView
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.viewmodel.BaseViewModel
@@ -15,7 +14,6 @@ import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.divider
-import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.google.android.material.snackbar.Snackbar
@@ -35,12 +33,12 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
 
     override fun initView(savedInstanceState: Bundle?) {
 
-
         initListView()
     }
 
     private fun initListView() {
-        mDatabind.rv.linear().setup {
+
+        mDatabind.rv.setup {
             addType<HeaderModel>(R.layout.item_hover_header)
             addType<OfficialModel>(R.layout.main_official)
             addType<FriendsModel>(R.layout.main_friends_feed)
@@ -53,18 +51,8 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                             setDivider(10, true)
                         }.setup {
                             addType<String>(R.layout.item_official)
-                            onBind {
-                                if (layoutPosition == 0)
-                                    findView<ImageView>(R.id.iv).setImageResource(R.drawable.pic_cora)
-                                else
-                                    findView<ImageView>(R.id.iv).setImageResource(R.drawable.pic_king)
-                            }
                             onClick(R.id.root) {
-                                Snackbar.make(
-                                    this.itemView,
-                                    "click official",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
+                                Snackbar.make(this.itemView, "click official", Snackbar.LENGTH_SHORT).show()
                                 when (this.layoutPosition) {
                                     0 -> {
                                         mDatabind.rv.models = getData(true)
