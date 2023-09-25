@@ -10,6 +10,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.base.model.RegisterRequestBean
+import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.databinding.ActivityRegiserBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 
@@ -48,6 +49,8 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
         }
 
         viewModel.registerBean = RegisterRequestBean()  // init request bean
+
+        MyApp.instance.initGooglePlace()
     }
 
     private fun goPrevious(){

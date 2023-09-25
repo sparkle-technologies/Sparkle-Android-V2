@@ -33,15 +33,16 @@ class MyApp : BaseApp() {
         BRV.modelId = BR.m
         initNetSpark(cacheDir)
         CacheUtil.init(this)
-        initGooglePlace()
         initRefresh()
         Logger.addLogAdapter(AndroidLogAdapter())
 
         Log.e(TAG, "onCreate:  time cost: ${System.currentTimeMillis() - st}")
     }
 
-    private fun initGooglePlace() {
-        Places.initialize(instance, "AIzaSyBx6ZuxE0RHbQRU7Ef7cxzHdh3VtinWE8I")
+    fun initGooglePlace() {
+        if(!Places.isInitialized()){
+            Places.initialize(instance, "AIzaSyBx6ZuxE0RHbQRU7Ef7cxzHdh3VtinWE8I")
+        }
     }
 
     private fun initRefresh() {
@@ -52,7 +53,4 @@ class MyApp : BaseApp() {
             ClassicsFooter(this)
         }
     }
-
-
-
 }
