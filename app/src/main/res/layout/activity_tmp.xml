@@ -3,97 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
 
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/outlinedTextField"
-            style="@style/OutlinedRoundedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="200dp"
-            android:layout_marginEnd="10dp"
-
-            android:hint="Nickname"
-
-            app:endIconDrawable="@drawable/register_ic_date"
-            app:endIconMode="custom"
-
-            app:helperText="Filling in specific time details for more accurate results."
-            app:helperTextEnabled="true"
-
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et"
+            <ImageView
+                android:id="@+id/iv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="select your weapon pls" />
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
 
-        </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-
-        <com.cyberflow.sparkle.login.widget.ShadowTxtButton
-            android:id="@+id/login_btn_shadow"
-            android:layout_width="200dp"
-            android:layout_height="46dp"
-            android:layout_marginTop="386dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:view_bg="@drawable/button_start"
-            app:view_shadow_distance="1dp"
-            app:view_text="Login Me" />
-
-
-        <com.cyberflow.sparkle.login.widget.ShadowTxtButton
-            android:layout_width="@dimen/dp_204"
-            android:layout_height="@dimen/dp_48"
-            android:layout_marginTop="@dimen/dp_25"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_btn_shadow"
-            app:view_bg="@drawable/main_bg_add_friends_empty_white"
-            app:view_left_drawable="@drawable/main_ic_reload"
-            app:view_shadow_distance="1dp"
-            app:view_text="Add Friends"
-            app:view_text_color="@color/red" />
-
-
-        <android.widget.Button
-            android:id="@+id/btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="60dp"
-            android:background="@drawable/login_wallet_btn_shape"
-            android:text="set error"
-            android:textColor="@color/color_000000"
-            android:textSize="@dimen/sp_17"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-
-        <android.widget.Button
-            android:id="@+id/btn_clear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/login_wallet_btn_shape"
-            android:text="clear error"
-            android:textColor="@color/color_000000"
-            android:textSize="@dimen/sp_17"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 
 
 </layout>

@@ -35,10 +35,10 @@
 
         </activity>
 
-
         <activity
             android:name=".TmpActivity"
             android:exported="true">
+
 
         </activity>
 

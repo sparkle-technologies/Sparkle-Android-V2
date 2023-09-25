@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -126,7 +125,6 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
     }
 
     private fun goPrevious() {
-        Log.e(TAG, "goPrevious: ")
         mDataBinding.pager.apply {
             if (currentItem > 0) {
                 setCurrentItem(currentItem - 1, true)
@@ -135,7 +133,6 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
     }
 
     private fun goNext() {
-        Log.e(TAG, "goNext: ")
         mDataBinding.pager.apply {
             adapter?.also { a ->
                 if (currentItem < a.itemCount - 1) {
@@ -145,15 +142,10 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         }
     }
 
-    // Context context, int radius, int margin, int mBorderWidth, int mBorderColor, int position
     override fun initData() {
         Glide.with(this)
             .load(R.drawable.avatar)
-//            .circleCrop()
-//            .diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false)
             .skipMemoryCache(true)
             .into(mDataBinding.ivHead)
-
-
     }
 }

@@ -96,16 +96,26 @@
             app:layout_constraintRight_toRightOf="@+id/view_menu_right"
             app:layout_constraintTop_toTopOf="@+id/view_menu_right" />
 
-        <com.cyberflow.sparkle.main.widget.CircleImageView
-            android:id="@+id/iv_head"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"
             android:layout_marginStart="@dimen/dp_20"
-            app:civ_border_color="@color/black"
-            app:civ_border_width="1dp"
+            app:cardCornerRadius="@dimen/dp_16"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/bgMenu"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/bgMenu" />
+            app:layout_constraintTop_toTopOf="@+id/bgMenu"
+            app:strokeWidth="@dimen/dp_1">
+
+            <ImageView
+                android:id="@+id/iv_head"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
+
+        </com.google.android.material.card.MaterialCardView>
+
 
         <com.cyberflow.sparkle.login.widget.ShadowImgButton
             android:id="@+id/btn_add_friends"
