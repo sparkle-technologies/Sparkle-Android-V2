@@ -220,7 +220,7 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
             requireActivity(),
             0,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE
         )
         (requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager).also {
             val calendar = Calendar.getInstance()

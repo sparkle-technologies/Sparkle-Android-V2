@@ -77,11 +77,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                             addType<String>(R.layout.item_friends_feed)
                             addType<FriendsAddModel>(R.layout.item_friends_feed_add)
                             onClick(R.id.bg_new_friend) {
-                                Snackbar.make(
-                                    itemView,
-                                    "TODO -->  go IM add friend",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
+                                Snackbar.make(itemView, "TODO -->  go IM add friend", Snackbar.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -90,11 +86,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         getBinding<ItemFriendsFeedEmptyBinding>().btnAddFriend.setClickListener(
                             object : ShadowTxtButton.ShadowClickListener {
                                 override fun clicked(disable: Boolean) {
-                                    Snackbar.make(
-                                        itemView,
-                                        "TODO -->  go IM add friend",
-                                        Snackbar.LENGTH_SHORT
-                                    ).show()
+                                    Snackbar.make(itemView, "TODO -->  go IM add friend", Snackbar.LENGTH_SHORT).show()
                                 }
                             })
                     }

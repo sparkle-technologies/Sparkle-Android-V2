@@ -76,10 +76,12 @@ dependencies {
 
     implementation(project(mapOf("path" to ":base")))
     implementation(project(mapOf("path" to ":base_resources")))
-    implementation(project(mapOf("path" to ":ease-im-kit")))
+    api(project(mapOf("path" to ":ease-im-kit")))
 
     implementation("io.hyphenate:hyphenate-chat:4.0.3")
     implementation("androidx.room:room-runtime:2.5.1")
+    kapt("androidx.room:room-compiler:2.5.1")
+
     implementation("com.parse:parse-android:1.13.1")
 
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))

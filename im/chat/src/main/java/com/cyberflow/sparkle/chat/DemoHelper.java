@@ -12,7 +12,6 @@ import android.util.Log;
 import com.cyberflow.base.BaseApp;
 import com.cyberflow.sparkle.chat.common.db.DemoDbHelper;
 import com.cyberflow.sparkle.chat.common.delegates.ChatRecallAdapterDelegate;
-import com.cyberflow.sparkle.chat.common.delegates.ChatUserCardAdapterDelegate;
 import com.cyberflow.sparkle.chat.common.manager.UserProfileManager;
 import com.cyberflow.sparkle.chat.common.model.DemoModel;
 import com.cyberflow.sparkle.chat.common.model.EmojiconExampleGroupData;
@@ -34,12 +33,9 @@ import com.hyphenate.chat.EMPushManager;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseFileAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseImageAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseLocationAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseTextAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseVideoAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseVoiceAdapterDelegate;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.domain.EaseEmojicon;
 import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
@@ -144,13 +140,13 @@ public class DemoHelper {
     private void registerConversationType() {
         EaseMessageTypeSetManager.getInstance()
                 .addMessageType(EaseExpressionAdapterDelegate.class)       //自定义表情
-                .addMessageType(EaseFileAdapterDelegate.class)             //文件
+//                .addMessageType(EaseFileAdapterDelegate.class)             //文件
                 .addMessageType(EaseImageAdapterDelegate.class)            //图片
-                .addMessageType(EaseLocationAdapterDelegate.class)         //定位
+//                .addMessageType(EaseLocationAdapterDelegate.class)         //定位
                 .addMessageType(EaseVideoAdapterDelegate.class)            //视频
-                .addMessageType(EaseVoiceAdapterDelegate.class)            //声音
+//                .addMessageType(EaseVoiceAdapterDelegate.class)            //声音
                 .addMessageType(ChatRecallAdapterDelegate.class)           //消息撤回
-                .addMessageType(ChatUserCardAdapterDelegate.class)         //名片消息
+//                .addMessageType(ChatUserCardAdapterDelegate.class)         //名片消息
                 .addMessageType(EaseCustomAdapterDelegate.class)           //自定义消息
                 .setDefaultMessageType(EaseTextAdapterDelegate.class);       //文本
     }
@@ -375,11 +371,11 @@ public class DemoHelper {
         options.setAppKey(APP_KEY_TEST);
 
         // 设置是否允许聊天室owner离开并删除会话记录，意味着owner再不会受到任何消息
-        options.allowChatroomOwnerLeave(demoModel.isChatroomOwnerLeaveAllowed());
+//        options.allowChatroomOwnerLeave(demoModel.isChatroomOwnerLeaveAllowed());
         // 设置退出(主动和被动退出)群组时是否删除聊天消息
-        options.setDeleteMessagesAsExitGroup(demoModel.isDeleteMessagesAsExitGroup());
+//        options.setDeleteMessagesAsExitGroup(demoModel.isDeleteMessagesAsExitGroup());
         // 设置是否自动接受加群邀请
-        options.setAutoAcceptGroupInvitation(demoModel.isAutoAcceptGroupInvitation());
+//        options.setAutoAcceptGroupInvitation(demoModel.isAutoAcceptGroupInvitation());
         // 是否自动将消息附件上传到环信服务器，默认为True是使用环信服务器上传下载
         options.setAutoTransferMessageAttachments(demoModel.isSetTransferFileByUser());
         // 是否自动下载缩略图，默认是true为自动下载

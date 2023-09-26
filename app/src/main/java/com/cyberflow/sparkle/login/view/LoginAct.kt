@@ -1,6 +1,7 @@
 package com.cyberflow.sparkle.login.view
 
 import android.animation.Animator
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
@@ -12,8 +13,11 @@ import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.callback.IMLoginResponse
+import com.cyberflow.base.util.callback.IMV2Callback
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
+import com.cyberflow.sparkle.chat.IMManager
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
@@ -25,6 +29,8 @@ import com.drake.net.utils.scopeDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
+import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
+import com.hyphenate.easeui.ui.dialog.ThreadUtil
 import com.web3auth.singlefactorauth.SingleFactorAuth
 import com.web3auth.singlefactorauth.types.LoginParams
 import com.web3auth.singlefactorauth.types.SingleFactorAuthArgs
@@ -52,14 +58,33 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
             context.startActivity(intent)
         }
+
+
+        // after login, now login to IM , then go main page or register page
+        fun imLogin(activity: Activity){
+            LoadingDialogHolder.getLoadingDialog()?.show(activity)
+            IMManager.instance.loginToIM(IMManager.Account, IMManager.Pwd, object : IMV2Callback<IMLoginResponse> {
+                override fun onEvent(event: IMLoginResponse) {
+                    ThreadUtil.runOnMainThread{
+                        LoadingDialogHolder.getLoadingDialog()?.hide()
+                        if(event.success){
+                            MainActivity.go(activity)
+                            activity.finish()
+                        }else{
+                            val msg = event.message ?: "IM login failed"
+                            TipUtils.toast(msg)
+                        }
+                    }
+                }
+            })
+        }
     }
 
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()
 
         if (CacheUtil.getUserInfo()?.user?.open_uid?.isNotEmpty() == true) {
-            MainActivity.go(this)
-            finish()
+            imLogin(this)
             return
         }
 
@@ -91,6 +116,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     }
 
+
     private fun request(authMsg: String, type: String){
          scopeDialog {
              val data = Post<LoginResponseData>(Api.SIGN_IN) {
@@ -105,8 +131,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                  if (it.user?.open_uid.isNullOrEmpty()) {
                      RegisterAct.go(this@LoginAct)
                  } else {
-                     MainActivity.go(this@LoginAct)
-                     finish()
+                     imLogin(this@LoginAct)
                  }
              }
           }

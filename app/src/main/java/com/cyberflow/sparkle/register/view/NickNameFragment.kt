@@ -13,9 +13,9 @@ import com.cyberflow.base.net.Api
 import com.cyberflow.base.net.GsonConverter
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.sparkle.databinding.FragmentRegisterNicknameBinding
+import com.cyberflow.sparkle.login.view.LoginAct
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
-import com.cyberflow.sparkle.main.view.MainActivity
 import com.drake.net.Post
 import com.drake.net.utils.scopeDialog
 
@@ -79,6 +79,7 @@ class NickNameFragment :
         })
     }
 
+
     private fun submitRegister() {
         val txt = mViewBind.etNiceName.text.toString().trim()
         actVm?.apply {
@@ -92,9 +93,7 @@ class NickNameFragment :
 
                     val token = CacheUtil.getUserInfo()?.token.orEmpty()
                     Log.e("NickNameFragment", "got new token from login :  $token")
-
-                    MainActivity.go(requireActivity())
-                    requireActivity().finish()
+                    LoginAct.imLogin(requireActivity())
                 }
             }
         }

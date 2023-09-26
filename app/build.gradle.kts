@@ -88,4 +88,7 @@ dependencies {
 
 //    kapt("cn.therouter:apt:1.2.0-rc1")
 //    implementation("cn.therouter:router:1.2.0-rc1")
+
+    // for IM
+    implementation(project(mapOf("path" to ":chat")))
 }

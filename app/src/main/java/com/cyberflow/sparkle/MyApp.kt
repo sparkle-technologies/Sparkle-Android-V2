@@ -4,8 +4,10 @@ import android.util.Log
 import com.cyberflow.base.BaseApp
 import com.cyberflow.base.net.initNetSpark
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.sparkle.chat.IMManager
 import com.drake.brv.utils.BRV
 import com.google.android.libraries.places.api.Places
+import com.google.firebase.FirebaseApp
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.scwang.smart.refresh.footer.ClassicsFooter
@@ -28,13 +30,18 @@ class MyApp : BaseApp() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+
         var st = System.currentTimeMillis()
 
         BRV.modelId = BR.m
         initNetSpark(cacheDir)
         CacheUtil.init(this)
         initRefresh()
+        FirebaseApp.initializeApp(this)
         Logger.addLogAdapter(AndroidLogAdapter())
+
+        IMManager.instance.initUI()
+        IMManager.instance.initSDKAndDB(this)
 
         Log.e(TAG, "onCreate:  time cost: ${System.currentTimeMillis() - st}")
     }

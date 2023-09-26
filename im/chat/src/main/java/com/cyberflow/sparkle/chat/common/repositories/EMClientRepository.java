@@ -84,7 +84,7 @@ public class EMClientRepository extends BaseEMRepository {
     private void loadAllConversationsAndGroups() {
         // 从本地数据库加载所有的对话及群组
         getChatManager().loadAllConversations();
-        getGroupManager().loadAllGroups();
+//        getGroupManager().loadAllGroups();
     }
 
     /**
@@ -178,7 +178,7 @@ public class EMClientRepository extends BaseEMRepository {
             @Override
             public void onSuccess() {
                 Log.e(TAG, "EMClient.getInstance().login  onSuccess: ");
-                loadAllConversationsAndGroups();
+                successForCallBack(null);
                 callback.onEvent(new IMActionResult.Success());
             }
 
@@ -240,13 +240,14 @@ public class EMClientRepository extends BaseEMRepository {
         PreferenceManager.getInstance().setAutoLogin(autoLogin);
     }
 
-    private void successForCallBack(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
+    private void successForCallBack(ResultCallBack<LiveData<EaseUser>> callBack) {
         // 初始化数据库
         initDb();
         // get current user id
         String currentUser = EMClient.getInstance().getCurrentUser();
         EaseUser user = new EaseUser(currentUser);
-        callBack.onSuccess(new MutableLiveData<>(user));
+        if(callBack!=null)
+            callBack.onSuccess(new MutableLiveData<>(user));
 
         // ** manually load all local groups and conversation
         loadAllConversationsAndGroups();

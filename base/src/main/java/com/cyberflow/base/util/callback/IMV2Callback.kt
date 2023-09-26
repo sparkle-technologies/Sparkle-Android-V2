@@ -6,3 +6,5 @@ package com.cyberflow.base.util.callback
 interface IMV2Callback<T> {
     fun onEvent(event: T)
 }
+
+data class IMLoginResponse(val success: Boolean, val message: String? = null)

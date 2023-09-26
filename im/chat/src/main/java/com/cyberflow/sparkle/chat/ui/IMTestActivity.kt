@@ -1,20 +1,27 @@
 package com.cyberflow.sparkle.chat.ui
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import com.cyberflow.base.BaseApp
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.PageConst
+import com.cyberflow.base.util.callback.IMLoginResponse
+import com.cyberflow.base.util.callback.IMV2Callback
 import com.cyberflow.base.util.click
 import com.cyberflow.sparkle.chat.DemoHelper
+import com.cyberflow.sparkle.chat.IMManager
 import com.cyberflow.sparkle.chat.common.db.DemoDbHelper
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.common.utils.PreferenceManager
 import com.cyberflow.sparkle.chat.databinding.ActivityImTestBinding
 import com.cyberflow.sparkle.chat.viewmodel.IMTestViewModel
 import com.cyberflow.sparkle.chat.viewmodel.parseResource
+import com.drake.net.utils.TipUtils
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
+import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
+import com.hyphenate.easeui.ui.dialog.ThreadUtil
 import com.therouter.router.Route
 
 
@@ -56,8 +63,12 @@ class IMTestActivity : BaseDBAct<IMTestViewModel, ActivityImTestBinding>() {
             }
         }
         mDataBinding.btnLogin.click {
-            var name = mDataBinding.etFrom.text.toString()
-            viewModel.login(name, "123")
+
+//            var name = mDataBinding.etFrom.text.toString()
+//            viewModel.login(name, "123")
+
+            imLogin(this)
+
         }
         mDataBinding.btnLogout.click {
             if (DemoHelper.getInstance().isSDKInit) {
@@ -140,6 +151,25 @@ class IMTestActivity : BaseDBAct<IMTestViewModel, ActivityImTestBinding>() {
             viewModel.updateInfo(username)
         }
     }
+
+    fun imLogin(activity: Activity){
+        LoadingDialogHolder.getLoadingDialog()?.show(activity)
+        IMManager.instance.loginToIM(IMManager.Account, IMManager.Pwd, object :
+            IMV2Callback<IMLoginResponse> {
+            override fun onEvent(event: IMLoginResponse) {
+                ThreadUtil.runOnMainThread{
+                    LoadingDialogHolder.getLoadingDialog()?.hide()
+                    if(event.success){
+                        activity.finish()
+                    }else{
+                        val msg = event.message ?: "IM login failed"
+                        TipUtils.toast(msg)
+                    }
+                }
+            }
+        })
+    }
+
 
     override fun initData() {
 

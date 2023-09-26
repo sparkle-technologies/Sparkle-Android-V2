@@ -2,72 +2,77 @@ package com.cyberflow.sparkle.chat
 
 import android.app.Application
 import android.util.Log
+import androidx.annotation.UiThread
 import com.cyberflow.base.BaseApp
-import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.SafeGlobalScope
 import com.cyberflow.base.util.callback.IMActionResult
+import com.cyberflow.base.util.callback.IMLoginResponse
 import com.cyberflow.base.util.callback.IMV2Callback
 import com.cyberflow.sparkle.chat.common.db.DemoDbHelper
 import com.cyberflow.sparkle.chat.common.repositories.EMChatManagerRepository
 import com.cyberflow.sparkle.chat.common.repositories.EMClientRepository
 import com.cyberflow.sparkle.chat.common.utils.PreferenceManager
 import com.hyphenate.EMCallBack
-import com.hyphenate.easeui.ui.dialog.ThreadUtil
+import com.hyphenate.easeui.ui.dialog.LoadingDialog
+import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
+import com.vanniktech.emoji.EmojiManager
+import com.vanniktech.emoji.ios.IosEmojiProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-private const val TAG = "IMManager"
 
+// its the only
 class IMManager private constructor() {
 
     companion object {
         val instance: IMManager by lazy { IMManager() }
+        const val TAG = "IMManager"
+        const val Account = "test5"
+        const val Pwd = "123"
+    }
+
+    @UiThread
+    fun initUI(){
+        LoadingDialogHolder.setLoadingDialog(LoadingDialog.Companion)
+        EmojiManager.install(IosEmojiProvider())
     }
 
     private var repository: EMClientRepository? = null
     private var mChatRepository: EMChatManagerRepository? = null
 
-    fun init(app: Application) {
+    fun initSDKAndDB(app: Application) {
         PreferenceManager.init(app)
-        if (DemoHelper.getInstance().autoLogin) {
-            DemoHelper.getInstance().init(app)
-        }
-        repository = EMClientRepository().also {
-            it.loadAllInfoFromHX()
-        }
+        repository = EMClientRepository()
         mChatRepository = EMChatManagerRepository()
     }
 
     private var job: Job? = null
 
-    fun login(callback: IMV2Callback<Boolean>) {
+    fun loginToIM(imAccount: String, imPwd: String, callback: IMV2Callback<IMLoginResponse>) {
         job?.let {
             it.cancel()
         }
         val newJob = SupervisorJob().also { job = it }
         SafeGlobalScope.launch(newJob + Dispatchers.IO) {
-            var openId = "war"   // given by server - its fake data for demo purposes  lover war
-
-            val imAccount = CacheUtil.getString("imAccount")
-            val imPwd = CacheUtil.getString("imPwd")
             Log.e(TAG, "im login: imAccount=$imAccount, imPwd=$imPwd" )
             repository?.also {
                 it.login(imAccount, imPwd, object : IMV2Callback<IMActionResult> {
                     override fun onEvent(event: IMActionResult) {
-                        var result = false
                         if(event is IMActionResult.Success){
-                            DemoHelper.getInstance().autoLogin = true
+//                            DemoHelper.getInstance().autoLogin = true
+
                             val userName = DemoHelper.getInstance().model.currentUsername
                             DemoDbHelper.getInstance(BaseApp.instance).initDb(userName)
 
-                            callback.onEvent(true)
+                            callback.onEvent(IMLoginResponse(true))
                         }else{
-                            // todo   ----  login failure
-                        }
-                        ThreadUtil.runOnMainThread(){
-                            callback.onEvent(result)
+                            if(event is IMActionResult.Failure){
+                                callback.onEvent(IMLoginResponse(false, event.msg))
+                            }else{
+                                callback.onEvent(IMLoginResponse(false))
+                            }
                         }
                     }
                 })
@@ -75,7 +80,7 @@ class IMManager private constructor() {
         }
     }
 
-    fun logout(callback: IMV2Callback<Boolean>) {
+    fun logoutIM(callback: IMV2Callback<Boolean>) {
         DemoHelper.getInstance().logout(true, object : EMCallBack{
             override fun onSuccess() {
                  DemoHelper.getInstance().model.phoneNumber = ""

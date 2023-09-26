@@ -25,7 +25,7 @@
 
         <activity
             android:name=".login.view.LoginAct"
-            android:exported="true">
+            android:exported="true" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,9 +39,7 @@
             android:name=".TmpActivity"
             android:exported="true">
 
-
         </activity>
-
 
         <receiver
             android:name=".main.view.MainLeftFragment$AlarmReceiver"
@@ -50,7 +48,6 @@
                 <action android:name="com.cyberflow.sparkle.main.view.MainLeftFragment.AlarmReceiver" />
             </intent-filter>
         </receiver>
-
 
         <activity
             android:name=".main.view.MainActivity"
