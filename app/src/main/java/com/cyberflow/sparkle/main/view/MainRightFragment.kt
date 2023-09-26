@@ -8,6 +8,7 @@ import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
+import com.cyberflow.sparkle.chat.ui.ChatActivity
 import com.cyberflow.sparkle.databinding.FragmentMainRightBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedEmptyBinding
 import com.cyberflow.sparkle.databinding.MainFriendsFeedBinding
@@ -85,12 +86,13 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         }.setup {
                             addType<FriendMessageInfo>(R.layout.item_friends_feed)
                             addType<FriendsAddModel>(R.layout.item_friends_feed_add)
+                            onClick(R.id.lay_go_chat){
+                                val model = getModel<FriendMessageInfo>(layoutPosition)
+                                ChatActivity.launch(model.nickname, 1)
+                            }
                             onClick(R.id.bg_new_friend) {
-                                Snackbar.make(
-                                    itemView,
-                                    "TODO -->  go IM add friend",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
+                                // todo
+                                Snackbar.make(itemView, "new friend  ->  go add friend", Snackbar.LENGTH_SHORT).show()
                             }
                         }
                     }
@@ -99,11 +101,8 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         getBinding<ItemFriendsFeedEmptyBinding>().btnAddFriend.setClickListener(
                             object : ShadowTxtButton.ShadowClickListener {
                                 override fun clicked(disable: Boolean) {
-                                    Snackbar.make(
-                                        itemView,
-                                        "TODO -->  go IM add friend",
-                                        Snackbar.LENGTH_SHORT
-                                    ).show()
+                                    // todo
+                                    Snackbar.make(itemView, "click empty  -> add friend", Snackbar.LENGTH_SHORT).show()
                                 }
                             })
                     }

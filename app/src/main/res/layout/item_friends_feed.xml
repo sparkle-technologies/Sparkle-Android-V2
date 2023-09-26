@@ -11,6 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lay_go_chat"
         android:layout_width="match_parent"
         android:paddingBottom="@dimen/dp_6"
         android:layout_height="183dp">
@@ -30,7 +31,7 @@
             android:background="@drawable/register_bg_gender_white" />
 
         <ImageView
-            android:id="@+id/bg_new_friend"
+            android:id="@+id/iv_avatar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_128"
             android:layout_marginTop="@dimen/dp_3"
@@ -60,7 +61,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bg_new_friend" />
+            app:layout_constraintTop_toBottomOf="@+id/iv_avatar" />
 
         <View
             android:id="@+id/contact_line"

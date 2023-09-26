@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
-//    id("therouter")
+    id("therouter")
     id("com.google.gms.google-services")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
@@ -91,4 +91,7 @@ dependencies {
 
     // for IM
     implementation(project(mapOf("path" to ":chat")))
+
+    kapt("cn.therouter:apt:1.2.0-rc1")
+    implementation("cn.therouter:router:1.2.0-rc1")
 }

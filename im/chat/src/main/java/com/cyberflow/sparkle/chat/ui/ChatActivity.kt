@@ -1,6 +1,5 @@
 package com.cyberflow.sparkle.chat.ui
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -45,19 +44,18 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     private val msgViewModel: MessageViewModel by viewModels()
 
     companion object {
-        fun launch(context: Context, conversationId: String, chatType: Int) {
+        fun launch(conversationId: String, chatType: Int) {
             Log.e(TAG, "actionStart: conversationId=$conversationId\t chatType=$chatType")
-
             TheRouter.build(PageConst.IM.PAGE_IM_CHAT)
                 .withString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
                 .withInt(EaseConstant.EXTRA_CHAT_TYPE, chatType)
-//                .withOptionsCompat(ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity))
-                .navigation(context)
-
+                .navigation()
         }
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        TheRouter.inject(this)
+
         mDataBinding.ivBtnBack.click{
             onBackPressed()
         }
