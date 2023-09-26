@@ -30,7 +30,7 @@
             android:layout_marginLeft="@dimen/margin_chat_activity"
             android:layout_marginTop="2dp"
             android:layout_toRightOf="@id/iv_userhead"
-            android:background="@drawable/ease_chat_bubble_receive_bg"
+            android:background="@drawable/chat_bg_receive_msg"
             android:minWidth="30dp"
             android:paddingStart="16dp"
             android:paddingTop="12dp"
@@ -47,7 +47,7 @@
                 android:lineSpacingExtra="2dp"
                 android:maxWidth="225.0dip"
                 android:minHeight="@dimen/ease_chat_text_min_height"
-                android:textColor="@color/color_2a2a2b"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 tools:text="环信" />
         </RelativeLayout>

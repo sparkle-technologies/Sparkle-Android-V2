@@ -106,7 +106,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     private static final int REQUEST_CODE_SELECT_AT_USER = 15;
     private static final String[] labels = {
-
             BaseApp.getInstance().getApplicationContext().getString(R.string.tab_politics),
             BaseApp.getInstance().getApplicationContext().getString(R.string.tab_yellow_related),
             BaseApp.getInstance().getApplicationContext().getString(R.string.tab_advertisement),

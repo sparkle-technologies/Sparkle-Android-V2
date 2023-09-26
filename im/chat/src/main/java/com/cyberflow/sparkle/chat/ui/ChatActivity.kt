@@ -56,7 +56,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     override fun initView(savedInstanceState: Bundle?) {
         TheRouter.inject(this)
 
-        mDataBinding.ivBtnBack.click{
+        mDataBinding.layBack.click{
             onBackPressed()
         }
 
