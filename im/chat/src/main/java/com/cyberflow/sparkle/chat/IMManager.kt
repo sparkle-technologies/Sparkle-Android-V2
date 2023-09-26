@@ -13,6 +13,7 @@ import com.cyberflow.sparkle.chat.common.repositories.EMChatManagerRepository
 import com.cyberflow.sparkle.chat.common.repositories.EMClientRepository
 import com.cyberflow.sparkle.chat.common.utils.PreferenceManager
 import com.hyphenate.EMCallBack
+import com.hyphenate.chat.EMClient
 import com.hyphenate.easeui.ui.dialog.LoadingDialog
 import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import com.vanniktech.emoji.EmojiManager
@@ -34,7 +35,7 @@ class IMManager private constructor() {
     }
 
     @UiThread
-    fun initUI(){
+    fun initUI() {
         LoadingDialogHolder.setLoadingDialog(LoadingDialog.Companion)
         EmojiManager.install(IosEmojiProvider())
     }
@@ -44,8 +45,10 @@ class IMManager private constructor() {
 
     fun initSDKAndDB(app: Application) {
         PreferenceManager.init(app)
+        DemoHelper.getInstance().init(app)
         repository = EMClientRepository()
         mChatRepository = EMChatManagerRepository()
+
     }
 
     private var job: Job? = null
@@ -56,21 +59,21 @@ class IMManager private constructor() {
         }
         val newJob = SupervisorJob().also { job = it }
         SafeGlobalScope.launch(newJob + Dispatchers.IO) {
-            Log.e(TAG, "im login: imAccount=$imAccount, imPwd=$imPwd" )
+            Log.e(TAG, "im login: imAccount=$imAccount, imPwd=$imPwd")
             repository?.also {
                 it.login(imAccount, imPwd, object : IMV2Callback<IMActionResult> {
                     override fun onEvent(event: IMActionResult) {
-                        if(event is IMActionResult.Success){
+                        if (event is IMActionResult.Success) {
 //                            DemoHelper.getInstance().autoLogin = true
 
                             val userName = DemoHelper.getInstance().model.currentUsername
                             DemoDbHelper.getInstance(BaseApp.instance).initDb(userName)
 
                             callback.onEvent(IMLoginResponse(true))
-                        }else{
-                            if(event is IMActionResult.Failure){
+                        } else {
+                            if (event is IMActionResult.Failure) {
                                 callback.onEvent(IMLoginResponse(false, event.msg))
-                            }else{
+                            } else {
                                 callback.onEvent(IMLoginResponse(false))
                             }
                         }
@@ -80,11 +83,23 @@ class IMManager private constructor() {
         }
     }
 
+    fun keepLogout() {
+        Log.e(TAG, "keepLogout: ---0----isLoggedIn=${EMClient.getInstance().isLoggedIn}")
+        if (EMClient.getInstance().isLoggedIn) {
+            job?.let { it.cancel() }
+            val newJob = SupervisorJob().also { job = it }
+            SafeGlobalScope.launch(newJob + Dispatchers.IO) {
+                EMClient.getInstance().logout(true)
+                Log.e(TAG, "keepLogout: ---1----isLoggedIn=${EMClient.getInstance().isLoggedIn}")
+            }
+        }
+    }
+
     fun logoutIM(callback: IMV2Callback<Boolean>) {
-        DemoHelper.getInstance().logout(true, object : EMCallBack{
+        DemoHelper.getInstance().logout(true, object : EMCallBack {
             override fun onSuccess() {
-                 DemoHelper.getInstance().model.phoneNumber = ""
-                 callback.onEvent(true)
+                DemoHelper.getInstance().model.phoneNumber = ""
+                callback.onEvent(true)
             }
 
             override fun onError(code: Int, error: String?) {

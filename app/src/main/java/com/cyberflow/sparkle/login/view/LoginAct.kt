@@ -59,7 +59,6 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             context.startActivity(intent)
         }
 
-
         // after login, now login to IM , then go main page or register page
         fun imLogin(activity: Activity){
             LoadingDialogHolder.getLoadingDialog()?.show(activity)
@@ -86,6 +85,8 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         if (CacheUtil.getUserInfo()?.user?.open_uid?.isNotEmpty() == true) {
             imLogin(this)
             return
+        }else{
+            IMManager.instance.keepLogout()   // make sure no login in IM
         }
 
         initWalletConnect()
@@ -188,11 +189,13 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         Log.e(MyApp.TAG, "initWalletConnect: ")
 
         lifecycleScope.launch {
-            val config = WalletConnectKitConfig(
-                projectId = "216dc6e2b36be94b855cd28ea41fda6d",
-                appUrl = "https://sparkle.fun",
-            )
-            MyApp.instance.walletConnectKit = WalletConnectKit.builder(MyApp.instance).config(config).build()
+            if(MyApp.instance.walletConnectKit == null){
+                val config = WalletConnectKitConfig(
+                    projectId = "216dc6e2b36be94b855cd28ea41fda6d",
+                    appUrl = "https://sparkle.fun",
+                )
+                MyApp.instance.walletConnectKit = WalletConnectKit.builder(MyApp.instance).config(config).build()
+            }
             runOnUiThread {
                 mViewBind.composeView.setContent {
                     MyApp.instance.walletConnectKit?.let { Content(it) }

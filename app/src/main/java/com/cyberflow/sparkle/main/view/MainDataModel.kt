@@ -8,6 +8,9 @@ class HeaderModel(val title: String, override var itemHover: Boolean = true) : I
 class OfficialModel(var names: List<String>, override var itemPosition: Int = 0) : ItemPosition
 
 class FriendsModel(var names: List<Any>, override var itemPosition: Int = 0) : ItemPosition
+
+class FriendMessageInfo(var imageUrl: String = "", var nickname: String = "", var bgColor: String = "#ffffff", var num: String = "0", var gender: Int = 1, override var itemPosition: Int = 0): ItemPosition
+
 class FriendsAddModel(override var itemPosition: Int = 0) : ItemPosition
 
 class FriendsEmptyModel(override var itemPosition: Int = 0) : ItemPosition

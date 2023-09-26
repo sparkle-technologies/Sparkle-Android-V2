@@ -7,7 +7,7 @@
 
         <variable
             name="m"
-            type="java.lang.String" />
+            type="com.cyberflow.sparkle.main.view.FriendMessageInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +34,13 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_128"
             android:layout_marginTop="@dimen/dp_3"
-            android:src="@drawable/contact_pic"
+            android:layout_marginStart="@dimen/dp_3"
+            android:layout_marginEnd="@dimen/dp_3"
+            android:scaleType="fitCenter"
+            holder="@{m.gender == 1 ? @drawable/place_holder_man :  @drawable/place_holder_women}"
+            corner="@{18}"
+            img="@{m.imageUrl}"
+            tools:src="@drawable/contact_pic"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -47,7 +53,7 @@
             android:gravity="center"
             android:maxLines="1"
             tools:text="Harry"
-            android:text="@{m}"
+            android:text="@{m.nickname}"
             android:textColor="@color/color_000000"
             android:textSize="@dimen/sp_16"
             android:textStyle="bold"
@@ -60,6 +66,7 @@
             android:id="@+id/contact_line"
             android:layout_width="@dimen/dp_30"
             android:layout_height="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_3"
             android:background="@drawable/main_vertical_divider"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

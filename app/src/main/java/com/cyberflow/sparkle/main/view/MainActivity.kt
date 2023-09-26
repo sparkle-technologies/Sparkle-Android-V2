@@ -4,21 +4,27 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.bumptech.glide.Glide
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.R
+import com.cyberflow.sparkle.chat.common.constant.DemoConstant
+import com.cyberflow.sparkle.chat.common.utils.ChatPresenter
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.widget.DoubleClickListener
+import com.cyberflow.sparkle.main.widget.NumView
 import com.cyberflow.sparkle.register.view.PageAdapter
 import com.cyberflow.sparkle.setting.view.SettingsActivity
 import com.google.android.material.snackbar.Snackbar
+import com.hyphenate.easeui.model.EaseEvent
 
 class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
@@ -147,5 +153,56 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
             .load(R.drawable.avatar)
             .skipMemoryCache(true)
             .into(mDataBinding.ivHead)
+
+        loadIMConversations()
+    }
+
+    /********************* IM ***********************/
+
+    private fun freshData(event: EaseEvent?) {
+        event?.also {
+            viewModel.refreshIMData()
+        }
+    }
+
+    private fun loadIMConversations() {
+        ChatPresenter.getInstance().init()  // chat global observer, like msg received , it should be called after login
+
+        LiveDataBus.get().apply {
+            with(DemoConstant.NOTIFY_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)  // unread
+            with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)  // unread
+            with(DemoConstant.CONVERSATION_DELETE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)  // unread
+            with(DemoConstant.CONVERSATION_READ, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)   // unread
+            with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)  // unread
+            with(DemoConstant.CONTACT_ADD, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)
+            with(DemoConstant.CONTACT_UPDATE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)
+        }
+
+        viewModel.inviteMsgObservable.observe(this) { list ->
+            list?.also {
+                mDataBinding.tvNum.apply {
+                    if (it.isNotEmpty()) {
+                        visibility = View.VISIBLE
+                        num = it.size.toString()
+                    } else {
+                        visibility = View.INVISIBLE
+                    }
+                }
+                mDataBinding.layDialogAdd.findViewById<NumView>(R.id.tv_num).apply {
+                    if (it.isNotEmpty()) {
+                        visibility = View.VISIBLE
+                        num = it.size.toString()
+                    } else {
+                        visibility = View.INVISIBLE
+                    }
+                }
+            }
+        }
+
+        viewModel.homeUnReadObservable.observe(this) {
+            if (it.isNotEmpty()) {
+                Log.e("TAG", "UnRead Count: $it")   // todo :  PM not decide yet
+            }
+        }
     }
 }

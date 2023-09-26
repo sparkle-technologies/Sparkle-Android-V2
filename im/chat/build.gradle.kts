@@ -78,7 +78,7 @@ dependencies {
     implementation(project(mapOf("path" to ":base_resources")))
     api(project(mapOf("path" to ":ease-im-kit")))
 
-    implementation("io.hyphenate:hyphenate-chat:4.0.3")
+    api("io.hyphenate:hyphenate-chat:4.0.3")
     implementation("androidx.room:room-runtime:2.5.1")
     kapt("androidx.room:room-compiler:2.5.1")
 

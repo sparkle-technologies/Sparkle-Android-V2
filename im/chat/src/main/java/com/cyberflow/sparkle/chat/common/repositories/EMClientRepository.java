@@ -102,8 +102,8 @@ public class EMClientRepository extends BaseEMRepository {
                 //注册之前先判断SDK是否已经初始化，如果没有先进行SDK的初始化
                 if (!DemoHelper.getInstance().isSDKInit) {
                     DemoHelper.getInstance().init(BaseApp.getInstance());
-                    DemoHelper.getInstance().getModel().setCurrentUserName(userName);
                 }
+                DemoHelper.getInstance().getModel().setCurrentUserName(userName);
                 runOnIOThread(() -> {
                     try {
                         EMClient.getInstance().createAccount(userName, pwd);
@@ -132,7 +132,9 @@ public class EMClientRepository extends BaseEMRepository {
 
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<EaseUser>> callBack) {
-                DemoHelper.getInstance().init(BaseApp.getInstance());
+                if (!DemoHelper.getInstance().isSDKInit) {
+                    DemoHelper.getInstance().init(BaseApp.getInstance());
+                }
                 DemoHelper.getInstance().getModel().setCurrentUserName(userName);
                 DemoHelper.getInstance().getModel().setCurrentUserPwd(pwd);
                 OptionsHelper.getInstance().checkChangeServe();
@@ -170,25 +172,32 @@ public class EMClientRepository extends BaseEMRepository {
     }
 
     public void login(String userName, String pwd, IMV2Callback<IMActionResult> callback) {
-        DemoHelper.getInstance().init(BaseApp.getInstance());
+        if (!DemoHelper.getInstance().isSDKInit) {
+            DemoHelper.getInstance().init(BaseApp.getInstance());
+        }
         DemoHelper.getInstance().getModel().setCurrentUserName(userName);
         DemoHelper.getInstance().getModel().setCurrentUserPwd(pwd);
         OptionsHelper.getInstance().checkChangeServe();
-        EMClient.getInstance().login(userName, pwd, new DemoEmCallBack() {
-            @Override
-            public void onSuccess() {
-                Log.e(TAG, "EMClient.getInstance().login  onSuccess: ");
-                successForCallBack(null);
-                callback.onEvent(new IMActionResult.Success());
-            }
 
-            @Override
-            public void onError(int code, String error) {
-                Log.e(TAG, " EMClient.getInstance().login  onError: " + code + "\t " + error);
-                callback.onEvent(new IMActionResult.Failure(code, error));
-                closeDb();
-            }
-        });
+        if(EMClient.getInstance().isLoggedIn()){
+            callback.onEvent(new IMActionResult.Success());
+        }else{
+            EMClient.getInstance().login(userName, pwd, new DemoEmCallBack() {
+                @Override
+                public void onSuccess() {
+                    Log.e(TAG, "EMClient.getInstance().login  onSuccess: ");
+                    successForCallBack(null);
+                    callback.onEvent(new IMActionResult.Success());
+                }
+
+                @Override
+                public void onError(int code, String error) {
+                    Log.e(TAG, " EMClient.getInstance().login  onError: " + code + "\t " + error);
+                    callback.onEvent(new IMActionResult.Failure(code, error));
+                    closeDb();
+                }
+            });
+        }
     }
 
     /**
@@ -447,7 +456,9 @@ public class EMClientRepository extends BaseEMRepository {
         return new NetworkOnlyResource<LoginResult>() {
             @Override
             protected void createCall(@NonNull ResultCallBack<LiveData<LoginResult>> callBack) {
-                DemoHelper.getInstance().init(BaseApp.getInstance());
+                if (!DemoHelper.getInstance().isSDKInit) {
+                    DemoHelper.getInstance().init(BaseApp.getInstance());
+                }
                 DemoHelper.getInstance().getModel().setCurrentUserName(userName);
                 OptionsHelper.getInstance().checkChangeServe();
                 LoginFromAppServe(userName, userPassword, new ResultCallBack<LoginResult>() {

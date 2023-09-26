@@ -96,6 +96,7 @@
             app:layout_constraintRight_toRightOf="@+id/view_menu_right"
             app:layout_constraintTop_toTopOf="@+id/view_menu_right" />
 
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"
@@ -128,6 +129,21 @@
             app:view_bg_src="@drawable/main_ic_add_friends_bg"
             app:view_img_shadow_distance="1dp"
             app:view_img_src="@drawable/main_ic_add_friends" />
+
+        <com.cyberflow.sparkle.main.widget.NumView
+            android:id="@+id/tv_num"
+            android:layout_width="@dimen/dp_23"
+            android:layout_height="@dimen/dp_23"
+            app:num_text_color="@color/black"
+            app:num_text_size="@dimen/sp_4"
+            android:visibility="invisible"
+            android:layout_marginEnd="@dimen/dp_4"
+            android:layout_marginBottom="@dimen/dp_8"
+            app:layout_constraintRight_toRightOf="@+id/btn_add_friends"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_add_friends"
+            app:num_view_color="@color/color_FFDD5B"
+            app:num_view_strokeColor="@color/black"
+            app:num_view_strokeWidth="@dimen/dp_1" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"
