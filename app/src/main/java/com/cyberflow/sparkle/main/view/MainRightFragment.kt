@@ -13,6 +13,7 @@ import com.cyberflow.sparkle.databinding.FragmentMainRightBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedEmptyBinding
 import com.cyberflow.sparkle.databinding.MainFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.MainOfficialBinding
+import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.viewmodel.parseResource
@@ -58,11 +59,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         }.setup {
                             addType<String>(R.layout.item_official)
                             onClick(R.id.root) {
-                                Snackbar.make(
-                                    this.itemView,
-                                    "click official",
-                                    Snackbar.LENGTH_SHORT
-                                ).show()
+                                Snackbar.make(this.itemView, "click official", Snackbar.LENGTH_SHORT).show()
                                 when (this.layoutPosition) {
                                     0 -> {
                                         mDatabind.rv.models = getData(true)
@@ -91,8 +88,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                                 ChatActivity.launch(model.nickname, 1)
                             }
                             onClick(R.id.bg_new_friend) {
-                                // todo
-                                Snackbar.make(itemView, "new friend  ->  go add friend", Snackbar.LENGTH_SHORT).show()
+                                IMSearchFriendAct.go(requireActivity())
                             }
                         }
                     }
@@ -101,8 +97,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         getBinding<ItemFriendsFeedEmptyBinding>().btnAddFriend.setClickListener(
                             object : ShadowTxtButton.ShadowClickListener {
                                 override fun clicked(disable: Boolean) {
-                                    // todo
-                                    Snackbar.make(itemView, "click empty  -> add friend", Snackbar.LENGTH_SHORT).show()
+                                    IMSearchFriendAct.go(requireActivity())
                                 }
                             })
                     }

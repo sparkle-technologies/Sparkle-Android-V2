@@ -17,6 +17,7 @@ import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.utils.ChatPresenter
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
+import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.widget.DoubleClickListener
@@ -98,7 +99,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
         mDataBinding.layDialogAdd.apply {
             findViewById<View>(R.id.lay_add_friends).setOnClickListener {
-                Snackbar.make(mDataBinding.ivHead, "add friends", Snackbar.LENGTH_SHORT).show()
+                IMSearchFriendAct.go(this@MainActivity)
             }
             findViewById<View>(R.id.lay_contacts).setOnClickListener {
                 Snackbar.make(mDataBinding.ivHead, "contacts", Snackbar.LENGTH_SHORT).show()

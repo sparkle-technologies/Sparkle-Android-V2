@@ -59,6 +59,9 @@
 
         <activity android:name=".setting.view.SettingsActivity" />
 
+        <activity android:name=".im.view.IMSearchFriendAct"/>
+        <activity android:name=".im.view.IMAddFriendAct"/>
+
     </application>
 
 </manifest>
