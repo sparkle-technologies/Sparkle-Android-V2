@@ -65,20 +65,6 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv_search"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:gravity="center"
-                        android:text="@string/search"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/sp_14"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/bg_white"
-                        app:layout_constraintLeft_toRightOf="@+id/bg_white"
-                        app:layout_constraintRight_toRightOf="@+id/bg_white"
-                        app:layout_constraintTop_toTopOf="@+id/bg_white" />
-
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edt_search_contact"
                         android:layout_width="0dp"

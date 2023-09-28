@@ -60,9 +60,6 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                 switchToSeeMoreOrNormal(false)
             }
         }
-        mDataBinding.tvSearch.setOnClickListener {
-
-        }
         mDataBinding.ivClear.setOnClickListener {
             mDataBinding.edtSearchContact.setText("")
         }
@@ -77,8 +74,10 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
             addTextChangedListener {
                 if (it.isNullOrEmpty()) {
                     mDataBinding.ivClear.visibility = View.INVISIBLE
+                    freshNormalUI()
                 } else {
                     mDataBinding.ivClear.visibility = View.VISIBLE
+                    freshSearchUI()
                 }
             }
             setOnFocusChangeListener { v, hasFocus ->
@@ -175,6 +174,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         }
     }
 
+
     private fun switchToSeeMoreOrNormal(more: Boolean) {
         Log.e(TAG, "switchToSeeMoreOrNormal:  more: $more" )
         mDataBinding.layMain.visibility = if (more) View.GONE else View.VISIBLE
@@ -182,14 +182,6 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         mDataBinding.tvTitle.text = if (more) getString(com.cyberflow.base.resources.R.string.friend_request) else getString(com.cyberflow.base.resources.R.string.contacts)
     }
 
-    private fun freshMoreUI(){
-        if(allRequestData.isNullOrEmpty()){
-            mDataBinding.state.showEmpty()
-        }else{
-            mDataBinding.state.showContent()
-            mDataBinding.rvCache.models = allRequestData
-        }
-    }
 
     override fun initData() {
         freshData()
@@ -287,9 +279,11 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         viewModel.loadContactList(true)   // load contact data from local db
     }
 
+    private val allContactData = arrayListOf<Contact>()
     // show contact list
     private fun showContactListData(data: List<EaseUser>?) {
         contactData.clear()
+        allContactData.clear()
         val list = arrayListOf<Any>()
 
         data?.forEach {
@@ -309,7 +303,10 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                 list.add(ContactLetter(it.initialLetter))
                 markArray[array.indexOf(it.initialLetter)] = true
             }
-            list.add(Contact(name = it.username))
+            Contact(name = it.username).apply {
+                list.add(this)
+                allContactData.add(this)
+            }
         }
 
         if(list.isNotEmpty()){
@@ -327,6 +324,22 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         allData.addAll(requestData)
         allData.addAll(contactData)
         mDataBinding.rv.models = allData
+    }
+
+    private fun freshMoreUI(){
+        if(allRequestData.isNullOrEmpty()){
+            mDataBinding.state.showEmpty()
+        }else{
+            mDataBinding.state.showContent()
+            mDataBinding.rvCache.models = allRequestData
+        }
+    }
+
+    private fun freshSearchUI() {
+        val name = mDataBinding.edtSearchContact.text.toString()
+        mDataBinding.rv.models = arrayListOf<Any>(ContactList(allContactData.filter {
+            it.name.contains(name, true)
+        }))
     }
 
     private val array = arrayOf(

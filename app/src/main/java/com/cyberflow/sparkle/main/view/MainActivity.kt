@@ -185,6 +185,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
         viewModel.inviteMsgObservable.observe(this) { list ->
             list?.also {
+
                 val count = it.filter { msg->
                     val statusParam = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS)
                     val status = InviteMessageStatus.valueOf(statusParam)
