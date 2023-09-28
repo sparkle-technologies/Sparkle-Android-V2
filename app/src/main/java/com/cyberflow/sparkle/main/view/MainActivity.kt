@@ -15,6 +15,7 @@ import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
+import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.utils.ChatPresenter
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.im.view.IMContactListAct
@@ -101,9 +102,11 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         mDataBinding.layDialogAdd.apply {
             findViewById<View>(R.id.lay_add_friends).setOnClickListener {
                 IMSearchFriendAct.go(this@MainActivity)
+                mDataBinding.layDialogAdd.visibility = View.GONE
             }
             findViewById<View>(R.id.lay_contacts).setOnClickListener {
                 IMContactListAct.go(this@MainActivity)
+                mDataBinding.layDialogAdd.visibility = View.GONE
             }
         }
 
@@ -182,10 +185,16 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
         viewModel.inviteMsgObservable.observe(this) { list ->
             list?.also {
+                val count = it.filter { msg->
+                    val statusParam = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS)
+                    val status = InviteMessageStatus.valueOf(statusParam)
+                    status == InviteMessageStatus.BEINVITEED
+                }.size
+
                 mDataBinding.tvNum.apply {
                     if (it.isNotEmpty()) {
                         visibility = View.VISIBLE
-                        num = it.size.toString()
+                        setNum(count)
                     } else {
                         visibility = View.INVISIBLE
                     }
@@ -193,7 +202,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
                 mDataBinding.layDialogAdd.findViewById<NumView>(R.id.tv_num).apply {
                     if (it.isNotEmpty()) {
                         visibility = View.VISIBLE
-                        num = it.size.toString()
+                        setNum(count)
                     } else {
                         visibility = View.INVISIBLE
                     }

@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="m"
             type="com.cyberflow.sparkle.im.viewmodel.FriendRequestHeader" />
@@ -36,7 +38,6 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvTitle">
@@ -44,6 +45,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_5"
                 android:fontFamily="@font/poppins_light"
                 android:text="See all"
                 android:textColor="@color/color_7d7d80"
@@ -53,8 +55,8 @@
                 android:id="@+id/tv_count"
                 android:layout_width="@dimen/dp_23"
                 android:layout_height="@dimen/dp_23"
-                android:layout_marginStart="@dimen/dp_5"
                 android:layout_marginEnd="@dimen/dp_5"
+                android:visibility="@{m.count >0 ? View.VISIBLE : View.GONE}"
                 app:num_text_color="@color/black"
                 app:num_text_size="@dimen/sp_4"
                 app:num_view_color="@color/color_FFDD5B"

@@ -33,6 +33,7 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
     // make fake data
     private fun searchFriends() {
         val query = mDataBinding.edtSearchFriend.text.toString().trim()
+        Log.e(TAG, "searchFriends: query=$query" )
 
         if(query.isNullOrEmpty()){
             mDataBinding.state.showEmpty()
@@ -57,7 +58,6 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
         mDataBinding.edtSearchFriend.apply {
             KeyboardUtil.hide(this)
         }
-        mDataBinding.rv.visibility = View.INVISIBLE
         IMAddFriendAct.go(this, data)
     }
 
@@ -70,7 +70,6 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
             }
             R.id.tv_add.onClick {
                 val model = getModel<IMSearchData>()
-                notifyItemChanged(layoutPosition)
                 Log.e(TAG, "you choose:  $model")
                 onItemClicked(model)
             }

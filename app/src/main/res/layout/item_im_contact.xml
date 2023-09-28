@@ -11,6 +11,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -53,7 +54,7 @@
                 app:layout_constraintLeft_toRightOf="@+id/cardview"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/cardview"
-                android:text="Arc Chan"
+                android:text="@{m.name}"
                 tools:text="Arc Chan" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
