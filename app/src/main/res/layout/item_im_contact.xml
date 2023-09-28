@@ -7,14 +7,13 @@
 
         <variable
             name="m"
-            type="com.cyberflow.base.model.IMSearchData" />
+            type="com.cyberflow.sparkle.im.viewmodel.Contact" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,7 +23,6 @@
                 android:id="@+id/cardview"
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_40"
-                android:layout_marginStart="@dimen/dp_16"
                 app:cardCornerRadius="@dimen/dp_16"
                 app:cardElevation="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -48,13 +46,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_12"
                 android:background="@null"
-                android:fontFamily="@font/poppins_regular"
-                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/color_2A2A2B"
                 android:textSize="@dimen/sp_17"
                 app:layout_constraintBottom_toBottomOf="@+id/cardview"
                 app:layout_constraintLeft_toRightOf="@+id/cardview"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/cardview"
+                android:text="Arc Chan"
                 tools:text="Arc Chan" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -63,9 +62,7 @@
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginStart="@dimen/dp_7"
             android:layout_marginTop="@dimen/dp_6"
-            android:layout_marginEnd="@dimen/dp_12"
             android:background="@drawable/register_google_place_divider" />
 
     </LinearLayout>

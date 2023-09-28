@@ -7,7 +7,7 @@
 
         <variable
             name="m"
-            type="com.cyberflow.base.model.IMSearchData" />
+            type="com.cyberflow.sparkle.im.viewmodel.FriendRequestEmpty" />
     </data>
 
 

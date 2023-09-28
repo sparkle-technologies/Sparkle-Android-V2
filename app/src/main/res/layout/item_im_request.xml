@@ -7,7 +7,7 @@
 
         <variable
             name="m"
-            type="com.cyberflow.base.model.IMSearchData" />
+            type="com.cyberflow.sparkle.im.viewmodel.FriendRequest" />
     </data>
 
     <LinearLayout
@@ -55,8 +55,8 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:layout_width="@dimen/dp_16"
-                    android:layout_height="@dimen/dp_16"
+                    android:layout_width="@dimen/dp_12"
+                    android:layout_height="@dimen/dp_12"
                     android:src="@drawable/svg_ic_delete" />
 
             </LinearLayout>
@@ -77,7 +77,8 @@
                     app:view_disable="false"
                     app:view_disable_bg="@drawable/register_btn_next_disable"
                     app:view_shadow_distance="1dp"
-                    app:view_text="Accept" />
+                    app:view_text="Accept"
+                    app:view_text_size="@dimen/sp_14" />
 
                 <TextView
                     android:id="@+id/tv_status"
@@ -86,9 +87,9 @@
                     android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
                     android:text="Accepted"
-                    android:visibility="gone"
                     android:textColor="@color/color_7d7d80"
-                    android:textSize="@dimen/sp_14" />
+                    android:textSize="@dimen/sp_14"
+                    android:visibility="gone" />
 
             </FrameLayout>
 
@@ -108,8 +109,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:fontFamily="@font/poppins_regular"
-                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Arc Chan"
+                    android:textColor="@color/color_2A2A2B"
                     android:textSize="@dimen/sp_17"
                     tools:text="Arc Chan" />
 
@@ -118,6 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
+                    android:text="Hi, glad to see you..."
                     android:textColor="@color/color_7d7d80"
                     android:textSize="@dimen/sp_12"
                     tools:text="Hi, glad to see you..." />

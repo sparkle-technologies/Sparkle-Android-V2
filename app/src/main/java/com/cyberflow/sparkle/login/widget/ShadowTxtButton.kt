@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -38,6 +39,7 @@ class ShadowTxtButton : ConstraintLayout {
     private var distance: Int = 0     // shadow width/height
     private var txt: String = ""     // button text
     private var txt_color: Int = 0
+    private var txt_size: Float = -1f
     private var txt_disable_color: Int = 0
     private var bg: Int = 0          // button background drawable, default is R.drawable.button_start
     private var bgDisable: Int = 0
@@ -58,6 +60,8 @@ class ShadowTxtButton : ConstraintLayout {
         txt = mTypedArray.getString(com.cyberflow.base.resources.R.styleable.shadowButton_view_text).orEmpty()
 
         txt_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_color, com.cyberflow.base.resources.R.color.almost_black)
+
+        txt_size = mTypedArray.getDimension(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_size, -1f)
 
         txt_disable_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_disable_color, com.cyberflow.base.resources.R.color.color_7D7D80)
 
@@ -108,6 +112,12 @@ class ShadowTxtButton : ConstraintLayout {
                 setCompoundDrawablesWithIntrinsicBounds(drawableLeft, 0, 0, 0)
                 compoundDrawablePadding = resources.getDimension(com.cyberflow.base.resources.R.dimen.dp_8).toInt()
             }
+        }
+
+        if(txt_size > 0){
+            Log.e("TAG", "============================= txt_size=$txt_size"  )
+            tvNormal?.setTextSize(TypedValue.COMPLEX_UNIT_PX, txt_size)
+            tvClicking?.setTextSize(TypedValue.COMPLEX_UNIT_PX, txt_size)
         }
 
         ivClicking?.setOnClickListener {

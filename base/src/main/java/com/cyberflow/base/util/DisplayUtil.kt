@@ -18,3 +18,7 @@ fun sp2px(spValue: Float): Int {
     return (spValue * fontScale + 0.5f).toInt()
 }
 
+fun sp2pxF(spValue: Float): Float {
+    val fontScale = BaseApp.instance!!.resources.displayMetrics.scaledDensity
+    return spValue * fontScale + 0.5f
+}

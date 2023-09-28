@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/tvNormal"
-        style="@style/font_semi_bold"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -46,7 +46,7 @@
 
     <TextView
         android:id="@+id/tvClicking"
-        android:fontFamily="@font/poppins_semibold"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"

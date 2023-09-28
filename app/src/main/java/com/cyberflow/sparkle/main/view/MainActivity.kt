@@ -17,6 +17,7 @@ import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.utils.ChatPresenter
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
+import com.cyberflow.sparkle.im.view.IMContactListAct
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.login.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
@@ -102,7 +103,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
                 IMSearchFriendAct.go(this@MainActivity)
             }
             findViewById<View>(R.id.lay_contacts).setOnClickListener {
-                Snackbar.make(mDataBinding.ivHead, "contacts", Snackbar.LENGTH_SHORT).show()
+                IMContactListAct.go(this@MainActivity)
             }
         }
 
