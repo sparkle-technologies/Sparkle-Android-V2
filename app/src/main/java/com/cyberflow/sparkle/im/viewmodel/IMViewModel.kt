@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cyberflow.base.BaseApp
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SingleSourceLiveData
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
@@ -18,6 +19,7 @@ import com.hyphenate.chat.EMTextMessageBody
 import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.manager.EaseSystemMsgManager
+import com.hyphenate.easeui.model.EaseEvent
 import kotlinx.coroutines.launch
 
 class IMViewModel : BaseViewModel() {
@@ -76,6 +78,7 @@ class IMViewModel : BaseViewModel() {
             msg.body = body
             EaseSystemMsgManager.getInstance().updateMessage(msg)
             acceptFriendObservable.postValue(name)
+            LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent())
         }
     }
 
@@ -84,6 +87,7 @@ class IMViewModel : BaseViewModel() {
         viewModelScope.launch {
             EMClient.getInstance().chatManager().getConversation(DemoConstant.DEFAULT_SYSTEM_MESSAGE_ID, EMConversation.EMConversationType.Chat, true).removeMessage(msgId)
             deleteMsgObservable.postValue(true)
+            LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent())
         }
     }
 

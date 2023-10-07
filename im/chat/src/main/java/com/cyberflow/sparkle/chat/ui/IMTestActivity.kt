@@ -64,10 +64,10 @@ class IMTestActivity : BaseDBAct<IMTestViewModel, ActivityImTestBinding>() {
         }
         mDataBinding.btnLogin.click {
 
-//            var name = mDataBinding.etFrom.text.toString()
-//            viewModel.login(name, "123")
+            var name = mDataBinding.etFrom.text.toString()
+            viewModel.login(name, "123")
 
-            imLogin(this)
+//            imLogin(this)
 
         }
         mDataBinding.btnLogout.click {
@@ -83,15 +83,17 @@ class IMTestActivity : BaseDBAct<IMTestViewModel, ActivityImTestBinding>() {
             }
         }
         mDataBinding.btnFriendRequest.click {
-            if (DemoHelper.getInstance().isSDKInit) {
 
-                viewModel.addFriend("lover", "hello, guys, we are family 000 ")
+            if (DemoHelper.getInstance().isSDKInit) {
+                var to = mDataBinding.etTo.text.toString()
+                var content = mDataBinding.etContent.text.toString()
+                viewModel.addFriend(to, content)
 //                viewModel.addFriend("war", "i dont like war 000 , but we need talk")
 
-                for (i in 1..5) {
+               /* for (i in 1..5) {
                     viewModel.addFriend("lover${i}", "hello, guys, we are family $i ")
                     viewModel.addFriend("war${i}", "i dont like war${i}, but we need talk")
-                }
+                }*/
 
             }
         }

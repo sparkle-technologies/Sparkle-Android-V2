@@ -55,13 +55,17 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         }
     }
 
+    override fun onBackPressed() {
+        if(mDataBinding.tvTitle.text == getString(com.cyberflow.base.resources.R.string.contacts)){
+            super.onBackPressed()
+        }else{
+            switchToSeeMoreOrNormal(false)
+        }
+    }
+
     override fun initView(savedInstanceState: Bundle?) {
         mDataBinding.llBack.setOnClickListener {
-            if(mDataBinding.tvTitle.text == getString(com.cyberflow.base.resources.R.string.contacts)){
-                onBackPressed()
-            }else{
-                switchToSeeMoreOrNormal(false)
-            }
+            onBackPressed()
         }
         mDataBinding.ivClear.setOnClickListener {
             mDataBinding.edtSearchContact.setText("")
@@ -227,10 +231,8 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
     private val allRequestData = arrayListOf<FriendRequest>()
     private fun freshData() {
-        requestData.clear()
-        contactData.clear()
-
         viewModel.inviteMsgObservable.observe(this) {
+            requestData.clear()
             allRequestData.clear()
 
             if(it.isEmpty()){
@@ -269,20 +271,21 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
-                list.forEach {
-                    Log.e(TAG, "freshData: $it" )
-                }
-
-                if(list.isNotEmpty()){
-                    requestData.add(FriendRequestHeader(list.size))
-                    requestData.add(FriendRequestList("", list))
-                }else{
-                    requestData.add(FriendRequestEmpty())
-                }
-                freshNormalUI()
-                freshMoreUI()
             }
+
+            list.forEach {
+                Log.e(TAG, "freshData: $it" )
+            }
+
+            if(list.isNotEmpty()){
+                requestData.add(FriendRequestHeader(list.size))
+                requestData.add(FriendRequestList("", list.take(2)))  // show no more than two friend request
+            }else{
+                requestData.add(FriendRequestEmpty())
+            }
+
+            freshNormalUI()
+            freshMoreUI()
         }
         viewModel.loadFriendRequestMessages()  // load system message
 
@@ -344,7 +347,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
     }
 
     private fun freshMoreUI(){
-        if(allRequestData.isNullOrEmpty()) allRequestData.addAll(getCacheData())
+//        if(allRequestData.isNullOrEmpty()) allRequestData.addAll(getCacheData())
 
         if(allRequestData.isNullOrEmpty()){
             mDataBinding.state.showEmpty()

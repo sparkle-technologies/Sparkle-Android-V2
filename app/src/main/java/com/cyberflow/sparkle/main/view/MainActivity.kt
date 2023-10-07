@@ -115,7 +115,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         adapter.addFragment(right)
 
         mDataBinding.pager.apply {
-            offscreenPageLimit = 1
+            offscreenPageLimit = 2
 //            isUserInputEnabled = false
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             this.adapter = adapter
@@ -217,4 +217,5 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
             }
         }
     }
+
 }

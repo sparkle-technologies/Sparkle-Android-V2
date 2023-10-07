@@ -126,6 +126,9 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
         refresh()
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
 
     fun refresh() {
         mDatabind.page.autoRefresh()
