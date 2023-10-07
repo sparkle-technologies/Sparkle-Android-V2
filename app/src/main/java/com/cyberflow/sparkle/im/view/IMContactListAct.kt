@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.KeyboardUtil
@@ -39,6 +40,8 @@ import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.drake.spannable.replaceSpanFirst
+import com.drake.spannable.span.ColorSpan
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.model.EaseEvent
 
@@ -75,6 +78,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                 if (it.isNullOrEmpty()) {
                     mDataBinding.ivClear.visibility = View.INVISIBLE
                     freshNormalUI()
+                    inputTxt = ""
                 } else {
                     mDataBinding.ivClear.visibility = View.VISIBLE
                     freshSearchUI()
@@ -107,6 +111,10 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                          viewModel.acceptFriend(model.emMessage)
                                     }
                                 })
+                                findView<LinearLayout>(R.id.lay_delete).setOnClickListener {
+                                    val model = getModel<FriendRequest>(layoutPosition)
+                                    viewModel.deleteMessage(model.emMessage?.msgId)
+                                }
                             }
                         }
                     }
@@ -116,6 +124,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                             addType<ContactLetter>(R.layout.item_im_contact_letter)
                             onBind {
                                 if(itemViewType == R.layout.item_im_contact){
+                                    findView<TextView>(R.id.tv_contact_name).text = getSpan(getModel<Contact>().name)
                                     val condition = getModel<Contact>().last || layoutPosition == modelCount - 1
                                     findView<View>(R.id.line).visibility = if ( condition ) View.INVISIBLE else View.VISIBLE
                                     getBinding<ItemImContactBinding>().item.setOnClickListener {
@@ -174,6 +183,14 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         }
     }
 
+    private var inputTxt = ""
+    private fun getSpan(txt: String): CharSequence {
+        if(inputTxt.isNullOrEmpty()) return ""
+
+        return txt.replaceSpanFirst(inputTxt, ignoreCase = true){
+            ColorSpan("#8B82DB")
+        }
+    }
 
     private fun switchToSeeMoreOrNormal(more: Boolean) {
         Log.e(TAG, "switchToSeeMoreOrNormal:  more: $more" )
@@ -327,6 +344,8 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
     }
 
     private fun freshMoreUI(){
+        if(allRequestData.isNullOrEmpty()) allRequestData.addAll(getCacheData())
+
         if(allRequestData.isNullOrEmpty()){
             mDataBinding.state.showEmpty()
         }else{
@@ -337,6 +356,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
     private fun freshSearchUI() {
         val name = mDataBinding.edtSearchContact.text.toString()
+        inputTxt = name
         mDataBinding.rv.models = arrayListOf<Any>(ContactList(allContactData.filter {
             it.name.contains(name, true)
         }))
@@ -381,6 +401,20 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
         data.add(ContactListHeader())
         data.add(ContactList(arrayListOf(ContactLetter("A"), Contact(), Contact(), Contact(), Contact(), Contact(), Contact(last = true), ContactLetter("B"),Contact(), Contact(),  Contact(), Contact(), Contact(last = true), ContactLetter("Z"), Contact(), Contact(),  Contact(), Contact(), Contact(last = true))))
+        return data
+    }
+
+    private fun getCacheData(): List<FriendRequest>{
+        val data = arrayListOf<FriendRequest>()
+        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you, my name is xxxxxx, how are you and you im fine good to see you again", status = STATUS_NORMAL))
+        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_NORMAL))
+        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_ADDED))
+        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_NORMAL))
+        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_NORMAL))
+        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_ADDED))
+        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_ADDED))
+        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_REJECTED))
+        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_NORMAL))
         return data
     }
 }

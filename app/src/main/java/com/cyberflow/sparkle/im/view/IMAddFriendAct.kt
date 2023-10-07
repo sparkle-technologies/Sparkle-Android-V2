@@ -27,6 +27,10 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        mDataBinding.llBack.setOnClickListener {
+            onBackPressed()
+        }
+
         mDataBinding.btnSend.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(disable: Boolean) {
                 submit()
@@ -37,7 +41,7 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
     private var searchName = ""
 
     override fun initData() {
-        (intent.getSerializableExtra(TAG) as? IMSearchData)?.apply{
+        (intent.getSerializableExtra(TAG) as? IMSearchData)?.apply {
             searchName = name
             mDataBinding.tvName.text = name
             mDataBinding.tvAddress.text = address

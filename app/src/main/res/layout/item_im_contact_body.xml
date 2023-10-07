@@ -14,7 +14,7 @@
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/register_bg_gender_white"
+        android:background="@{m.list.empty ? null : @drawable/register_bg_gender_white}"
         android:paddingTop="@dimen/dp_6"
         android:paddingStart="@dimen/dp_17"
         android:paddingEnd="@dimen/dp_17"
