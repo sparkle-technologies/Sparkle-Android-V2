@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_F4F2F3"
+        android:fitsSystemWindows="true"
         android:orientation="vertical"
         tools:ignore="MissingDefaultResource">
 
@@ -18,7 +19,7 @@
             android:id="@+id/lay_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/status_bar_height"
+            android:layout_marginTop="@dimen/dp_10"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingEnd="18dp"

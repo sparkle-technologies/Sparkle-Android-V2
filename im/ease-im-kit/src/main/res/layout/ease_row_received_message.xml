@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingTop="13dp">
+    android:paddingTop="@dimen/dp_10">
 
     <TextView
         android:id="@+id/timestamp"
@@ -15,8 +15,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_chat_activity">
+        android:layout_height="wrap_content">
 
         <com.hyphenate.easeui.widget.EaseImageView
             android:id="@+id/iv_userhead"
@@ -28,7 +27,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_userid"
             android:layout_marginLeft="@dimen/margin_chat_activity"
-            android:layout_marginTop="2dp"
             android:layout_toRightOf="@id/iv_userhead"
             android:background="@drawable/chat_bg_receive_msg"
             android:minWidth="30dp"

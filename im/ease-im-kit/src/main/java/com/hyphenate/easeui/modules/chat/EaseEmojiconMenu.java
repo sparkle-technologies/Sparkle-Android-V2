@@ -5,9 +5,9 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -32,7 +32,7 @@ public class EaseEmojiconMenu extends LinearLayout implements IChatEmojiconMenu 
     private EaseEmojiconIndicatorView indicatorView;
     private EaseEmojiconPagerView pagerView;
 
-    private Button btnSend;
+    private TextView btnSend;
     private ImageView btnDelete;
 
     private List<EaseEmojiconGroupEntity> emojiconGroupList = new ArrayList<>();

@@ -13,6 +13,7 @@
             android:layout_width="@dimen/dp_154"
             android:layout_height="@dimen/dp_27"
             android:layout_marginBottom="-3dp"
+            android:visibility="gone"
             android:background="@drawable/register_bg_gender_white"
             app:layout_constraintBottom_toBottomOf="@+id/bgMenu"
             app:layout_constraintLeft_toLeftOf="@+id/bgMenu"

@@ -101,6 +101,8 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
         chatLayout = findViewById(R.id.layout_chat);
         chatLayout.getChatMessageListLayout().setItemShowType(EaseChatMessageListLayout.ShowType.NORMAL);
         chatLayout.getChatMessageListLayout().setBackgroundColor(ContextCompat.getColor(mContext, R.color.gray));
+        chatLayout.getChatMessageListLayout().setTimeTextSize((int) EaseCommonUtils.sp2px(mContext, 12));
+        chatLayout.getChatMessageListLayout().setTimeTextColor(ContextCompat.getColor(mContext, com.cyberflow.base.resources.R.color.color_B0B0B0));
 
         sendTokenLayout = findViewById(R.id.lay_send_token);
     }

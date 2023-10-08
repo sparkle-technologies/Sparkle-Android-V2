@@ -71,11 +71,11 @@ class ShadowImgButton : ConstraintLayout {
         ivClicking = findViewById(R.id.ivClicking)
 
         val layoutParams1 = ivBgShadow?.layoutParams as LayoutParams
-        layoutParams1.setMargins(distance, distance, 0, 0)
+        layoutParams1.setMargins(0, distance, 0, 0)
         ivBgShadow?.layoutParams = layoutParams1
 
         val layoutParams2 = ivClicking?.layoutParams as LayoutParams
-        layoutParams2.setMargins(0, 0, distance, distance)
+        layoutParams2.setMargins(0, 0, 0, distance)
         ivClicking?.layoutParams = layoutParams2
 
         if (bg != 0) {

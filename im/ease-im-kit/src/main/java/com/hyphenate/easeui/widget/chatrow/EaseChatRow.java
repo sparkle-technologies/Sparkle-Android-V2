@@ -24,7 +24,6 @@ import com.hyphenate.easeui.adapter.EaseBaseAdapter;
 import com.hyphenate.easeui.domain.EaseAvatarOptions;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.modules.chat.model.EaseChatItemStyleHelper;
-import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout;
 import com.hyphenate.easeui.modules.chat.model.EaseChatSetStyle;
 import com.hyphenate.easeui.utils.EaseDateUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
