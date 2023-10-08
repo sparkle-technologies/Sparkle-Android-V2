@@ -12,7 +12,7 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_52"
+            android:layout_marginTop="@dimen/status_bar_height"
             android:fontFamily="@font/poppins_semibold"
             android:text="@string/contacts"
             android:textColor="@color/black"

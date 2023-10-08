@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="85dp"
+    android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/dp_1"
     android:background="@drawable/chat_bg_input"
     android:elevation="12dp"
@@ -11,7 +11,9 @@
     <LinearLayout
         android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_11"
+        android:layout_marginBottom="@dimen/dp_14"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -37,10 +39,12 @@
                 android:gravity="center_vertical"
                 android:hint="@string/send_message"
                 android:imeOptions="actionSend"
-                android:maxLines="6"
-                android:minHeight="48dp"
-                android:paddingStart="15dp"
-                android:paddingEnd="100dp"
+                android:maxLines="5"
+                android:minHeight="@dimen/dp_43"
+                android:paddingStart="12dp"
+                android:paddingTop="@dimen/dp_14"
+                android:paddingEnd="70dp"
+                android:paddingBottom="@dimen/dp_14"
                 android:textColor="@color/color_2a2a2b"
                 android:textColorHint="@color/color_bcbdc6"
                 android:textSize="16sp"
@@ -51,21 +55,20 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/ease_chat_primary_menu_icon_size"
+                android:layout_height="@dimen/dp_43"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="18dp"
+                android:paddingStart="9dp"
+                android:paddingEnd="9dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintRight_toRightOf="parent">
 
                 <RelativeLayout
                     android:id="@+id/rl_face"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="16dp">
+                    android:layout_marginEnd="6dp">
 
                     <ImageView
                         android:id="@+id/iv_face_normal"
@@ -100,8 +103,8 @@
 
                     <CheckBox
                         android:id="@+id/btn_send"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_width="@dimen/dp_24"
+                        android:layout_height="@dimen/dp_24"
                         android:layout_gravity="center"
                         android:background="@drawable/ic_chat_send"
                         android:button="@null"
@@ -109,6 +112,7 @@
 
                 </FrameLayout>
             </androidx.appcompat.widget.LinearLayoutCompat>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

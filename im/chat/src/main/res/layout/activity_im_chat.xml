@@ -18,7 +18,7 @@
             android:id="@+id/lay_top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_52"
+            android:layout_marginTop="@dimen/status_bar_height"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingEnd="18dp"
@@ -71,10 +71,10 @@
         <View
             android:id="@+id/anchor"
             android:layout_width="match_parent"
-            android:background="@color/black"
+            android:layout_height="@dimen/dp_1"
             android:layout_marginTop="@dimen/dp_10"
-            app:layout_constraintTop_toBottomOf="@+id/lay_top"
-            android:layout_height="@dimen/dp_1"/>
+            android:background="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/lay_top" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fl_fragment"
