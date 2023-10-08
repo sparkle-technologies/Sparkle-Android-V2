@@ -1,9 +1,7 @@
 package com.hyphenate.easeui.modules.chat;
 
 import android.animation.ValueAnimator;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -19,8 +17,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.drake.brv.PageRefreshLayout;
 import com.hyphenate.chat.EMChatRoom;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
@@ -39,6 +37,8 @@ import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenter;
 import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenterImpl;
 import com.hyphenate.easeui.modules.chat.presenter.IChatMessageListView;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     private String msgId;
     private int pageSize = DEFAULT_PAGE_SIZE;
     public RecyclerView rvList;
-    private SwipeRefreshLayout srlRefresh;
+    private PageRefreshLayout srlRefresh;
     private LinearLayoutManager layoutManager;
     private EMConversation conversation;
     /**
@@ -324,9 +324,10 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
     }
 
     private void initListener() {
-        srlRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        srlRefresh.setOnRefreshListener(new OnRefreshListener(){
+
             @Override
-            public void onRefresh() {
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                 loadMorePreviousData();
             }
         });
@@ -454,7 +455,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         if (presenter.isActive()) {
             runOnUi(() -> {
                 if (srlRefresh != null) {
-                    srlRefresh.setRefreshing(false);
+                    srlRefresh.finishRefresh();
                 }
             });
         }

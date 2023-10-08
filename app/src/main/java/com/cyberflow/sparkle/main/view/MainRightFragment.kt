@@ -155,14 +155,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
         }
     }
 
-    val imgUrl1 = "https://i.ibb.co/LPGHdr2/1.jpg"
-    val imgUrl2 = "https://i.ibb.co/zHLQWSX/2.jpg"
-    val imgUrl3 = "https://i.ibb.co/jbDJHqv/3.jpg"
-    val imgUrl4 = "https://i.ibb.co/dpL36nY/4.jpg"
-    val imgUrl5 = "https://i.ibb.co/YDDB33P/5.jpg"
-    val imgUrl6 = "https://i.ibb.co/m6LvNLk/6.jpg"
-    val imgList = arrayListOf(imgUrl1, imgUrl2, imgUrl3, imgUrl4, imgUrl5, imgUrl6)
-    var count = 5
+
 
     private fun showConversationList(data: List<EaseConversationInfo>?) {
         var modelData = arrayListOf<Any>()
@@ -177,7 +170,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
             var friendMessageList = arrayListOf<Any>()
             data?.also { list ->
                 list.forEach { item ->
-                    var imageUrl: String = imgList[count++ % 3]
+                    var imageUrl: String = ""
                     var nickname: String = ""
                     var bgColor: String = "#ff0000"   // todo waiting for our end developer to implement
                     var num: String = ""
@@ -233,5 +226,4 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                 )
         )
     }
-
 }

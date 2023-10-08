@@ -19,7 +19,7 @@
         <View
             android:layout_width="94dp"
             android:layout_height="60dp"
-            android:background="@drawable/main_bg_top_menu_selected"
+            android:background="@drawable/main_bg_friend_account"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
