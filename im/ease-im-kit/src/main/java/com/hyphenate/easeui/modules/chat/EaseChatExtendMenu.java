@@ -54,28 +54,29 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
     public static int[] itemStrings = {
             R.string.camera,
             R.string.library,
-            R.string.send_token,
-            R.string.send_nft,
-            R.string.daily_horoscope,
-            R.string.horoscope,
-            R.string.compatibility};
+//            R.string.send_token,
+//            R.string.send_nft,
+//            R.string.daily_horoscope,
+//            R.string.horoscope,
+//            R.string.compatibility
+            };
     public static int[] itemdrawables = {
             R.drawable.ic_chat_camera,
             R.drawable.ic_chat_library,
-            R.drawable.ic_chat_send_token,
-            R.drawable.ic_chat_send_nft,
-            R.drawable.ic_chat_daily_horoscope,
-            R.drawable.ic_chat_horoscope,
-            R.drawable.ic_chat_compatibility
+//            R.drawable.ic_chat_send_token,
+//            R.drawable.ic_chat_send_nft,
+//            R.drawable.ic_chat_daily_horoscope,
+//            R.drawable.ic_chat_horoscope,
+//            R.drawable.ic_chat_compatibility
     };
     public static int[] itemIds = {
             R.id.extend_item_camera,
             R.id.extend_item_library,
-            R.id.extend_item_send_token,
-            R.id.extend_item_send_nft,
-            R.id.extend_item_daily_horoscope,
-            R.id.extend_item_horoscope,
-            R.id.extend_item_compatibility
+//            R.id.extend_item_send_token,
+//            R.id.extend_item_send_nft,
+//            R.id.extend_item_daily_horoscope,
+//            R.id.extend_item_horoscope,
+//            R.id.extend_item_compatibility
     };
 
     public EaseChatExtendMenu(Context context) {

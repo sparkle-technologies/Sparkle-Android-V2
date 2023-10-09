@@ -7,14 +7,15 @@
 
     <ImageView
         android:id="@+id/iv_expression"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/dp_70"
+        android:layout_height="@dimen/dp_70"
         android:scaleType="centerInside" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_name"
+        android:visibility="gone"
         android:textSize="11sp"
         android:textColor="@color/gray_normal" />
 

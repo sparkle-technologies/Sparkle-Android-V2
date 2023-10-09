@@ -126,7 +126,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
              data?.let {
                  CacheUtil.setUserInfo(it)
-                 signInJWT(it.id_token)
+//                 signInJWT(it.id_token)
                  if (it.user?.open_uid.isNullOrEmpty()) {
                      RegisterAct.go(this@LoginAct)
                  } else {

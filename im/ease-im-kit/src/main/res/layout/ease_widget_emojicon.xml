@@ -6,35 +6,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.hyphenate.easeui.widget.emojicon.EaseEmojiconPagerView
-        android:id="@+id/pager_view"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingBottom="23dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <com.hyphenate.easeui.widget.emojicon.EaseEmojiconIndicatorView
-        android:id="@+id/indicator_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/pager_view" />
+        <com.hyphenate.easeui.widget.emojicon.EaseEmojiconScrollTabBar
+            android:id="@+id/tab_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_49"
+            android:background="@color/color_F5F4FF" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#CFCFCF"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/indicator_view" />
+        <com.hyphenate.easeui.widget.emojicon.EaseEmojiconPagerView
+            android:id="@+id/pager_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-    <com.hyphenate.easeui.widget.emojicon.EaseEmojiconScrollTabBar
-        android:id="@+id/tab_bar"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/indicator_view" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
     <TextView
         android:id="@+id/btn_send"
@@ -50,7 +40,6 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
-
 
     <ImageView
         android:id="@+id/btn_delete"

@@ -5,12 +5,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -62,7 +60,6 @@ import com.hyphenate.easeui.modules.menu.EasePopupWindowHelper;
 import com.hyphenate.easeui.modules.menu.MenuItemBean;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
-import com.hyphenate.easeui.widget.EaseAlertDialog;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 
@@ -1180,12 +1177,12 @@ public class EaseChatLayout extends RelativeLayout implements
     @Override
     public void onKeyboardShown() {
         inputMenu.onKeyboardShown();
-        messageListLayout.rvList.scrollToPosition(messageListLayout.baseAdapter.getItemCount() - 1);
+        messageListLayout.rvList.smoothScrollToPosition(messageListLayout.baseAdapter.getItemCount() - 1);
     }
 
     @Override
     public void onInputPanelExpanded() {
-        messageListLayout.rvList.scrollToPosition(messageListLayout.baseAdapter.getItemCount() - 1);
+        messageListLayout.rvList.smoothScrollToPosition(messageListLayout.baseAdapter.getItemCount() - 1);
     }
 
     @Override

@@ -17,7 +17,6 @@ import com.hyphenate.easeui.domain.EaseEmojiconGroupEntity;
 import com.hyphenate.easeui.model.EaseDefaultEmojiconDatas;
 import com.hyphenate.easeui.modules.chat.interfaces.EaseEmojiconMenuListener;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatEmojiconMenu;
-import com.hyphenate.easeui.widget.emojicon.EaseEmojiconIndicatorView;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconPagerView;
 import com.hyphenate.easeui.widget.emojicon.EaseEmojiconScrollTabBar;
 
@@ -29,7 +28,6 @@ public class EaseEmojiconMenu extends LinearLayout implements IChatEmojiconMenu 
     private int emojiconColumns;
     private int bigEmojiconColumns;
     private EaseEmojiconScrollTabBar tabBar;
-    private EaseEmojiconIndicatorView indicatorView;
     private EaseEmojiconPagerView pagerView;
 
     private TextView btnSend;
@@ -52,7 +50,6 @@ public class EaseEmojiconMenu extends LinearLayout implements IChatEmojiconMenu 
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.ease_widget_emojicon, this);
         pagerView = (EaseEmojiconPagerView) findViewById(R.id.pager_view);
-        indicatorView = (EaseEmojiconIndicatorView) findViewById(R.id.indicator_view);
         tabBar = (EaseEmojiconScrollTabBar) findViewById(R.id.tab_bar);
         btnSend = findViewById(R.id.btn_send);
         btnDelete = findViewById(R.id.btn_delete);
@@ -73,7 +70,7 @@ public class EaseEmojiconMenu extends LinearLayout implements IChatEmojiconMenu 
     public void init(List<EaseEmojiconGroupEntity> groupEntities) {
         if (groupEntities == null || groupEntities.size() == 0) {
             groupEntities = new ArrayList<>();
-            groupEntities.add(new EaseEmojiconGroupEntity(R.drawable.ee_1, Arrays.asList(EaseDefaultEmojiconDatas.getData())));
+            groupEntities.add(new EaseEmojiconGroupEntity(R.drawable.ee_0, Arrays.asList(EaseDefaultEmojiconDatas.getData())));
         }
         for (EaseEmojiconGroupEntity groupEntity : groupEntities) {
             emojiconGroupList.add(groupEntity);
@@ -158,30 +155,29 @@ public class EaseEmojiconMenu extends LinearLayout implements IChatEmojiconMenu 
 
         @Override
         public void onPagerViewInited(int groupMaxPageSize, int firstGroupPageSize) {
-            indicatorView.init(groupMaxPageSize);
-            indicatorView.updateIndicator(firstGroupPageSize);
             tabBar.selectedTo(0);
         }
 
         @Override
         public void onGroupPositionChanged(int groupPosition, int pagerSizeOfGroup) {
-            indicatorView.updateIndicator(pagerSizeOfGroup);
             tabBar.selectedTo(groupPosition);
+
+            boolean showSend = groupPosition == 0;
+            btnSend.setVisibility(showSend ? View.VISIBLE : View.GONE);
+            btnDelete.setVisibility(showSend ? View.VISIBLE : View.GONE);
+
         }
 
         @Override
         public void onGroupInnerPagePostionChanged(int oldPosition, int newPosition) {
-            indicatorView.selectTo(oldPosition, newPosition);
         }
 
         @Override
         public void onGroupPagePostionChangedTo(int position) {
-            indicatorView.selectTo(position);
         }
 
         @Override
         public void onGroupMaxPageSizeChanged(int maxCount) {
-            indicatorView.updateIndicator(maxCount);
         }
 
         @Override

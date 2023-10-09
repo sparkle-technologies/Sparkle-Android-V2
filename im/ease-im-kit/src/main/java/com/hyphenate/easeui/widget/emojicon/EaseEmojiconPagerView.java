@@ -145,7 +145,7 @@ public class EaseEmojiconPagerView extends ViewPager {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     EaseEmojicon emojicon = gridAdapter.getItem(position);
                     if (pagerViewListener != null) {
-                        Log.e("TAG", "onItemClick: " + emojicon.toString() );
+                        Log.e("TAG", "onItemClick: " + emojicon.toString());
                         String emojiText = emojicon.getEmojiText();
                         if (emojiText != null && emojiText.equals(EaseSmileUtils.DELETE_KEY)) {
                             pagerViewListener.onDeleteImageClicked();

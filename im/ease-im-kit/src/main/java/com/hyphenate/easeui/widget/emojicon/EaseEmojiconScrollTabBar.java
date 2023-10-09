@@ -9,10 +9,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 
+import com.google.android.material.card.MaterialCardView;
 import com.hyphenate.easeui.R;
-import com.hyphenate.util.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class EaseEmojiconScrollTabBar extends RelativeLayout {
     private HorizontalScrollView scrollView;
     private LinearLayout tabContainer;
 
-    private List<ImageView> tabList = new ArrayList<ImageView>();
+    private List<MaterialCardView> tabList = new ArrayList<MaterialCardView>();
     private EaseScrollTabBarItemClickListener itemClickListener;
 
     public EaseEmojiconScrollTabBar(Context context) {
@@ -56,11 +57,12 @@ public class EaseEmojiconScrollTabBar extends RelativeLayout {
         View tabView = View.inflate(context, R.layout.ease_scroll_tab_item, null);
         ImageView imageView = (ImageView) tabView.findViewById(R.id.iv_icon);
         imageView.setImageResource(icon);
-        int tabWidth = 60;
-        LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(DensityUtil.dip2px(context, tabWidth), LayoutParams.MATCH_PARENT);
-        imageView.setLayoutParams(imgParams);
+//        LinearLayout.LayoutParams imgParams = new LinearLayout.LayoutParams(DensityUtil.dip2px(context, tabWidth), LayoutParams.MATCH_PARENT);
+//        imageView.setLayoutParams(imgParams);
+
+        MaterialCardView cardview = (MaterialCardView) tabView.findViewById(R.id.cardview);
         tabContainer.addView(tabView);
-        tabList.add(imageView);
+        tabList.add(cardview);
         final int position = tabList.size() - 1;
         imageView.setOnClickListener(new OnClickListener() {
 
@@ -87,9 +89,9 @@ public class EaseEmojiconScrollTabBar extends RelativeLayout {
         scrollTo(position);
         for (int i = 0; i < tabList.size(); i++) {
             if (position == i) {
-                tabList.get(i).setBackgroundColor(getResources().getColor(R.color.emojicon_tab_selected));
+                tabList.get(i).setStrokeColor(ContextCompat.getColor(context, R.color.black));
             } else {
-                tabList.get(i).setBackgroundColor(getResources().getColor(R.color.emojicon_tab_nomal));
+                tabList.get(i).setStrokeColor(ContextCompat.getColor(context, R.color.transparent));
             }
         }
     }

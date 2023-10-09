@@ -417,7 +417,10 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
         EditText etAddMessage = sendTokenLayout.findViewById(com.hyphenate.easeui.R.id.et_add_message);
 
-        TextView tvNum_1 = sendTokenLayout.findViewById(com.hyphenate.easeui.R.id.tv_num_1);
+
+
+
+        /*TextView tvNum_1 = sendTokenLayout.findViewById(com.hyphenate.easeui.R.id.tv_num_1);
         TextView tvNum_2 = sendTokenLayout.findViewById(com.hyphenate.easeui.R.id.tv_num_2);
         TextView tvNum_3 = sendTokenLayout.findViewById(com.hyphenate.easeui.R.id.tv_num_3);
         TextView tvNum_4 = sendTokenLayout.findViewById(com.hyphenate.easeui.R.id.tv_num_4);
@@ -471,7 +474,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         });
         iv_delete.setOnClickListener(v -> {
             delete();
-        });
+        });*/
+
+
     }
 
     private String inputNums = "";
