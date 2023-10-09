@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingTop="13dp">
+    android:paddingBottom="@dimen/dp_5"
+    android:paddingTop="@dimen/dp_9">
 
     <TextView
         android:id="@+id/timestamp"
