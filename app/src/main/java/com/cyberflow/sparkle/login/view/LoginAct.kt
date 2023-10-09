@@ -35,10 +35,8 @@ import com.web3auth.singlefactorauth.SingleFactorAuth
 import com.web3auth.singlefactorauth.types.LoginParams
 import com.web3auth.singlefactorauth.types.SingleFactorAuthArgs
 import com.web3auth.singlefactorauth.types.TorusKey
-import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
 import dev.pinkroom.walletconnectkit.core.accounts
 import dev.pinkroom.walletconnectkit.core.sessions
-import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
 import dev.pinkroom.walletconnectkit.sign.dapp.sample.main.Content
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -189,13 +187,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         Log.e(MyApp.TAG, "initWalletConnect: ")
 
         lifecycleScope.launch {
-            if(MyApp.instance.walletConnectKit == null){
-                val config = WalletConnectKitConfig(
-                    projectId = "216dc6e2b36be94b855cd28ea41fda6d",
-                    appUrl = "https://sparkle.fun",
-                )
-                MyApp.instance.walletConnectKit = WalletConnectKit.builder(MyApp.instance).config(config).build()
-            }
+            MyApp.instance.checkWalletConnect()
             runOnUiThread {
                 mViewBind.composeView.setContent {
                     MyApp.instance.walletConnectKit?.let { Content(it) }

@@ -13,6 +13,7 @@ import com.orhanobut.logger.Logger
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
+import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
 import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
 
 class MyApp : BaseApp() {
@@ -26,6 +27,16 @@ class MyApp : BaseApp() {
     }
 
     var walletConnectKit: WalletConnectKit? = null
+
+    fun checkWalletConnect(){
+        if(walletConnectKit == null){
+            val config = WalletConnectKitConfig(
+                projectId = "216dc6e2b36be94b855cd28ea41fda6d",
+                appUrl = "https://sparkle.fun",
+            )
+            walletConnectKit = WalletConnectKit.builder(MyApp.instance).config(config).build()
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()

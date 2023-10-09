@@ -55,7 +55,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         freshUI()
 
         Thread {
-            Thread.sleep(5 * 1000)
+            Thread.sleep(1 * 1000)
             runOnUiThread {
                 LoginAct.go(this)
                 finish()
@@ -125,6 +125,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     }
 
     private fun walletConnect() {
+        MyApp.instance.checkWalletConnect()
         MyApp.instance.walletConnectKit?.disconnect {
             it.printStackTrace()
             Log.e(TAG, "clicked:  $it")

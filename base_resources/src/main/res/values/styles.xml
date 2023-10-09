@@ -27,6 +27,7 @@
         <attr name="view_left_drawable" format="reference" />
         <attr name="view_text_color" format="color" />
         <attr name="view_text_size" format="dimension" />
+        <attr name="view_text_bold" format="boolean" />
         <attr name="view_text_disable_color" format="color" />
 
         <attr name="view_bg" format="reference" />

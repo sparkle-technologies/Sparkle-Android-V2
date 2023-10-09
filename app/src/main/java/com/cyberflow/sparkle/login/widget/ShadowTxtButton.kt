@@ -40,6 +40,7 @@ class ShadowTxtButton : ConstraintLayout {
     private var txt: String = ""     // button text
     private var txt_color: Int = 0
     private var txt_size: Float = -1f
+    private var txt_bold: Boolean = false
     private var txt_disable_color: Int = 0
     private var bg: Int = 0          // button background drawable, default is R.drawable.button_start
     private var bgDisable: Int = 0
@@ -62,6 +63,8 @@ class ShadowTxtButton : ConstraintLayout {
         txt_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_color, com.cyberflow.base.resources.R.color.almost_black)
 
         txt_size = mTypedArray.getDimension(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_size, -1f)
+
+        txt_bold = mTypedArray.getBoolean(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_bold, false)
 
         txt_disable_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_disable_color, com.cyberflow.base.resources.R.color.color_7D7D80)
 
@@ -118,6 +121,13 @@ class ShadowTxtButton : ConstraintLayout {
             Log.e("TAG", "============================= txt_size=$txt_size"  )
             tvNormal?.setTextSize(TypedValue.COMPLEX_UNIT_PX, txt_size)
             tvClicking?.setTextSize(TypedValue.COMPLEX_UNIT_PX, txt_size)
+        }
+
+        if(txt_bold){
+            ResourcesCompat.getFont(context, com.cyberflow.base.resources.R.font.poppins_semibold).apply {
+                tvNormal?.typeface = this
+                tvClicking?.typeface = this
+            }
         }
 
         ivClicking?.setOnClickListener {
