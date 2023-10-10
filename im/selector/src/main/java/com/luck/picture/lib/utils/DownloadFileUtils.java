@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.luck.picture.lib.basic.PictureContentResolver;
 import com.luck.picture.lib.config.PictureMimeType;
@@ -107,7 +106,7 @@ public class DownloadFileUtils {
                         if (PictureMimeType.isHasHttp(path)) {
                             inputStream = new URL(path).openStream();
                         } else {
-                            if (PictureMimeType.isContent(path)) {
+                            if (PictureMimeType.isContent(path) || PictureMimeType.isLocalFile(path)) {
                                 inputStream = PictureContentResolver.openInputStream(context, Uri.parse(path));
                             } else {
                                 inputStream = new FileInputStream(path);

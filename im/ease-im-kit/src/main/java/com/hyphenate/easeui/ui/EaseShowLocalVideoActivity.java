@@ -27,7 +27,6 @@ import com.luck.picture.lib.config.SelectMimeType;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.interfaces.OnCallbackListener;
 import com.luck.picture.lib.utils.DownloadFileUtils;
-import com.luck.picture.lib.utils.SdkVersionUtils;
 import com.luck.picture.lib.utils.ToastUtils;
 
 public class EaseShowLocalVideoActivity extends EaseBaseActivity implements EasyVideoCallback {
@@ -63,8 +62,11 @@ public class EaseShowLocalVideoActivity extends EaseBaseActivity implements Easy
         }
     }
 
+    String path = "";
+
     public void initIntent(Intent intent) {
-        String path = intent.getStringExtra("path");
+        path = intent.getStringExtra("path");
+        Log.e(TAG, "initIntent: path=" + path );
         if (!TextUtils.isEmpty(path)) {
             uri = Uri.parse(path);
         }
@@ -133,13 +135,36 @@ public class EaseShowLocalVideoActivity extends EaseBaseActivity implements Easy
         if(uri == null){
             return;
         }
-        if(!UriUtils.isFileExistByUri(getApplicationContext(), uri)){
+
+//        Log.e(TAG, "realSave: isExist=" +  UriUtils.isFileExistByUri(getApplicationContext(), Uri.parse(path)) );
+
+       /* if(UriUtils.isFileExistByUri(getApplicationContext(), Uri.parse(path))){
             ToastUtils.showToast(getApplicationContext(), getString(com.luck.picture.lib.R.string.ps_save_success));
             return;
-        }
+        }*/
+
         String videoPath = UriUtils.getFilePath(getApplicationContext(), uri);
+
+        /**
+         * 低版本  android 9  api=28
+         * path=file:///storage/emulated/0/DCIM/Camera/VID_20231009_190155.mp4
+         * videoPath=/storage/emulated/0/DCIM/Camera/VID_20231009_190155.mp4
+         * media.getMimeType()=video/mp4
+         *
+         * 高版本  android 12   api=31
+         * path= content://media/external/video/media/247
+         * videoPath=
+         */
+
+        Log.e(TAG, "realSave: videoPath=" +  videoPath );
+        if(videoPath.isEmpty() || videoPath == null ){
+            videoPath = path;
+        }
+        Log.e(TAG, "realSave: videoPath=" +  videoPath );
         LocalMedia media = LocalMedia.generateLocalMedia(getApplicationContext(), videoPath);
         media.setChooseModel(SelectMimeType.TYPE_VIDEO);
+
+        Log.e(TAG, "realSave: media.getMimeType()=" +  media.getMimeType() );
 
         DownloadFileUtils.saveLocalFile(this, videoPath, media.getMimeType(), new OnCallbackListener<String>() {
             @Override

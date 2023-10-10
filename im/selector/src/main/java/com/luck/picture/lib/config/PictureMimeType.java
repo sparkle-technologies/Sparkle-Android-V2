@@ -247,6 +247,14 @@ public final class PictureMimeType {
     }
 
 
+    public static boolean isLocalFile(String url) {
+        if (TextUtils.isEmpty(url)) {
+            return false;
+        }
+        return url.startsWith("file://");
+    }
+
+
     public static String ofPNG() {
         return MIME_TYPE_PNG;
     }

@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMFileMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMVideoMessageBody;
 import com.hyphenate.easeui.R;
@@ -53,7 +52,7 @@ public class EaseShowVideoActivity extends EaseBaseActivity {
         EMVideoMessageBody messageBody = (EMVideoMessageBody) message.getBody();
 
         localFilePath = messageBody.getLocalUri();
-        EMLog.d(TAG, "localFilePath = " + localFilePath);
+        EMLog.d(TAG, "localFilePath = " + localFilePath);  // content://media/external/video/media/247
         EMLog.d(TAG, "local filename = " + messageBody.getFileName());
         EMMessage.Status status = message.status();
         EMLog.d(TAG, "message status: " + status);

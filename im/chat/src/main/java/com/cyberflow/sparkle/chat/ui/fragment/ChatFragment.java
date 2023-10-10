@@ -579,7 +579,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            int duration = mediaPlayer.getDuration();
+                            int duration = mediaPlayer.getDuration() / 1000;
                             EMLog.d(TAG, "path = " + uri.getPath() + ",duration=" + duration);
                             EaseFileUtils.saveUriPermission(mContext, uri, null);
                             chatLayout.sendVideoMessage(uri, duration);
