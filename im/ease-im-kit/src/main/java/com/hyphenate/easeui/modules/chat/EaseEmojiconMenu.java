@@ -33,6 +33,8 @@ public class EaseEmojiconMenu extends LinearLayout implements IChatEmojiconMenu 
     private TextView btnSend;
     private ImageView btnDelete;
 
+    private View lay_send;
+
     private List<EaseEmojiconGroupEntity> emojiconGroupList = new ArrayList<>();
     private EaseEmojiconMenuListener listener;
     private static final int defaultColumns = 7;
@@ -51,6 +53,7 @@ public class EaseEmojiconMenu extends LinearLayout implements IChatEmojiconMenu 
         LayoutInflater.from(context).inflate(R.layout.ease_widget_emojicon, this);
         pagerView = (EaseEmojiconPagerView) findViewById(R.id.pager_view);
         tabBar = (EaseEmojiconScrollTabBar) findViewById(R.id.tab_bar);
+        lay_send = findViewById(R.id.lay_send);
         btnSend = findViewById(R.id.btn_send);
         btnDelete = findViewById(R.id.btn_delete);
         initAttrs(context, attrs);
@@ -161,11 +164,7 @@ public class EaseEmojiconMenu extends LinearLayout implements IChatEmojiconMenu 
         @Override
         public void onGroupPositionChanged(int groupPosition, int pagerSizeOfGroup) {
             tabBar.selectedTo(groupPosition);
-
-            boolean showSend = groupPosition == 0;
-            btnSend.setVisibility(showSend ? View.VISIBLE : View.GONE);
-            btnDelete.setVisibility(showSend ? View.VISIBLE : View.GONE);
-
+            lay_send.setVisibility(groupPosition == 0 ? View.VISIBLE : View.GONE);
         }
 
         @Override
