@@ -6,7 +6,6 @@ import androidx.lifecycle.scopeNetLife
 import androidx.lifecycle.viewModelScope
 import com.cyberflow.base.BaseApp
 import com.cyberflow.base.model.DailyHoroScopeData
-import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.bus.SingleSourceLiveData
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.chat.DemoHelper
@@ -18,7 +17,6 @@ import com.cyberflow.sparkle.chat.common.enums.Status
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.common.net.Resource
 import com.cyberflow.sparkle.chat.common.repositories.EMChatManagerRepository
-import com.drake.net.Post
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMConversation
 import com.hyphenate.chat.EMMessage
@@ -36,7 +34,7 @@ class MainViewModel : BaseViewModel {
 
 
     fun getDailyHoroscope() = scopeNetLife {
-        horoScopeData.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
+//        horoScopeData.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
     }
 
 

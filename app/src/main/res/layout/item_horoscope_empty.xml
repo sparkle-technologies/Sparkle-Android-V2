@@ -14,6 +14,7 @@
             android:layout_marginTop="@dimen/dp_122"
             android:layout_marginEnd="@dimen/dp_20"
             android:gravity="center"
+            android:fontFamily="@font/poppins_regular"
             android:lineSpacingExtra="@dimen/dp_3"
             android:text="Keep going! Pushing your boundaries!"
             android:textColor="@color/color_000000"
