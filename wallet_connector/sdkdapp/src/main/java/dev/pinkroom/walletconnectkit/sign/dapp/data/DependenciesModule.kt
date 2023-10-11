@@ -1,11 +1,11 @@
 package dev.pinkroom.walletconnectkit.sign.dapp.data
 
+//import dev.pinkroom.walletconnectkit.sign.dapp.BuildConfig
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import com.google.gson.Gson
 import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
-//import dev.pinkroom.walletconnectkit.sign.dapp.BuildConfig
 import dev.pinkroom.walletconnectkit.sign.dapp.data.repository.PreferencesRepository
 import dev.pinkroom.walletconnectkit.sign.dapp.data.repository.WalletRepository
 import dev.pinkroom.walletconnectkit.sign.dapp.data.service.ExplorerService
@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 internal class DependenciesModule(context: Context, config: WalletConnectKitConfig) {
 
@@ -22,6 +23,7 @@ internal class DependenciesModule(context: Context, config: WalletConnectKitConf
 
     private val explorerService by lazy { retrofit.create(ExplorerService::class.java) }
 
+    // here
     private val retrofit by lazy {
         Retrofit.Builder()
             .baseUrl("https://explorer-api.walletconnect.com/")
@@ -42,6 +44,8 @@ internal class DependenciesModule(context: Context, config: WalletConnectKitConf
 
     private fun createBaseHttpClientBuilder(): OkHttpClient.Builder {
         val httpClientBuilder = OkHttpClient.Builder()
+            .readTimeout(2, TimeUnit.SECONDS)
+            .connectTimeout(2, TimeUnit.SECONDS)
 //        if (BuildConfig.DEBUG) {
             val loggingInterceptor = HttpLoggingInterceptor()
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY

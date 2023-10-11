@@ -5,8 +5,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Build
+import android.widget.Toast
 import androidx.core.net.toUri
 import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
+import dev.pinkroom.walletconnectkit.sign.dapp.data.model.ExplorerResponse
 import dev.pinkroom.walletconnectkit.sign.dapp.data.model.Wallet
 import dev.pinkroom.walletconnectkit.sign.dapp.data.model.toWallet
 import dev.pinkroom.walletconnectkit.sign.dapp.data.service.ExplorerService
@@ -19,7 +21,14 @@ internal class WalletRepository(
 
     suspend fun getWalletsInstalled(chains: List<String>): List<Wallet> {
         val installedWalletsIds = getInstalledWalletsIds()
-        val allWallets = getAllWallets(chains)?.listings?.map { it.value }?.map {
+        val wallets = getAllWallets(chains)
+
+        if(wallets == null){
+            context?.run {
+                Toast.makeText(this, "fail to connect to wallet-connect, pls ensure your network", Toast.LENGTH_SHORT).show()
+            }
+        }
+        val allWallets = wallets?.listings?.map { it.value }?.map {
             it.toWallet(walletConnectKitConfig.projectId)
         } ?: return emptyList()
         return allWallets.filter { installedWalletsIds.contains(it.packageName) }
@@ -42,7 +51,13 @@ internal class WalletRepository(
         }
     }
 
-    private suspend fun getAllWallets(chains: List<String>) =
-        explorerService.getWallets(walletConnectKitConfig.projectId, chains.joinToString(","))
-            .body()
+    private suspend fun getAllWallets(chains: List<String>): ExplorerResponse? {
+        try {
+            val re = explorerService.getWallets(walletConnectKitConfig.projectId, chains.joinToString(","))
+            return re.body()
+        } catch (e: Exception) {
+            return null
+        }
+    }
+
 }
