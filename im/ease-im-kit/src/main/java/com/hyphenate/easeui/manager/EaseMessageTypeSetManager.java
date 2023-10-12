@@ -4,12 +4,9 @@ import com.hyphenate.easeui.adapter.EaseAdapterDelegate;
 import com.hyphenate.easeui.adapter.EaseBaseDelegateAdapter;
 import com.hyphenate.easeui.delegate.EaseCustomAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseExpressionAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseFileAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseImageAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseLocationAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseTextAdapterDelegate;
 import com.hyphenate.easeui.delegate.EaseVideoAdapterDelegate;
-import com.hyphenate.easeui.delegate.EaseVoiceAdapterDelegate;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -81,11 +78,11 @@ public class EaseMessageTypeSetManager {
         //如果没有注册聊天类型，则使用默认的
         if (delegateList.size() <= 0) {
             addMessageType(EaseExpressionAdapterDelegate.class)       //自定义表情
-                    .addMessageType(EaseFileAdapterDelegate.class)             //文件
+//                    .addMessageType(EaseFileAdapterDelegate.class)             //文件
                     .addMessageType(EaseImageAdapterDelegate.class)            //图片
-                    .addMessageType(EaseLocationAdapterDelegate.class)         //定位
+//                    .addMessageType(EaseLocationAdapterDelegate.class)         //定位
                     .addMessageType(EaseVideoAdapterDelegate.class)            //视频
-                    .addMessageType(EaseVoiceAdapterDelegate.class)            //声音
+//                    .addMessageType(EaseVoiceAdapterDelegate.class)            //声音
                     .addMessageType(EaseCustomAdapterDelegate.class)           //自定义消息
                     .setDefaultMessageType(EaseTextAdapterDelegate.class);       //文本
         }

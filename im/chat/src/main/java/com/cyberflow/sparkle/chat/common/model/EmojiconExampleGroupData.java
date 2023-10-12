@@ -18,7 +18,7 @@ public class EmojiconExampleGroupData {
             R.drawable.icon_06,
             R.drawable.icon_07,
             R.drawable.icon_08,
-            R.drawable.icon_09,
+//            R.drawable.icon_09,
             R.drawable.icon_10,
     };
 
@@ -31,22 +31,20 @@ public class EmojiconExampleGroupData {
             R.drawable.icon_06,
             R.drawable.icon_07,
             R.drawable.icon_08,
-            R.drawable.icon_09,
             R.drawable.icon_10,
     };
 
 
     private static String[] names = new String[]{
-            "thank you",
-            "大哭",
-            "开心",
-            "打call",
-            "施魔法",
-            "早上好",
-            "求好运",
-            "生气",
-            "通用文字",
-            "震惊"
+            "Thanks",
+            "Sobbing",
+            "Happy",
+            "Cheering",
+            "Casting Spell",
+            "Good Morning",
+            "Prey",
+            "Angry",
+            "Astonished"
     };
 
     private static final EaseEmojiconGroupEntity DATA = createData();
@@ -59,7 +57,7 @@ public class EmojiconExampleGroupData {
             datas[i].setBigIcon(bigIcons[i]);
             //you can replace this to any you want
             datas[i].setName(names[i]);
-            datas[i].setIdentityCode("em" + i);
+            datas[i].setIdentityCode("em"+i);
         }
         emojiconGroupEntity.setEmojiconList(Arrays.asList(datas));
         emojiconGroupEntity.setIcon(R.drawable.icon_00);
