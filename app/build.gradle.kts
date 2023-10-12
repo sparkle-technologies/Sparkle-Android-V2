@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.kapt")
     id("therouter")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
@@ -70,6 +71,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.libraries.places:places:3.1.0")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")   // crash
+    implementation("com.google.firebase:firebase-analytics-ktx")
 
     // for wallet-connector, it integrates with metamask, trust wallet, coinbase wallet etc
     implementation(project(mapOf("path" to ":dapp")))
