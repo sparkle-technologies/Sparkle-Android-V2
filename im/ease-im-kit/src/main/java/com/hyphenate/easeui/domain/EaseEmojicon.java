@@ -39,6 +39,7 @@ public class EaseEmojicon {
     /**
      * identity code
      */
+    private String identityGroupCode;
     private String identityCode;
 
     /**
@@ -213,6 +214,15 @@ public class EaseEmojicon {
         this.bigIconPath = bigIconPath;
     }
 
+
+    public String getIdentityGroupCode() {
+        return identityGroupCode;
+    }
+
+    public void setIdentityGroupCode(String identityGroupCode) {
+        this.identityGroupCode = identityGroupCode;
+    }
+
     /**
      * get identity code
      *
@@ -242,6 +252,7 @@ public class EaseEmojicon {
     @Override
     public String toString() {
         return "EaseEmojicon{" +
+                "identityGroupCode='" + identityGroupCode + '\'' +
                 "identityCode='" + identityCode + '\'' +
                 ", icon=" + icon +
                 ", bigIcon=" + bigIcon +

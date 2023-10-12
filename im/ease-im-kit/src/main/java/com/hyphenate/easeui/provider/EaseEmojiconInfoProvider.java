@@ -9,10 +9,11 @@ public interface EaseEmojiconInfoProvider {
     /**
      * return EaseEmojicon for input emojiconIdentityCode
      *
+     * @param emojiconIdentityGroupCode
      * @param emojiconIdentityCode
      * @return
      */
-    EaseEmojicon getEmojiconInfo(String emojiconIdentityCode);
+    EaseEmojicon getEmojiconInfo(String emojiconIdentityGroupCode, String emojiconIdentityCode);
 
     /**
      * get Emojicon map, key is the text of emoji, value is the resource id or local path of emoji icon(can't be URL on internet)

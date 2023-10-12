@@ -24,6 +24,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.WindowManager;
 
+import com.cyberflow.base.net.GsonConverter;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMConversation.EMConversationType;
 import com.hyphenate.chat.EMMessage;
@@ -33,10 +34,9 @@ import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.provider.EaseUserProfileProvider;
-import com.hyphenate.easeui.utils.HanziToPinyin;
 import com.hyphenate.util.EMLog;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EaseCommonUtils {
@@ -69,11 +69,15 @@ public class EaseCommonUtils {
         return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
     }
 
-    public static EMMessage createExpressionMessage(String toChatUsername, String expressioName, String identityCode) {
+    public static EMMessage createExpressionMessage(String toChatUsername, String expressioName,  String identityGroupCode, String identityCode) {
         EMMessage message = EMMessage.createTxtSendMessage("[" + expressioName + "]", toChatUsername);
-        if (identityCode != null) {
-            message.setAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, identityCode);
-        }
+        HashMap<String, String> map = new HashMap<String, String>(2);
+        map.put(EaseConstant.MESSAGE_ATTR_EXPRESSION_GROUP_ID, identityGroupCode);
+        map.put(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, identityCode);
+        String emojiconMapStr = GsonConverter.Companion.getGson().toJson(map);
+//        Log.e(TAG, "createExpressionMessage: emojiconMapStr" + emojiconMapStr );
+        message.setAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION, emojiconMapStr);
+
         message.setAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, true);
         return message;
     }

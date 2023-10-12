@@ -71,8 +71,8 @@ public class EaseHandleMessagePresenterImpl extends EaseHandleMessagePresenter {
     }
 
     @Override
-    public void sendBigExpressionMessage(String name, String identityCode) {
-        EMMessage message = EaseCommonUtils.createExpressionMessage(toChatUsername, name, identityCode);
+    public void sendBigExpressionMessage(String name, String identityGroupCode, String identityCode) {
+        EMMessage message = EaseCommonUtils.createExpressionMessage(toChatUsername, name, identityGroupCode, identityCode);
         sendMessage(message);
     }
 

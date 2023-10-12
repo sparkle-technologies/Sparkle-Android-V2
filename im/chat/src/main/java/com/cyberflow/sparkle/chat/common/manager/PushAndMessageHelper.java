@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 
 import com.cyberflow.base.BaseApp;
+import com.cyberflow.base.net.GsonConverter;
 import com.cyberflow.base.util.bus.LiveDataBus;
 import com.cyberflow.sparkle.chat.DemoHelper;
 import com.cyberflow.sparkle.chat.R;
@@ -22,6 +23,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseFileUtils;
 import com.hyphenate.exceptions.HyphenateException;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -47,8 +49,11 @@ public class PushAndMessageHelper {
         switch (type) {
             case TXT:
                 if (message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
-                    sendBigExpressionMessage(toChatUsername, ((EMTextMessageBody) message.getBody()).getMessage(),
-                            message.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, null));
+                    String emojiconMap = message.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION, null);
+                    HashMap<String, String> map = GsonConverter.Companion.getGson().fromJson(emojiconMap, HashMap.class);
+                    String emojiconGroupId = map.get(EaseConstant.MESSAGE_ATTR_EXPRESSION_GROUP_ID);
+                    String emojiconId = map.get(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID);
+                    sendBigExpressionMessage(toChatUsername, ((EMTextMessageBody) message.getBody()).getMessage(), emojiconGroupId, emojiconId);
                 } else {
                     // get the content and send it
                     String content = ((EMTextMessageBody) message.getBody()).getMessage();
@@ -290,8 +295,8 @@ public class PushAndMessageHelper {
      * @param name
      * @param identityCode
      */
-    private static void sendBigExpressionMessage(String toChatUsername, String name, String identityCode) {
-        EMMessage message = EaseCommonUtils.createExpressionMessage(toChatUsername, name, identityCode);
+    private static void sendBigExpressionMessage(String toChatUsername, String name,String identityGroupCode,  String identityCode) {
+        EMMessage message = EaseCommonUtils.createExpressionMessage(toChatUsername, name, identityGroupCode, identityCode);
         sendMessage(message);
     }
 

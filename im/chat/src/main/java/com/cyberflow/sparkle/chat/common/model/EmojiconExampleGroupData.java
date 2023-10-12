@@ -51,17 +51,20 @@ public class EmojiconExampleGroupData {
 
     private static EaseEmojiconGroupEntity createData() {
         EaseEmojiconGroupEntity emojiconGroupEntity = new EaseEmojiconGroupEntity();
+        String groupId = "1";
         EaseEmojicon[] datas = new EaseEmojicon[icons.length];
         for (int i = 0; i < icons.length; i++) {
             datas[i] = new EaseEmojicon(icons[i], null, Type.BIG_EXPRESSION);
             datas[i].setBigIcon(bigIcons[i]);
             //you can replace this to any you want
             datas[i].setName(names[i]);
-            datas[i].setIdentityCode("em"+i);
+            datas[i].setIdentityGroupCode(groupId);  // only one emoji now
+            datas[i].setIdentityCode(String.valueOf(i));
         }
         emojiconGroupEntity.setEmojiconList(Arrays.asList(datas));
         emojiconGroupEntity.setIcon(R.drawable.icon_00);
         emojiconGroupEntity.setType(Type.BIG_EXPRESSION);
+        emojiconGroupEntity.setName(groupId);
         return emojiconGroupEntity;
     }
 

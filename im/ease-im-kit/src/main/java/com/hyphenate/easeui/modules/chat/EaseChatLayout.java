@@ -434,8 +434,8 @@ public class EaseChatLayout extends RelativeLayout implements
     }
 
     @Override
-    public void sendBigExpressionMessage(String name, String identityCode) {
-        presenter.sendBigExpressionMessage(name, identityCode);
+    public void sendBigExpressionMessage(String name, String identityGroupCode, String identityCode) {
+        presenter.sendBigExpressionMessage(name, identityGroupCode, identityCode);
     }
 
     @Override
@@ -581,7 +581,10 @@ public class EaseChatLayout extends RelativeLayout implements
     @Override
     public void onExpressionClicked(Object emojicon) {
         if (emojicon instanceof EaseEmojicon) {
-            presenter.sendBigExpressionMessage(((EaseEmojicon) emojicon).getName(), ((EaseEmojicon) emojicon).getIdentityCode());
+            presenter.sendBigExpressionMessage(((EaseEmojicon) emojicon).getName(),
+                    ((EaseEmojicon) emojicon).getIdentityGroupCode(),
+                    ((EaseEmojicon) emojicon).getIdentityCode()
+            );
         }
     }
 

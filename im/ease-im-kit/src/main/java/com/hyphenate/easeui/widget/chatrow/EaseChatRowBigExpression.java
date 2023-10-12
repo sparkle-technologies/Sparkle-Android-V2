@@ -7,11 +7,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.cyberflow.base.net.GsonConverter;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseIM;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseEmojicon;
+
+import java.util.HashMap;
 
 /**
  * big emoji icons
@@ -41,10 +44,15 @@ public class EaseChatRowBigExpression extends EaseChatRowText {
 
     @Override
     public void onSetUpView() {
-        String emojiconId = message.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID, null);
+        String emojiconMap = message.getStringAttribute(EaseConstant.MESSAGE_ATTR_EXPRESSION, null);
+//        Log.e(TAG, "createExpressionMessage: emojiconMap" + emojiconMap );
+        HashMap<String, String> map = GsonConverter.Companion.getGson().fromJson(emojiconMap, HashMap.class);
+        String emojiconGroupId = map.get(EaseConstant.MESSAGE_ATTR_EXPRESSION_GROUP_ID);
+        String emojiconId = map.get(EaseConstant.MESSAGE_ATTR_EXPRESSION_ID);
+
         EaseEmojicon emojicon = null;
         if (EaseIM.getInstance().getEmojiconInfoProvider() != null) {
-            emojicon = EaseIM.getInstance().getEmojiconInfoProvider().getEmojiconInfo(emojiconId);
+            emojicon = EaseIM.getInstance().getEmojiconInfoProvider().getEmojiconInfo(emojiconGroupId, emojiconId);
         }
         if (emojicon != null) {
             if (emojicon.getBigIcon() != 0) {

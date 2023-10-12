@@ -17,9 +17,10 @@ public interface EaseConstant {
     String MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call";
     String MESSAGE_ATTR_IS_VIDEO_CALL = "is_video_call";
 
-
-    String MESSAGE_ATTR_IS_BIG_EXPRESSION = "em_is_big_expression";
-    String MESSAGE_ATTR_EXPRESSION_ID = "em_expression_id";
+    String MESSAGE_ATTR_IS_BIG_EXPRESSION = "isEmoticonMsg";
+    String MESSAGE_ATTR_EXPRESSION_GROUP_ID = "emoticonGroupID";
+    String MESSAGE_ATTR_EXPRESSION_ID = "emoticonID";
+    String MESSAGE_ATTR_EXPRESSION = "emoticon";
 
     String MESSAGE_ATTR_AT_MSG = "em_at_list";
     String MESSAGE_ATTR_VALUE_AT_MSG_ALL = "ALL";

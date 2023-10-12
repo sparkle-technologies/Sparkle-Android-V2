@@ -271,9 +271,11 @@ public class DemoHelper {
                 })
                 .setEmojiconInfoProvider(new EaseEmojiconInfoProvider() {
                     @Override
-                    public EaseEmojicon getEmojiconInfo(String emojiconIdentityCode) {
+                    public EaseEmojicon getEmojiconInfo(String emojiconIdentityGroupCode, String emojiconIdentityCode) {
+//                        Log.e(TAG, "getEmojiconInfo: emojiconIdentityGroupCode=" + emojiconIdentityGroupCode + "\t emojiconIdentityCode=" + emojiconIdentityCode );
                         EaseEmojiconGroupEntity data = EmojiconExampleGroupData.getData();
                         for (EaseEmojicon emojicon : data.getEmojiconList()) {
+//                            Log.e(TAG, "getEmojiconInfo: emojicon.getIdentityCode()="+ emojicon.getIdentityCode() );
                             if (emojicon.getIdentityCode().equals(emojiconIdentityCode)) {
                                 return emojicon;
                             }

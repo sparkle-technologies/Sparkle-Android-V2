@@ -74,7 +74,7 @@ public abstract class EaseHandleMessagePresenter extends EaseBasePresenter {
      * @param name
      * @param identityCode
      */
-    public abstract void sendBigExpressionMessage(String name, String identityCode);
+    public abstract void sendBigExpressionMessage(String name,String identityGroupCode,  String identityCode);
 
     /**
      * 发送语音消息
