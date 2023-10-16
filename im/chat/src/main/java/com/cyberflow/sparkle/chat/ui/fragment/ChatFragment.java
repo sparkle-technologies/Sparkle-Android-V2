@@ -41,6 +41,7 @@ import com.cyberflow.sparkle.chat.DemoHelper;
 import com.cyberflow.sparkle.chat.R;
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant;
 import com.cyberflow.sparkle.chat.common.model.EmojiconExampleGroupData;
+import com.cyberflow.sparkle.chat.common.utils.CompressFileEngineImpl;
 import com.cyberflow.sparkle.chat.common.utils.RecyclerViewUtils;
 import com.cyberflow.sparkle.chat.ui.dialog.DeleteMsgDialog;
 import com.cyberflow.sparkle.chat.ui.dialog.DemoDialogFragment;
@@ -48,6 +49,7 @@ import com.cyberflow.sparkle.chat.ui.dialog.DemoListDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.LabelEditDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.SimpleDialogFragment;
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel;
+import com.drake.tooltip.dialog.BubbleDialog;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCustomMessageBody;
@@ -78,6 +80,7 @@ import com.luck.picture.lib.config.SelectMimeType;
 import com.luck.picture.lib.config.SelectModeConfig;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.interfaces.OnCameraInterceptListener;
+import com.luck.picture.lib.interfaces.OnKeyValueResultCallbackListener;
 import com.luck.picture.lib.interfaces.OnResultCallbackListener;
 import com.luck.picture.lib.permissions.PermissionUtil;
 import com.luck.picture.lib.utils.ToastUtils;
@@ -562,33 +565,11 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
                     public void onResult(ArrayList<LocalMedia> result) {
-                       /* Log.e(TAG, "onResult: ");
-                        for (int i = 0; i < result.size(); i++) {
-                            Log.e(TAG, "onResult: " + result.get(i).getPath());
-                        }*/
-                        if(result.isEmpty()){
+                        if (result.isEmpty()) {
                             return;
                         }
                         LocalMedia select = result.get(0);
-                        Uri uri = Uri.parse(select.getPath());
-                        if (PictureMimeType.isHasVideo(select.getMimeType())) {
-                            MediaPlayer mediaPlayer = new MediaPlayer();
-                            try {
-                                mediaPlayer.setDataSource(mContext, uri);
-                                mediaPlayer.prepare();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            int duration = mediaPlayer.getDuration() / 1000;
-                            EMLog.d(TAG, "path = " + uri.getPath() + ",duration=" + duration);
-                            EaseFileUtils.saveUriPermission(mContext, uri, null);
-                            chatLayout.sendVideoMessage(uri, duration);
-                        }
-
-                        if (PictureMimeType.isHasImage(select.getMimeType())) {
-                            Uri restoreImageUri = ImageUtils.checkDegreeAndRestoreImage(mContext, uri);
-                            chatLayout.sendImageMessage(restoreImageUri);
-                        }
+                        handleImgOrVideo(select, true);
                     }
 
                     @Override
@@ -609,39 +590,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     public void onResult(ArrayList<LocalMedia> result) {
                         if (result != null && result.size() > 0) {
                             LocalMedia select = result.get(0);
-
-                            Log.e(TAG, "path: " + select.getPath());
-                            Log.e(TAG, "getAvailablePath: " + select.getAvailablePath());
-                            Log.e(TAG, "getRealPath: " + select.getRealPath());
-
-                            String currentEditPath = select.getAvailablePath();
-                            Uri mapped = PictureMimeType.isContent(currentEditPath) ? Uri.parse(currentEditPath) : Uri.fromFile(new File(currentEditPath));
-
-                            Log.e(TAG, "onResult:  finally " + mapped.getPath());
-                            if (PictureMimeType.isHasImage(select.getMimeType())) {  // image logic
-                                Uri selectedImage = mapped;
-                                if (selectedImage != null) {
-                                    String filePath = EaseFileUtils.getFilePath(mContext, selectedImage);
-                                    if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
-                                        chatLayout.sendImageMessage(Uri.parse(filePath));
-                                    } else {
-                                        EaseFileUtils.saveUriPermission(mContext, selectedImage, null);
-                                        chatLayout.sendImageMessage(selectedImage);
-                                    }
-                                }
-                            } else if (PictureMimeType.isHasVideo(select.getMimeType())) {   // video logic
-                                MediaPlayer mediaPlayer = new MediaPlayer();
-                                try {
-                                    mediaPlayer.setDataSource(mContext, mapped);
-                                    mediaPlayer.prepare();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                int duration = mediaPlayer.getDuration() / 1000;
-                                EaseFileUtils.saveUriPermission(mContext, mapped, null);
-                                Log.e(TAG, "onResult: path=" + mapped.getPath() +"\t duration=" + duration);
-                                chatLayout.sendVideoMessage(mapped, duration);
-                            }
+                            handleImgOrVideo(select, false);
                         }
                     }
 
@@ -649,6 +598,113 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     public void onCancel() {
                     }
                 });
+    }
+
+    BubbleDialog compressDialog =  null;
+
+    private void showCompressDialog() {
+        if(compressDialog == null){
+            compressDialog = new BubbleDialog(mContext, "compress video");
+        }
+        if(compressDialog.isShowing()){
+            return;
+        }
+        compressDialog.show();
+    }
+
+    private void hideCompressDialog(){
+        if(compressDialog != null){
+            compressDialog.dismiss();
+        }
+    }
+
+
+    private void handleImgOrVideo(LocalMedia select, boolean checkDegree) {
+        Log.e(TAG, "path: " + select.getPath());
+        Log.e(TAG, "getAvailablePath: " + select.getAvailablePath());
+        Log.e(TAG, "getRealPath: " + select.getRealPath());
+        Log.e(TAG, "compressPath: " + select.getCompressPath());
+
+        String currentEditPath = select.getAvailablePath();
+        Uri mapped = PictureMimeType.isContent(currentEditPath) ? Uri.parse(currentEditPath) : Uri.fromFile(new File(currentEditPath));
+
+        Log.e(TAG, "onResult:  finally " + mapped.getPath());
+        if (PictureMimeType.isHasImage(select.getMimeType())) {  // image logic
+            if (checkDegree) {
+                Uri restoreImageUri = ImageUtils.checkDegreeAndRestoreImage(mContext, mapped);
+                chatLayout.sendImageMessage(restoreImageUri);
+            } else {
+                Uri selectedImage = mapped;
+                if (selectedImage != null) {
+                    String filePath = EaseFileUtils.getFilePath(mContext, selectedImage);
+                    if (!TextUtils.isEmpty(filePath) && new File(filePath).exists()) {
+                        chatLayout.sendImageMessage(Uri.parse(filePath));
+                    } else {
+                        EaseFileUtils.saveUriPermission(mContext, selectedImage, null);
+                        chatLayout.sendImageMessage(selectedImage);
+                    }
+                }
+            }
+        }
+
+        if (PictureMimeType.isHasVideo(select.getMimeType())) {   // video logic
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.setDataSource(mContext, mapped);
+                mediaPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int duration = mediaPlayer.getDuration() / 1000;
+            EaseFileUtils.saveUriPermission(mContext, mapped, null);
+            File file = new File(currentEditPath);
+            float size = (float) file.length() / (1024 * 1024);
+            Log.e(TAG, "onResult: path=" + mapped.getPath() + "\t duration=" + duration + "\t size=" + size);
+            if (size <= CompressFileEngineImpl.ORIGIN_VIDEO_MAX_SIZE) {
+                chatLayout.sendVideoMessage(mapped, duration);
+            } else {
+                if(size > CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW){
+                    ToastUtils.showToast(mContext, "video size too large, make sure it less than " + CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW + "MB");
+                    return;
+                }
+
+                showCompressDialog();
+
+                ArrayList<Uri> list = new ArrayList<Uri>(1);
+                list.add(mapped);
+                CompressFileEngineImpl.Companion.check(mContext, list, new OnKeyValueResultCallbackListener() {
+
+                    @Override
+                    public void onCallback(String srcPath, String resultPath) {
+                        hideCompressDialog();
+                        Log.e(TAG, "onCallback: srcPath=" + srcPath + "\t resultPath=" + resultPath);
+                        if(srcPath == null || resultPath == null){
+                            ToastUtils.showToast(mContext, "compress video error");
+                            return;
+                        }
+                        File oldF = new File(srcPath);
+                        File newF = new File(resultPath);
+                        float old_file_size = (float) oldF.length() / (1024 * 1024);
+                        float new_file_size = (float) newF.length() / (1024 * 1024);
+                        float percent = (old_file_size - new_file_size) / old_file_size;
+
+                        // size1=49.50347MB  	 size2=5.128317MB  	  percent=0.89640486       VERY_LOW
+                        // size1=49.50347MB  	 size2=10.031748MB  	  percent=0.7973527    Low
+                        // size1=49.50347MB  	 size2=14.908022MB  	  percent=0.698849     MEDIUM
+                        // size1=49.50347MB  	 size2=19.796103MB  	  percent=0.6001068    HIGH
+                        // size1=49.50347MB  	 size2=29.458006MB  	  percent=0.4049305    VERY_HIGH
+
+                        // >10MB   不行
+                        Log.e(TAG, "onCallback: size1=" + old_file_size + "MB  \t size2=" + new_file_size + "MB  \t  percent=" + percent);
+                        if(new_file_size > CompressFileEngineImpl.ORIGIN_VIDEO_MAX_SIZE){
+                            ToastUtils.showToast(mContext, "video size cannot more than 10MB");
+                            return;
+                        }
+                        chatLayout.sendVideoMessage(Uri.fromFile(new File(resultPath)), duration);
+                    }
+                });
+            }
+        }
     }
 
 
@@ -775,7 +831,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         //默认两分钟后，即不可撤回
         if (System.currentTimeMillis() - message.getMsgTime() > 2 * 60 * 1000) {
             helper.findItemVisible(com.hyphenate.easeui.R.id.action_chat_recall, false);
-        }else{
+        } else {
             helper.findItemVisible(com.hyphenate.easeui.R.id.action_chat_delete, false);
         }
         EMMessage.Type type = message.getType();

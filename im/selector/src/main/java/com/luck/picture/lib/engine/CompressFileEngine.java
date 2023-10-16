@@ -26,3 +26,4 @@ public interface CompressFileEngine {
      */
     void onStartCompress(Context context, ArrayList<Uri> source, OnKeyValueResultCallbackListener call);
 }
+

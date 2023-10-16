@@ -92,4 +92,6 @@ dependencies {
     kapt("cn.therouter:apt:1.2.0-rc1")
     implementation("cn.therouter:router:1.2.0-rc1")
 
+    implementation("com.github.AbedElazizShe:LightCompressor:1.3.2")
+
 }

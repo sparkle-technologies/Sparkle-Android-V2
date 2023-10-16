@@ -49,7 +49,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_11"
                         style="@style/font_semi_bold"
-                        android:text="Today‘s Horoscope"
+                        android:text="Today's Horoscope"
                         android:textColor="@color/color_000000"
                         android:textSize="@dimen/sp_18"
                         android:textStyle="bold"
