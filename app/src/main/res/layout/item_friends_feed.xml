@@ -53,6 +53,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
+            android:fontFamily="@font/poppins_semibold"
             tools:text="Harry"
             android:text="@{m.nickname}"
             android:textColor="@color/color_000000"

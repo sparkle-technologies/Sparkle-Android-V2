@@ -55,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
+                android:fontFamily="@font/poppins_semibold"
                 android:text="Eleanor Pena"
                 android:textColor="@color/black"
                 android:textSize="17sp"

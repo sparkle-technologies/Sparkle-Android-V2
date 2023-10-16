@@ -5,7 +5,7 @@
     <dimen name="em_toolbar_title_right_size">16sp</dimen>
     <dimen name="ease_common_title_bar_height">44dp</dimen>
 
-    <dimen name="margin_chat_activity">10dp</dimen>
+    <dimen name="margin_chat_activity">5dp</dimen>
     <dimen name="size_avatar">42dp</dimen>
     <dimen name="chat_nick_margin_left">12dp</dimen>
     <dimen name="chat_nick_text_size">13sp</dimen>

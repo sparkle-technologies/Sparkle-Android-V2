@@ -27,7 +27,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:view_bg="@drawable/button_start"
-            app:view_shadow_distance="1dp"
+            app:view_shadow_distance="5dp"
             app:view_text="Logout" />
 
 

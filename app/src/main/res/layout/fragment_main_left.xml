@@ -298,6 +298,7 @@
             android:layout_marginStart="@dimen/dp_6"
             android:text="666"
             android:textColor="@color/color_000000"
+            android:fontFamily="@font/poppins_bold"
             android:textSize="@dimen/sp_15"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/iv_bg_score"

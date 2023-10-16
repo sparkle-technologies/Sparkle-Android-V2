@@ -20,6 +20,7 @@
             android:layout_height="match_parent"
             android:gravity="center|left"
             android:text="@{m.title}"
+            android:fontFamily="@font/poppins_semibold"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_16"
             android:textStyle="bold"

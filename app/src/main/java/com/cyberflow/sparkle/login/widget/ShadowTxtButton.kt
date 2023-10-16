@@ -40,7 +40,7 @@ class ShadowTxtButton : ConstraintLayout {
     private var txt: String = ""     // button text
     private var txt_color: Int = 0
     private var txt_size: Float = -1f
-    private var txt_bold: Boolean = false
+    private var txt_bold: Boolean = true
     private var txt_disable_color: Int = 0
     private var bg: Int = 0          // button background drawable, default is R.drawable.button_start
     private var bgDisable: Int = 0
@@ -64,7 +64,7 @@ class ShadowTxtButton : ConstraintLayout {
 
         txt_size = mTypedArray.getDimension(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_size, -1f)
 
-        txt_bold = mTypedArray.getBoolean(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_bold, false)
+        txt_bold = mTypedArray.getBoolean(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_bold, true)
 
         txt_disable_color = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_text_disable_color, com.cyberflow.base.resources.R.color.color_7D7D80)
 

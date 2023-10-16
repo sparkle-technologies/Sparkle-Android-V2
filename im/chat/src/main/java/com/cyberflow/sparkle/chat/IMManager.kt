@@ -30,7 +30,7 @@ class IMManager private constructor() {
     companion object {
         val instance: IMManager by lazy { IMManager() }
         const val TAG = "IMManager"
-        const val Account = "test5"
+        const val Account = "test6"
         const val Pwd = "123"
     }
 

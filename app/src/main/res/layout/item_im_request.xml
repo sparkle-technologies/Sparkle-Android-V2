@@ -83,6 +83,7 @@
                     app:view_disable_bg="@drawable/register_btn_next_disable"
                     app:view_shadow_distance="1dp"
                     app:view_text="Accept"
+                    app:view_text_bold="false"
                     app:view_text_size="@dimen/sp_14" />
 
                 <TextView

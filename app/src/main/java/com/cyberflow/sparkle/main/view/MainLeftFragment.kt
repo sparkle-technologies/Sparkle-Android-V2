@@ -155,8 +155,11 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
 //            Log.e("TAG", "verticalOffset: $verticalOffset" )
 //            Log.e("TAG", "totel: ${appBarLayout.totalScrollRange}" )
             val rate = 1 - abs(verticalOffset) / appBarLayout.totalScrollRange.toFloat()
-//            Log.e("TAG", "rate: $rate", )
-            mDatabind.layPan.alpha = rate
+            Log.e("TAG", "rate: $rate", )
+            if(rate < 0.05f )
+                mDatabind.layPan.alpha = 0.0f
+            else
+                mDatabind.layPan.alpha = 1.0f
         }
     }
 

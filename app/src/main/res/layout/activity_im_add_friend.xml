@@ -98,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:fontFamily="@font/poppins_regular"
+                    android:fontFamily="@font/poppins_medium"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_17"
                     tools:text="Arc Chan" />
@@ -107,7 +107,7 @@
                     android:id="@+id/tv_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_light"
+                    android:fontFamily="@font/poppins_regular"
                     android:textSize="@dimen/sp_12"
                     tools:text="0xb98...3c6e" />
             </LinearLayout>
@@ -228,7 +228,8 @@
             app:view_disable="false"
             app:view_disable_bg="@drawable/register_btn_next_disable"
             app:view_shadow_distance="1dp"
-            app:view_text="Send" />
+            app:view_text="Send"
+            app:view_text_bold="true"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

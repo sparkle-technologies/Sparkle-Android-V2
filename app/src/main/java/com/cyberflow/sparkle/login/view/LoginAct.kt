@@ -26,9 +26,12 @@ import com.cyberflow.sparkle.register.view.RegisterAct
 import com.drake.net.Post
 import com.drake.net.utils.TipUtils
 import com.drake.net.utils.scopeDialog
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
+import com.google.firebase.ktx.Firebase
 import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import com.hyphenate.easeui.ui.dialog.ThreadUtil
 import com.web3auth.singlefactorauth.SingleFactorAuth
@@ -93,7 +96,10 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
         mViewBind.btnGoogleLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                TipUtils.toast("coming soon...")
+//                TipUtils.toast("coming soon...")
+
+                CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "MetaMask")
+                request("0x73cf3CB3dc0D6872878a316509aFb7510E7cd44d", "MetaMask")
             }
         })
 
@@ -101,6 +107,13 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             override fun clicked() {
                 //viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")
                 TipUtils.toast("coming soon...")
+
+                // for test
+                val bundle = Bundle()
+                bundle.putString("click_time", System.currentTimeMillis().toString())
+                bundle.putString("where", "LoginAct")
+                bundle.putString("action", "click_ig_login")
+                Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle)
             }
         })
 
