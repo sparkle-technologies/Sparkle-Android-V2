@@ -26,8 +26,8 @@ import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainLeftBinding
 import com.cyberflow.sparkle.databinding.ItemHoroscopeBinding
-import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
@@ -155,7 +155,7 @@ class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>(
 //            Log.e("TAG", "verticalOffset: $verticalOffset" )
 //            Log.e("TAG", "totel: ${appBarLayout.totalScrollRange}" )
             val rate = 1 - abs(verticalOffset) / appBarLayout.totalScrollRange.toFloat()
-            Log.e("TAG", "rate: $rate", )
+//            Log.e("TAG", "rate: $rate", )
             if(rate < 0.05f )
                 mDatabind.layPan.alpha = 0.0f
             else

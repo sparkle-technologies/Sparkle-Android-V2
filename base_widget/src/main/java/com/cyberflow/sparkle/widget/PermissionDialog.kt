@@ -1,4 +1,4 @@
-package com.cyberflow.sparkle.im.view.dialog
+package com.cyberflow.sparkle.widget
 
 import android.app.Dialog
 import android.content.Context
@@ -7,8 +7,6 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.TextView
 import androidx.annotation.StyleRes
-import com.cyberflow.sparkle.R
-import com.cyberflow.sparkle.widget.ShadowTxtButton
 
 class PermissionDialog @JvmOverloads constructor(
     context: Context,

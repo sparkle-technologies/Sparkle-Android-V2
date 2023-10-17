@@ -49,6 +49,7 @@ import com.cyberflow.sparkle.chat.ui.dialog.DemoListDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.LabelEditDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.SimpleDialogFragment;
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel;
+import com.cyberflow.sparkle.widget.PermissionDialog;
 import com.drake.tooltip.dialog.BubbleDialog;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
@@ -94,6 +95,7 @@ import java.util.List;
 import java.util.Map;
 
 import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
 
 public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener, EasyPermissions.PermissionCallbacks {
     private static final String TAG = ChatFragment.class.getSimpleName();
@@ -539,7 +541,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             }
         }
         if (itemId == EaseChatExtendMenu.itemIds[1]) {   // gallery =  image + video
-            selectPictureOrVideoFromGallery();
+            if (checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_CODE_STORAGE_PICTURE)) {
+                selectPictureOrVideoFromGallery();
+            }
         }
         if (itemId == EaseChatExtendMenu.itemIds[2]) {
             showCustomView(true);
@@ -1005,6 +1009,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
+    @SuppressLint("RestrictedApi")
     private boolean checkIfHasPermissions(String permission, int requestCode) {
         if (!EasyPermissions.hasPermissions(mContext, permission)) {
             String rationale = "";
@@ -1021,7 +1026,11 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             } else if (requestCode == REQUEST_CODE_VOICE) {
                 rationale = getString(R.string.demo_chat_request_audio_permission);
             }
-            EasyPermissions.requestPermissions(this, rationale, requestCode, permission);
+
+//            EasyPermissions.requestPermissions(this, rationale, requestCode, permission);
+            PermissionRequest request =  new PermissionRequest.Builder(this, requestCode, permission).build();
+            request.getHelper().directRequestPermissions(requestCode, permission);
+//            EasyPermissions.requestPermissions();
             return false;
         }
         return true;
@@ -1042,13 +1051,31 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        String title = "";
+        String content  = "";
+
         switch (requestCode) {
             case REQUEST_CODE_CAMERA:
-                Toast.makeText(getContext(), getString(R.string.demo_chat_request_camera_permission), Toast.LENGTH_LONG).show();
-                PermissionUtil.goIntentSetting(this, requestCode);
+                title = "Unable to take photos";
+                content  = "You have turned off camera  permissions.";
                 break;
             case REQUEST_CODE_STORAGE_PICTURE:
+                title = "Unable to access the gallery";
+                content  = "You have turned off gallery  permissions.";
                 break;
         }
+
+        PermissionDialog dialog = new PermissionDialog(this.mContext, title, content, new PermissionDialog.PermissionClickListener() {
+            @Override
+            public void leftClicked() {
+                // do nothing
+            }
+
+            @Override
+            public void rightClicked() {
+                PermissionUtil.goIntentSetting(ChatFragment.this, requestCode);
+            }
+        });
+        dialog.show();
     }
 }
