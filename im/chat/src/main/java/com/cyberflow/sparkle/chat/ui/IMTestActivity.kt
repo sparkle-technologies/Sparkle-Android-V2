@@ -110,7 +110,7 @@ class IMTestActivity : BaseDBAct<IMTestViewModel, ActivityImTestBinding>() {
 
             val conversationId = mDataBinding.etTo.text.toString()
             // conversationId=lover3  chatType=1
-            ChatActivity.launch(conversationId, 1)
+//            ChatActivity.launch(conversationId, 1)
 
             /*if(conversationList.isNotEmpty()){
                 val info = conversationList[0].info

@@ -1,5 +1,12 @@
 [
   {
+    "path": "/im/ChatActivity",
+    "className": "com.cyberflow.sparkle.im.view.ChatActivity",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
     "path": "/im/IMTestActivity",
     "className": "com.cyberflow.sparkle.chat.ui.IMTestActivity",
     "action": "",

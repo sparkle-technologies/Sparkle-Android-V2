@@ -1,5 +1,7 @@
-package com.cyberflow.sparkle.chat.ui
+package com.cyberflow.sparkle.im.view
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -7,7 +9,6 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import com.cyberflow.base.act.BaseDBAct
-import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.click
 import com.cyberflow.sparkle.chat.DemoHelper
@@ -19,55 +20,76 @@ import com.cyberflow.sparkle.chat.ui.fragment.ChatFragment
 import com.cyberflow.sparkle.chat.viewmodel.ChatViewModel
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel
 import com.cyberflow.sparkle.chat.viewmodel.parseResource
+import com.cyberflow.sparkle.im.view.dialog.PermissionDialog
 import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.chat.EMClient
 import com.hyphenate.easeui.EaseIM
 import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.model.EaseEvent
-import com.therouter.TheRouter
-import com.therouter.router.Autowired
-import com.therouter.router.Route
 
-
-@Route(path = PageConst.IM.PAGE_IM_CHAT)
 class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     ChatFragment.OnFragmentInfoListener {
 
-    @JvmField
-    @Autowired(name = EaseConstant.EXTRA_CONVERSATION_ID)
     var conversationId: String = ""
-
-    @JvmField
-    @Autowired(name = EaseConstant.EXTRA_CHAT_TYPE)
     var chatType: Int = 0
 
     private val msgViewModel: MessageViewModel by viewModels()
 
     companion object {
-        fun launch(conversationId: String, chatType: Int) {
+        fun launch(context: Context, conversationId: String, chatType: Int) {
             Log.e(TAG, "actionStart: conversationId=$conversationId\t chatType=$chatType")
-            TheRouter.build(PageConst.IM.PAGE_IM_CHAT)
-                .withString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
-                .withInt(EaseConstant.EXTRA_CHAT_TYPE, chatType)
-                .navigation()
+            val intent = Intent(context, ChatActivity::class.java)
+            intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
+            intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType)
+            context.startActivity(intent)
         }
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        TheRouter.inject(this)
+        intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_ID)?.apply {
+            conversationId = this
+        }
+        chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, 0)
 
-        mDataBinding.layBack.click{
+        Log.e(TAG, "initView: conversationId=$conversationId\t chatType=$chatType")
+
+        if (conversationId.isNullOrEmpty() || chatType == 0) {
+            ToastUtil.show(this, "Invalid params")
+            finish()
+            return
+        }
+
+        mDataBinding.layBack.click {
             onBackPressed()
         }
 
-        mDataBinding.ivAvatar.click{
-            Log.e(TAG, "ivAvatar:  go chat detail or profile detail? " )
+        mDataBinding.ivAvatar.click {
+            Log.e(TAG, "ivAvatar:  go chat detail or profile detail? ")
+            PermissionDialog(this, "Unable to access the gallery", "You have turned off gallery  permissions.", object :
+                PermissionDialog.PermissionClickListener {
+                override fun leftClicked() {
+
+                }
+
+                override fun rightClicked() {
+
+                }
+            }).show()
         }
 
-        mDataBinding.ivBtnRight.click{
-            Log.e(TAG, "ivBtnRight:  waiting for designer to decide what to do" )
+        mDataBinding.ivBtnRight.click {
+            Log.e(TAG, "ivBtnRight:  waiting for designer to decide what to do")
+            PermissionDialog(this, "Unable to take photos", "You have turned off camera  permissions.", object :
+                PermissionDialog.PermissionClickListener {
+                override fun leftClicked() {
+
+                }
+
+                override fun rightClicked() {
+
+                }
+            }).show()
         }
-        TheRouter.inject(this)
         initChatFragment()
     }
 
@@ -104,8 +126,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         }
         msgViewModel.messageChange.with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java)
             .observe(this) {
-                if (it.isMessageChange)
-                    showSnackBar(it.message)
+                if (it.isMessageChange) showSnackBar(it.message)
             }
         msgViewModel.messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java)
             .observe(this) {
@@ -169,8 +190,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         if (imm != null && window.attributes.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (currentFocus != null) {
                 imm.hideSoftInputFromWindow(
-                    currentFocus!!.windowToken,
-                    InputMethodManager.HIDE_NOT_ALWAYS
+                    currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
                 )
                 super.onBackPressed()
             } else {

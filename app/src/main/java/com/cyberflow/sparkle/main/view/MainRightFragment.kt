@@ -8,11 +8,11 @@ import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
-import com.cyberflow.sparkle.chat.ui.ChatActivity
 import com.cyberflow.sparkle.databinding.FragmentMainRightBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedEmptyBinding
 import com.cyberflow.sparkle.databinding.MainFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.MainOfficialBinding
+import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.login.widget.ShadowTxtButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
@@ -85,7 +85,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                             addType<FriendsAddModel>(R.layout.item_friends_feed_add)
                             onClick(R.id.lay_go_chat){
                                 val model = getModel<FriendMessageInfo>(layoutPosition)
-                                ChatActivity.launch(model.nickname, 1)
+                                ChatActivity.launch(context, model.nickname, 1)
                             }
                             onClick(R.id.bg_new_friend) {
                                 IMSearchFriendAct.go(requireActivity())

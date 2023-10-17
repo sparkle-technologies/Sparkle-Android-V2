@@ -16,7 +16,6 @@ import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
-import com.cyberflow.sparkle.chat.ui.ChatActivity
 import com.cyberflow.sparkle.chat.viewmodel.parseResource
 import com.cyberflow.sparkle.databinding.ActivityImContactListBinding
 import com.cyberflow.sparkle.databinding.ItemImContactBinding
@@ -133,7 +132,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                     findView<View>(R.id.line).visibility = if ( condition ) View.INVISIBLE else View.VISIBLE
                                     getBinding<ItemImContactBinding>().item.setOnClickListener {
                                         val model = getModel<Contact>(layoutPosition)
-                                        ChatActivity.launch(model.name, 1)  // go chat activity
+                                        ChatActivity.launch(this@IMContactListAct, model.name, 1)  // go chat activity
                                     }
                                 }
                             }
@@ -212,7 +211,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         }
         viewModel.acceptFriendObservable.observe(this){
             if(!it.isNullOrEmpty()){
-                ChatActivity.launch(it, 1)
+                ChatActivity.launch(this@IMContactListAct, it, 1)
             }
             freshData()
         }
