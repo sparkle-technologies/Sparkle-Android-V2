@@ -318,7 +318,7 @@ public class PushAndMessageHelper {
      * @param imageUri
      */
     private static void sendImageMessage(String toChatUsername, Uri imageUri) {
-        EMMessage message = EMMessage.createImageSendMessage(imageUri, false, toChatUsername);
+        EMMessage message = EMMessage.createImageSendMessage(imageUri, true, toChatUsername);
         sendMessage(message);
     }
 
@@ -329,7 +329,7 @@ public class PushAndMessageHelper {
      * @param imagePath
      */
     private static void sendImageMessage(String toChatUsername, String imagePath) {
-        EMMessage message = EMMessage.createImageSendMessage(imagePath, false, toChatUsername);
+        EMMessage message = EMMessage.createImageSendMessage(imagePath, true, toChatUsername);
         sendMessage(message);
     }
 

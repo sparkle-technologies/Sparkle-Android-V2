@@ -565,6 +565,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     private void takePictureOrRecordVideo() {
         PictureSelector.create(this)
                 .openCamera(SelectMimeType.ofAll())
+                .isOriginalSkipCompress(true)
                 .setCameraInterceptListener(getCustomCameraEvent())
                 .forResult(new OnResultCallbackListener<LocalMedia>() {
                     @Override
@@ -587,6 +588,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         PictureSelector.create(getActivity()).openGallery(SelectMimeType.ofAll())
                 .setSelectorUIStyle(PicSelectorHelper.getSelectMainStyle(getActivity()))
                 .setImageEngine(GlideEngine.Companion.createGlideEngine())
+                .isOriginalSkipCompress(true)
                 .isDisplayCamera(false)
                 .setSelectionMode(SelectModeConfig.SINGLE)
                 .forResult(new OnResultCallbackListener<LocalMedia>() {

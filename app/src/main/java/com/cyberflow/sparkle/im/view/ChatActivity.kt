@@ -20,7 +20,6 @@ import com.cyberflow.sparkle.chat.ui.fragment.ChatFragment
 import com.cyberflow.sparkle.chat.viewmodel.ChatViewModel
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel
 import com.cyberflow.sparkle.chat.viewmodel.parseResource
-import com.cyberflow.sparkle.widget.PermissionDialog
 import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.chat.EMClient
 import com.hyphenate.easeui.EaseIM
@@ -65,30 +64,10 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
 
         mDataBinding.ivAvatar.click {
             Log.e(TAG, "ivAvatar:  go chat detail or profile detail? ")
-            PermissionDialog(this, "Unable to access the gallery", "You have turned off gallery  permissions.", object :
-                PermissionDialog.PermissionClickListener {
-                override fun leftClicked() {
-
-                }
-
-                override fun rightClicked() {
-
-                }
-            }).show()
         }
 
         mDataBinding.ivBtnRight.click {
             Log.e(TAG, "ivBtnRight:  waiting for designer to decide what to do")
-            PermissionDialog(this, "Unable to take photos", "You have turned off camera  permissions.", object :
-                PermissionDialog.PermissionClickListener {
-                override fun leftClicked() {
-
-                }
-
-                override fun rightClicked() {
-
-                }
-            }).show()
         }
         initChatFragment()
     }

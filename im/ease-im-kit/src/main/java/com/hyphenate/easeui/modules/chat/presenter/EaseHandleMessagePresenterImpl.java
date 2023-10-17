@@ -6,6 +6,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
@@ -84,7 +85,7 @@ public class EaseHandleMessagePresenterImpl extends EaseHandleMessagePresenter {
 
     @Override
     public void sendImageMessage(Uri imageUri) {
-        sendImageMessage(imageUri, false);
+        sendImageMessage(imageUri, true);
     }
 
     @Override
@@ -92,7 +93,7 @@ public class EaseHandleMessagePresenterImpl extends EaseHandleMessagePresenter {
         //Compatible with web and does not support heif image terminal
         //convert heif format to jpeg general image format
         imageUri = handleImageHeifToJpeg(imageUri);
-        EMMessage message = EMMessage.createImageSendMessage(imageUri, sendOriginalImage, toChatUsername);
+        EMMessage message = EMMessage.createImageSendMessage(imageUri, true, toChatUsername);
         sendMessage(message);
     }
 
