@@ -10,7 +10,7 @@ import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.base.model.LocationInfo
 import com.cyberflow.sparkle.databinding.FragmentRegisterBirthPlaceBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.widget.searchplace.SearchPlaceDialog
 import com.google.android.material.snackbar.Snackbar
 

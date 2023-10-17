@@ -73,7 +73,7 @@
                 app:layout_constraintTop_toTopOf="@+id/lay_delete"
                 app:layout_goneMarginRight="@dimen/dp_38">
 
-                <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+                <com.cyberflow.sparkle.widget.ShadowTxtButton
                     android:id="@+id/btn_accept"
                     android:layout_width="@dimen/dp_80"
                     android:layout_height="@dimen/dp_30"

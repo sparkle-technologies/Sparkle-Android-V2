@@ -66,6 +66,7 @@ dependencies {
 
     implementation(project(mapOf("path" to ":base")))
     implementation(project(mapOf("path" to ":base_resources")))
+    implementation(project(mapOf("path" to ":base_widget")))
 
     // auth for twitter/google social login
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))

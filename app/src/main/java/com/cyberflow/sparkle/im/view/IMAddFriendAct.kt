@@ -8,7 +8,7 @@ import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.databinding.ActivityImAddFriendBinding
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.main.viewmodel.parseResource
 import com.drake.net.utils.TipUtils
 import com.google.android.material.snackbar.Snackbar

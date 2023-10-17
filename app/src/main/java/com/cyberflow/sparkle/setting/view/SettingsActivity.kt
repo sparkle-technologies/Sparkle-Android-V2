@@ -11,7 +11,7 @@ import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.databinding.ActivitySettingBinding
 import com.cyberflow.sparkle.login.view.LoginAct
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.google.firebase.auth.FirebaseAuth
 
 class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {

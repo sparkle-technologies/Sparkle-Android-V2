@@ -44,7 +44,7 @@ dependencies {
 
     implementation project(path: ':base')
     implementation project(path: ':base_resources')
-
+    implementation project(path: ':base_widget')
 
     api project(path: ':selector')
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'

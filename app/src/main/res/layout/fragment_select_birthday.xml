@@ -124,7 +124,7 @@
             app:layout_constraintTop_toTopOf="@+id/outlinedTextField_BirthTime" />
 
 
-        <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+        <com.cyberflow.sparkle.widget.ShadowTxtButton
             android:id="@+id/btn_register_previous"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_48"
@@ -138,7 +138,7 @@
             app:view_shadow_distance="1dp"
             app:view_text="Previous" />
 
-        <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+        <com.cyberflow.sparkle.widget.ShadowTxtButton
             android:id="@+id/btn_register_next"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_48"

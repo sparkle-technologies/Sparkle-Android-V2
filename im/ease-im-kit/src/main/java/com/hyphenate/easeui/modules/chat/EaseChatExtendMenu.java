@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cyberflow.sparkle.widget.ShadowImgButton;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.adapter.EaseChatExtendMenuAdapter;
 import com.hyphenate.easeui.adapter.EaseChatExtendMenuIndicatorAdapter;
@@ -61,8 +61,8 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
 //            R.string.compatibility
             };
     public static int[] itemdrawables = {
-            R.drawable.ic_chat_camera,
-            R.drawable.ic_chat_library,
+            com.cyberflow.base.resources.R.drawable.im_ic_menu_camera,
+            com.cyberflow.base.resources.R.drawable.im_ic_menu_galary,
 //            R.drawable.ic_chat_send_token,
 //            R.drawable.ic_chat_send_nft,
 //            R.drawable.ic_chat_daily_horoscope,
@@ -372,7 +372,7 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
     }
 
     class ChatMenuItem extends LinearLayout {
-        private ImageView imageView;
+        private ShadowImgButton imageView;
         private TextView textView;
 
         public ChatMenuItem(Context context, AttributeSet attrs, int defStyle) {
@@ -391,12 +391,13 @@ public class EaseChatExtendMenu extends FrameLayout implements PagingScrollHelpe
 
         private void init(Context context, AttributeSet attrs) {
             LayoutInflater.from(context).inflate(R.layout.ease_chat_menu_item, this);
-            imageView = (ImageView) findViewById(R.id.image);
+            imageView = (ShadowImgButton) findViewById(R.id.image);
             textView = (TextView) findViewById(R.id.text);
         }
 
         public void setImage(int resid) {
-            imageView.setBackgroundResource(resid);
+            imageView.updateSrc(resid);
+//            imageView.setBackgroundResource(resid);
         }
 
         public void setText(int resid) {

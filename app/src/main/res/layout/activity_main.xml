@@ -119,7 +119,7 @@
         </com.google.android.material.card.MaterialCardView>
 
 
-        <com.cyberflow.sparkle.login.widget.ShadowImgButton
+        <com.cyberflow.sparkle.widget.ShadowImgButton
             android:id="@+id/btn_add_friends"
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"

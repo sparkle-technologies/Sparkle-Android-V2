@@ -26,7 +26,7 @@ import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainLeftBinding
 import com.cyberflow.sparkle.databinding.ItemHoroscopeBinding
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models

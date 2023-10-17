@@ -1,4 +1,4 @@
-package com.cyberflow.sparkle.login.widget
+package com.cyberflow.sparkle.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,7 +10,6 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.cyberflow.base.util.dp2px
-import com.cyberflow.sparkle.R
 
 class ShadowImgButton : ConstraintLayout {
 
@@ -103,6 +102,7 @@ class ShadowImgButton : ConstraintLayout {
             this.src = pic
             ivNormal?.setImageResource(src)
             ivClicking?.setImageResource(src)
+            invalidate()
         }
     }
 

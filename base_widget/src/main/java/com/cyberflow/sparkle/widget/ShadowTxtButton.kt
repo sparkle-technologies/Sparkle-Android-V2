@@ -1,4 +1,4 @@
-package com.cyberflow.sparkle.login.widget
+package com.cyberflow.sparkle.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,7 +14,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import com.cyberflow.base.util.dp2px
-import com.cyberflow.sparkle.R
 
 class ShadowTxtButton : ConstraintLayout {
 

@@ -18,7 +18,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="info: xxxxxx \n sssxxxxxx \n  \n xxsfsfsfdfs" />
 
-        <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+        <com.cyberflow.sparkle.widget.ShadowTxtButton
             android:id="@+id/btn_logout"
             android:layout_width="200dp"
             android:layout_height="46dp"

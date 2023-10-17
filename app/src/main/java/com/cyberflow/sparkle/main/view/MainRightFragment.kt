@@ -14,7 +14,7 @@ import com.cyberflow.sparkle.databinding.MainFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.MainOfficialBinding
 import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.viewmodel.parseResource
 import com.drake.brv.annotaion.DividerOrientation

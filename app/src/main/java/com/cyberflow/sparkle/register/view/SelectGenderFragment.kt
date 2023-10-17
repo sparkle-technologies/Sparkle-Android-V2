@@ -7,7 +7,7 @@ import com.cyberflow.base.fragment.BaseVBFragment
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.databinding.FragmentSelectGenderBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.google.android.material.snackbar.Snackbar
 
 class SelectGenderFragment : BaseVBFragment<BaseViewModel, FragmentSelectGenderBinding>() {

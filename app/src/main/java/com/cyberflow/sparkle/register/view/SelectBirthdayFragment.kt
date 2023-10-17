@@ -9,7 +9,7 @@ import com.cyberflow.base.model.GENDER_MAN
 import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.sparkle.databinding.FragmentSelectBirthdayBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.widget.daytimepicker.CustomDatePicker
 import com.cyberflow.sparkle.register.widget.daytimepicker.DateFormatUtils
 import com.google.android.material.snackbar.Snackbar

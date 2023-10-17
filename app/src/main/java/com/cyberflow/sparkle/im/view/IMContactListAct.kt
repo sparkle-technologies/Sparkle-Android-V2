@@ -35,7 +35,7 @@ import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.im.viewmodel.STATUS_ADDED
 import com.cyberflow.sparkle.im.viewmodel.STATUS_NORMAL
 import com.cyberflow.sparkle.im.viewmodel.STATUS_REJECTED
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup

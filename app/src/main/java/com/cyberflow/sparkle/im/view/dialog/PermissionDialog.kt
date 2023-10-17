@@ -8,7 +8,7 @@ import android.os.Looper
 import android.widget.TextView
 import androidx.annotation.StyleRes
 import com.cyberflow.sparkle.R
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 
 class PermissionDialog @JvmOverloads constructor(
     context: Context,

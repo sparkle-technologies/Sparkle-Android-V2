@@ -20,7 +20,7 @@ import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.chat.IMManager
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.login.widget.ShadowImgButton
+import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.view.MainActivity
 import com.cyberflow.sparkle.register.view.RegisterAct
 import com.drake.net.Post

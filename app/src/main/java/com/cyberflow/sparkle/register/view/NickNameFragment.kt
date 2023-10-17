@@ -15,7 +15,7 @@ import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.sparkle.databinding.FragmentRegisterNicknameBinding
 import com.cyberflow.sparkle.login.view.LoginAct
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.login.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.Post
 import com.drake.net.utils.scopeDialog
 

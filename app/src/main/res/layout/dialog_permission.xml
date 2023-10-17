@@ -40,7 +40,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
 
-    <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+    <com.cyberflow.sparkle.widget.ShadowTxtButton
         android:id="@+id/btn_cancel"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_48"
@@ -54,7 +54,7 @@
         app:view_shadow_distance="1dp"
         app:view_text="Cancel" />
 
-    <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+    <com.cyberflow.sparkle.widget.ShadowTxtButton
         android:id="@+id/btn_go_setting"
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_48"

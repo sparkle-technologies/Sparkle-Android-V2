@@ -103,7 +103,7 @@
             app:layout_constraintTop_toTopOf="@+id/iv_women_bg"
             app:srcCompat="@drawable/register_ic_women" />
 
-        <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+        <com.cyberflow.sparkle.widget.ShadowTxtButton
             android:id="@+id/btn_register_next"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_48"

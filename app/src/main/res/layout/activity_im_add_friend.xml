@@ -213,7 +213,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+        <com.cyberflow.sparkle.widget.ShadowTxtButton
             android:id="@+id/btn_send"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_48"

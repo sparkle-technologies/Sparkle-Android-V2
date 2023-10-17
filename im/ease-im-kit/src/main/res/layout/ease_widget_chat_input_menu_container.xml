@@ -29,7 +29,7 @@
     <com.hyphenate.easeui.input.KeyboardHeightFrameLayout
         android:id="@+id/extContainerFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/default_custom_keyboard_size"
+        android:layout_height="120dp"
         android:visibility="gone">
 
         <!--更多内容-->

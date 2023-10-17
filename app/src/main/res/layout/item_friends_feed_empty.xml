@@ -29,7 +29,7 @@
             app:layout_constraintRight_toRightOf="@+id/iv"
             app:layout_constraintTop_toBottomOf="@+id/iv" />
 
-        <com.cyberflow.sparkle.login.widget.ShadowTxtButton
+        <com.cyberflow.sparkle.widget.ShadowTxtButton
             android:id="@+id/btn_add_friend"
             android:layout_width="@dimen/dp_204"
             android:layout_height="@dimen/dp_48"

@@ -31,6 +31,7 @@ rootProject.name = "Sparkle"
 include(":app")
 include(":base")
 include(":base_resources")
+include(":base_widget")
 
 // IM
 include(":chat")
@@ -57,6 +58,5 @@ project(":dapp").projectDir = File("wallet_connector/dapp")
  *  app 里面只会有具体的业务逻辑 不再分包 widget/自定义view和具体的业务放在一起
  *      例如 login/{viewmodel, view, widget }         一句话 所有UI业务逻辑都放这
  */
-
 
 
