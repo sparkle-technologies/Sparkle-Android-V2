@@ -48,6 +48,7 @@
                 android:layout_height="@dimen/dp_30"
                 android:layout_marginEnd="@dimen/dp_22"
                 android:background="@drawable/im_bg_add_button"
+                android:fontFamily="@font/poppins_medium"
                 android:gravity="center"
                 android:text="@string/add"
                 android:textColor="@color/color_000000"
@@ -72,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:fontFamily="@font/poppins_regular"
+                    android:fontFamily="@font/poppins_medium"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_17"
                     tools:text="Arc Chan" />
@@ -82,8 +83,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
-                    android:textSize="@dimen/sp_12"
                     android:text="@{m.address}"
+                    android:textSize="@dimen/sp_12"
                     tools:text="0xb98...3c6e" />
 
             </LinearLayout>

@@ -22,6 +22,7 @@
             android:layout_marginStart="@dimen/dp_7"
             android:layout_marginTop="@dimen/dp_6"
             android:layout_marginEnd="@dimen/dp_7"
+            android:fontFamily="@font/poppins_medium"
             android:background="@null"
             android:gravity="center|left"
             android:paddingStart="@dimen/dp_7"

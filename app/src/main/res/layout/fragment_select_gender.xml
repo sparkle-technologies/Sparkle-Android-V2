@@ -15,7 +15,7 @@
             android:layout_marginTop="@dimen/dp_204"
             android:text="Before you begin"
             android:textSize="@dimen/sp_36"
-            style="@style/font_bold"
+            android:fontFamily="@font/poppins_extrabold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -24,6 +24,7 @@
             android:id="@+id/tv_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
             app:layout_constraintLeft_toLeftOf="@+id/tv_title"
             app:layout_constraintRight_toRightOf="@+id/tv_title"
             android:text="Tell us your preference on avatar style. \nThis will be your identity in web3 world."

@@ -40,7 +40,7 @@
             android:layout_marginTop="@dimen/dp_20"
             android:text="Birth Place"
             android:textSize="@dimen/sp_36"
-            style="@style/font_bold"
+            android:fontFamily="@font/poppins_extrabold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_head" />
@@ -52,6 +52,7 @@
             android:layout_marginStart="@dimen/dp_28"
             android:layout_marginTop="@dimen/dp_3"
             android:layout_marginEnd="@dimen/dp_28"
+            android:fontFamily="@font/poppins_regular"
             android:text="Tell us where is your birth place"
             android:textSize="@dimen/sp_16"
             app:layout_constraintLeft_toLeftOf="parent"
