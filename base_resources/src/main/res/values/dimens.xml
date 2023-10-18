@@ -94,10 +94,12 @@
     <dimen name="dp_158">158dp</dimen>
     <dimen name="dp_160">160dp</dimen>
     <dimen name="dp_166">166dp</dimen>
+    <dimen name="dp_188">188dp</dimen>
     <dimen name="dp_190">190dp</dimen>
     <dimen name="dp_194">194dp</dimen>
     <dimen name="dp_204">204dp</dimen>
     <dimen name="dp_292">292dp</dimen>
+    <dimen name="dp_335">335dp</dimen>
 
 
 
