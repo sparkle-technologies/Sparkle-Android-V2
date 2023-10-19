@@ -21,6 +21,9 @@ import com.hyphenate.easeui.input.util.ServiceUtil;
  * show方法 将俩个view绑定起来
  */
 public class InputAwareLayout extends KeyboardAwareLinearLayout implements KeyboardAwareLinearLayout.OnKeyboardShownListener {
+
+    private final static String TAG = "InputAwareLayout";
+
     private InputView current;
 
     public InputAwareLayout(Context context) {
@@ -38,6 +41,7 @@ public class InputAwareLayout extends KeyboardAwareLinearLayout implements Keybo
 
     @Override
     public void onKeyboardShown() {
+//        Log.e(TAG, "onKeyboardShown: " );
         hideAttachedInput(true);
     }
 

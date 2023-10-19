@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -836,8 +837,11 @@ public class EaseChatLayout extends RelativeLayout implements
         inputMenu.showExtendMenu(false);
     }
 
+
+
     @Override
     public boolean onBubbleClick(EMMessage message) {
+        Log.e(TAG, "EaseChatLayout onBubbleClick: ");
         if (listener != null) {
             return listener.onBubbleClick(message);
         }
@@ -1179,6 +1183,7 @@ public class EaseChatLayout extends RelativeLayout implements
 
     @Override
     public void onKeyboardShown() {
+//        Log.e(TAG, "onKeyboardShown: " );
         inputMenu.onKeyboardShown();
         messageListLayout.rvList.smoothScrollToPosition(messageListLayout.baseAdapter.getItemCount() - 1);
     }

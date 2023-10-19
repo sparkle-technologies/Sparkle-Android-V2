@@ -208,6 +208,7 @@ public class EaseChatInputMenu extends LinearLayout implements
     }
 
     public void onKeyboardShown() {
+//        Log.e(TAG, "onKeyboardShown: " );
         hideEmotionLayout();
     }
 
@@ -224,6 +225,7 @@ public class EaseChatInputMenu extends LinearLayout implements
     private InputAwareLayout rootLinearLayout;
 
     private void showEmotionLayout() {
+//        Log.e(TAG, "showEmotionLayout: " );
         rootLinearLayout.show(primaryMenu.getEditText(), emotionContainerFrameLayout);
         if (onConversationInputPanelStateChangeListener != null) {
             onConversationInputPanelStateChangeListener.onInputPanelExpanded();
@@ -231,12 +233,14 @@ public class EaseChatInputMenu extends LinearLayout implements
     }
 
     private void hideEmotionLayout() {
+//        Log.e(TAG, "hideEmotionLayout: " );
         if (onConversationInputPanelStateChangeListener != null) {
             onConversationInputPanelStateChangeListener.onInputPanelCollapsed();
         }
     }
 
     private void showConversationExtension() {
+//        Log.e(TAG, "showConversationExtension: " );
         rootLinearLayout.show(primaryMenu.getEditText(), extContainerFrameLayout);
         if (onConversationInputPanelStateChangeListener != null) {
             onConversationInputPanelStateChangeListener.onInputPanelExpanded();
@@ -244,13 +248,14 @@ public class EaseChatInputMenu extends LinearLayout implements
     }
 
     private void hideConversationExtension() {
+//        Log.e(TAG, "hideConversationExtension: " );
         if (onConversationInputPanelStateChangeListener != null) {
             onConversationInputPanelStateChangeListener.onInputPanelCollapsed();
         }
     }
 
     // 关闭键盘   按返回键  触碰消息列表空白区域
-    void closeConversationInputPanel() {
+    public void closeConversationInputPanel() {
         rootLinearLayout.hideAttachedInput(true);
         rootLinearLayout.hideCurrentInput(primaryMenu.getEditText());
     }
@@ -279,6 +284,7 @@ public class EaseChatInputMenu extends LinearLayout implements
     public void onToggleExtendClicked(boolean extend) {
         Log.e(TAG, "onToggleExtendClicked extend:" + extend);
         primaryMenu.showEmojOrKeyboard(true);
+//        Log.e(TAG, "onToggleExtendClicked condition:" + (rootLinearLayout.getCurrentInput() == extContainerFrameLayout));
         if(rootLinearLayout.getCurrentInput() == extContainerFrameLayout){
             hideConversationExtension();
             rootLinearLayout.showSoftkey(primaryMenu.getEditText());
@@ -290,7 +296,8 @@ public class EaseChatInputMenu extends LinearLayout implements
     // 点击表情图标
     @Override
     public void onToggleEmojiconClicked() {
-        Log.e(TAG, "onToggleEmojiconClicked extend:" );
+//        Log.e(TAG, "onToggleEmojiconClicked is emotion:" + (rootLinearLayout.getCurrentInput() == emotionContainerFrameLayout) );
+//        Log.e(TAG, "onToggleEmojiconClicked is extend:" + (rootLinearLayout.getCurrentInput() == extContainerFrameLayout) );
         if(rootLinearLayout.getCurrentInput() == emotionContainerFrameLayout){
             primaryMenu.showEmojOrKeyboard(true);
             hideEmotionLayout();

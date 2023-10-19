@@ -16,6 +16,7 @@ import com.cyberflow.sparkle.chat.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.databinding.ActivityImChatBinding
+import com.cyberflow.sparkle.chat.ui.PreviewActivity
 import com.cyberflow.sparkle.chat.ui.fragment.ChatFragment
 import com.cyberflow.sparkle.chat.viewmodel.ChatViewModel
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel
@@ -68,6 +69,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
 
         mDataBinding.ivBtnRight.click {
             Log.e(TAG, "ivBtnRight:  waiting for designer to decide what to do")
+            PreviewActivity.go(this@ChatActivity, "test1", 1)
         }
         initChatFragment()
     }

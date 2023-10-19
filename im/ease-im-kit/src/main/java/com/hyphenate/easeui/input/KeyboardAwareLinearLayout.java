@@ -290,6 +290,7 @@ public class KeyboardAwareLinearLayout extends LinearLayoutCompat {
     }
 
     public void addOnKeyboardHiddenListener(OnKeyboardHiddenListener listener) {
+//        Log.e(TAG, "addOnKeyboardHiddenListener: " );
         hiddenListeners.add(listener);
     }
 

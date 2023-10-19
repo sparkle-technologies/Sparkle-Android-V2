@@ -197,6 +197,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
 
     @Override
     public void showEmojOrKeyboard(boolean showEmoj) {
+//        Log.e(TAG, "showEmojOrKeyboard: showEmoj=" + showEmoj );
         faceNormal.setVisibility(showEmoj ? View.VISIBLE : View.INVISIBLE);
         faceChecked.setVisibility(!showEmoj ? View.VISIBLE : View.INVISIBLE);
     }
