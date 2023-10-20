@@ -96,15 +96,19 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
 
     private var localMedia: LocalMedia? = null
 
-    public fun saveImageOrVideo(localMedia: LocalMedia?) {
+     fun saveImageOrVideo(localMedia: LocalMedia?) {
         this.localMedia = localMedia
         if (checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, ChatFragment.REQUEST_CODE_STORAGE_FILE)) {
             realSave(localMedia)
         }
     }
 
-    public fun onOutSideClicked(){
-        inputMenu?.onOutSideClicked()
+    fun onOutSideClicked(){
+        if (keyboardHidden) {
+            requireActivity().finish()
+        }else{
+            inputMenu?.onOutSideClicked()
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -211,7 +215,8 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
     var presenter: EaseHandleMessagePresenter? = null 
 
     private fun initInputView() {
-        rootLinearLayout?.addOnKeyboardShownListener(this);
+        rootLinearLayout?.addOnKeyboardShownListener(this)
+        rootLinearLayout?.addOnKeyboardHiddenListener(this)
         inputMenu?.init(rootLinearLayout)
         inputMenu?.setOnConversationInputPanelStateChangeListener(this)
         inputMenu?.setChatInputMenuListener(this)
@@ -437,14 +442,17 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
     
     /********************************************************************/
 
+    private var keyboardHidden = true
 
     override fun onKeyboardHidden() {
         Log.e(TAG, "onKeyboardHidden: ")
+        keyboardHidden = true
         inputMenu?.onKeyboardHidden()
     }
 
     override fun onKeyboardShown() {
         Log.e(TAG, "onKeyboardShown: ")
+        keyboardHidden = false
         inputMenu?.onKeyboardShown()
     }
 

@@ -11,14 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/color_000000_75"
-        android:fitsSystemWindows="true"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_70"
+            android:layout_marginTop="@dimen/dp_108"
             android:layout_marginEnd="@dimen/dp_20"
             android:layout_marginBottom="@dimen/dp_100"
             android:fitsSystemWindows="false"
@@ -37,7 +36,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/lay_top"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
+            android:layout_height="@dimen/dp_90"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.cyberflow.sparkle.widget.ShadowImgButton

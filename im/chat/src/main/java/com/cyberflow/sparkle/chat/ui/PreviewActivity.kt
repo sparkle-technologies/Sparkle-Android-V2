@@ -28,6 +28,7 @@ import com.luck.picture.lib.photoview.PhotoView
 import com.luck.picture.lib.utils.BitmapUtils
 import com.luck.picture.lib.utils.DensityUtil
 import com.luck.picture.lib.utils.MediaUtils
+import com.vanniktech.ui.hideKeyboard
 
 class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
 
@@ -71,6 +72,14 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
         coverImageView?.setOnViewTapListener(OnViewTapListener { view, x, y ->
             fragment?.onOutSideClicked()
         })
+
+        coverImageView?.setOnViewDragListener { dx, dy ->
+//            Log.e(TAG, "initView: $dy" )
+            if(dy > 30){
+                hideKeyboard()
+                finish()
+            }
+        }
     }
 
     private var fragment : PreviewFragment? = null
@@ -109,7 +118,7 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
         val maxImageSize = BitmapUtils.getMaxImageSize(size!![0], size!![1])
         Log.e(PreviewFragment.TAG, "load: maxImageSize=$maxImageSize")
         loadImage(media, maxImageSize[0], maxImageSize[1])
-        setScaleDisplaySize(media)
+//        setScaleDisplaySize(media)
         setCoverScaleType(media)
     }
 
