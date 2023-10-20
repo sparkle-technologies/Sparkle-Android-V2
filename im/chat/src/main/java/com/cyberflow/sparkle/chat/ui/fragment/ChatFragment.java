@@ -43,6 +43,7 @@ import com.cyberflow.sparkle.chat.common.constant.DemoConstant;
 import com.cyberflow.sparkle.chat.common.model.EmojiconExampleGroupData;
 import com.cyberflow.sparkle.chat.common.utils.CompressFileEngineImpl;
 import com.cyberflow.sparkle.chat.common.utils.RecyclerViewUtils;
+import com.cyberflow.sparkle.chat.ui.PreviewActivity;
 import com.cyberflow.sparkle.chat.ui.dialog.DeleteMsgDialog;
 import com.cyberflow.sparkle.chat.ui.dialog.DemoDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.DemoListDialogFragment;
@@ -99,13 +100,14 @@ import pub.devrel.easypermissions.PermissionRequest;
 
 public class ChatFragment extends EaseChatFragment implements OnRecallMessageResultListener, EasyPermissions.PermissionCallbacks {
     private static final String TAG = ChatFragment.class.getSimpleName();
-    private static final int REQUEST_CODE_SELECT_USER_CARD = 20;
-    private static final int REQUEST_CODE_CAMERA = 110;
-    private static final int REQUEST_CODE_STORAGE_PICTURE = 111;
-    private static final int REQUEST_CODE_STORAGE_VIDEO = 112;
-    private static final int REQUEST_CODE_STORAGE_FILE = 113;
-    private static final int REQUEST_CODE_LOCATION = 114;
-    private static final int REQUEST_CODE_VOICE = 115;
+    public static final int REQUEST_CODE_SELECT_USER_CARD = 20;
+
+    public static final int REQUEST_CODE_CAMERA = 110;
+    public static final int REQUEST_CODE_STORAGE_PICTURE = 111;
+    public static final int REQUEST_CODE_STORAGE_VIDEO = 112;
+    public static final int REQUEST_CODE_STORAGE_FILE = 113;
+    public static final int REQUEST_CODE_LOCATION = 114;
+    public static final int REQUEST_CODE_VOICE = 115;
     private MessageViewModel viewModel;
     protected ClipboardManager clipboard;
 
@@ -273,13 +275,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             }
         });
 
-        LiveDataBus.get().with(DemoConstant.GROUP_MEMBER_ATTRIBUTE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
-            if (event == null) {
-                return;
-            }
-            if (event != null) {
-                chatLayout.getChatMessageListLayout().refreshMessages();
-            }
+        LiveDataBus.get().with(DemoConstant.MSG_LIST_FRESH_TO_LATEST, String.class).observe(getViewLifecycleOwner(), event -> {
+            chatLayout.getChatMessageListLayout().refreshToLatest();
         });
     }
 
@@ -380,6 +377,11 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         if (count == 1 && "@".equals(String.valueOf(s.charAt(start)))) {
 //            PickAtUserActivity.actionStartForResult(ChatFragment.this, conversationId, REQUEST_CODE_SELECT_AT_USER);
         }
+    }
+
+    @Override
+    public void onPicturePreview(LocalMedia localMedia, int position) {
+        PreviewActivity.Companion.go(requireActivity(), conversationId, chatType, localMedia);
     }
 
     @Override
@@ -721,7 +723,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     /**
      * 自定义拍照
      */
-    private class MeOnCameraInterceptListener implements OnCameraInterceptListener {
+    public static class MeOnCameraInterceptListener implements OnCameraInterceptListener {
 
         @Override
         public void openCamera(Fragment fragment, int cameraMode, int requestCode) {

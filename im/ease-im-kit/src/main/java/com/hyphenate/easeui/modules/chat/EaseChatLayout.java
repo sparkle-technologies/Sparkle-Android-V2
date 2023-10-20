@@ -63,6 +63,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseUserUtils;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import java.util.List;
 
@@ -837,7 +838,13 @@ public class EaseChatLayout extends RelativeLayout implements
         inputMenu.showExtendMenu(false);
     }
 
-
+    @Override
+    public void onPicturePreview(LocalMedia localMedia, int position) {
+        Log.e(TAG, "onPicturePreview: ");
+        if (listener != null) {
+             listener.onPicturePreview(localMedia, position);
+        }
+    }
 
     @Override
     public boolean onBubbleClick(EMMessage message) {

@@ -1,17 +1,33 @@
 package com.cyberflow.sparkle.chat.ui.fragment
 
-import android.content.Intent
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import com.cyberflow.base.fragment.BaseVBFragment
-import com.cyberflow.base.viewmodel.BaseViewModel
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
+import com.cyberflow.base.util.ToastUtil
+import com.cyberflow.sparkle.chat.R
 import com.cyberflow.sparkle.chat.common.model.EmojiconExampleGroupData
-import com.cyberflow.sparkle.chat.databinding.FragmentPreivewBinding
+import com.cyberflow.sparkle.chat.common.utils.CompressFileEngineImpl
+import com.cyberflow.sparkle.chat.ui.fragment.ChatFragment.MeOnCameraInterceptListener
+import com.cyberflow.sparkle.widget.PermissionDialog
+import com.cyberflow.sparkle.widget.PermissionDialog.PermissionClickListener
+import com.cyberflow.sparkle.widget.ShadowImgButton
+import com.drake.tooltip.dialog.BubbleDialog
 import com.hyphenate.chat.EMMessage
-import com.hyphenate.easeui.constants.EaseConstant
+import com.hyphenate.easeui.domain.EaseEmojicon
+import com.hyphenate.easeui.input.InputAwareLayout
 import com.hyphenate.easeui.input.KeyboardAwareLinearLayout
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener
 import com.hyphenate.easeui.modules.chat.EaseChatExtendMenu
@@ -19,135 +35,532 @@ import com.hyphenate.easeui.modules.chat.EaseChatInputMenu
 import com.hyphenate.easeui.modules.chat.EaseChatMessageListLayout
 import com.hyphenate.easeui.modules.chat.interfaces.ChatInputMenuListener
 import com.hyphenate.easeui.modules.chat.interfaces.IChatExtendMenu
+import com.hyphenate.easeui.modules.chat.presenter.EaseHandleMessagePresenter
+import com.hyphenate.easeui.modules.chat.presenter.EaseHandleMessagePresenterImpl
+import com.hyphenate.easeui.modules.chat.presenter.IHandleMessageView
+import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
+import com.hyphenate.easeui.utils.EaseFileUtils
+import com.hyphenate.easeui.utils.GlideEngine
+import com.hyphenate.easeui.utils.GlideEngine.Companion.createGlideEngine
+import com.hyphenate.easeui.utils.PicSelectorHelper
+import com.hyphenate.util.ImageUtils
+import com.luck.picture.lib.basic.PictureMediaScannerConnection
+import com.luck.picture.lib.basic.PictureSelector
+import com.luck.picture.lib.config.PictureConfig
+import com.luck.picture.lib.config.PictureMimeType
+import com.luck.picture.lib.config.SelectMimeType
+import com.luck.picture.lib.config.SelectModeConfig
+import com.luck.picture.lib.entity.LocalMedia
+import com.luck.picture.lib.interfaces.OnCallbackListener
+import com.luck.picture.lib.interfaces.OnCameraInterceptListener
+import com.luck.picture.lib.interfaces.OnKeyValueResultCallbackListener
+import com.luck.picture.lib.interfaces.OnResultCallbackListener
+import com.luck.picture.lib.permissions.PermissionUtil
+import com.luck.picture.lib.photoview.OnViewTapListener
+import com.luck.picture.lib.photoview.PhotoView
+import com.luck.picture.lib.utils.BitmapUtils
+import com.luck.picture.lib.utils.DensityUtil
+import com.luck.picture.lib.utils.DownloadFileUtils
+import com.luck.picture.lib.utils.MediaUtils
+import com.luck.picture.lib.utils.ToastUtils
+import pub.devrel.easypermissions.EasyPermissions
+import pub.devrel.easypermissions.PermissionRequest
+import java.io.File
+import java.io.IOException
 
-class PreviewFragment : BaseVBFragment<BaseViewModel, FragmentPreivewBinding>(),
-    EaseChatMessageListLayout.OnMessageTouchListener,
-    MessageListItemClickListener,
-    EaseChatMessageListLayout.OnChatErrorListener,
+open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouchListener,
+    EasyPermissions.PermissionCallbacks, IHandleMessageView,
+    MessageListItemClickListener, EaseChatMessageListLayout.OnChatErrorListener,
     KeyboardAwareLinearLayout.OnKeyboardShownListener,
     KeyboardAwareLinearLayout.OnKeyboardHiddenListener,
     EaseChatInputMenu.OnConversationInputPanelStateChangeListener, ChatInputMenuListener {
 
     companion object {
-
         const val TAG = "PreviewFragment"
-
-        fun go(act: AppCompatActivity, conversationId: String, chatType: Int) {
-            val intent = Intent(act, PreviewFragment::class.java)
-            intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
-            intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType)
-            act.startActivity(intent)
-        }
     }
 
-    override fun initView(savedInstanceState: Bundle?) {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_preivew, container, false)
+    }
 
-        /*mViewBind.btnDelete.setClickListener(object : ShadowImgButton.ShadowClickListener {
-            override fun clicked() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView(view)
+        initListener()
 
-            }
-        })
-        mViewBind.btnShare.setClickListener(object : ShadowImgButton.ShadowClickListener {
-            override fun clicked() {
+        localMedia?.let { load(it) }
+    }
 
-            }
-        })
-        mViewBind.btnDownload.setClickListener(object : ShadowImgButton.ShadowClickListener {
-            override fun clicked() {
+    private var rootLinearLayout: InputAwareLayout? = null
+    private var inputMenu: EaseChatInputMenu? = null
+    private var messageListLayout: EaseChatMessageListLayout? = null
 
-            }
-        })*/
+    private var btnDelete: ShadowImgButton? = null
+    private var btnDownload: ShadowImgButton? = null
+    private var btnShare: ShadowImgButton? = null
+    private var coverImageView: PhotoView? = null
 
-        /* intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_ID)?.apply {
-           conversationId = this
-       }
-       chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, 0)*/
+
+    private fun initView(view: View) {
+        rootLinearLayout = view.findViewById(R.id.rootLinearLayout)
+        inputMenu = view.findViewById(R.id.inputMenu)
+        messageListLayout = view.findViewById(R.id.messageListLayout)
+
+        coverImageView = view.findViewById(R.id.coverImageView)
+
+        btnDelete = view.findViewById(R.id.shadow_btn_delete)
+        btnDownload = view.findViewById(R.id.shadow_btn_download)
+        btnShare = view.findViewById(R.id.shadow_btn_share)
+
+//        Log.e(TAG, "go: conversationId=$conversationId \t chatType=$chatType localMedia=${localMedia?.path}")
 
         initInputView()
     }
 
-    override fun initData() {
-
+    private fun initListener() {
+        btnDelete?.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+                requireActivity().finish()
+            }
+        })
+        btnShare?.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+                ToastUtil.show(requireContext(), "coming soon...", true)
+            }
+        })
+        btnDownload?.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+                saveImageOrVideo()
+            }
+        })
     }
 
+    private fun saveImageOrVideo() {
+        if (checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, ChatFragment.REQUEST_CODE_STORAGE_FILE)) {
+            realSave()
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    private  fun checkIfHasPermissions(permission: String, requestCode: Int): Boolean {
+        if (!EasyPermissions.hasPermissions(requireContext(), permission)) {
+            val request = PermissionRequest.Builder(this, requestCode, permission).build()
+            request.helper.directRequestPermissions(requestCode, permission)
+            return false
+        }
+        return true
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
+         if(requestCode == ChatFragment.REQUEST_CODE_STORAGE_FILE){
+             realSave()
+         }
+        if(requestCode == ChatFragment.REQUEST_CODE_CAMERA){
+            takePictureOrRecordVideo()
+        }
+        if(requestCode == ChatFragment.REQUEST_CODE_STORAGE_PICTURE){
+            selectPictureOrVideoFromGallery()
+        }
+    }
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        var title = ""
+        var content  = ""
+        if(requestCode == ChatFragment.REQUEST_CODE_STORAGE_FILE){
+              title = "Unable to save files"
+              content  = "You have turned off storage  permissions"
+        }
+        if(requestCode == ChatFragment.REQUEST_CODE_CAMERA){
+            title = "Unable to take photos"
+            content  = "You have turned off camera  permissions."
+        }
+        if(requestCode == ChatFragment.REQUEST_CODE_STORAGE_PICTURE){
+            title = "Unable to access the gallery"
+            content  = "You have turned off gallery  permissions."
+        }
+        showPermissionDialog(title, content, requestCode)
+    }
+
+    private fun showPermissionDialog(title: String, content: String, requestCode: Int) {
+        val dialog = PermissionDialog(requireContext(), title, content, object : PermissionClickListener {
+                override fun leftClicked() {
+                    // do nothing
+                }
+
+                override fun rightClicked() {
+                    PermissionUtil.goIntentSetting(requireActivity(), requestCode)
+                }
+            })
+        dialog.show()
+    }
+
+    private fun realSave() {
+        localMedia?.let {
+            val media = it
+            val path = media.availablePath
+            if (PictureMimeType.isHasHttp(path)) {
+                LoadingDialogHolder.getLoadingDialog()?.show(requireContext())
+            }
+            DownloadFileUtils.saveLocalFile(context, path, media.mimeType, object : OnCallbackListener<String?> {
+                override fun onCall(realPath: String?) {
+                    LoadingDialogHolder.getLoadingDialog()?.hide()
+                    if (TextUtils.isEmpty(realPath)) {
+                        var errorMsg: String = ""
+                        errorMsg = if (PictureMimeType.isHasAudio(media.mimeType)) {
+                            getString(com.luck.picture.lib.R.string.ps_save_audio_error)
+                        } else if (PictureMimeType.isHasVideo(media.mimeType)) {
+                            getString(com.luck.picture.lib.R.string.ps_save_video_error)
+                        } else {
+                            getString(com.luck.picture.lib.R.string.ps_save_image_error)
+                        }
+                        ToastUtils.showToast(context, errorMsg)
+                    } else {
+                        PictureMediaScannerConnection(activity, realPath)
+                        ToastUtils.showToast(context, "${getString(com.luck.picture.lib.R.string.ps_save_success)}\n$realPath")
+                    }
+                }
+            })
+        }
+    }
+
+    private var conversationId: String = ""
+    private var chatType: Int = 0
+    private var localMedia: LocalMedia? = null
+
+    fun setData(_conversationId: String, _chatType: Int, _localMedia: LocalMedia) {
+        this.conversationId = _conversationId
+        this.chatType = _chatType
+        this.localMedia = _localMedia
+    }
+
+    /****************************** load image **************************************/
+
+    // PicturePreviewAdapter  PreviewImageHolder
+    private fun load(media: LocalMedia) {
+        initScreenSize()
+        val size = getRealSizeFromMedia(media)
+        Log.e(TAG, "load: size=$size")
+        val maxImageSize = BitmapUtils.getMaxImageSize(size!![0], size!![1])
+        Log.e(TAG, "load: maxImageSize=$maxImageSize")
+        loadImage(media, maxImageSize[0], maxImageSize[1])
+        setScaleDisplaySize(media)
+        setCoverScaleType(media)
+    }
+
+    private var screenWidth = 0
+    private var screenHeight = 0
+    private var screenAppInHeight = 0
+
+    private fun initScreenSize() {
+        screenWidth = DensityUtil.getRealScreenWidth(requireContext())
+        screenHeight = DensityUtil.getScreenHeight(requireContext())
+        screenAppInHeight = DensityUtil.getRealScreenHeight(requireContext())
+    }
+
+    private fun getRealSizeFromMedia(media: LocalMedia): IntArray? {
+        return if (media.isCut && media.cropImageWidth > 0 && media.cropImageHeight > 0) {
+            intArrayOf(media.cropImageWidth, media.cropImageHeight)
+        } else {
+            intArrayOf(media.width, media.height)
+        }
+    }
+
+    private fun loadImage(media: LocalMedia, maxWidth: Int, maxHeight: Int) {
+        Log.e(TAG, "loadImage: maxWidth=$maxWidth \t maxHeight=$maxHeight")
+        GlideEngine.createGlideEngine().apply {
+            val availablePath = media.availablePath
+            Log.e(TAG, "loadImage: availablePath=$availablePath")
+            if (maxWidth == PictureConfig.UNSET && maxHeight == PictureConfig.UNSET) {
+                loadImage(requireContext(), availablePath, coverImageView)
+            } else {
+                loadImage(requireContext(), coverImageView, availablePath, maxWidth, maxHeight)
+            }
+        }
+
+        coverImageView?.setOnViewTapListener(OnViewTapListener { view, x, y ->
+//            requireActivity().finish()
+            inputMenu?.onOutSideClicked()
+        })
+    }
+
+    private fun setScaleDisplaySize(media: LocalMedia) {
+        if (screenWidth < screenHeight) {
+            if (media.width > 0 && media.height > 0) {
+                val layoutParams = coverImageView!!.layoutParams as ConstraintLayout.LayoutParams
+                layoutParams.width = screenWidth
+                layoutParams.height = screenAppInHeight
+//                layoutParams.gravity = Gravity.CENTER
+            }
+        }
+    }
+
+    private fun setCoverScaleType(media: LocalMedia) {
+        if (MediaUtils.isLongImage(media.width, media.height)) {
+            coverImageView!!.scaleType = ImageView.ScaleType.CENTER_CROP
+        } else {
+            coverImageView!!.scaleType = ImageView.ScaleType.FIT_CENTER
+        }
+    }
+
+
+    /****************** IM *********************/
+
+    var presenter: EaseHandleMessagePresenter? = null 
+
     private fun initInputView() {
-        mViewBind.rootLinearLayout.addOnKeyboardShownListener(this);
-        mViewBind.inputMenu.init(mViewBind.rootLinearLayout)
-        mViewBind.inputMenu.setOnConversationInputPanelStateChangeListener(this)
-        mViewBind.inputMenu.setChatInputMenuListener(this)
+        rootLinearLayout?.addOnKeyboardShownListener(this);
+        inputMenu?.init(rootLinearLayout)
+        inputMenu?.setOnConversationInputPanelStateChangeListener(this)
+        inputMenu?.setChatInputMenuListener(this)
 
-
-        mViewBind.messageListLayout.setOnMessageTouchListener(this)
-        mViewBind.messageListLayout.setMessageListItemClickListener(this)
-        mViewBind.messageListLayout.setOnChatErrorListener(this)
+        messageListLayout?.setOnMessageTouchListener(this)
+        messageListLayout?.setMessageListItemClickListener(this)
+        messageListLayout?.setOnChatErrorListener(this)
 
         resetChatExtendMenu()
+
+        presenter = EaseHandleMessagePresenterImpl()
+        presenter?.apply {
+            setupWithToUser(chatType, conversationId)
+            if (context is AppCompatActivity) {
+                (context as AppCompatActivity).lifecycle.addObserver(this)
+            }
+            attachView(this@PreviewFragment)
+        }
     }
 
     private fun resetChatExtendMenu() {
-        val chatExtendMenu: IChatExtendMenu = mViewBind.inputMenu.chatExtendMenu
-        chatExtendMenu.clear()
-        // seven menu in total, include camera, library, send token, send nft, daily horoscope, horoscope, compatibility
-        for (i in EaseChatExtendMenu.itemdrawables.indices) {
-            chatExtendMenu.registerMenuItem(
-                EaseChatExtendMenu.itemStrings[i],
-                EaseChatExtendMenu.itemdrawables[i],
-                EaseChatExtendMenu.itemIds[i]
-            )
+        inputMenu?.chatExtendMenu?.apply {
+            val chatExtendMenu: IChatExtendMenu = this
+            chatExtendMenu.clear()
+            // seven menu in total, include camera, library, send token, send nft, daily horoscope, horoscope, compatibility
+            for (i in EaseChatExtendMenu.itemdrawables.indices) {
+                chatExtendMenu.registerMenuItem(
+                    EaseChatExtendMenu.itemStrings[i],
+                    EaseChatExtendMenu.itemdrawables[i],
+                    EaseChatExtendMenu.itemIds[i]
+                )
+            }
+            //添加扩展表情
+            inputMenu?.emojiconMenu?.addEmojiconGroup(EmojiconExampleGroupData.getData())
         }
-        //添加扩展表情
-        mViewBind.inputMenu.emojiconMenu.addEmojiconGroup(EmojiconExampleGroupData.getData())
     }
 
-    /********************************************************************/
 
     override fun onInputPanelExpanded() {
-//        mViewBind.inputMenu.hideSoftKeyboard()
-//        mViewBind.inputMenu.showExtendMenu(false)
+//        inputMenu.hideSoftKeyboard()
+//        inputMenu.showExtendMenu(false)
     }
 
     override fun onInputPanelCollapsed() {
 
     }
 
-    /********************************************************************/
-
     override fun onTyping(s: CharSequence?, start: Int, before: Int, count: Int) {
 
     }
 
     override fun onSendMessage(content: String?) {
+        presenter?.sendTextMessage(content)
     }
 
     override fun onExpressionClicked(emojicon: Any?) {
+        if (emojicon is EaseEmojicon) {
+            presenter?.sendBigExpressionMessage(emojicon.name, emojicon.identityGroupCode, emojicon.identityCode)
+        }
     }
 
     override fun onPressToSpeakBtnTouch(v: View?, event: MotionEvent?): Boolean = false
 
     override fun onChatExtendMenuItemClick(itemId: Int, view: View?) {
+        if (itemId == EaseChatExtendMenu.itemIds[0]) {    // camera + record video
+            if (checkIfHasPermissions(Manifest.permission.CAMERA, ChatFragment.REQUEST_CODE_CAMERA)) {
+                takePictureOrRecordVideo()
+            }
+        }
+        if (itemId == EaseChatExtendMenu.itemIds[1]) {   // gallery =  image + video
+            if (checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, ChatFragment.REQUEST_CODE_STORAGE_PICTURE)) {
+                selectPictureOrVideoFromGallery()
+            }
+        }
+    }
+    
+    private fun takePictureOrRecordVideo() {
+        PictureSelector.create(this).openCamera(SelectMimeType.ofAll()).isOriginalSkipCompress(true)
+            .setCameraInterceptListener(getCustomCameraEvent())
+            .forResult(object : OnResultCallbackListener<LocalMedia?> {
+                override fun onResult(result: ArrayList<LocalMedia?>?) {
+                    if (result.isNullOrEmpty()) {
+                        return
+                    }
+                    result[0]?.also {
+                        handleImgOrVideo(it, true)
+                    }
+                }
+
+                override fun onCancel() {
+                    Log.e(TAG, "onCancel: ")
+                }
+            })
     }
 
+    private fun selectPictureOrVideoFromGallery() {
+        PictureSelector.create(activity).openGallery(SelectMimeType.ofAll())
+            .setSelectorUIStyle(PicSelectorHelper.getSelectMainStyle(activity))
+            .setImageEngine(createGlideEngine()).isOriginalSkipCompress(true).isDisplayCamera(false)
+            .setSelectionMode(SelectModeConfig.SINGLE)
+            .forResult(object : OnResultCallbackListener<LocalMedia?> {
+                override fun onResult(result: ArrayList<LocalMedia?>?) {
+                    if (result != null && result.size > 0) {
+                        result[0]?.also {
+                            handleImgOrVideo(it, false)
+                        }
+                    }
+                }
+
+                override fun onCancel() {}
+            })
+    }
+
+
+    private fun handleImgOrVideo(select: LocalMedia, checkDegree: Boolean) {
+        Log.e(TAG, "path: " + select.path)
+        Log.e(TAG, "getAvailablePath: " + select.availablePath)
+        Log.e(TAG, "getRealPath: " + select.realPath)
+        Log.e(TAG, "compressPath: " + select.compressPath)
+        val currentEditPath = select.availablePath
+        val mapped =
+            if (PictureMimeType.isContent(currentEditPath)) Uri.parse(currentEditPath) else Uri.fromFile(
+                File(currentEditPath)
+            )
+        Log.e(TAG, "onResult:  finally " + mapped.path)
+        if (PictureMimeType.isHasImage(select.mimeType)) {  // image logic
+            if (checkDegree) {
+                val restoreImageUri = ImageUtils.checkDegreeAndRestoreImage(requireContext(), mapped)
+                presenter?.sendImageMessage(restoreImageUri, true)
+            } else {
+                if (mapped != null) {
+                    val filePath = EaseFileUtils.getFilePath(requireContext(), mapped)
+                    if (!TextUtils.isEmpty(filePath) && File(filePath).exists()) {
+                        presenter?.sendImageMessage(Uri.parse(filePath), true)
+                    } else {
+                        EaseFileUtils.saveUriPermission(requireContext(), mapped, null)
+                        presenter?.sendImageMessage(mapped, true)
+                    }
+                }
+            }
+        }
+        if (PictureMimeType.isHasVideo(select.mimeType)) {   // video logic
+            val mediaPlayer = MediaPlayer()
+            try {
+                mediaPlayer.setDataSource(requireContext(), mapped)
+                mediaPlayer.prepare()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            val duration = mediaPlayer.duration / 1000
+            EaseFileUtils.saveUriPermission(requireContext(), mapped, null)
+            val file = File(currentEditPath)
+            val size = file.length().toFloat() / (1024 * 1024)
+            Log.e(
+                TAG,
+                "onResult: path=" + mapped.path + "\t duration=" + duration + "\t size=" + size
+            )
+            if (size <= CompressFileEngineImpl.ORIGIN_VIDEO_MAX_SIZE) {
+                presenter?.sendVideoMessage(mapped, duration)
+            } else {
+                if (size > CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW) {
+                    ToastUtils.showToast(requireContext(), "video size too large, make sure it less than " + CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW + "MB")
+                    return
+                }
+                showCompressDialog()
+                val list = java.util.ArrayList<Uri>(1)
+                list.add(mapped)
+                CompressFileEngineImpl.check(requireContext(), list, OnKeyValueResultCallbackListener { srcPath, resultPath ->
+                    hideCompressDialog()
+                    Log.e(
+                        TAG,
+                        "onCallback: srcPath=$srcPath\t resultPath=$resultPath"
+                    )
+                    if (srcPath == null || resultPath == null) {
+                        ToastUtils.showToast(requireContext(), "compress video error")
+                        return@OnKeyValueResultCallbackListener
+                    }
+                    val oldF = File(srcPath)
+                    val newF = File(resultPath)
+                    val old_file_size = oldF.length().toFloat() / (1024 * 1024)
+                    val new_file_size = newF.length().toFloat() / (1024 * 1024)
+                    val percent = (old_file_size - new_file_size) / old_file_size
+
+                    // size1=49.50347MB  	 size2=5.128317MB  	  percent=0.89640486       VERY_LOW
+                    // size1=49.50347MB  	 size2=10.031748MB  	  percent=0.7973527    Low
+                    // size1=49.50347MB  	 size2=14.908022MB  	  percent=0.698849     MEDIUM
+                    // size1=49.50347MB  	 size2=19.796103MB  	  percent=0.6001068    HIGH
+                    // size1=49.50347MB  	 size2=29.458006MB  	  percent=0.4049305    VERY_HIGH
+
+                    // >10MB   不行
+                    Log.e(TAG, "onCallback: size1=" + old_file_size + "MB  \t size2=" + new_file_size + "MB  \t  percent=" + percent)
+                    if (new_file_size > CompressFileEngineImpl.ORIGIN_VIDEO_MAX_SIZE) {
+                        ToastUtils.showToast(requireContext(), "video size cannot more than 10MB")
+                        return@OnKeyValueResultCallbackListener
+                    }
+                    presenter?.sendVideoMessage(Uri.fromFile(File(resultPath)), duration)
+                })
+            }
+        }
+    }
+
+    var compressDialog: BubbleDialog? = null
+
+    private fun showCompressDialog() {
+        if (compressDialog == null) {
+            compressDialog = BubbleDialog(requireContext(), "compress video")
+        }
+        if (compressDialog!!.isShowing) {
+            return
+        }
+        compressDialog!!.show()
+    }
+
+    private fun hideCompressDialog() {
+        if (compressDialog != null) {
+            compressDialog!!.dismiss()
+        }
+    }
+    
+    private fun getCustomCameraEvent(): OnCameraInterceptListener? {
+        return MeOnCameraInterceptListener()
+    }
+    
     /********************************************************************/
 
 
     override fun onKeyboardHidden() {
         Log.e(TAG, "onKeyboardHidden: ")
-        mViewBind.inputMenu.onKeyboardHidden()
+        inputMenu?.onKeyboardHidden()
     }
 
     override fun onKeyboardShown() {
         Log.e(TAG, "onKeyboardShown: ")
-        mViewBind.inputMenu.onKeyboardShown()
+        inputMenu?.onKeyboardShown()
     }
-
 
 
     /*override fun onBackPressed() {
         var consumed = false
-        mViewBind.rootLinearLayout.apply {
+        rootLinearLayout.apply {
             if (currentInput != null) {
                 hideAttachedInput(true)
-                mViewBind.inputMenu.closeConversationInputPanel()
+                inputMenu.closeConversationInputPanel()
                 consumed = true
             }
         }
@@ -170,6 +583,10 @@ class PreviewFragment : BaseVBFragment<BaseViewModel, FragmentPreivewBinding>(),
 
     override fun onBubbleClick(message: EMMessage?): Boolean {
         return false
+    }
+
+    override fun onPicturePreview(localMedia: LocalMedia?, position: Int) {
+
     }
 
     override fun onResendClick(message: EMMessage?): Boolean {
@@ -202,15 +619,68 @@ class PreviewFragment : BaseVBFragment<BaseViewModel, FragmentPreivewBinding>(),
     }
 
     override fun onTouchItemOutside(v: View?, position: Int) {
-        mViewBind.inputMenu.onOutSideClicked()
+
     }
 
     override fun onViewDragging() {
-        mViewBind.inputMenu.hideSoftKeyboard()
-        mViewBind.inputMenu.showExtendMenu(false)
+        inputMenu?.hideSoftKeyboard()
+        inputMenu?.showExtendMenu(false)
     }
 
     override fun onChatError(code: Int, errorMsg: String?) {
+
+    }
+
+    /********************************************************************/
+    override fun context(): Context {
+         return this.requireContext()
+    }
+
+    override fun createThumbFileFail(message: String?) {
+
+    }
+
+    override fun addMsgAttrBeforeSend(message: EMMessage?) {
+
+    }
+
+    override fun sendMessageFail(message: String?) {
+
+    }
+
+    override fun sendMessageFinish(message: EMMessage?) {
+
+    }
+
+    override fun deleteLocalMessageSuccess(message: EMMessage?) {
+
+    }
+
+    override fun recallMessageFinish(message: EMMessage?) {
+
+    }
+
+    override fun recallMessageFail(code: Int, message: String?) {
+
+    }
+
+    override fun onPresenterMessageSuccess(message: EMMessage?) {
+
+    }
+
+    override fun onPresenterMessageError(message: EMMessage?, code: Int, error: String?) {
+
+    }
+
+    override fun onPresenterMessageInProgress(message: EMMessage?, progress: Int) {
+
+    }
+
+    override fun translateMessageSuccess(message: EMMessage?) {
+
+    }
+
+    override fun translateMessageFail(message: EMMessage?, code: Int, error: String?) {
 
     }
 }

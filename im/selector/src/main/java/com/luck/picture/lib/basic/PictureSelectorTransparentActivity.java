@@ -80,6 +80,9 @@ public class PictureSelectorTransparentActivity extends AppCompatActivity {
         String fragmentTag;
         Fragment targetFragment = null;
         int modeTypeSource = getIntent().getIntExtra(PictureConfig.EXTRA_MODE_TYPE_SOURCE, 0);
+
+        Log.e("TAG", "setupFragment: modeTypeSource=" + modeTypeSource );
+
         if (modeTypeSource == PictureConfig.MODE_TYPE_SYSTEM_SOURCE) {
             fragmentTag = PictureSelectorSystemFragment.TAG;
             targetFragment = PictureSelectorSystemFragment.newInstance();
@@ -102,6 +105,9 @@ public class PictureSelectorTransparentActivity extends AppCompatActivity {
             fragmentTag = PictureOnlyCameraFragment.TAG;
             targetFragment = PictureOnlyCameraFragment.newInstance();
         }
+
+        Log.e("TAG", "setupFragment: fragmentTag=" + fragmentTag );
+
         FragmentManager supportFragmentManager = getSupportFragmentManager();
         Fragment fragment = supportFragmentManager.findFragmentByTag(fragmentTag);
         if (fragment != null) {

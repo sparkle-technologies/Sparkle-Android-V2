@@ -49,6 +49,7 @@ public class EaseImageViewHolder extends EaseChatRowViewHolder {
     @Override
     public void onBubbleClick(EMMessage message) {
         super.onBubbleClick(message);
+//        Log.e("TAG", " EaseChatRowViewHolder onBubbleClick: " );
         EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
         if (EMClient.getInstance().getOptions().getAutodownloadThumbnail()) {
             if (imgBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.FAILED) {
@@ -79,7 +80,7 @@ public class EaseImageViewHolder extends EaseChatRowViewHolder {
             }
         }
         checkImgResource(imgBody, message);
-        Log.e("TAG", "onBubbleClick: -------image------- ");
+//        Log.e("TAG", "onBubbleClick: -------image------- ");
     }
 
     private void checkImgResource(EMImageMessageBody imgBody, EMMessage message) {
@@ -108,6 +109,7 @@ public class EaseImageViewHolder extends EaseChatRowViewHolder {
             downloadImg(msgId, uri -> {
                 String imgPath = UriUtils.getFilePath(getContext(), uri);
                 LocalMedia localMedia = buildLocalMedia(getContext(), imgPath);
+
                 goPreview(localMedia);
             });
         }
@@ -130,6 +132,11 @@ public class EaseImageViewHolder extends EaseChatRowViewHolder {
     private void goPreview(LocalMedia localMedia) {
         localMedia.setPath(SdkVersionUtils.isQ() ? localMedia.getPath() : localMedia.getRealPath());
         int pos = getChatRow().position;
+
+        mItemClickListener.onPicturePreview(localMedia, pos);
+
+        if(true)
+            return;
 
         Log.e("TAG", "goPreview:  pos=" + pos);
         Log.e("TAG", "goPreview:  localMedia.path=" + localMedia.getPath());

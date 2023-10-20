@@ -33,6 +33,8 @@ public interface EaseConstant {
     int CHATTYPE_CHATROOM = 3;
 
     String EXTRA_CHAT_TYPE = "chatType";
+
+    String EXTRA_LOCAL_MEDIA = "localMedia";
     String EXTRA_CONVERSATION_ID = "conversationId";
     String EXTRA_IS_ROAM = "isRoaming";
 

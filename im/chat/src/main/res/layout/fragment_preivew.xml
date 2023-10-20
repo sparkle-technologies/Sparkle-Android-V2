@@ -26,10 +26,25 @@
                 app:layout_constraintBottom_toTopOf="@+id/inputMenu"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!--   <com.luck.picture.lib.photoview.PhotoView
-                   android:id="@+id/preview_image"
-                   android:layout_width="match_parent"
-                   android:layout_height="match_parent" />-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_70"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_100"
+                android:fitsSystemWindows="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.luck.picture.lib.photoview.PhotoView
+                    android:id="@+id/coverImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.hyphenate.easeui.modules.chat.EaseChatInputMenu
                 android:id="@+id/inputMenu"
@@ -39,39 +54,40 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/messageListLayout" />
 
-            <!-- <com.cyberflow.sparkle.widget.ShadowImgButton
-                 android:id="@+id/btn_delete"
-                 android:layout_width="@dimen/dp_40"
-                 android:layout_height="@dimen/dp_40"
-                 android:layout_marginStart="@dimen/dp_22"
-                 android:layout_marginTop="@dimen/dp_48"
-                 app:layout_constraintLeft_toLeftOf="parent"
-                 app:layout_constraintTop_toTopOf="parent"
-                 app:view_bg_src="@drawable/main_ic_add_friends_bg"
-                 app:view_img_shadow_distance="1dp"
-                 app:view_img_src="@drawable/im_ic_preview_delete" />
+            <com.cyberflow.sparkle.widget.ShadowImgButton
+                android:id="@+id/shadow_btn_delete"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_22"
+                android:layout_marginTop="@dimen/dp_28"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                app:view_img_shadow_distance="1dp"
+                app:view_img_src="@drawable/im_ic_preview_delete" />
 
-             <com.cyberflow.sparkle.widget.ShadowImgButton
-                 android:id="@+id/btn_download"
-                 android:layout_width="@dimen/dp_40"
-                 android:layout_height="@dimen/dp_40"
-                 android:layout_marginEnd="@dimen/dp_22"
-                 app:layout_constraintRight_toRightOf="parent"
-                 app:layout_constraintTop_toTopOf="@+id/btn_delete"
-                 app:view_bg_src="@drawable/main_ic_add_friends_bg"
-                 app:view_img_shadow_distance="1dp"
-                 app:view_img_src="@drawable/im_ic_preview_download" />
+            <com.cyberflow.sparkle.widget.ShadowImgButton
+                android:id="@+id/shadow_btn_download"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginEnd="@dimen/dp_22"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/shadow_btn_delete"
+                app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                app:view_img_shadow_distance="1dp"
+                app:view_img_src="@drawable/im_ic_preview_download" />
 
-             <com.cyberflow.sparkle.widget.ShadowImgButton
-                 android:id="@+id/btn_share"
-                 android:layout_width="@dimen/dp_40"
-                 android:layout_height="@dimen/dp_40"
-                 android:layout_marginEnd="@dimen/dp_10"
-                 app:layout_constraintRight_toLeftOf="@+id/btn_download"
-                 app:layout_constraintTop_toTopOf="@+id/btn_download"
-                 app:view_bg_src="@drawable/main_ic_add_friends_bg"
-                 app:view_img_shadow_distance="1dp"
-                 app:view_img_src="@drawable/im_ic_preview_share" />-->
+            <com.cyberflow.sparkle.widget.ShadowImgButton
+                android:id="@+id/shadow_btn_share"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginEnd="@dimen/dp_10"
+                app:layout_constraintRight_toLeftOf="@+id/shadow_btn_download"
+                app:layout_constraintTop_toTopOf="@+id/shadow_btn_download"
+                app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                app:view_img_shadow_distance="1dp"
+                app:view_img_src="@drawable/im_ic_preview_share" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

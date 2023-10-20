@@ -16,7 +16,6 @@ import com.cyberflow.sparkle.chat.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.databinding.ActivityImChatBinding
-import com.cyberflow.sparkle.chat.ui.PreviewActivity
 import com.cyberflow.sparkle.chat.ui.fragment.ChatFragment
 import com.cyberflow.sparkle.chat.viewmodel.ChatViewModel
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel
@@ -37,7 +36,6 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
 
     companion object {
         fun launch(context: Context, conversationId: String, chatType: Int) {
-            Log.e(TAG, "actionStart: conversationId=$conversationId\t chatType=$chatType")
             val intent = Intent(context, ChatActivity::class.java)
             intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
             intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType)
@@ -50,8 +48,6 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
             conversationId = this
         }
         chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, 0)
-
-        Log.e(TAG, "initView: conversationId=$conversationId\t chatType=$chatType")
 
         if (conversationId.isNullOrEmpty() || chatType == 0) {
             ToastUtil.show(this, "Invalid params")
@@ -69,7 +65,6 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
 
         mDataBinding.ivBtnRight.click {
             Log.e(TAG, "ivBtnRight:  waiting for designer to decide what to do")
-            PreviewActivity.go(this@ChatActivity, "test1", 1)
         }
         initChatFragment()
     }

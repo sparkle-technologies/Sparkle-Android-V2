@@ -20,7 +20,7 @@ public class EaseChatRowViewHolder extends EaseMessageAdapter.ViewHolder<EMMessa
     private Context context;
     private EaseChatRow chatRow;
     private EMMessage message;
-    private MessageListItemClickListener mItemClickListener;
+    public MessageListItemClickListener mItemClickListener;
 
     public EaseChatRowViewHolder(@NonNull View itemView, MessageListItemClickListener itemClickListener) {
         super(itemView);

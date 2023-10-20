@@ -20,7 +20,7 @@
       android:strokeColor="#000000"/>
   <path
       android:pathData="M22.455,1.56L38.878,1.56A21.108,21.108 0,0 1,59.986 22.667L59.986,39.09A21.108,21.108 0,0 1,38.878 60.198L22.455,60.198A21.108,21.108 0,0 1,1.348 39.09L1.348,22.667A21.108,21.108 0,0 1,22.455 1.56z"
-      android:strokeWidth="1.36178"
+      android:strokeWidth="0.36178"
       android:fillColor="#00000000"
       android:strokeColor="#000000"/>
 </vector>

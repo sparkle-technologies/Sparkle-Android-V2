@@ -39,6 +39,7 @@ import com.hyphenate.util.EMLog;
 import com.hyphenate.util.ImageUtils;
 import com.hyphenate.util.PathUtil;
 import com.hyphenate.util.VersionUtils;
+import com.luck.picture.lib.entity.LocalMedia;
 
 import java.io.File;
 import java.io.IOException;
@@ -149,6 +150,11 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
 
     public void setOnChatLayoutListener(OnChatLayoutListener listener) {
         this.listener = listener;
+    }
+
+    @Override
+    public void onPicturePreview(LocalMedia localMedia, int position) {
+         // in ChatFragment
     }
 
     @Override

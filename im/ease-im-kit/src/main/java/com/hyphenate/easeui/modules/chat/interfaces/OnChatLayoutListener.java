@@ -3,12 +3,13 @@ package com.hyphenate.easeui.modules.chat.interfaces;
 import android.view.View;
 
 import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.model.EaseEvent;
+import com.luck.picture.lib.entity.LocalMedia;
 
 /**
  * 用于监听{@link com.hyphenate.easeui.modules.chat.EaseChatLayout}中的变化
  */
 public interface OnChatLayoutListener {
+
 
     /**
      * 点击消息bubble区域
@@ -83,4 +84,6 @@ public interface OnChatLayoutListener {
     default void onOtherTyping(String action) {
     }
 
+
+    void onPicturePreview(LocalMedia localMedia, int position);
 }

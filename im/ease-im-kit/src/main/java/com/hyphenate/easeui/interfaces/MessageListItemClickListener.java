@@ -3,6 +3,7 @@ package com.hyphenate.easeui.interfaces;
 import android.view.View;
 
 import com.hyphenate.chat.EMMessage;
+import com.luck.picture.lib.entity.LocalMedia;
 
 /**
  * 消息列表中的点击事件
@@ -77,4 +78,6 @@ public interface MessageListItemClickListener {
      * @param progress
      */
     void onMessageInProgress(EMMessage message, int progress);
+
+    void onPicturePreview(LocalMedia localMedia, int position);
 }

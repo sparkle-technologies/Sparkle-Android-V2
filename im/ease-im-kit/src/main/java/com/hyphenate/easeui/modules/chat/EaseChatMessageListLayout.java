@@ -37,6 +37,7 @@ import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenter;
 import com.hyphenate.easeui.modules.chat.presenter.EaseChatMessagePresenterImpl;
 import com.hyphenate.easeui.modules.chat.presenter.IChatMessageListView;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.luck.picture.lib.entity.LocalMedia;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
@@ -443,6 +444,13 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
             public void onMessageInProgress(EMMessage message, int progress) {
                 if (messageListItemClickListener != null) {
                     messageListItemClickListener.onMessageInProgress(message, progress);
+                }
+            }
+
+            @Override
+            public void onPicturePreview(LocalMedia localMedia, int position) {
+                if (messageListItemClickListener != null) {
+                    messageListItemClickListener.onPicturePreview(localMedia, position);
                 }
             }
         });
