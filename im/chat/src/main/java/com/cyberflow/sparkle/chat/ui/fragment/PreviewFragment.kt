@@ -12,18 +12,14 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.sparkle.chat.R
 import com.cyberflow.sparkle.chat.common.model.EmojiconExampleGroupData
 import com.cyberflow.sparkle.chat.common.utils.CompressFileEngineImpl
 import com.cyberflow.sparkle.chat.ui.fragment.ChatFragment.MeOnCameraInterceptListener
 import com.cyberflow.sparkle.widget.PermissionDialog
 import com.cyberflow.sparkle.widget.PermissionDialog.PermissionClickListener
-import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.drake.tooltip.dialog.BubbleDialog
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.easeui.domain.EaseEmojicon
@@ -40,13 +36,11 @@ import com.hyphenate.easeui.modules.chat.presenter.EaseHandleMessagePresenterImp
 import com.hyphenate.easeui.modules.chat.presenter.IHandleMessageView
 import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import com.hyphenate.easeui.utils.EaseFileUtils
-import com.hyphenate.easeui.utils.GlideEngine
 import com.hyphenate.easeui.utils.GlideEngine.Companion.createGlideEngine
 import com.hyphenate.easeui.utils.PicSelectorHelper
 import com.hyphenate.util.ImageUtils
 import com.luck.picture.lib.basic.PictureMediaScannerConnection
 import com.luck.picture.lib.basic.PictureSelector
-import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
 import com.luck.picture.lib.config.SelectMimeType
 import com.luck.picture.lib.config.SelectModeConfig
@@ -56,12 +50,7 @@ import com.luck.picture.lib.interfaces.OnCameraInterceptListener
 import com.luck.picture.lib.interfaces.OnKeyValueResultCallbackListener
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.luck.picture.lib.permissions.PermissionUtil
-import com.luck.picture.lib.photoview.OnViewTapListener
-import com.luck.picture.lib.photoview.PhotoView
-import com.luck.picture.lib.utils.BitmapUtils
-import com.luck.picture.lib.utils.DensityUtil
 import com.luck.picture.lib.utils.DownloadFileUtils
-import com.luck.picture.lib.utils.MediaUtils
 import com.luck.picture.lib.utils.ToastUtils
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
@@ -88,19 +77,11 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView(view)
-        initListener()
-
-        localMedia?.let { load(it) }
     }
 
     private var rootLinearLayout: InputAwareLayout? = null
     private var inputMenu: EaseChatInputMenu? = null
     private var messageListLayout: EaseChatMessageListLayout? = null
-
-    private var btnDelete: ShadowImgButton? = null
-    private var btnDownload: ShadowImgButton? = null
-    private var btnShare: ShadowImgButton? = null
-    private var coverImageView: PhotoView? = null
 
 
     private fun initView(view: View) {
@@ -108,39 +89,22 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
         inputMenu = view.findViewById(R.id.inputMenu)
         messageListLayout = view.findViewById(R.id.messageListLayout)
 
-        coverImageView = view.findViewById(R.id.coverImageView)
-
-        btnDelete = view.findViewById(R.id.shadow_btn_delete)
-        btnDownload = view.findViewById(R.id.shadow_btn_download)
-        btnShare = view.findViewById(R.id.shadow_btn_share)
-
 //        Log.e(TAG, "go: conversationId=$conversationId \t chatType=$chatType localMedia=${localMedia?.path}")
 
         initInputView()
     }
 
-    private fun initListener() {
-        btnDelete?.setClickListener(object : ShadowImgButton.ShadowClickListener {
-            override fun clicked() {
-                requireActivity().finish()
-            }
-        })
-        btnShare?.setClickListener(object : ShadowImgButton.ShadowClickListener {
-            override fun clicked() {
-                ToastUtil.show(requireContext(), "coming soon...", true)
-            }
-        })
-        btnDownload?.setClickListener(object : ShadowImgButton.ShadowClickListener {
-            override fun clicked() {
-                saveImageOrVideo()
-            }
-        })
+    private var localMedia: LocalMedia? = null
+
+    public fun saveImageOrVideo(localMedia: LocalMedia?) {
+        this.localMedia = localMedia
+        if (checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, ChatFragment.REQUEST_CODE_STORAGE_FILE)) {
+            realSave(localMedia)
+        }
     }
 
-    private fun saveImageOrVideo() {
-        if (checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, ChatFragment.REQUEST_CODE_STORAGE_FILE)) {
-            realSave()
-        }
+    public fun onOutSideClicked(){
+        inputMenu?.onOutSideClicked()
     }
 
     @SuppressLint("RestrictedApi")
@@ -162,7 +126,7 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
          if(requestCode == ChatFragment.REQUEST_CODE_STORAGE_FILE){
-             realSave()
+             realSave(localMedia)
          }
         if(requestCode == ChatFragment.REQUEST_CODE_CAMERA){
             takePictureOrRecordVideo()
@@ -203,7 +167,7 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
         dialog.show()
     }
 
-    private fun realSave() {
+    private fun realSave(localMedia: LocalMedia?) {
         localMedia?.let {
             val media = it
             val path = media.availablePath
@@ -234,82 +198,12 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
 
     private var conversationId: String = ""
     private var chatType: Int = 0
-    private var localMedia: LocalMedia? = null
 
-    fun setData(_conversationId: String, _chatType: Int, _localMedia: LocalMedia) {
+    fun setData(_conversationId: String, _chatType: Int) {
         this.conversationId = _conversationId
         this.chatType = _chatType
-        this.localMedia = _localMedia
     }
 
-    /****************************** load image **************************************/
-
-    // PicturePreviewAdapter  PreviewImageHolder
-    private fun load(media: LocalMedia) {
-        initScreenSize()
-        val size = getRealSizeFromMedia(media)
-        Log.e(TAG, "load: size=$size")
-        val maxImageSize = BitmapUtils.getMaxImageSize(size!![0], size!![1])
-        Log.e(TAG, "load: maxImageSize=$maxImageSize")
-        loadImage(media, maxImageSize[0], maxImageSize[1])
-        setScaleDisplaySize(media)
-        setCoverScaleType(media)
-    }
-
-    private var screenWidth = 0
-    private var screenHeight = 0
-    private var screenAppInHeight = 0
-
-    private fun initScreenSize() {
-        screenWidth = DensityUtil.getRealScreenWidth(requireContext())
-        screenHeight = DensityUtil.getScreenHeight(requireContext())
-        screenAppInHeight = DensityUtil.getRealScreenHeight(requireContext())
-    }
-
-    private fun getRealSizeFromMedia(media: LocalMedia): IntArray? {
-        return if (media.isCut && media.cropImageWidth > 0 && media.cropImageHeight > 0) {
-            intArrayOf(media.cropImageWidth, media.cropImageHeight)
-        } else {
-            intArrayOf(media.width, media.height)
-        }
-    }
-
-    private fun loadImage(media: LocalMedia, maxWidth: Int, maxHeight: Int) {
-        Log.e(TAG, "loadImage: maxWidth=$maxWidth \t maxHeight=$maxHeight")
-        GlideEngine.createGlideEngine().apply {
-            val availablePath = media.availablePath
-            Log.e(TAG, "loadImage: availablePath=$availablePath")
-            if (maxWidth == PictureConfig.UNSET && maxHeight == PictureConfig.UNSET) {
-                loadImage(requireContext(), availablePath, coverImageView)
-            } else {
-                loadImage(requireContext(), coverImageView, availablePath, maxWidth, maxHeight)
-            }
-        }
-
-        coverImageView?.setOnViewTapListener(OnViewTapListener { view, x, y ->
-//            requireActivity().finish()
-            inputMenu?.onOutSideClicked()
-        })
-    }
-
-    private fun setScaleDisplaySize(media: LocalMedia) {
-        if (screenWidth < screenHeight) {
-            if (media.width > 0 && media.height > 0) {
-                val layoutParams = coverImageView!!.layoutParams as ConstraintLayout.LayoutParams
-                layoutParams.width = screenWidth
-                layoutParams.height = screenAppInHeight
-//                layoutParams.gravity = Gravity.CENTER
-            }
-        }
-    }
-
-    private fun setCoverScaleType(media: LocalMedia) {
-        if (MediaUtils.isLongImage(media.width, media.height)) {
-            coverImageView!!.scaleType = ImageView.ScaleType.CENTER_CROP
-        } else {
-            coverImageView!!.scaleType = ImageView.ScaleType.FIT_CENTER
-        }
-    }
 
 
     /****************** IM *********************/
@@ -619,7 +513,7 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
     }
 
     override fun onTouchItemOutside(v: View?, position: Int) {
-
+        inputMenu?.onOutSideClicked()
     }
 
     override fun onViewDragging() {
