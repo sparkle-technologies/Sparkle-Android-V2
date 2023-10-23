@@ -20,12 +20,12 @@ import com.cyberflow.sparkle.chat.common.utils.ChatPresenter
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.im.view.IMContactListAct
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
-import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.widget.DoubleClickListener
 import com.cyberflow.sparkle.main.widget.NumView
 import com.cyberflow.sparkle.register.view.PageAdapter
 import com.cyberflow.sparkle.setting.view.SettingsActivity
+import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.easeui.model.EaseEvent
 

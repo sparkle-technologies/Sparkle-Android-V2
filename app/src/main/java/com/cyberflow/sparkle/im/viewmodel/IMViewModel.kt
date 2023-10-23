@@ -1,5 +1,6 @@
 package com.cyberflow.sparkle.im.viewmodel
 
+import android.text.TextUtils
 import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,6 +21,8 @@ import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.manager.EaseSystemMsgManager
 import com.hyphenate.easeui.model.EaseEvent
+import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
+import com.hyphenate.easeui.utils.EaseCommonUtils
 import kotlinx.coroutines.launch
 
 class IMViewModel : BaseViewModel() {
@@ -91,4 +94,43 @@ class IMViewModel : BaseViewModel() {
         }
     }
 
+
+    val conversationCacheObservable = MutableLiveData<List<EaseConversationInfo>>()
+    fun getConversationFromCache() {
+        viewModelScope.launch {
+            val cache = EMClient.getInstance().chatManager().allConversations
+            if (cache.isEmpty()) {
+                conversationCacheObservable.postValue(emptyList())
+                return@launch
+            }
+            // transfer EMCoversation to EaseConversationInfo
+            val newList = cache.filter {
+                !it.value.conversationId().equals(EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID)
+            }.map {
+                EaseConversationInfo().apply {
+                    info = it.value
+                    val conversation = it.value
+                    val extField: String = conversation.extField
+                    val lastMsgTime: Long =
+                        if (conversation.lastMessage == null) 0 else conversation.lastMessage.msgTime
+                    if (!TextUtils.isEmpty(extField) && EaseCommonUtils.isTimestamp(extField)) {
+                        isTop = true
+                        val makeTopTime = extField.toLong()
+                        timestamp = if (makeTopTime > lastMsgTime) {
+                            makeTopTime
+                        } else {
+                            lastMsgTime
+                        }
+                    } else {
+                        timestamp = lastMsgTime
+                    }
+                }
+            }.sortedBy {
+                it.isTop
+            }.sortedByDescending {
+                it.timestamp
+            }
+            conversationCacheObservable.postValue(newList)
+        }
+    }
 }

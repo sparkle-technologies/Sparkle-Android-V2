@@ -92,7 +92,9 @@ public class EaseShowLocalVideoActivity extends EaseBaseActivity implements Easy
             }
         });
         ivShare.setOnClickListener(v -> {
-            ToastUtils.showToast(this, "not decide yet");
+            /*TheRouter.build(PageConst.IM.PAGE_IM_FORWARD)
+                    .withString("forward_msg_id", msg_id)
+                    .navigation();*/
         });
         ivDelete.setOnClickListener(v -> {
             finish();

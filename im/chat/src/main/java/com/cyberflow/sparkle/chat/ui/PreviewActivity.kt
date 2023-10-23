@@ -11,7 +11,7 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.cyberflow.base.act.BaseVBAct
-import com.cyberflow.base.util.ToastUtil
+import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.chat.R
@@ -28,6 +28,7 @@ import com.luck.picture.lib.photoview.PhotoView
 import com.luck.picture.lib.utils.BitmapUtils
 import com.luck.picture.lib.utils.DensityUtil
 import com.luck.picture.lib.utils.MediaUtils
+import com.therouter.TheRouter
 import com.vanniktech.ui.hideKeyboard
 
 class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
@@ -60,7 +61,10 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
         })
         mViewBind.shadowBtnShare.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                ToastUtil.show(this@PreviewActivity, "coming soon...", true)
+                Log.e(TAG, "clicked: localMedia?.forward_msg_id=${localMedia?.forward_msg_id}" )
+                TheRouter.build(PageConst.IM.PAGE_IM_FORWARD)
+                    .withString("forward_msg_id", localMedia?.forward_msg_id)
+                    .navigation()
             }
         })
         mViewBind.shadowBtnDownload.setClickListener(object : ShadowImgButton.ShadowClickListener {

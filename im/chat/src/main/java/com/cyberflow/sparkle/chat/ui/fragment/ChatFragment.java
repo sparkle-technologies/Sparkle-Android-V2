@@ -36,6 +36,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.cyberflow.base.BaseApp;
 import com.cyberflow.base.act.BaseVBAct;
+import com.cyberflow.base.util.PageConst;
 import com.cyberflow.base.util.bus.LiveDataBus;
 import com.cyberflow.sparkle.chat.DemoHelper;
 import com.cyberflow.sparkle.chat.R;
@@ -86,6 +87,7 @@ import com.luck.picture.lib.interfaces.OnKeyValueResultCallbackListener;
 import com.luck.picture.lib.interfaces.OnResultCallbackListener;
 import com.luck.picture.lib.permissions.PermissionUtil;
 import com.luck.picture.lib.utils.ToastUtils;
+import com.therouter.TheRouter;
 
 import java.io.File;
 import java.io.IOException;
@@ -867,7 +869,13 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     @Override
     public boolean onMenuItemClick(MenuItemBean item, EMMessage message) {
         if (item.getItemId() == R.id.action_chat_forward) {
-//            ForwardMessageActivity.actionStart(mContext, message.getMsgId());
+
+            Log.e(TAG, "onMenuItemClick: message.getMsgId()="+ message.getMsgId() );
+
+            TheRouter.build(PageConst.IM.PAGE_IM_FORWARD)
+                    .withString("forward_msg_id", message.getMsgId())
+                    .navigation();
+
             return true;
         } else if (item.getItemId() == com.hyphenate.easeui.R.id.action_chat_delete) {
             showDeleteDialog(message);

@@ -51,4 +51,7 @@ dependencies {
     api 'io.github.lucksiege:camerax:v3.11.1'
     api 'com.vanniktech:emoji-ios:0.18.0-SNAPSHOT'
     implementation "com.google.android.exoplayer:exoplayer:2.18.0"
+
+    kapt("cn.therouter:apt:1.2.0-rc1")
+    implementation("cn.therouter:router:1.2.0-rc1")
 }

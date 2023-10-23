@@ -31,6 +31,10 @@ const val STATUS_REJECTED = 2
 data class ContactListHeader(override var itemHover: Boolean = true) : ItemHover
 
 @Serializable
+data class RecentContactList(var list: List<Contact> = listOf())
+data class SearchContactList(var list: List<Contact> = listOf())
+
+@Serializable
 data class ContactList(var list: List<Any> = listOf())
 
 @Serializable

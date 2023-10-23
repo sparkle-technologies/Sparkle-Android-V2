@@ -82,7 +82,7 @@ public class EaseBaseActivity extends AppCompatActivity {
      * @param fitSystemForTheme
      */
     public void setFitSystemForTheme(boolean fitSystemForTheme) {
-        setFitSystemForTheme(fitSystemForTheme, R.color.white, true);
+        setFitSystemForTheme(fitSystemForTheme, R.color.black, true);
     }
 
     /**

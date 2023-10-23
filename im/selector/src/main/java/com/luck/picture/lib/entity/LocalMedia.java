@@ -163,6 +163,8 @@ public class LocalMedia implements Parcelable {
      */
     private String parentFolderName;
 
+    private String forward_msg_id;
+
     /**
      * bucketId
      */
@@ -232,6 +234,7 @@ public class LocalMedia implements Parcelable {
         isOriginal = in.readByte() != 0;
         fileName = in.readString();
         parentFolderName = in.readString();
+        forward_msg_id = in.readString();
         bucketId = in.readLong();
         dateAddedTime = in.readLong();
         customData = in.readString();
@@ -271,6 +274,7 @@ public class LocalMedia implements Parcelable {
         dest.writeByte((byte) (isOriginal ? 1 : 0));
         dest.writeString(fileName);
         dest.writeString(parentFolderName);
+        dest.writeString(forward_msg_id);
         dest.writeLong(bucketId);
         dest.writeLong(dateAddedTime);
         dest.writeString(customData);
@@ -663,6 +667,14 @@ public class LocalMedia implements Parcelable {
 
     public void setParentFolderName(String parentFolderName) {
         this.parentFolderName = parentFolderName;
+    }
+
+    public String getForward_msg_id() {
+        return forward_msg_id;
+    }
+
+    public void setForward_msg_id(String forward_msg_id) {
+        this.forward_msg_id = forward_msg_id;
     }
 
     public long getBucketId() {

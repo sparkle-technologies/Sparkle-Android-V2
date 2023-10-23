@@ -100,10 +100,15 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                 }
             })
         }
-        msgViewModel.messageChange.with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java)
-            .observe(this) {
-                if (it.isMessageChange) showSnackBar(it.message)
+        msgViewModel.messageChange.with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java).observe(this) {
+            it?.apply {
+                if (isMessageChange) {
+                    message?.also { m->
+                        showSnackBar(m)
+                    }
+                }
             }
+        }
         msgViewModel.messageChange.with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java)
             .observe(this) {
                 if (it == null) {

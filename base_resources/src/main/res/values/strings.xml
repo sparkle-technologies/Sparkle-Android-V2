@@ -79,4 +79,5 @@
     <string name="my_friends">My Friends</string>
     <string name="send_message">Send message...</string>
     <string name="send_a_message">Send a message</string>
+    <string name="send_to">Send to</string>
 </resources>

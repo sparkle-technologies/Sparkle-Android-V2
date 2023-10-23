@@ -101,6 +101,7 @@ public class EaseImageViewHolder extends EaseChatRowViewHolder {
             }
             Log.e("TAG", "onBubbleClick: imgPath=" + imgPath);
             LocalMedia localMedia = buildLocalMedia(getContext(), imgPath);
+            localMedia.setForward_msg_id(message.getMsgId());
             goPreview(localMedia);
         } else {  // download first, then go preview it
 //            String finename = imgBody.getFileName();
@@ -109,7 +110,7 @@ public class EaseImageViewHolder extends EaseChatRowViewHolder {
             downloadImg(msgId, uri -> {
                 String imgPath = UriUtils.getFilePath(getContext(), uri);
                 LocalMedia localMedia = buildLocalMedia(getContext(), imgPath);
-
+                localMedia.setForward_msg_id(msgId);
                 goPreview(localMedia);
             });
         }

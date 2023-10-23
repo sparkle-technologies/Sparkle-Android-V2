@@ -1,5 +1,12 @@
 [
   {
+    "path": "/im/IMForwardListAct",
+    "className": "com.cyberflow.sparkle.im.view.IMForwardListAct",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
     "path": "/im/ChatActivity",
     "className": "com.cyberflow.sparkle.im.view.ChatActivity",
     "action": "",
