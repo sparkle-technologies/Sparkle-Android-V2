@@ -7,7 +7,7 @@
 
         <variable
             name="m"
-            type="com.cyberflow.base.model.IMSearchData" />
+            type="com.cyberflow.sparkle.im.db.IMSearchData" />
     </data>
 
     <LinearLayout
@@ -33,12 +33,13 @@
                 app:strokeColor="@color/black"
                 app:strokeWidth="@dimen/dp_1">
 
+                <!-- holder="@{m.gender == 1 ? @drawable/place_holder_man :  @drawable/place_holder_women}"  -->
+
                 <ImageView
                     android:id="@+id/iv_head"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/avatar" />
+                    android:scaleType="fitXY" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -83,7 +84,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
-                    android:text="@{m.address}"
                     android:textSize="@dimen/sp_12"
                     tools:text="0xb98...3c6e" />
 

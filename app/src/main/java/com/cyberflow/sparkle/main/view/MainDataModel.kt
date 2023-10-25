@@ -9,7 +9,7 @@ class OfficialModel(var names: List<String>, override var itemPosition: Int = 0)
 
 class FriendsModel(var names: List<Any>, override var itemPosition: Int = 0) : ItemPosition
 
-class FriendMessageInfo(var imageUrl: String = "", var nickname: String = "", var bgColor: String = "#ffffff", var num: String = "0", var gender: Int = 1, override var itemPosition: Int = 0): ItemPosition
+class FriendMessageInfo(var avatar: String = "", var imageUrl: String = "", var nickname: String = "", var open_uid :String = "",  var bgColor: String = "#ffffff", var num: Int = 0, var gender: Int = 1, override var itemPosition: Int = 0): ItemPosition
 
 class FriendsAddModel(override var itemPosition: Int = 0) : ItemPosition
 

@@ -63,7 +63,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         // after login, now login to IM , then go main page or register page
         fun imLogin(activity: Activity){
             LoadingDialogHolder.getLoadingDialog()?.show(activity)
-            IMManager.instance.loginToIM(IMManager.Account, IMManager.Pwd, object : IMV2Callback<IMLoginResponse> {
+            IMManager.instance.loginToIM(object : IMV2Callback<IMLoginResponse> {
                 override fun onEvent(event: IMLoginResponse) {
                     ThreadUtil.runOnMainThread{
                         LoadingDialogHolder.getLoadingDialog()?.hide()

@@ -297,7 +297,7 @@ public class EaseUser implements Serializable {
         return users;
     }
 
-    public class GetInitialLetter {
+    public static class GetInitialLetter {
         private String defaultLetter = "#";
 
         /**

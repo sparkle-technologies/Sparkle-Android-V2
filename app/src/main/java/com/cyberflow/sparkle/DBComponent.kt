@@ -42,7 +42,6 @@ object DBComponent {
             .diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false).into(v)
     }
 
-
     @SuppressLint("CheckResult")
     @BindingAdapter(value = ["img", "holder", "corner"], requireAll = false)
     @JvmStatic
@@ -56,11 +55,13 @@ object DBComponent {
         requestBuilder.into(v)
     }
 
+    fun loadImage(v: ImageView, url: Any?, holder: Drawable?) {
+        Glide.with(v.context).load(url).placeholder(holder).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false).into(v)
+    }
 
     @BindingAdapter(value = ["url"], requireAll = true)
     @JvmStatic
     fun loadImage(v: ImageView, url: Any?) {
-        Glide.with(v.context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
-            .skipMemoryCache(false).into(v)
+        Glide.with(v.context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false).into(v)
     }
 }

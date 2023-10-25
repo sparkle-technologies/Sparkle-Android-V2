@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.annotation.UiThread
 import com.cyberflow.base.BaseApp
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.SafeGlobalScope
 import com.cyberflow.base.util.callback.IMActionResult
 import com.cyberflow.base.util.callback.IMLoginResponse
@@ -30,8 +31,6 @@ class IMManager private constructor() {
     companion object {
         val instance: IMManager by lazy { IMManager() }
         const val TAG = "IMManager"
-        const val Account = "test5"
-        const val Pwd = "123"
     }
 
     @UiThread
@@ -48,18 +47,22 @@ class IMManager private constructor() {
         DemoHelper.getInstance().init(app)
         repository = EMClientRepository()
         mChatRepository = EMChatManagerRepository()
-
     }
 
     private var job: Job? = null
 
-    fun loginToIM(imAccount: String, imPwd: String, callback: IMV2Callback<IMLoginResponse>) {
+    fun loginToIM( callback: IMV2Callback<IMLoginResponse>) {
         job?.let {
             it.cancel()
         }
         val newJob = SupervisorJob().also { job = it }
         SafeGlobalScope.launch(newJob + Dispatchers.IO) {
+            val imAccount: String = CacheUtil.getUserInfo()?.user?.getIMAccount() ?: ""
+            val imPwd: String = "sparkle_123456"
             Log.e(TAG, "im login: imAccount=$imAccount, imPwd=$imPwd")
+            if(imAccount.isNullOrEmpty()){
+                return@launch
+            }
             repository?.also {
                 it.login(imAccount, imPwd, object : IMV2Callback<IMActionResult> {
                     override fun onEvent(event: IMActionResult) {

@@ -94,6 +94,7 @@ class NickNameFragment :
                     val token = CacheUtil.getUserInfo()?.token.orEmpty()
                     Log.e("NickNameFragment", "got new token from login :  $token")
                     LoginAct.imLogin(requireActivity())
+                    requireActivity().finish()
                 }
             }
         }

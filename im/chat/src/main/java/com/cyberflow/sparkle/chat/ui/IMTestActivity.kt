@@ -156,7 +156,7 @@ class IMTestActivity : BaseDBAct<IMTestViewModel, ActivityImTestBinding>() {
 
     fun imLogin(activity: Activity){
         LoadingDialogHolder.getLoadingDialog()?.show(activity)
-        IMManager.instance.loginToIM(IMManager.Account, IMManager.Pwd, object :
+        IMManager.instance.loginToIM(object :
             IMV2Callback<IMLoginResponse> {
             override fun onEvent(event: IMLoginResponse) {
                 ThreadUtil.runOnMainThread{

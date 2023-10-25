@@ -2,10 +2,10 @@ package com.cyberflow.sparkle.main.viewmodel
 
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.scopeNetLife
 import androidx.lifecycle.viewModelScope
 import com.cyberflow.base.BaseApp
 import com.cyberflow.base.model.DailyHoroScopeData
+import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.bus.SingleSourceLiveData
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.chat.DemoHelper
@@ -17,31 +17,41 @@ import com.cyberflow.sparkle.chat.common.enums.Status
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.common.net.Resource
 import com.cyberflow.sparkle.chat.common.repositories.EMChatManagerRepository
+import com.cyberflow.sparkle.chat.common.repositories.EMContactManagerRepository
+import com.cyberflow.sparkle.im.db.IMUserInfoList
+import com.drake.net.Post
+import com.drake.net.utils.scopeNet
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMConversation
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.easeui.constants.EaseConstant
+import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import com.hyphenate.easeui.utils.EaseCommonUtils
 import com.luck.picture.lib.utils.ToastUtils.showToast
 import kotlinx.coroutines.launch
 
-class MainViewModel : BaseViewModel {
+class MainViewModel : BaseViewModel() {
 
     var horoScopeData: MutableLiveData<DailyHoroScopeData> = MutableLiveData()
 
-    constructor() : super()
+    var imUserListData: MutableLiveData<IMUserInfoList> = MutableLiveData()
 
-
-    fun getDailyHoroscope() = scopeNetLife {
-//        horoScopeData.value = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {}.await()
+    fun getIMUserInfoList(openUidList: List<String>?) = scopeNet {
+        imUserListData.value = Post<IMUserInfoList>(Api.IM_BATCH_USER_INFO) {
+            json("scene" to "0", "open_uid_list" to openUidList)
+        }.await()
     }
-
 
     // ------------------------------------------- IM -------------------------------------------
 
+    val contactObservable = SingleSourceLiveData<Resource<List<EaseUser>>>()
+    val mRepository = EMContactManagerRepository()
+    fun loadContactList(server: Boolean) {
+        contactObservable.setSource(mRepository.getContactList(server));
+    }
 
-    fun refreshIMData(){
+    fun refreshIMData() {
         //需要两个条件，判断是否触发从服务器拉取会话列表的时机，一是第一次安装，二则本地数据库没有会话列表数据
         if (DemoHelper.getInstance().isFirstInstall && EMClient.getInstance().chatManager().allConversations.isEmpty()) {
             fetchConversationsFromServer()
@@ -54,9 +64,10 @@ class MainViewModel : BaseViewModel {
     }
 
     val conversationInfoObservable = SingleSourceLiveData<Resource<List<EaseConversationInfo>>>()
+    val chatRepository = EMChatManagerRepository()
+
     fun fetchConversationsFromServer() {  // get conversations from server
-        val mRepository = EMChatManagerRepository()
-        conversationInfoObservable.setSource(mRepository.fetchConversationsFromServer())
+        conversationInfoObservable.setSource(chatRepository.fetchConversationsFromServer())
     }
 
     val conversationCacheObservable = MutableLiveData<List<EaseConversationInfo>>()
@@ -125,10 +136,9 @@ class MainViewModel : BaseViewModel {
         } else count.toString()
     }
 
-    val inviteMsgObservable =
-        SingleSourceLiveData<List<EMMessage>>()
+    val inviteMsgObservable = SingleSourceLiveData<List<EMMessage>>()
 
-    fun loadFriendRequestMessages() {
+    private fun loadFriendRequestMessages() {
         viewModelScope.launch {
             val emMessages = EMClient.getInstance().chatManager().searchMsgFromDB(
                 EMMessage.Type.TXT,

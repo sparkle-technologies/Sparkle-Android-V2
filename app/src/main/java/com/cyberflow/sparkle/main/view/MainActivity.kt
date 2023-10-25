@@ -5,19 +5,23 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import com.bumptech.glide.Glide
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
+import com.cyberflow.sparkle.DBComponent.loadImage
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.utils.ChatPresenter
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
+import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.im.view.IMContactListAct
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
@@ -74,7 +78,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
         mDataBinding.viewMenuRight.setOnClickListener(object : DoubleClickListener() {
             override fun onDoubleClick() {
-                right.refresh()
+                right.pullToRefreshUI()
             }
 
             override fun onSingleClick() {
@@ -83,8 +87,10 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         })
 
         mDataBinding.ivHead.setOnClickListener {
+
             Snackbar.make(mDataBinding.ivHead, "go setting", Snackbar.LENGTH_SHORT).show()
             SettingsActivity.go(this)
+
         }
 
         mDataBinding.btnAddFriends.setClickListener(object : ShadowImgButton.ShadowClickListener {
@@ -154,10 +160,15 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
     }
 
     override fun initData() {
-        Glide.with(this)
-            .load(R.drawable.avatar)
-            .skipMemoryCache(true)
-            .into(mDataBinding.ivHead)
+        CacheUtil.getUserInfo()?.user?.apply {
+            val resId = if (gender == 1) {
+                com.cyberflow.base.resources.R.drawable.home_male_head_default
+            } else {
+                com.cyberflow.base.resources.R.drawable.home_female_head_default
+            }
+            val draw = ResourcesCompat.getDrawable(resources, resId, null)
+            loadImage(mDataBinding.ivHead, avatar, draw)
+        }
 
         loadIMConversations()
     }
@@ -170,7 +181,14 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         }
     }
 
+    override fun onDestroy() {
+        DBManager.instance.closeDB()
+        super.onDestroy()
+    }
+
     private fun loadIMConversations() {
+        DBManager.instance.initDB(this)
+
         ChatPresenter.getInstance().init()  // chat global observer, like msg received , it should be called after login
 
         LiveDataBus.get().apply {
@@ -186,11 +204,20 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         viewModel.inviteMsgObservable.observe(this) { list ->
             list?.also {
 
-                val count = it.filter { msg->
+                val res = it.filter { msg ->
                     val statusParam = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS)
                     val status = InviteMessageStatus.valueOf(statusParam)
                     status == InviteMessageStatus.BEINVITEED
-                }.size
+                }
+                val count = res.size
+
+                val open_uid_list = res.map {
+                    it.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM)
+                }
+
+                if(open_uid_list.isNotEmpty()){
+                    viewModel.getIMUserInfoList(open_uid_list)
+                }
 
                 mDataBinding.tvNum.apply {
                     if (it.isNotEmpty()) {
@@ -218,4 +245,14 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         }
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            val home = Intent(Intent.ACTION_MAIN)
+            home.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            home.addCategory(Intent.CATEGORY_HOME)
+            startActivity(home)
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
 }

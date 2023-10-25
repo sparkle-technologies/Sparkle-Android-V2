@@ -13,6 +13,7 @@ import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.net.Resource
 import com.cyberflow.sparkle.chat.common.repositories.EMContactManagerRepository
+import com.cyberflow.sparkle.im.db.IMUserSearchList
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMConversation
 import com.hyphenate.chat.EMMessage
@@ -26,6 +27,8 @@ import com.hyphenate.easeui.utils.EaseCommonUtils
 import kotlinx.coroutines.launch
 
 class IMViewModel : BaseViewModel() {
+
+    var imUserListData: MutableLiveData<IMUserSearchList> = MutableLiveData()
 
     val mContactRepository = EMContactManagerRepository()
 
@@ -43,7 +46,6 @@ class IMViewModel : BaseViewModel() {
     fun loadContactList(server: Boolean) {
         contactObservable.setSource(mRepository.getContactList(server));
     }
-
 
     val userInfoObservable = SingleSourceLiveData<Resource<EaseUser>>()
     val mRepository = EMContactManagerRepository()

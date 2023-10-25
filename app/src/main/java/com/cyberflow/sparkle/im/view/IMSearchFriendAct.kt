@@ -6,17 +6,23 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.cyberflow.base.act.BaseDBAct
-import com.cyberflow.base.model.IMSearchData
+import com.cyberflow.sparkle.im.db.IMSearchData
+import com.cyberflow.sparkle.im.db.IMUserSearchList
+import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.KeyboardUtil
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityImSearchFriendBinding
+import com.cyberflow.sparkle.databinding.ItemImSearchBinding
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.drake.net.Post
+import com.drake.net.utils.scope
 import com.drake.spannable.replaceSpanFirst
 import com.drake.spannable.span.ColorSpan
 
@@ -28,24 +34,6 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
             val intent = Intent(context, IMSearchFriendAct::class.java)
             context.startActivity(intent)
         }
-    }
-
-    // make fake data
-    private fun searchFriends() {
-        val query = mDataBinding.edtSearchFriend.text.toString().trim()
-        Log.e(TAG, "searchFriends: query=$query" )
-
-        if(query.isNullOrEmpty()){
-            mDataBinding.state.showEmpty()
-            return
-        }
-        inputTxt = query
-        val dataList = arrayListOf<IMSearchData>()
-        dataList.add(IMSearchData(query, "", "0xbcc...ad23", 1))
-        dataList.add(IMSearchData("${query}'s'", "", "0xbcc...ad23", 1))
-        dataList.add(IMSearchData("fake${query}'data", "", "0xbcc...ad23", 1))
-        mDataBinding.state.showContent()
-        mDataBinding.rv.models = dataList
     }
 
     private var inputTxt = ""
@@ -65,8 +53,19 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
         mDataBinding.rv.linear().setup {
             addType<IMSearchData>(R.layout.item_im_search)
             onBind {
-                findView<TextView>(R.id.tv_friend_result).text = getSpan(getModel<IMSearchData>().name)
-                findView<View>(R.id.line).visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
+                val data = getModel<IMSearchData>()
+                val binding = getBinding<ItemImSearchBinding>()
+                binding.tvFriendResult.text = getSpan(data.nick)
+
+                Log.e(TAG, "initView: ${data.avatar}" )
+
+                Glide.with(this@IMSearchFriendAct).load(data.avatar).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false).into(binding.ivHead)
+//                loadImage(binding.ivHead, data.avatar)
+                val address = if(data.wallet_address.isNullOrEmpty()) data.ca_wallet else data.wallet_address
+                if(address.length > 5){
+                    binding.tvAddress.text = "${address.substring(0, 5)}...${address.substring(address.length - 5, address.length)}"
+                }
+                binding.line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
             }
             R.id.tv_add.onClick {
                 val model = getModel<IMSearchData>()
@@ -111,6 +110,31 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
     }
 
     override fun initData() {
+        viewModel.imUserListData?.observe(this){
+            if(it.list.isNullOrEmpty()){
+                mDataBinding.state.showEmpty()
+            }else{
+                mDataBinding.state.showContent()
+                mDataBinding.rv.models = it.list
+            }
+        }
+    }
 
+    // make fake data
+    private fun searchFriends() {
+        val query = mDataBinding.edtSearchFriend.text.toString().trim()
+        Log.e(TAG, "searchFriends: query=$query" )
+
+        if(query.isNullOrEmpty()){
+            mDataBinding.state.showEmpty()
+            return
+        }
+        inputTxt = query
+        mDataBinding.state.showLoading()
+        mDataBinding.state.scope {
+            viewModel.imUserListData?.value = Post<IMUserSearchList>(Api.IM_USER_SEARCH) {
+                json("keyword" to inputTxt)
+            }.await()
+        }
     }
 }

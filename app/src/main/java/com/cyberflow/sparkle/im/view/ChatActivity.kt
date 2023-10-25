@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.click
+import com.cyberflow.sparkle.DBComponent.loadImage
 import com.cyberflow.sparkle.chat.DemoHelper
 import com.cyberflow.sparkle.chat.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
@@ -22,7 +23,6 @@ import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel
 import com.cyberflow.sparkle.chat.viewmodel.parseResource
 import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.chat.EMClient
-import com.hyphenate.easeui.EaseIM
 import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.model.EaseEvent
 
@@ -30,14 +30,18 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     ChatFragment.OnFragmentInfoListener {
 
     var conversationId: String = ""
+    var avatar: String = ""
+    var nickName: String = ""
     var chatType: Int = 0
 
     private val msgViewModel: MessageViewModel by viewModels()
 
     companion object {
-        fun launch(context: Context, conversationId: String, chatType: Int) {
+        fun launch(context: Context, conversationId: String, avatar: String, nickName:String,  chatType: Int) {
             val intent = Intent(context, ChatActivity::class.java)
             intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
+            intent.putExtra(EaseConstant.EXTRA_CONVERSATION_AVATAR, avatar)
+            intent.putExtra(EaseConstant.EXTRA_CONVERSATION_NICK_NAME, nickName)
             intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType)
             context.startActivity(intent)
         }
@@ -46,6 +50,12 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     override fun initView(savedInstanceState: Bundle?) {
         intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_ID)?.apply {
             conversationId = this
+        }
+        intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_AVATAR)?.apply {
+            avatar = this
+        }
+        intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_NICK_NAME)?.apply {
+            nickName = this
         }
         chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, 0)
 
@@ -143,19 +153,9 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     }
 
     private fun setDefaultTitle() {
-        Log.e(TAG, "setDefaultTitle: conversationId=${conversationId}  chatType=${chatType}")
-        val userProvider = EaseIM.getInstance().userProvider
-        val title = if (userProvider != null) {
-            val user = userProvider.getUser(conversationId)
-            if (user != null) {
-                user.nickname
-            } else {
-                conversationId!!
-            }
-        } else {
-            conversationId!!
-        }
-        mDataBinding.tvTitle.text = title
+        Log.e(TAG, "setDefaultTitle: avatar=${avatar}  nickName=${nickName}")
+        mDataBinding.tvTitle.text = nickName
+        loadImage(mDataBinding.ivAvatar, avatar)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

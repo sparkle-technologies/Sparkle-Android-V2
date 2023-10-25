@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
+    id("kotlinx-serialization")
     id("therouter")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
@@ -98,4 +99,12 @@ dependencies {
 
     kapt("cn.therouter:apt:1.2.0-rc1")
     implementation("cn.therouter:router:1.2.0-rc1")
+
+    //for database
+    val room_version = "2.5.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
 }

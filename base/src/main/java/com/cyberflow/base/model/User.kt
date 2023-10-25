@@ -26,7 +26,9 @@ data class User(
     var star_sign: List<StartSignItem>? = null ,
     var task_completed: Boolean = false,
     var wallet_address: String = ""
-)
+){
+    fun getIMAccount() :String = open_uid.replace("-", "_")
+}
 
 @Serializable
 data class BindBean(

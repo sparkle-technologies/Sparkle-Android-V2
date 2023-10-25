@@ -335,9 +335,8 @@ public class DemoHelper {
         return user;
     }
 
-
-//    private final static String APP_KEY_TEST = "1111230615161307#sparkletest";
-    private final static String APP_KEY_TEST = "1111230615161307#demo";
+    private final static String APP_KEY_TEST = "1111230615161307#sparkletest";
+//    private final static String APP_KEY_TEST = "1111230615161307#demo";
 
 
     /**
@@ -359,7 +358,7 @@ public class DemoHelper {
          */
         EMPushConfig.Builder builder = new EMPushConfig.Builder(context);
 
-        builder.enableFCM("95650532859");  // from firebase server : https://console.firebase.google.com/project/sparkle-android-app/settings/cloudmessaging?hl=zh-cn
+        builder.enableFCM("782795210914");  // from firebase server : https://console.firebase.google.com/project/sparkle-android-app/settings/cloudmessaging?hl=zh-cn
 
       /*  builder.enableVivoPush() // 需要在AndroidManifest.xml中配置appId和appKey
                 .enableMeiZuPush("134952", "f00e7e8499a549e09731a60a4da399e3")
