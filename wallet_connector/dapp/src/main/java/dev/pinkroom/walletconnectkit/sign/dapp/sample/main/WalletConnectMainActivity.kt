@@ -27,7 +27,6 @@ import dev.pinkroom.walletconnectkit.core.accounts
 import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
 import dev.pinkroom.walletconnectkit.sign.dapp.components.WalletConnectKitButton
 import dev.pinkroom.walletconnectkit.sign.dapp.sample.theme.WalletConnectKitTheme
-import timber.log.Timber
 
 class WalletConnectMainActivity : ComponentActivity() {
     private lateinit var walletConnectKit: WalletConnectKit
@@ -55,6 +54,7 @@ class WalletConnectMainActivity : ComponentActivity() {
 @Composable
 fun Content(walletConnectKit: WalletConnectKit) {
     val activeSessions by walletConnectKit.activeSessions.collectAsStateWithLifecycle(initialValue = emptyList())
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

@@ -5,14 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.databinding.ActivitySettingBinding
+import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.view.LoginAct
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
@@ -46,6 +49,11 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         sb.append("clear local cache")
         sb.append("\n")
         freshUI()
+
+        lifecycleScope.launch {
+            DBManager.instance.db?.imUserInfoDao()?.deleteAll()
+        }
+
         CacheUtil.setUserInfo(null)
         CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "")
         CacheUtil.savaString(CacheUtil.UNIPASS_PUBK, "")

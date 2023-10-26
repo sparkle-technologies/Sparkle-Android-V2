@@ -234,7 +234,15 @@ private fun WalletConnectKitBottomSheet(
         sheetState = sheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() },
     ) {
-        if (showPairings) {
+
+        SelectWallet(installedWallets) {
+            scope.launch {
+                sheetState.hide()
+                onWalletClick(it)
+            }
+        }
+
+        /*if (showPairings) {
             SelectPairings(
                 pairingsMetadata = pairingsMetadata,
                 onPairingClick = {
@@ -252,7 +260,7 @@ private fun WalletConnectKitBottomSheet(
                     onWalletClick(it)
                 }
             }
-        }
+        }*/
     }
 }
 

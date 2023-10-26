@@ -52,8 +52,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
     companion object {
         fun go(context: Context) {
             val intent = Intent(context, LoginAct::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(intent)
         }
 
@@ -197,11 +196,11 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
         lifecycleScope.launch {
             MyApp.instance.checkWalletConnect()
+            MyApp.instance.walletConnectKit?.disconnect()
             runOnUiThread {
                 mViewBind.composeView.setContent {
                     MyApp.instance.walletConnectKit?.let { Content(it) }
                 }
-
                 lifecycleScope.launch {
                     MyApp.instance.walletConnectKit?.activeSessions?.collect {
                         if (it.isNotEmpty()) {

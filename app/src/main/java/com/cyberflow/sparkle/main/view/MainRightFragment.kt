@@ -28,7 +28,6 @@ import com.drake.brv.utils.divider
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.drake.net.utils.withMain
-import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.chat.EMConversation
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import kotlinx.coroutines.launch
@@ -65,14 +64,14 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         }.setup {
                             addType<String>(R.layout.item_official)
                             onClick(R.id.root) {
-                                Snackbar.make(this.itemView, "click official", Snackbar.LENGTH_SHORT).show()
+//                                Snackbar.make(this.itemView, "click official", Snackbar.LENGTH_SHORT).show()
                                 when (this.layoutPosition) {
                                     0 -> {
 //                                        mDatabind.rv.models = getData(true)
                                     }
 
                                     1 -> {
-                                        mDatabind.rv.models = getData(false)
+//                                        mDatabind.rv.models = getData(false)
                                     }
                                 }
                             }
