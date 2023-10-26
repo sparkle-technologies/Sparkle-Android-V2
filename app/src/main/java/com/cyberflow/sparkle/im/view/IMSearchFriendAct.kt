@@ -7,16 +7,15 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.cyberflow.base.act.BaseDBAct
-import com.cyberflow.sparkle.im.db.IMSearchData
-import com.cyberflow.sparkle.im.db.IMUserSearchList
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.KeyboardUtil
+import com.cyberflow.sparkle.DBComponent.loadImage
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityImSearchFriendBinding
 import com.cyberflow.sparkle.databinding.ItemImSearchBinding
+import com.cyberflow.sparkle.im.db.IMSearchData
+import com.cyberflow.sparkle.im.db.IMUserSearchList
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
@@ -59,8 +58,7 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
 
                 Log.e(TAG, "initView: ${data.avatar}" )
 
-                Glide.with(this@IMSearchFriendAct).load(data.avatar).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false).into(binding.ivHead)
-//                loadImage(binding.ivHead, data.avatar)
+                loadImage(binding.ivHead, data.avatar)
                 val address = if(data.wallet_address.isNullOrEmpty()) data.ca_wallet else data.wallet_address
                 if(address.length > 5){
                     binding.tvAddress.text = "${address.substring(0, 5)}...${address.substring(address.length - 5, address.length)}"

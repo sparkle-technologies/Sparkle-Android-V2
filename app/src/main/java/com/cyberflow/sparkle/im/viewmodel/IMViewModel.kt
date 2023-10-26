@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cyberflow.base.BaseApp
+import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SingleSourceLiveData
 import com.cyberflow.base.viewmodel.BaseViewModel
@@ -13,7 +14,10 @@ import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.net.Resource
 import com.cyberflow.sparkle.chat.common.repositories.EMContactManagerRepository
+import com.cyberflow.sparkle.im.db.IMUserInfoList
 import com.cyberflow.sparkle.im.db.IMUserSearchList
+import com.drake.net.Post
+import com.drake.net.utils.scopeNet
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMConversation
 import com.hyphenate.chat.EMMessage
@@ -40,6 +44,14 @@ class IMViewModel : BaseViewModel() {
                 friendObservable.value = response
             }
         }
+    }
+
+    var imNewFriendListData: MutableLiveData<IMUserInfoList> = MutableLiveData()
+
+    fun getIMNewFriendInfoList(openUidList: List<String>?) = scopeNet {
+        imNewFriendListData.value = Post<IMUserInfoList>(Api.IM_BATCH_USER_INFO) {
+            json("scene" to "0", "open_uid_list" to openUidList)
+        }.await()
     }
 
     val contactObservable = SingleSourceLiveData<Resource<List<EaseUser>>>()

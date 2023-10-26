@@ -1,6 +1,8 @@
 package com.cyberflow.sparkle.main.view
 
 import android.app.Activity
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
@@ -10,6 +12,7 @@ import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.databinding.FragmentMainRightBinding
+import com.cyberflow.sparkle.databinding.ItemFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedEmptyBinding
 import com.cyberflow.sparkle.databinding.MainFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.MainOfficialBinding
@@ -27,7 +30,6 @@ import com.drake.brv.utils.setup
 import com.drake.net.utils.withMain
 import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.chat.EMConversation
-import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -36,7 +38,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
 
 
     private val TAG = "MainRightFragment"
-    
+
     private var actVm: MainViewModel? = null
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
@@ -44,7 +46,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        Log.e(TAG, "initView: ", )
+        Log.e(TAG, "initView: ")
         initListView()
     }
 
@@ -87,9 +89,28 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         }.setup {
                             addType<FriendMessageInfo>(R.layout.item_friends_feed)
                             addType<FriendsAddModel>(R.layout.item_friends_feed_add)
-                            onClick(R.id.lay_go_chat){
+                            onBind {
+                                when(itemViewType){
+                                    R.layout.item_friends_feed ->{
+                                        val model = getModel<FriendMessageInfo>()
+                                        getBinding<ItemFriendsFeedBinding>().bgBottomColor.apply {
+                                            (background as? GradientDrawable)?.also {
+                                                it.setColor(Color.parseColor(model.bgColor))
+                                                background = it
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            onClick(R.id.lay_go_chat) {
                                 val model = getModel<FriendMessageInfo>(layoutPosition)
-                                ChatActivity.launch(context, conversationId = model.open_uid, avatar = model.avatar, nickName = model.nickname, chatType = 1)
+                                ChatActivity.launch(
+                                    context,
+                                    conversationId = model.open_uid,
+                                    avatar = model.avatar,
+                                    nickName = model.nickname,
+                                    chatType = 1
+                                )
                             }
                             onClick(R.id.bg_new_friend) {
                                 IMSearchFriendAct.go(requireActivity())
@@ -132,30 +153,38 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
 
     // called by activity
     fun pullToRefreshUI() {
-        Log.e(TAG, "refresh: " )
+        Log.e(TAG, "pullToRefreshUI: ")
         mDatabind.page.autoRefresh()
     }
 
-    private fun freshIMData(){
+    // no friends contact list
+    fun showEmpty() {
+        Log.e(TAG, "showEmpty: ")
+        showConversationList(null)
+    }
+
+    private fun freshIMData() {
+        Log.e(TAG, "freshIMData: ", )
         actVm?.refreshIMData()
     }
 
     override fun initData() {
-        Log.e(TAG, "initData: ", )
+        Log.e(TAG, "initData: ")
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         initIMListener()
         initHeadData()
-        actVm?.loadContactList(true)
     }
 
     /************************* IM *******************************/
     private fun initIMListener() {
-        
-        Log.e(TAG, "initIMListener: " )
-        
+        Log.e(TAG, "initIMListener: ")
         // from server
-        actVm?.conversationInfoObservable?.observe(this) { response ->
+        actVm?.conversationInfoObservable?.observe(requireActivity()) { response ->
             mDatabind.page.finishRefresh()
-            Log.e("MainRightFragment", "conversation from server " )
+            Log.e("MainRightFragment", "conversation from server ")
             parseResource(response, object : OnResourceParseCallback<List<EaseConversationInfo>>(true) {
                     override fun onSuccess(data: List<EaseConversationInfo>?) {
                         fetchUserInfoFromLocalDB(data)
@@ -164,60 +193,19 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
         }
 
         // from db cache
-        actVm?.conversationCacheObservable?.observe(this) {
+        actVm?.conversationCacheObservable?.observe(requireActivity()) {
             mDatabind.page.finishRefresh()
-            Log.e("MainRightFragment", "conversation from db cache " )
+            Log.e("MainRightFragment", "conversation from db cache ")
             fetchUserInfoFromLocalDB(it)
         }
-
-        actVm?.contactObservable?.observe(this){ response ->
-            parseResource(response, object : OnResourceParseCallback<List<EaseUser>>() {
-                override fun onSuccess(data: List<EaseUser>?) {
-                    Log.e("MainRightFragment", "contact from server " )
-                    batchRequest(data)
-                }
-            })
-        }
-
-        // after fetch user info from our server
-        actVm?.imUserListData?.observe(this){ infoList->
-            saveToLocalDB(infoList.user_info_list)
-            //?.map {
-            //                it.toInfo()
-            //            }
-        }
     }
 
-    private fun saveToLocalDB(userInfoList: List<IMUserInfo>?) {
-        Log.e(TAG, "saveToLocalDB: ", )
-        if(userInfoList.isNullOrEmpty()){
-            return
-        }
-        lifecycleScope.launch {
-            DBManager.instance.db?.imUserInfoDao()?.insert(*userInfoList.toTypedArray())
-            withMain {
-                freshIMData()
-            }
-        }
-    }
-
-    // get data from server then save into local db
-    private fun batchRequest(data: List<EaseUser>?){
-        Log.e(TAG, "batchRequest: ", )
-        val open_uid_list = data?.map {
-            it.username.replace("_", "-")
-        }?.filter { it.length > 20 }?.toList()
-        if(open_uid_list.isNullOrEmpty()){
-           return
-        }
-        actVm?.getIMUserInfoList(open_uid_list)
-    }
 
     var allData = arrayListOf<Any>()
     var headData = arrayListOf<Any>()
 
-    private fun initHeadData(){
-        Log.e(TAG, "initHeadData: ", )
+    private fun initHeadData() {
+        Log.e(TAG, "initHeadData: ")
         headData.add(HeaderModel(title = "Official"))
         headData.add(OfficialModel(arrayListOf("Cora-Official", "King-Official")))
         allData.clear()
@@ -225,55 +213,96 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
         mDatabind.rv.models = allData
     }
 
-    private val map = HashMap<String, IMUserInfo>()
     private val unRead = HashMap<String, Int>()
 
-    private fun fetchUserInfoFromLocalDB(data: List<EaseConversationInfo>?){
-        Log.e(TAG, "fetchUserInfoFromLocalDB: ", )
-        
-        if(data.isNullOrEmpty()){
-            showConversationList(null)
-        }else{
-            lifecycleScope.launch {
-                map.clear()
-                DBManager.instance.db?.imUserInfoDao()?.getAll()?.forEach {
-                    it.open_uid = it.open_uid.replace("-", "_")
-                    map[it.open_uid] = it
-                }
+    private fun fetchUserInfoFromLocalDB(data: List<EaseConversationInfo>?) {
+        Log.e(TAG, "fetchUserInfoFromLocalDB: ")
+        lifecycleScope.launch {
+            val allContactList = DBManager.instance.db?.imUserInfoDao()?.getAll()
+            if (data.isNullOrEmpty() && allContactList.isNullOrEmpty()) {
+                withMain { showConversationList(null) }
+                return@launch
+            } else {
 
-                data.filter {
-                    map.contains((it.info as? EMConversation)?.conversationId())
-                }.mapNotNull {
-                    val username = (it.info as? EMConversation)?.conversationId() ?: ""
-                    val count = (it.info as? EMConversation)?.unreadMsgCount
-                    unRead[username] = count ?: 0
-                    map[username]
-                }.apply {
-                    showConversationList(this)
+                allContactList?.associate {
+                    it.open_uid.replace("-", "_") to it
+                }?.also { allContactMap ->
+
+                    val allData = arrayListOf<IMUserInfo>()
+                    val conversaction = data?.filter {
+                        allContactMap.contains((it.info as? EMConversation)?.conversationId())
+                    }?.mapNotNull {
+                        val username = (it.info as? EMConversation)?.conversationId() ?: ""
+                        val count = (it.info as? EMConversation)?.unreadMsgCount
+                        unRead[username] = count ?: 0
+                        allContactMap[username]
+                    }.orEmpty()
+
+                    val mark = conversaction.map { it.open_uid.replace("-", "_") }.toSet()
+
+//                    Log.e(TAG, "mark: ${mark.toString()}" )
+
+//                    allContactMap.forEach {
+//                        Log.e(TAG, "allContactMap.forEach: key=${it.key}   value=${it.value}", )
+//                    }
+
+                    val contactData = allContactMap.filter {
+                        !mark.contains(it.key)
+                    }.map {
+                        it.value
+                    }.sortedBy {
+                        it.nick
+                    }.orEmpty()
+
+//                    conversaction.forEach {
+//                        Log.e(TAG, "conversaction: ${it.nick}" )
+//                    }
+
+//                    contactData.forEach {
+//                        Log.e(TAG, "contactData: ${it.nick}" )
+//                    }
+
+                    allData.addAll(conversaction)
+                    allData.addAll(contactData)
+
+                    if (allData.isNotEmpty()) {
+                        showConversationList(allData)
+                    } else {
+                        showConversationList(null)
+                    }
                 }
             }
         }
     }
 
     private fun showConversationList(data: List<IMUserInfo>?) {
-        Log.e(TAG, "showConversationList: ", )
+        Log.e(TAG, "showConversationList: ")
         var modelData = arrayListOf<Any>()
         modelData.add(HeaderModel(title = "Friends Feed"))
         if (data.isNullOrEmpty()) {
             modelData.add(FriendsEmptyModel())
-        }else{
+        } else {
             var friendMessageList = arrayListOf<Any>()
             data?.also { list ->
                 list.forEach { item ->
 
                     var avatar = item.avatar
-                    var imageUrl  = item.feed_avatar
+                    var imageUrl = item.feed_avatar
                     var nickname = item.nick
-                    var openUid = item.open_uid
-                    var bgColor  = item.feed_card_color
+                    var openUid = item.open_uid.replace("-", "_")
+                    var bgColor = item.feed_card_color
                     var num: Int = unRead[item.open_uid] ?: 0
 
-                    friendMessageList.add(FriendMessageInfo(avatar=avatar, imageUrl=imageUrl, nickname=nickname,  open_uid = openUid, bgColor = bgColor, num = num))
+                    friendMessageList.add(
+                        FriendMessageInfo(
+                            avatar = avatar,
+                            imageUrl = imageUrl,
+                            nickname = nickname,
+                            open_uid = openUid,
+                            bgColor = bgColor,
+                            num = num
+                        )
+                    )
                 }
                 if (friendMessageList.size <= 6) {
                     friendMessageList.add(FriendsAddModel())
@@ -293,22 +322,21 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
             HeaderModel(title = "Official"),
             OfficialModel(arrayListOf("Cora-Official", "King-Official")),
             HeaderModel(title = "Friends Feed"),
-            if (empty) FriendsEmptyModel() else
-                FriendsModel(
-                    arrayListOf(
-                        FriendMessageInfo(nickname = "Cora-$r"),
-                        FriendMessageInfo(nickname ="King-$r"),
-                        FriendMessageInfo(nickname ="Cora-$r"),
+            if (empty) FriendsEmptyModel() else FriendsModel(
+                arrayListOf(
+                    FriendMessageInfo(nickname = "Cora-$r"),
+                    FriendMessageInfo(nickname = "King-$r"),
+                    FriendMessageInfo(nickname = "Cora-$r"),
 
-                        FriendMessageInfo(nickname ="King-$r"),
-                        FriendMessageInfo(nickname ="Cora-$r"),
-                        FriendMessageInfo(nickname ="King-$r"),
+                    FriendMessageInfo(nickname = "King-$r"),
+                    FriendMessageInfo(nickname = "Cora-$r"),
+                    FriendMessageInfo(nickname = "King-$r"),
 
-                        FriendMessageInfo(nickname ="King-$r"),
-                        FriendMessageInfo(nickname ="Cora-$r"),
-                        FriendMessageInfo(nickname ="King-$r")
-                    )
+                    FriendMessageInfo(nickname = "King-$r"),
+                    FriendMessageInfo(nickname = "Cora-$r"),
+                    FriendMessageInfo(nickname = "King-$r")
                 )
+            )
         )
     }
 }

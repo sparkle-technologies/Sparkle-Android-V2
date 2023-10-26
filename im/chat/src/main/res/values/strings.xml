@@ -570,7 +570,7 @@
     <string name="demo_chat_room_listener_onOwnerChanged">%1$s has transferred chat room to %2$s</string>
     <string name="demo_chat_room_listener_onAnnouncementChanged">Chat room announcement has been updated.</string>
 
-    <string name="demo_contact_listener_onContactAdded">You\'ve added %1$s as a friend</string>
+    <string name="demo_contact_listener_onContactAdded">You\'ve added a friend</string>
     <string name="demo_contact_listener_onContactDeleted">You\'ve deleted your friend %1$s</string>
     <string name="demo_contact_listener_onContactDeleted_by_other">%1$s has unfriended you</string>
     <string name="demo_contact_listener_onContactInvited">%1$s wants to be your friend. Please accept the request. </string>

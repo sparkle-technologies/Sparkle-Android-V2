@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -19,19 +20,25 @@ import com.cyberflow.sparkle.DBComponent.loadImage
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
+import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.common.utils.ChatPresenter
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.im.DBManager
+import com.cyberflow.sparkle.im.db.IMUserInfo
 import com.cyberflow.sparkle.im.view.IMContactListAct
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
+import com.cyberflow.sparkle.main.viewmodel.parseResource
 import com.cyberflow.sparkle.main.widget.DoubleClickListener
 import com.cyberflow.sparkle.main.widget.NumView
 import com.cyberflow.sparkle.register.view.PageAdapter
 import com.cyberflow.sparkle.setting.view.SettingsActivity
 import com.cyberflow.sparkle.widget.ShadowImgButton
+import com.drake.net.utils.withMain
 import com.google.android.material.snackbar.Snackbar
+import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.model.EaseEvent
+import kotlinx.coroutines.launch
 
 class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
@@ -175,9 +182,16 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
     /********************* IM ***********************/
 
-    private fun freshData(event: EaseEvent?) {
+    private fun freshConversationData(event: EaseEvent?) {
+        Log.e(TAG, "freshConversationData: ", )
         event?.also {
-            viewModel.refreshIMData()
+            viewModel.freshConversationData()
+        }
+    }
+
+    private fun freshContactData(event: EaseEvent?) {
+        event?.also {
+            viewModel.freshContactData()
         }
     }
 
@@ -192,13 +206,11 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         ChatPresenter.getInstance().init()  // chat global observer, like msg received , it should be called after login
 
         LiveDataBus.get().apply {
-            with(DemoConstant.NOTIFY_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)  // unread
-            with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)  // unread
-            with(DemoConstant.CONVERSATION_DELETE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)  // unread
-            with(DemoConstant.CONVERSATION_READ, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)   // unread
-            with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)  // unread
-            with(DemoConstant.CONTACT_ADD, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)
-            with(DemoConstant.CONTACT_UPDATE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshData)
+            with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshConversationData)
+
+            with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshContactData)
+            with(DemoConstant.CONTACT_ADD, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshContactData)
+            with(DemoConstant.CONTACT_UPDATE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshContactData)
         }
 
         viewModel.inviteMsgObservable.observe(this) { list ->
@@ -212,11 +224,11 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
                 val count = res.size
 
                 val open_uid_list = res.map {
-                    it.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM)
+                    it.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM).replace("_", "-")
                 }
 
                 if(open_uid_list.isNotEmpty()){
-                    viewModel.getIMUserInfoList(open_uid_list)
+                    viewModel.getIMNewFriendInfoList(open_uid_list)
                 }
 
                 mDataBinding.tvNum.apply {
@@ -238,11 +250,59 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
             }
         }
 
+        viewModel.contactObservable?.observe(this){ response ->
+            parseResource(response, object : OnResourceParseCallback<List<EaseUser>>() {
+                override fun onSuccess(data: List<EaseUser>?) {
+                    Log.e("MainActivity", "contact from server size: ${data?.size}" )
+                    contactsBatchRequestInfo(data)
+                }
+            })
+        }
+
+        viewModel.imNewFriendListData?.observe(this){ infoList->
+            saveToLocalDB(infoList.user_info_list, false)
+        }
+
+        viewModel.imContactListData?.observe(this){ infoList->
+            saveToLocalDB(infoList.user_info_list, true)
+        }
+
         viewModel.homeUnReadObservable.observe(this) {
             if (it.isNotEmpty()) {
-                Log.e("TAG", "UnRead Count: $it")   // todo :  PM not decide yet
+                Log.e("MainActivity", "UnRead Count: $it")   // todo :  PM not decide yet
             }
         }
+
+        viewModel.loadContactList(true)
+    }
+
+    private fun saveToLocalDB(userInfoList: List<IMUserInfo>?, isContactData: Boolean = false) {
+        Log.e(TAG, "saveToLocalDB: isContactData=$isContactData", )
+        if(userInfoList.isNullOrEmpty()){
+            return
+        }
+        lifecycleScope.launch {
+            DBManager.instance.db?.imUserInfoDao()?.insert(*userInfoList.toTypedArray())
+            if(isContactData){
+                withMain {
+                    freshConversationData(EaseEvent())
+                }
+            }
+        }
+    }
+
+    // get data from server then save into local db
+    private fun contactsBatchRequestInfo(data: List<EaseUser>?){
+        Log.e(TAG, "batchRequest:  size: ${data?.size}", )
+        val open_uid_list = data?.map {
+            it.username.replace("_", "-")
+        }?.filter { it.length > 20 }?.toList()
+        if(open_uid_list.isNullOrEmpty()){
+            Log.e(TAG, "contactsBatchRequestInfo: open_uid_list isNullOrEmpty" )
+            right.showEmpty()  // no friends
+            return
+        }
+        viewModel.getIMContactInfoList(open_uid_list)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

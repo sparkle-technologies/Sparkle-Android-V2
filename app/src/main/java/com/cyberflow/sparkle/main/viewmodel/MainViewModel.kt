@@ -35,10 +35,17 @@ class MainViewModel : BaseViewModel() {
 
     var horoScopeData: MutableLiveData<DailyHoroScopeData> = MutableLiveData()
 
-    var imUserListData: MutableLiveData<IMUserInfoList> = MutableLiveData()
+    var imContactListData: MutableLiveData<IMUserInfoList> = MutableLiveData()
+    var imNewFriendListData: MutableLiveData<IMUserInfoList> = MutableLiveData()
 
-    fun getIMUserInfoList(openUidList: List<String>?) = scopeNet {
-        imUserListData.value = Post<IMUserInfoList>(Api.IM_BATCH_USER_INFO) {
+    fun getIMContactInfoList(openUidList: List<String>?) = scopeNet {
+        imContactListData.value = Post<IMUserInfoList>(Api.IM_BATCH_USER_INFO) {
+            json("scene" to "0", "open_uid_list" to openUidList)
+        }.await()
+    }
+
+    fun getIMNewFriendInfoList(openUidList: List<String>?) = scopeNet {
+        imNewFriendListData.value = Post<IMUserInfoList>(Api.IM_BATCH_USER_INFO) {
             json("scene" to "0", "open_uid_list" to openUidList)
         }.await()
     }
@@ -48,19 +55,27 @@ class MainViewModel : BaseViewModel() {
     val contactObservable = SingleSourceLiveData<Resource<List<EaseUser>>>()
     val mRepository = EMContactManagerRepository()
     fun loadContactList(server: Boolean) {
-        contactObservable.setSource(mRepository.getContactList(server));
+        contactObservable.setSource(mRepository.getContactList(server))
     }
 
-    fun refreshIMData() {
+    fun freshContactData(){
+        loadFriendRequestMessages()
+        loadContactList(true)
+    }
+
+    fun freshConversationData(){
         //需要两个条件，判断是否触发从服务器拉取会话列表的时机，一是第一次安装，二则本地数据库没有会话列表数据
         if (DemoHelper.getInstance().isFirstInstall && EMClient.getInstance().chatManager().allConversations.isEmpty()) {
             fetchConversationsFromServer()
         } else {
             getConversationFromCache()
         }
-
         checkUnreadMsg()
-        loadFriendRequestMessages()
+    }
+
+    fun refreshIMData() {
+        freshContactData()
+        freshConversationData()
     }
 
     val conversationInfoObservable = SingleSourceLiveData<Resource<List<EaseConversationInfo>>>()

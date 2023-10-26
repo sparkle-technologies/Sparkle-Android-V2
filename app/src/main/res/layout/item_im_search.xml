@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_56">
@@ -96,7 +95,6 @@
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_marginStart="@dimen/dp_7"
-            android:layout_marginTop="@dimen/dp_6"
             android:layout_marginEnd="@dimen/dp_12"
             android:background="@drawable/register_google_place_divider" />
 

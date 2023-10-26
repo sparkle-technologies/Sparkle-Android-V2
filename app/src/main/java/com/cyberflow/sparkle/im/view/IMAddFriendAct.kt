@@ -5,11 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.cyberflow.base.act.BaseDBAct
-import com.cyberflow.sparkle.im.db.IMSearchData
 import com.cyberflow.sparkle.DBComponent.loadImage
 import com.cyberflow.sparkle.chat.DemoHelper
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.databinding.ActivityImAddFriendBinding
+import com.cyberflow.sparkle.im.db.IMSearchData
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.main.view.MainActivity
 import com.cyberflow.sparkle.main.viewmodel.parseResource
@@ -79,7 +79,7 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
         hideKeyboard()
 
         Log.e(TAG, "submit: currentUsername=${DemoHelper.getInstance().model.currentUsername}" )
-
+//        imAccount="c32c8b8b_04ee_439c_a65b_0d46304bdaf7"
         viewModel.addFriend(imAccount, msg)
     }
 }

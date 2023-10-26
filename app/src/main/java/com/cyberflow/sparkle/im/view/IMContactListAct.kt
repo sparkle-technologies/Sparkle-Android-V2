@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.LinearLayout
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
@@ -184,17 +183,19 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         mDataBinding.rvCache.linear().setup {
             addType<FriendRequest>(R.layout.item_im_request)
             onBind {
-                findView<View>(R.id.line).visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
-                findView<LinearLayout>(R.id.lay_delete).setOnClickListener {
-                    val model = getModel<FriendRequest>(layoutPosition)
-                    viewModel.deleteMessage(model.emMessage?.msgId)
-                }
-                findView<ShadowTxtButton>(R.id.btn_accept).setClickListener(object : ShadowTxtButton.ShadowClickListener{
-                    override fun clicked(disable: Boolean) {
-                        val model = getModel<FriendRequest>(layoutPosition)
-                        viewModel.acceptFriend(model.emMessage)
+                getBinding<ItemImRequestBinding>().apply {
+                    val model = getModel<FriendRequest>()
+                    line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
+                    layDelete.setOnClickListener {
+                        viewModel.deleteMessage(model.emMessage?.msgId)
                     }
-                })
+                    btnAccept.setClickListener(object : ShadowTxtButton.ShadowClickListener{
+                        override fun clicked(disable: Boolean) {
+                            val model = getModel<FriendRequest>(layoutPosition)
+                            viewModel.acceptFriend(model.emMessage)
+                        }
+                    })
+                }
             }
         }
     }
@@ -224,6 +225,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         loadLocalDBData(null)
     }
 
+
     // for event listener
     private fun loadLocalDBData(easeEvent: EaseEvent?) {
         lifecycleScope.launch {
@@ -249,9 +251,9 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         }
 
         LiveDataBus.get().apply {
-            with(DemoConstant.NOTIFY_CHANGE, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::loadLocalDBData)
-            with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::loadLocalDBData)
             with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::loadLocalDBData)
+            with(DemoConstant.CONTACT_ADD, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::loadLocalDBData)
+            with(DemoConstant.CONTACT_UPDATE, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::loadLocalDBData)
         }
 
         viewModel.inviteMsgObservable.observe(this) {inviteList->
@@ -267,6 +269,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
             }
 
             var list = arrayListOf<FriendRequest>()
+            var newUser = arrayListOf<String>()
             inviteList.forEach { msg ->
                 try {
                     val name = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM)
@@ -294,8 +297,9 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                             }
                             allRequestData.add(cacheFriend)
                         }
+                    }else{
+                        newUser.add(name)
                     }
-
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -303,6 +307,14 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
             list.forEach {
                 Log.e(TAG, "freshData: $it" )
+            }
+            newUser.forEach {
+                Log.e(TAG, "freshData: $it" )
+            }
+
+            if(newUser.isNotEmpty()){
+                viewModel.getIMNewFriendInfoList(newUser)
+                return@observe
             }
 
             if(list.isNotEmpty()){
@@ -323,14 +335,32 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                 }
             })
         }
+
+        viewModel.imNewFriendListData.observe(this){
+            saveToLocalDB(it.user_info_list, false)
+        }
+    }
+
+    private fun saveToLocalDB(userInfoList: List<IMUserInfo>?, isContactData: Boolean = false) {
+        Log.e(TAG, "saveToLocalDB: ", )
+        if(userInfoList.isNullOrEmpty()){
+            return
+        }
+        lifecycleScope.launch {
+            DBManager.instance.db?.imUserInfoDao()?.insert(*userInfoList.toTypedArray())
+            if(isContactData){
+                withMain {
+                    freshData()
+                }
+            }
+        }
     }
 
     private val allRequestData = arrayListOf<FriendRequest>()
     private fun freshData() {
-        viewModel.loadFriendRequestMessages()  // load system message
+        viewModel.loadFriendRequestMessages()    // load system message
         viewModel.loadContactList(true)   // load contact data from local db
     }
-
 
     private val map = HashMap<String, IMUserInfo>()
 

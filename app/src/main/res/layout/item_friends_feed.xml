@@ -17,6 +17,7 @@
         android:layout_height="183dp">
 
         <View
+            android:id="@+id/bg_bottom_color"
             android:layout_width="94dp"
             android:layout_height="60dp"
             android:background="@drawable/main_bg_friend_account"
