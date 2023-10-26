@@ -821,6 +821,13 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 LiveDataBus.get().with(DemoConstant.MESSAGE_NOT_SEND).postValue(true);
             }
         }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE).postValue(new EaseEvent(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.TYPE.MESSAGE));
+        super.onDestroy();
     }
 
     /**

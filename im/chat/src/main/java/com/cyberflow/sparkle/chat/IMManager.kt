@@ -57,14 +57,14 @@ class IMManager private constructor() {
         }
         val newJob = SupervisorJob().also { job = it }
         SafeGlobalScope.launch(newJob + Dispatchers.IO) {
+            val imToken = CacheUtil.getUserInfo()?.im_token ?: ""
             val imAccount: String = CacheUtil.getUserInfo()?.user?.getIMAccount() ?: ""
-            val imPwd: String = "sparkle_123456"
-            Log.e(TAG, "im login: imAccount=$imAccount, imPwd=$imPwd")
-            if(imAccount.isNullOrEmpty()){
+            Log.e(TAG, "im login: imAccount=$imAccount  imToken=$imToken")
+            if(imToken.isNullOrEmpty()){
                 return@launch
             }
             repository?.also {
-                it.login(imAccount, imPwd, object : IMV2Callback<IMActionResult> {
+                it.loginWithToken(imAccount, imToken, object : IMV2Callback<IMActionResult> {
                     override fun onEvent(event: IMActionResult) {
                         if (event is IMActionResult.Success) {
 //                            DemoHelper.getInstance().autoLogin = true

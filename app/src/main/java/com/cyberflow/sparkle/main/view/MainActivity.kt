@@ -114,7 +114,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
         mDataBinding.layDialogAdd.apply {
             findViewById<View>(R.id.lay_add_friends).setOnClickListener {
-                IMSearchFriendAct.go(this@MainActivity)
+                IMSearchFriendAct.go(this@MainActivity, viewModel.getContactList())
                 mDataBinding.layDialogAdd.visibility = View.GONE
             }
             findViewById<View>(R.id.lay_contacts).setOnClickListener {
@@ -183,7 +183,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
     /********************* IM ***********************/
 
     private fun freshConversationData(event: EaseEvent?) {
-        Log.e(TAG, "freshConversationData: ", )
+        Log.e(TAG, "freshConversationData: event:${event?.event}  refresh:${event?.refresh}  message:${event?.message}", )
         event?.also {
             viewModel.freshConversationData()
         }
@@ -206,7 +206,10 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         ChatPresenter.getInstance().init()  // chat global observer, like msg received , it should be called after login
 
         LiveDataBus.get().apply {
+            with(DemoConstant.NOTIFY_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshConversationData)
             with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshConversationData)
+            with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshConversationData)
+            with(DemoConstant.CONVERSATION_READ, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshConversationData)
 
             with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshContactData)
             with(DemoConstant.CONTACT_ADD, EaseEvent::class.java).observe(this@MainActivity, this@MainActivity::freshContactData)

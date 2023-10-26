@@ -38,6 +38,12 @@ class MainViewModel : BaseViewModel() {
     var imContactListData: MutableLiveData<IMUserInfoList> = MutableLiveData()
     var imNewFriendListData: MutableLiveData<IMUserInfoList> = MutableLiveData()
 
+    fun getContactList() : List<String>{
+        return imContactListData.value?.user_info_list?.map {
+            it.open_uid
+        }.orEmpty()
+    }
+
     fun getIMContactInfoList(openUidList: List<String>?) = scopeNet {
         imContactListData.value = Post<IMUserInfoList>(Api.IM_BATCH_USER_INFO) {
             json("scene" to "0", "open_uid_list" to openUidList)

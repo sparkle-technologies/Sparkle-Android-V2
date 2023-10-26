@@ -371,9 +371,9 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         allContactData.clear()
         val list = arrayListOf<Any>()
 
-        data?.forEach {
-            Log.e(TAG, "  userName=${it.username}  initialLetter=${it.initialLetter}" )
-        }
+//        data?.forEach {
+//            Log.e(TAG, "  userName=${it.username}  initialLetter=${it.initialLetter}" )
+//        }
 
         val markArray = BooleanArray(array.size)  // handle letter missing problem
         val letter = EaseUser.GetInitialLetter()
@@ -395,7 +395,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                 markArray[array.indexOf(initialLetter)] = true
             }
 
-            Log.e(TAG, "showContactListData: ${it.nick}  ${it}" )
+//            Log.e(TAG, "showContactListData: ${it.nick}  ${it}" )
 
             Contact(name = it.nick, avatar = it.avatar).apply {
                 list.add(this)

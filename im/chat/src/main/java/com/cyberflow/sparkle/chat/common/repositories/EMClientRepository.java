@@ -136,7 +136,6 @@ public class EMClientRepository extends BaseEMRepository {
                     DemoHelper.getInstance().init(BaseApp.getInstance());
                 }
                 DemoHelper.getInstance().getModel().setCurrentUserName(userName);
-                DemoHelper.getInstance().getModel().setCurrentUserPwd(pwd);
                 OptionsHelper.getInstance().checkChangeServe();
                 if (isTokenFlag) {
                     EMClient.getInstance().loginWithToken(userName, pwd, new DemoEmCallBack() {
@@ -171,17 +170,44 @@ public class EMClientRepository extends BaseEMRepository {
         }.asLiveData();
     }
 
+    public void loginWithToken(String userName, String imToken, IMV2Callback<IMActionResult> callback) {
+        if (!DemoHelper.getInstance().isSDKInit) {
+            DemoHelper.getInstance().init(BaseApp.getInstance());
+        }
+        DemoHelper.getInstance().getModel().setCurrentUserName(userName);
+        OptionsHelper.getInstance().checkChangeServe();
+
+        if (EMClient.getInstance().isLoggedIn()) {
+            callback.onEvent(new IMActionResult.Success());
+        } else {
+            EMClient.getInstance().loginWithToken(userName, imToken, new DemoEmCallBack() {
+                @Override
+                public void onSuccess() {
+                    Log.e(TAG, "EMClient.getInstance().login  onSuccess: ");
+                    successForCallBack(null);
+                    callback.onEvent(new IMActionResult.Success());
+                }
+
+                @Override
+                public void onError(int code, String error) {
+                    Log.e(TAG, " EMClient.getInstance().login  onError: " + code + "\t " + error);
+                    callback.onEvent(new IMActionResult.Failure(code, error));
+                    closeDb();
+                }
+            });
+        }
+    }
+
     public void login(String userName, String pwd, IMV2Callback<IMActionResult> callback) {
         if (!DemoHelper.getInstance().isSDKInit) {
             DemoHelper.getInstance().init(BaseApp.getInstance());
         }
         DemoHelper.getInstance().getModel().setCurrentUserName(userName);
-        DemoHelper.getInstance().getModel().setCurrentUserPwd(pwd);
         OptionsHelper.getInstance().checkChangeServe();
 
-        if(EMClient.getInstance().isLoggedIn()){
+        if (EMClient.getInstance().isLoggedIn()) {
             callback.onEvent(new IMActionResult.Success());
-        }else{
+        } else {
             EMClient.getInstance().login(userName, pwd, new DemoEmCallBack() {
                 @Override
                 public void onSuccess() {
@@ -255,7 +281,7 @@ public class EMClientRepository extends BaseEMRepository {
         // get current user id
         String currentUser = EMClient.getInstance().getCurrentUser();
         EaseUser user = new EaseUser(currentUser);
-        if(callBack!=null)
+        if (callBack != null)
             callBack.onSuccess(new MutableLiveData<>(user));
 
         // ** manually load all local groups and conversation

@@ -72,14 +72,14 @@ public class SemiCircleArcProgressBar extends View {
 
         progressAmount = percent * (float) 1.8;
 
-        Log.e(TAG, "init: progressAmount=" + progressAmount);
+//        Log.e(TAG, "init: progressAmount=" + progressAmount);
         int padd = progressPlaceHolderWidth / 5;
         rec = getProgressBarRectF();
 
         float _readisW = rec.width() / 2;
         float _readisH = rec.height() / 2;
 
-        Log.e(TAG, "initLength: readisW=" + _readisW + "\t readisH=" + _readisH + "\t padd=" + padd);
+//        Log.e(TAG, "initLength: readisW=" + _readisW + "\t readisH=" + _readisH + "\t padd=" + padd);
 
         float centerX = rec.left + rec.width() / 2;
         float centerY = rec.top + rec.height() / 2;

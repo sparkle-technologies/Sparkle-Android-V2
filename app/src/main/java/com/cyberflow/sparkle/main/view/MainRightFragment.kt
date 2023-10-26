@@ -113,7 +113,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                                 )
                             }
                             onClick(R.id.bg_new_friend) {
-                                IMSearchFriendAct.go(requireActivity())
+                                IMSearchFriendAct.go(requireActivity(), actVm?.getContactList().orEmpty())
                             }
                         }
                     }
@@ -122,7 +122,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         getBinding<ItemFriendsFeedEmptyBinding>().btnAddFriend.setClickListener(
                             object : ShadowTxtButton.ShadowClickListener {
                                 override fun clicked(disable: Boolean) {
-                                    IMSearchFriendAct.go(requireActivity())
+                                    IMSearchFriendAct.go(requireActivity(), actVm?.getContactList().orEmpty())
                                 }
                             })
                     }

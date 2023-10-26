@@ -14,6 +14,12 @@ data class IMUserInfoList(
 @Serializable
 data class IMUserSearchList(var total: Int = 0, var list: List<IMSearchData>? = null)
 
+data class IMMyFriendsList(var total: Int = 0, var list: List<IMSearchData>? = null)
+data class IMSearchFriendHead(var name: String = "", var type: Int = 0, var showMore: Boolean = false)
+
+const val TYPE_MY_FRIENDS = 0
+const val TYPE_ADD_FRIENDS = 1
+
 @Serializable
 @Entity(tableName = "im_user_info_cache")
 data class IMUserInfo(
@@ -30,12 +36,10 @@ data class IMUserInfo(
 
 @Serializable
 data class IMSearchData(
+    var nick: String = "",
+    var gender: Int = 0,  // 1=man  2=women
     var avatar: String = "",
     var ca_wallet: String = "",
-    var created_at: String = "",
-    var nick: String = "",
     var open_uid: String = "",
-    var task_completed: Boolean = false,
-    var updated_at: String = "",
     var wallet_address: String = ""
 ) : java.io.Serializable
