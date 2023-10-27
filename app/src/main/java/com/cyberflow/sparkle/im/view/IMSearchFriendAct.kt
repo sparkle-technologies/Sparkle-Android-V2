@@ -6,12 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.KeyboardUtil
-import com.cyberflow.sparkle.DBComponent
+import com.cyberflow.sparkle.DBComponent.loadAvatar
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityImSearchFriendBinding
 import com.cyberflow.sparkle.databinding.ItemImSearchAddFriendsBodyBinding
@@ -150,13 +149,7 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
     private fun handleView(binding: ItemImSearchBinding, data: IMSearchData, layoutPosition: Int, modelCount: Int,  add: Boolean) {
         binding.tvFriendResult.text = getSpan(data.nick)
 
-        val resId = if (data.gender == 1) {
-            com.cyberflow.base.resources.R.drawable.home_male_head_default
-        } else {
-            com.cyberflow.base.resources.R.drawable.home_female_head_default
-        }
-        val draw = ResourcesCompat.getDrawable(resources, resId, null)
-        DBComponent.loadImage(binding.ivHead, data.avatar, draw)
+        loadAvatar(binding.ivHead, data.avatar, data.gender)
 
         binding.line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
 

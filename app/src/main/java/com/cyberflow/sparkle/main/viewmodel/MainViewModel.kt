@@ -58,12 +58,7 @@ class MainViewModel : BaseViewModel() {
 
     // ------------------------------------------- IM -------------------------------------------
 
-    val contactObservable = SingleSourceLiveData<Resource<List<EaseUser>>>()
-    val mRepository = EMContactManagerRepository()
-    fun loadContactList(server: Boolean) {
-        contactObservable.setSource(mRepository.getContactList(server))
-    }
-
+    // 会先刷新 新朋友消息 或 联系人   然后会继续拿会话信息
     fun freshContactData(){
         loadFriendRequestMessages()
         loadContactList(true)
@@ -79,9 +74,11 @@ class MainViewModel : BaseViewModel() {
         checkUnreadMsg()
     }
 
-    fun refreshIMData() {
-        freshContactData()
-        freshConversationData()
+
+    val contactObservable = SingleSourceLiveData<Resource<List<EaseUser>>>()
+    val mRepository = EMContactManagerRepository()
+    fun loadContactList(server: Boolean) {
+        contactObservable.setSource(mRepository.getContactList(server))
     }
 
     val conversationInfoObservable = SingleSourceLiveData<Resource<List<EaseConversationInfo>>>()

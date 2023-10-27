@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 
+//save all user info include contact + invite friend
 @Dao
 interface IMUserInfoDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -10,6 +10,7 @@ import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivitySettingBinding
 import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.view.LoginAct
@@ -52,6 +53,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
         lifecycleScope.launch {
             DBManager.instance.db?.imUserInfoDao()?.deleteAll()
+            IMDataManager.instance.clearCache()
         }
 
         CacheUtil.setUserInfo(null)

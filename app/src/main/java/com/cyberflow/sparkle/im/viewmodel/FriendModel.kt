@@ -15,6 +15,7 @@ data class FriendRequest(
     var name: String = "",
     var msg: String = "",
     var status: Int = 0,   // 0: normal, 1: added ,2: rejected
+    var gender: Int = 0,
     var url: String = "",
     val emMessage: EMMessage? = null,
     override var itemPosition: Int = 0
@@ -41,6 +42,7 @@ data class Contact(
     var name: String = "",
     var txt: String = "",
     val avatar: String = "",
+    val gender: Int = 0,
     val url: String = "",
     val openUid: String = "",
     var last : Boolean = false

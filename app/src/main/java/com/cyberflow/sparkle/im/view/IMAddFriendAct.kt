@@ -4,9 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.core.content.res.ResourcesCompat
 import com.cyberflow.base.act.BaseDBAct
-import com.cyberflow.sparkle.DBComponent.loadImage
+import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.chat.DemoHelper
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.databinding.ActivityImAddFriendBinding
@@ -48,13 +47,7 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
         (intent.getSerializableExtra(TAG) as? IMSearchData)?.apply {
             imAccount = open_uid.replace("-", "_")
 
-            val resId = if (gender == 1) {
-                com.cyberflow.base.resources.R.drawable.home_male_head_default
-            } else {
-                com.cyberflow.base.resources.R.drawable.home_female_head_default
-            }
-            val draw = ResourcesCompat.getDrawable(resources, resId, null)
-            loadImage(mDataBinding.ivHead, avatar, draw)
+            DBComponent.loadAvatar(mDataBinding.ivHead, avatar, gender)
 
             mDataBinding.tvName.text = nick
 

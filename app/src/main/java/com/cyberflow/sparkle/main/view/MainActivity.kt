@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
@@ -16,12 +15,13 @@ import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
-import com.cyberflow.sparkle.DBComponent.loadImage
+import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.common.utils.ChatPresenter
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.im.db.IMUserInfo
@@ -168,13 +168,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
     override fun initData() {
         CacheUtil.getUserInfo()?.user?.apply {
-            val resId = if (gender == 1) {
-                com.cyberflow.base.resources.R.drawable.home_male_head_default
-            } else {
-                com.cyberflow.base.resources.R.drawable.home_female_head_default
-            }
-            val draw = ResourcesCompat.getDrawable(resources, resId, null)
-            loadImage(mDataBinding.ivHead, avatar, draw)
+            DBComponent.loadAvatar(mDataBinding.ivHead, avatar, gender)
         }
 
         loadIMConversations()
@@ -218,7 +212,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
         viewModel.inviteMsgObservable.observe(this) { list ->
             list?.also {
-
+                IMDataManager.instance.setInviteData(list)
                 val res = it.filter { msg ->
                     val statusParam = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS)
                     val status = InviteMessageStatus.valueOf(statusParam)
@@ -256,6 +250,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         viewModel.contactObservable?.observe(this){ response ->
             parseResource(response, object : OnResourceParseCallback<List<EaseUser>>() {
                 override fun onSuccess(data: List<EaseUser>?) {
+                    IMDataManager.instance.setContactData(data)
                     Log.e("MainActivity", "contact from server size: ${data?.size}" )
                     contactsBatchRequestInfo(data)
                 }
@@ -263,7 +258,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         }
 
         viewModel.imNewFriendListData?.observe(this){ infoList->
-            saveToLocalDB(infoList.user_info_list, false)
+            saveToLocalDB(infoList.user_info_list, true)
         }
 
         viewModel.imContactListData?.observe(this){ infoList->
@@ -276,17 +271,17 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
             }
         }
 
-        viewModel.loadContactList(true)
+        viewModel.freshContactData()
     }
 
-    private fun saveToLocalDB(userInfoList: List<IMUserInfo>?, isContactData: Boolean = false) {
-        Log.e(TAG, "saveToLocalDB: isContactData=$isContactData", )
+    private fun saveToLocalDB(userInfoList: List<IMUserInfo>?, needFetchConversation: Boolean = false) {
+        Log.e(TAG, "saveToLocalDB: isContactData=$needFetchConversation", )
         if(userInfoList.isNullOrEmpty()){
             return
         }
         lifecycleScope.launch {
             DBManager.instance.db?.imUserInfoDao()?.insert(*userInfoList.toTypedArray())
-            if(isContactData){
+            if(needFetchConversation){
                 withMain {
                     freshConversationData(EaseEvent())
                 }

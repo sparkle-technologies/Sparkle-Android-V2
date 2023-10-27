@@ -11,6 +11,7 @@ import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.FragmentMainRightBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedEmptyBinding
@@ -164,7 +165,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
 
     private fun freshIMData() {
         Log.e(TAG, "freshIMData: ", )
-        actVm?.refreshIMData()
+        actVm?.freshContactData()
     }
 
     override fun initData() {
@@ -226,10 +227,10 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                 allContactList?.associate {
                     it.open_uid.replace("-", "_") to it
                 }?.also { allContactMap ->
-
                     val allData = arrayListOf<IMUserInfo>()
+                    val contactOpenUidList = IMDataManager.instance.getContactData().map { it.username }
                     val conversaction = data?.filter {
-                        allContactMap.contains((it.info as? EMConversation)?.conversationId())
+                        contactOpenUidList.contains((it.info as? EMConversation)?.conversationId())
                     }?.mapNotNull {
                         val username = (it.info as? EMConversation)?.conversationId() ?: ""
                         val count = (it.info as? EMConversation)?.unreadMsgCount
@@ -239,27 +240,25 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
 
                     val mark = conversaction.map { it.open_uid.replace("-", "_") }.toSet()
 
-//                    Log.e(TAG, "mark: ${mark.toString()}" )
+                    Log.e(TAG, "mark: ${mark.toString()}" )
 
-//                    allContactMap.forEach {
-//                        Log.e(TAG, "allContactMap.forEach: key=${it.key}   value=${it.value}", )
-//                    }
+                    allContactMap.forEach {
+                        Log.e(TAG, "allContactMap.forEach: key=${it.key}   value=${it.value}", )
+                    }
 
-                    val contactData = allContactMap.filter {
-                        !mark.contains(it.key)
-                    }.map {
-                        it.value
-                    }.sortedBy {
-                        it.nick
-                    }.orEmpty()
+                    val contactData = contactOpenUidList.filter {
+                        !mark.contains(it)
+                    }.mapNotNull {
+                        allContactMap[it]
+                    }.sortedBy { it.nick }.orEmpty()
 
-//                    conversaction.forEach {
-//                        Log.e(TAG, "conversaction: ${it.nick}" )
-//                    }
+                    conversaction.forEach {
+                        Log.e(TAG, "conversaction: ${it.nick}" )
+                    }
 
-//                    contactData.forEach {
-//                        Log.e(TAG, "contactData: ${it.nick}" )
-//                    }
+                    contactData.forEach {
+                        Log.e(TAG, "contactData: ${it.nick}" )
+                    }
 
                     allData.addAll(conversaction)
                     allData.addAll(contactData)

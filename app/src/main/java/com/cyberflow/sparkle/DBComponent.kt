@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -53,6 +54,16 @@ object DBComponent {
             requestBuilder.transform(CenterCrop(), RoundedCorners((corner * BaseApp.instance!!.resources.displayMetrics.density).toInt()))
         }
         requestBuilder.into(v)
+    }
+
+    fun loadAvatar(v: ImageView, url: Any?, gender: Int = 1) {
+        val resId = if (gender == 1) {
+            com.cyberflow.base.resources.R.drawable.home_male_head_default
+        } else {
+            com.cyberflow.base.resources.R.drawable.home_female_head_default
+        }
+        val draw = ResourcesCompat.getDrawable(v.resources, resId, null)
+        loadImage(v, url, draw)
     }
 
     fun loadImage(v: ImageView, url: Any?, holder: Drawable?) {

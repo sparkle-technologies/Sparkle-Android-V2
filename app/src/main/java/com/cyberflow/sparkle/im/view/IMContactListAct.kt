@@ -11,11 +11,12 @@ import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.KeyboardUtil
 import com.cyberflow.base.util.bus.LiveDataBus
-import com.cyberflow.sparkle.DBComponent.loadImage
+import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.chat.viewmodel.parseResource
 import com.cyberflow.sparkle.databinding.ActivityImContactListBinding
 import com.cyberflow.sparkle.databinding.ItemImContactBinding
@@ -45,6 +46,7 @@ import com.drake.brv.utils.setup
 import com.drake.net.utils.withMain
 import com.drake.spannable.replaceSpanFirst
 import com.drake.spannable.span.ColorSpan
+import com.hyphenate.chat.EMMessage
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.model.EaseEvent
 import kotlinx.coroutines.launch
@@ -114,7 +116,9 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                             onBind {
                                 getBinding<ItemImRequestBinding>().apply {
                                     val model = getModel<FriendRequest>()
-                                    loadImage(ivHead, model.url)
+
+                                    DBComponent.loadAvatar(ivHead, model.url, model.gender)
+
                                     tvFriendName.text = model.name
                                     tvMsg.text = model.msg
                                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
@@ -141,7 +145,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                         tvContactName.text = if(isSearchModel()) getSpan(model.name) else model.name
                                         val condition = model.last || layoutPosition == modelCount - 1
                                         line.visibility = if ( condition ) View.INVISIBLE else View.VISIBLE
-                                        loadImage(ivHead, model.avatar)
+                                        DBComponent.loadAvatar(ivHead, model.avatar, model.gender)
                                         item.setOnClickListener {
 //                                        ChatActivity.launch(this@IMContactListAct, model.name, 1)  // go chat activity
                                         }
@@ -225,6 +229,25 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         loadLocalDBData(null)
     }
 
+    private var isFirst = true
+    private fun freshData() {
+        if(isFirst){
+            IMDataManager.instance.apply {
+                isFirst = false
+                val invite = getInviteData()
+                val contact = getContactData()
+                if(invite.isNullOrEmpty() && contact.isNullOrEmpty()){
+                    freshData()
+                }else{
+                    handleInviteMsg(invite)
+                    showContactListData(contact)
+                }
+            }
+        }else{
+            viewModel.loadFriendRequestMessages()    // load system message
+            viewModel.loadContactList(true)   // load contact data from local db
+        }
+    }
 
     // for event listener
     private fun loadLocalDBData(easeEvent: EaseEvent?) {
@@ -256,76 +279,8 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
             with(DemoConstant.CONTACT_UPDATE, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::loadLocalDBData)
         }
 
-        viewModel.inviteMsgObservable.observe(this) {inviteList->
-            requestData.clear()
-            allRequestData.clear()
-
-            if(inviteList.isEmpty()){
-                requestData.add(FriendRequestEmpty())
-                freshNormalUI()
-
-                freshMoreUI()
-                return@observe
-            }
-
-            var list = arrayListOf<FriendRequest>()
-            var newUser = arrayListOf<String>()
-            inviteList.forEach { msg ->
-                try {
-                    val name = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM)
-                    var reason = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_REASON)
-
-                    val statusParam = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS)
-                    val status = InviteMessageStatus.valueOf(statusParam)
-
-//                    Log.e(TAG, "getContactData: name: $name reason: $reason status: $status")  // name: lover2 reason: 加个好友呗 status: BEINVITEED
-
-                    if(map.contains(name)){
-                        map[name]?.also {
-                            val friend = FriendRequest(name = it.nick, msg = reason, status = STATUS_NORMAL, url= it.avatar, emMessage = msg)
-                            val cacheFriend = FriendRequest(name = it.nick, msg = reason, status = STATUS_NORMAL,url= it.avatar, emMessage = msg)
-
-                            if (status == InviteMessageStatus.BEINVITEED) {  // only show friend request
-                                list.add(friend)
-                            } else {
-                                if (status == InviteMessageStatus.AGREED) {
-                                    cacheFriend.status = STATUS_ADDED
-                                }
-                                if (status == InviteMessageStatus.BEREFUSED || status == InviteMessageStatus.REFUSED) {
-                                    cacheFriend.status = STATUS_REJECTED
-                                }
-                            }
-                            allRequestData.add(cacheFriend)
-                        }
-                    }else{
-                        newUser.add(name)
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-
-            list.forEach {
-                Log.e(TAG, "freshData: $it" )
-            }
-            newUser.forEach {
-                Log.e(TAG, "freshData: $it" )
-            }
-
-            if(newUser.isNotEmpty()){
-                viewModel.getIMNewFriendInfoList(newUser)
-                return@observe
-            }
-
-            if(list.isNotEmpty()){
-                requestData.add(FriendRequestHeader(list.size))
-                requestData.add(FriendRequestList("", list.take(2)))  // show no more than two friend request
-            }else{
-                requestData.add(FriendRequestEmpty())
-            }
-
-            freshNormalUI()
-            freshMoreUI()
+        viewModel.inviteMsgObservable.observe(this) { inviteList->
+            handleInviteMsg(inviteList)
         }
 
         viewModel.contactObservable.observe(this) { response ->
@@ -339,6 +294,78 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         viewModel.imNewFriendListData.observe(this){
             saveToLocalDB(it.user_info_list, false)
         }
+    }
+
+    private fun handleInviteMsg(inviteList: List<EMMessage>) {
+        requestData.clear()
+        allRequestData.clear()
+
+        if(inviteList.isEmpty()){
+            requestData.add(FriendRequestEmpty())
+            freshNormalUI()
+
+            freshMoreUI()
+            return
+        }
+
+        var list = arrayListOf<FriendRequest>()
+        var newUser = arrayListOf<String>()
+        inviteList.forEach { msg ->
+            try {
+                val name = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM)
+                var reason = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_REASON)
+
+                val statusParam = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS)
+                val status = InviteMessageStatus.valueOf(statusParam)
+
+//                    Log.e(TAG, "getContactData: name: $name reason: $reason status: $status")  // name: lover2 reason: 加个好友呗 status: BEINVITEED
+
+                if(map.contains(name)){
+                    map[name]?.also {
+                        val friend = FriendRequest(name = it.nick, msg = reason, status = STATUS_NORMAL, gender=it.gender,  url= it.avatar, emMessage = msg)
+                        val cacheFriend = FriendRequest(name = it.nick, msg = reason, status = STATUS_NORMAL, gender=it.gender, url= it.avatar, emMessage = msg)
+
+                        if (status == InviteMessageStatus.BEINVITEED) {  // only show friend request
+                            list.add(friend)
+                        } else {
+                            if (status == InviteMessageStatus.AGREED) {
+                                cacheFriend.status = STATUS_ADDED
+                            }
+                            if (status == InviteMessageStatus.BEREFUSED || status == InviteMessageStatus.REFUSED) {
+                                cacheFriend.status = STATUS_REJECTED
+                            }
+                        }
+                        allRequestData.add(cacheFriend)
+                    }
+                }else{
+                    newUser.add(name)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        list.forEach {
+            Log.e(TAG, "freshData: $it" )
+        }
+        newUser.forEach {
+            Log.e(TAG, "freshData: $it" )
+        }
+
+        if(newUser.isNotEmpty()){
+            viewModel.getIMNewFriendInfoList(newUser)
+            return
+        }
+
+        if(list.isNotEmpty()){
+            requestData.add(FriendRequestHeader(list.size))
+            requestData.add(FriendRequestList("", list.take(2)))  // show no more than two friend request
+        }else{
+            requestData.add(FriendRequestEmpty())
+        }
+
+        freshNormalUI()
+        freshMoreUI()
     }
 
     private fun saveToLocalDB(userInfoList: List<IMUserInfo>?, isContactData: Boolean = false) {
@@ -357,10 +384,6 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
     }
 
     private val allRequestData = arrayListOf<FriendRequest>()
-    private fun freshData() {
-        viewModel.loadFriendRequestMessages()    // load system message
-        viewModel.loadContactList(true)   // load contact data from local db
-    }
 
     private val map = HashMap<String, IMUserInfo>()
 
@@ -397,7 +420,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
 //            Log.e(TAG, "showContactListData: ${it.nick}  ${it}" )
 
-            Contact(name = it.nick, avatar = it.avatar).apply {
+            Contact(name = it.nick, avatar = it.avatar, gender = it.gender).apply {
                 list.add(this)
                 allContactData.add(this)
             }
@@ -469,29 +492,4 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         "#"
     )
 
-    private fun getData() : List<Any>{
-        val data = arrayListOf<Any>()
-
-        data.add(FriendRequestEmpty())
-        data.add(FriendRequestHeader())
-        data.add(FriendRequestList("", arrayListOf(FriendRequest(),FriendRequest() )))
-
-        data.add(ContactListHeader())
-        data.add(ContactList(arrayListOf(ContactLetter("A"), Contact(), Contact(), Contact(), Contact(), Contact(), Contact(last = true), ContactLetter("B"),Contact(), Contact(),  Contact(), Contact(), Contact(last = true), ContactLetter("Z"), Contact(), Contact(),  Contact(), Contact(), Contact(last = true))))
-        return data
-    }
-
-    private fun getCacheData(): List<FriendRequest>{
-        val data = arrayListOf<FriendRequest>()
-        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you, my name is xxxxxx, how are you and you im fine good to see you again", status = STATUS_NORMAL))
-        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_NORMAL))
-        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_ADDED))
-        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_NORMAL))
-        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_NORMAL))
-        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_ADDED))
-        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_ADDED))
-        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_REJECTED))
-        data.add(FriendRequest(name = "Arc Chan", msg = "Hi,glad to see you", status = STATUS_NORMAL))
-        return data
-    }
 }
