@@ -110,7 +110,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
 
         mDataBinding.layDialogAdd.apply {
             findViewById<View>(R.id.lay_add_friends).setOnClickListener {
-                IMSearchFriendAct.go(this@MainActivity, viewModel.getContactList())
+                IMSearchFriendAct.go(this@MainActivity)
                 mDataBinding.layDialogAdd.visibility = View.GONE
             }
             findViewById<View>(R.id.lay_contacts).setOnClickListener {

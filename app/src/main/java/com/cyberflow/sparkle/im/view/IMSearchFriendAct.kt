@@ -10,21 +10,14 @@ import androidx.core.widget.addTextChangedListener
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.KeyboardUtil
-import com.cyberflow.sparkle.DBComponent.loadAvatar
+import com.cyberflow.sparkle.DBComponent.loadImage
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityImSearchFriendBinding
-import com.cyberflow.sparkle.databinding.ItemImSearchAddFriendsBodyBinding
 import com.cyberflow.sparkle.databinding.ItemImSearchBinding
-import com.cyberflow.sparkle.databinding.ItemImSearchHeaderBinding
-import com.cyberflow.sparkle.databinding.ItemImSearchMyFriendsBodyBinding
-import com.cyberflow.sparkle.im.db.IMMyFriendsList
 import com.cyberflow.sparkle.im.db.IMSearchData
-import com.cyberflow.sparkle.im.db.IMSearchFriendHead
 import com.cyberflow.sparkle.im.db.IMUserSearchList
-import com.cyberflow.sparkle.im.db.TYPE_ADD_FRIENDS
-import com.cyberflow.sparkle.im.db.TYPE_MY_FRIENDS
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
-import com.cyberflow.sparkle.widget.ShadowTxtButton
+import com.cyberflow.sparkle.profile.view.ProfileAct
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
@@ -32,21 +25,19 @@ import com.drake.net.Post
 import com.drake.net.utils.scope
 import com.drake.spannable.replaceSpanFirst
 import com.drake.spannable.span.ColorSpan
+import com.vanniktech.ui.hideKeyboard
 
 
 class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>() {
 
     companion object {
-        private const val EXTRA_DATA = "contactData"
-        fun go(context: Context, contactList: List<String>) {
+        fun go(context: Context) {
             val intent = Intent(context, IMSearchFriendAct::class.java)
-            intent.putStringArrayListExtra(EXTRA_DATA, ArrayList(contactList))
             context.startActivity(intent)
         }
     }
 
     private var inputTxt = ""
-    private var contactList = ArrayList<String>()
     private fun getSpan(txt: String): CharSequence {
         if (inputTxt.isNullOrEmpty()) return ""
         return txt.replaceSpanFirst(inputTxt, ignoreCase = true) { ColorSpan("#8B82DB") }
@@ -61,53 +52,29 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
 
     override fun initView(savedInstanceState: Bundle?) {
         mDataBinding.rv.linear().setup {
-            addType<IMSearchFriendHead>(R.layout.item_im_search_header)
-            addType<IMMyFriendsList>(R.layout.item_im_search_my_friends_body)
-            addType<IMUserSearchList>(R.layout.item_im_search_add_friends_body)
-            addType<String>(R.layout.item_im_search_no_result)
-            onCreate {
-                when (itemViewType) {
-                    R.layout.item_im_search_my_friends_body -> {
-                        getBinding<ItemImSearchMyFriendsBodyBinding>().rv.linear().setup {
-                            addType<IMSearchData>(R.layout.item_im_search)
-                            onBind {
-                                val data = getModel<IMSearchData>()
-                                val binding = getBinding<ItemImSearchBinding>()
-                                handleView(binding, data, layoutPosition,modelCount, false)
-                            }
-                        }
-                    }
-                    R.layout.item_im_search_add_friends_body -> {
-                        getBinding<ItemImSearchAddFriendsBodyBinding>().rv.linear().setup {
-                            addType<IMSearchData>(R.layout.item_im_search)
-                            onBind {
-                                val data = getModel<IMSearchData>()
-                                val binding = getBinding<ItemImSearchBinding>()
-                                handleView(binding, data, layoutPosition, modelCount, true)
-                            }
-                        }
-                    }
+            addType<IMSearchData>(R.layout.item_im_search)
+            onBind {
+                val data = getModel<IMSearchData>()
+                val binding = getBinding<ItemImSearchBinding>()
+                binding.tvFriendResult.text = getSpan(data.nick)
+
+                Log.e(TAG, "initView: ${data.avatar}" )
+
+                loadImage(binding.ivHead, data.avatar)
+                val address = if(data.wallet_address.isNullOrEmpty()) data.ca_wallet else data.wallet_address
+                if(address.length > 5){
+                    binding.tvAddress.text = "${address.substring(0, 5)}...${address.substring(address.length - 5, address.length)}"
+                }
+                binding.line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
+                binding.cardview.setOnClickListener {
+                    hideKeyboard(mDataBinding.edtSearchFriend)
+                    ProfileAct.go(this@IMSearchFriendAct, data.open_uid, ProfileAct.ADD_FRIEND)
                 }
             }
-            onBind {
-                when (itemViewType) {
-                    R.layout.item_im_search_header -> {
-                        getBinding<ItemImSearchHeaderBinding>().apply {
-                            val model = getModel<IMSearchFriendHead>()
-                            tvTitle.text = model.name
-                            laySeeMore.visibility = if (model.showMore) View.VISIBLE else View.GONE
-                        }
-                    }
-                    R.layout.item_im_search_my_friends_body -> {
-                        val model = getModel<IMMyFriendsList>()
-                        getBinding<ItemImSearchMyFriendsBodyBinding>().rv.models = model.list
-                    }
-
-                    R.layout.item_im_search_add_friends_body -> {
-                        val model = getModel<IMUserSearchList>()
-                        getBinding<ItemImSearchAddFriendsBodyBinding>().rv.models = model.list
-                    }
-                }
+            R.id.tv_add.onClick {
+                val model = getModel<IMSearchData>()
+                Log.e(TAG, "you choose:  $model")
+                onItemClicked(model)
             }
         }
 
@@ -122,7 +89,7 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
         }
         mDataBinding.edtSearchFriend.apply {
             setOnEditorActionListener { textView, i, keyEvent ->
-                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                if(i == EditorInfo.IME_ACTION_SEARCH){
                     searchFriends()
                     true
                 }
@@ -146,75 +113,13 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
         }
     }
 
-    private fun handleView(binding: ItemImSearchBinding, data: IMSearchData, layoutPosition: Int, modelCount: Int,  add: Boolean) {
-        binding.tvFriendResult.text = getSpan(data.nick)
-
-        loadAvatar(binding.ivHead, data.avatar, data.gender)
-
-        binding.line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
-
-        if(add){
-            binding.tvAddress.visibility = View.VISIBLE
-            binding.tvAdd.visibility = View.VISIBLE
-            val address = if (data.wallet_address.isNullOrEmpty()) data.ca_wallet else data.wallet_address
-            if (address.length > 5) {
-                binding.tvAddress.text = "${address.substring(0, 5)}...${address.substring(address.length - 5, address.length)}"
-            }
-            binding.tvAdd.setClickListener(object : ShadowTxtButton.ShadowClickListener {
-                override fun clicked(disable: Boolean) {
-                    Log.e(TAG, "you choose:  $data")
-                    onItemClicked(data)
-                }
-            })
-        }else{
-            binding.tvAddress.visibility = View.INVISIBLE
-            binding.tvAdd.visibility = View.INVISIBLE
-        }
-    }
-
     override fun initData() {
-        intent.getStringArrayListExtra(EXTRA_DATA)?.apply {
-            contactList = this
-        }
-
-        Log.e(TAG, "initData: contactList=$contactList")
-
-        viewModel.imUserListData?.observe(this) {
-            if (it.list.isNullOrEmpty()) {
+        viewModel.imUserListData?.observe(this){
+            if(it.list.isNullOrEmpty()){
                 mDataBinding.state.showEmpty()
-            } else {
-                it.list?.apply {
-                    val data = arrayListOf<Any>()
-                    // friends
-                    // new friends
-                    val friends = filter {
-                        contactList.contains(it.open_uid)
-                    }
-                    val newFriends = filter {
-                        !contactList.contains(it.open_uid)
-                    }
-
-                    val maxCountMyFriend = 3
-                    val maxCountAddFriend = 4
-
-                    if(friends.isNullOrEmpty()){
-                        data.add(IMSearchFriendHead(name = getString(com.cyberflow.base.resources.R.string.my_friends), type = TYPE_MY_FRIENDS, showMore = false))
-                        data.add("no result found")
-                    }else{
-                        data.add(IMSearchFriendHead(name = getString(com.cyberflow.base.resources.R.string.my_friends), type = TYPE_MY_FRIENDS, showMore = friends.size > maxCountMyFriend))
-                        data.add(IMMyFriendsList(total = friends.size, list = friends.take(maxCountMyFriend)))
-                    }
-
-                    if(newFriends.isNullOrEmpty()){
-                        data.add(IMSearchFriendHead(name = getString(com.cyberflow.base.resources.R.string.add_friends), type = TYPE_ADD_FRIENDS, showMore = false))
-                        data.add("no result found")
-                    }else{
-                        data.add(IMSearchFriendHead(name = getString(com.cyberflow.base.resources.R.string.add_friends), type = TYPE_ADD_FRIENDS, showMore = newFriends.size > maxCountAddFriend))
-                        data.add(IMUserSearchList(total = newFriends.size, list = newFriends.take(maxCountAddFriend)))
-                    }
-                    mDataBinding.state.showContent()
-                    mDataBinding.rv.models = data
-                }
+            }else{
+                mDataBinding.state.showContent()
+                mDataBinding.rv.models = it.list
             }
         }
     }
@@ -222,9 +127,9 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
     // make fake data
     private fun searchFriends() {
         val query = mDataBinding.edtSearchFriend.text.toString().trim()
-        Log.e(TAG, "searchFriends: query=$query")
+        Log.e(TAG, "searchFriends: query=$query" )
 
-        if (query.isNullOrEmpty()) {
+        if(query.isNullOrEmpty()){
             mDataBinding.state.showEmpty()
             return
         }

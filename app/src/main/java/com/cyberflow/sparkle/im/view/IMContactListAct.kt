@@ -50,6 +50,7 @@ import com.drake.spannable.span.ColorSpan
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.model.EaseEvent
+import com.vanniktech.ui.hideKeyboard
 import kotlinx.coroutines.launch
 
 
@@ -124,7 +125,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                     tvMsg.text = model.msg
                                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
                                     cardview.setOnClickListener {
-                                        ProfileAct.go(this@IMContactListAct, model.openUid, ProfileAct.ACCEPT_FRIEND)
+                                        goProfile(model)
                                     }
                                     btnAccept.setClickListener(object : ShadowTxtButton.ShadowClickListener{
                                         override fun clicked(disable: Boolean) {
@@ -198,7 +199,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                     val model = getModel<FriendRequest>()
                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
                     cardview.setOnClickListener {
-                        ProfileAct.go(this@IMContactListAct, model.openUid, ProfileAct.ACCEPT_FRIEND)
+                        goProfile(model)
                     }
                     layDelete.setOnClickListener {
                         viewModel.deleteMessage(model.emMessage?.msgId)
@@ -212,6 +213,18 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                 }
             }
         }
+    }
+
+    private fun goProfile(model: FriendRequest){
+        val friendStatus = when(model.status){
+            STATUS_NORMAL-> ProfileAct.ADD_FRIEND
+            STATUS_ADDED-> ProfileAct.CHAT
+            STATUS_REJECTED-> ProfileAct.ADD_FRIEND
+            else -> ProfileAct.ADD_FRIEND
+        }
+        IMDataManager.instance.setEmMessage(model.emMessage)
+        hideKeyboard(mDataBinding.edtSearchContact)
+        ProfileAct.go(this@IMContactListAct, model.openUid, friendStatus)
     }
 
     private var inputTxt = ""

@@ -41,12 +41,9 @@ class IMDataManager private constructor() {
         this.emMessage = emMessage
     }
 
-
-
     fun clearCache(){
         inviteCacheData = null
         contactCacheData = null
         emMessage = null
     }
-
 }
