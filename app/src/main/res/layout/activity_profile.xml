@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_2nd">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/status_bar_height"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/profile"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/ll_back"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_56"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title">
+
+            <ImageView
+                android:id="@+id/iv_btn_back"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:layout_centerInParent="true"
+                android:background="@drawable/svg_btn_left" />
+        </RelativeLayout>
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_setting"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_20"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/profile_ic_setting" />
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_share_purple"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/profile_ic_share_purple" />
+
+
+        <View
+            android:layout_width="@dimen/dp_303"
+            android:layout_height="@dimen/dp_323"
+            android:layout_marginTop="@dimen/dp_47"
+            android:background="@drawable/profile_bg_yellow"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/img_card"
+            android:layout_width="285dp"
+            android:layout_height="305dp"
+            android:layout_marginTop="@dimen/dp_55"
+            android:background="@color/white"
+            app:cardCornerRadius="@dimen/dp_16"
+            app:cardElevation="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            app:strokeColor="@color/black"
+            app:strokeWidth="@dimen/dp_1">
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/profile_default_avatar" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <com.cyberflow.sparkle.widget.ShadowTxtButton
+            android:id="@+id/btn_name"
+            android:layout_width="@dimen/dp_215"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginTop="-20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_card"
+            app:view_bg="@drawable/profile_btn_name"
+            app:view_shadow_distance="1dp"
+            app:view_text_bold="true"
+            app:view_text_size="@dimen/sp_16" />
+
+        <com.cyberflow.sparkle.profile.widget.TagListView xmlns:f="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/tlv_tag_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_25"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_name"
+            f:horizontalSpacing="10dp"
+            f:orientation="horizontal"
+            f:verticalSpacing="10dp" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/divider"
+            android:layout_marginStart="@dimen/dp_38"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_33"
+            android:fontFamily="@font/poppins_regular"
+            android:gravity="center_vertical|top"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tlv_tag_view" />
+
+        <!--  horoscope star  share  -->
+
+        <View
+            android:id="@+id/divider"
+            app:layout_constraintTop_toTopOf="@+id/anchor"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="@dimen/dp_0_1"
+            android:layout_height="@dimen/dp_0_1"/>
+
+        <View
+            android:id="@+id/anchorBg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp_1"
+            android:layout_marginBottom="-1dp"
+            android:background="@drawable/profile_bg_bottom_layout_black"
+            app:layout_constraintBottom_toBottomOf="@+id/anchor"
+            app:layout_constraintLeft_toLeftOf="@+id/anchor"
+            app:layout_constraintRight_toRightOf="@+id/anchor"
+            app:layout_constraintTop_toTopOf="@+id/anchor" />
+
+        <View
+            android:id="@+id/anchor"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_70"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_46"
+            android:background="@drawable/profile_bg_bottom_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_star"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            app:layout_constraintBottom_toBottomOf="@+id/anchor"
+            app:layout_constraintLeft_toLeftOf="@+id/anchor"
+            app:layout_constraintRight_toRightOf="@+id/anchor"
+            app:layout_constraintTop_toTopOf="@+id/anchor"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/profile_ic_star" />
+
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_share_blue"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_43"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_star"
+            app:layout_constraintRight_toRightOf="@+id/anchor"
+            app:layout_constraintTop_toTopOf="@+id/btn_star"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/profile_ic_share_blue" />
+
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_horoscope"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_43"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_star"
+            app:layout_constraintLeft_toLeftOf="@+id/anchor"
+            app:layout_constraintTop_toTopOf="@+id/btn_star"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/profile_ic_horoscope" />
+
+
+        <com.cyberflow.sparkle.widget.ShadowTxtButton
+            android:id="@+id/btn_profile_action"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginStart="@dimen/dp_22"
+            android:layout_marginEnd="@dimen/dp_23"
+            android:layout_marginBottom="@dimen/dp_34"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:view_bg="@drawable/register_btn_next"
+            app:view_disable="false"
+            app:view_disable_bg="@drawable/register_btn_next_disable"
+            app:view_shadow_distance="1dp"
+            app:view_text="Add friend" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

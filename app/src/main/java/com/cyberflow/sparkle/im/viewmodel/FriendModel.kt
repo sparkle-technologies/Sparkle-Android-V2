@@ -17,6 +17,7 @@ data class FriendRequest(
     var status: Int = 0,   // 0: normal, 1: added ,2: rejected
     var gender: Int = 0,
     var url: String = "",
+    var openUid: String = "",
     val emMessage: EMMessage? = null,
     override var itemPosition: Int = 0
 ) : ItemPosition{

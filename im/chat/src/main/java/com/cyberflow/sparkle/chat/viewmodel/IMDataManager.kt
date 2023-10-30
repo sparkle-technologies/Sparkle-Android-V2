@@ -30,8 +30,23 @@ class IMDataManager private constructor() {
         contactCacheData = data
     }
 
+
+
+    // for profile page
+    private var emMessage: EMMessage? = null
+    fun getEmMessage(): EMMessage? {
+        return emMessage
+    }
+    fun setEmMessage(emMessage: EMMessage?) {
+        this.emMessage = emMessage
+    }
+
+
+
     fun clearCache(){
         inviteCacheData = null
         contactCacheData = null
+        emMessage = null
     }
+
 }

@@ -173,6 +173,13 @@ class ShadowTxtButton : ConstraintLayout {
         this.listener = listener
     }
 
+    fun setViewTxt(txt: String){
+        this.txt = txt
+        tvNormal?.text = txt
+        tvClicking?.text = txt
+        invalidate()
+    }
+
     private fun staticButtonTouchAnim(
         motionEvent: MotionEvent,
         button: ImageView?,

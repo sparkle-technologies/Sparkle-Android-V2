@@ -31,11 +31,10 @@ import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.viewmodel.parseResource
 import com.cyberflow.sparkle.main.widget.DoubleClickListener
 import com.cyberflow.sparkle.main.widget.NumView
+import com.cyberflow.sparkle.profile.view.ProfileAct
 import com.cyberflow.sparkle.register.view.PageAdapter
-import com.cyberflow.sparkle.setting.view.SettingsActivity
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.drake.net.utils.withMain
-import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.model.EaseEvent
 import kotlinx.coroutines.launch
@@ -94,10 +93,7 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         })
 
         mDataBinding.ivHead.setOnClickListener {
-
-            Snackbar.make(mDataBinding.ivHead, "go setting", Snackbar.LENGTH_SHORT).show()
-            SettingsActivity.go(this)
-
+            ProfileAct.go(this, CacheUtil.getUserInfo()?.user?.open_uid.orEmpty())
         }
 
         mDataBinding.btnAddFriends.setClickListener(object : ShadowImgButton.ShadowClickListener {

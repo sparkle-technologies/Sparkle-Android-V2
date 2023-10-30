@@ -22,6 +22,8 @@ object CacheUtil {
 
     const val LOGIN_METHOD = "sparkle_login_method"
 
+    const val AVATAR_BIG = "sparkle_avatar_big"
+
 
     fun getUserInfo(): LoginResponseData? {
         val kv = getMMKV()

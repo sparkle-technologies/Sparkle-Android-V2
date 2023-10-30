@@ -49,7 +49,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
 
     override fun initView(savedInstanceState: Bundle?) {
         intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_ID)?.apply {
-            conversationId = this
+            conversationId = this.replace("-", "_")
         }
         intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_AVATAR)?.apply {
             avatar = this

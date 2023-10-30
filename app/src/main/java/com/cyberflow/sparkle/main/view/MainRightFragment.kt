@@ -161,6 +161,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
     fun showEmpty() {
         Log.e(TAG, "showEmpty: ")
         showConversationList(null)
+        mDatabind.page.finishRefresh()
     }
 
     private fun freshIMData() {

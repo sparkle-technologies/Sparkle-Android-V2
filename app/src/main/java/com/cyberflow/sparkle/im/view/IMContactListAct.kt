@@ -39,6 +39,7 @@ import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.im.viewmodel.STATUS_ADDED
 import com.cyberflow.sparkle.im.viewmodel.STATUS_NORMAL
 import com.cyberflow.sparkle.im.viewmodel.STATUS_REJECTED
+import com.cyberflow.sparkle.profile.view.ProfileAct
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
@@ -122,6 +123,9 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                     tvFriendName.text = model.name
                                     tvMsg.text = model.msg
                                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
+                                    cardview.setOnClickListener {
+                                        ProfileAct.go(this@IMContactListAct, model.openUid, ProfileAct.ACCEPT_FRIEND)
+                                    }
                                     btnAccept.setClickListener(object : ShadowTxtButton.ShadowClickListener{
                                         override fun clicked(disable: Boolean) {
                                             viewModel.acceptFriend(model.emMessage)
@@ -146,8 +150,11 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                         val condition = model.last || layoutPosition == modelCount - 1
                                         line.visibility = if ( condition ) View.INVISIBLE else View.VISIBLE
                                         DBComponent.loadAvatar(ivHead, model.avatar, model.gender)
+                                        cardview.setOnClickListener {
+                                            ProfileAct.go(this@IMContactListAct, model.openUid, ProfileAct.CHAT)
+                                        }
                                         item.setOnClickListener {
-//                                        ChatActivity.launch(this@IMContactListAct, model.name, 1)  // go chat activity
+                                            ChatActivity.launch(this@IMContactListAct, model.openUid, model.avatar, model.name, 1)  // go chat activity
                                         }
                                     }
                                 }
@@ -190,6 +197,9 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                 getBinding<ItemImRequestBinding>().apply {
                     val model = getModel<FriendRequest>()
                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
+                    cardview.setOnClickListener {
+                        ProfileAct.go(this@IMContactListAct, model.openUid, ProfileAct.ACCEPT_FRIEND)
+                    }
                     layDelete.setOnClickListener {
                         viewModel.deleteMessage(model.emMessage?.msgId)
                     }
@@ -322,8 +332,8 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
                 if(map.contains(name)){
                     map[name]?.also {
-                        val friend = FriendRequest(name = it.nick, msg = reason, status = STATUS_NORMAL, gender=it.gender,  url= it.avatar, emMessage = msg)
-                        val cacheFriend = FriendRequest(name = it.nick, msg = reason, status = STATUS_NORMAL, gender=it.gender, url= it.avatar, emMessage = msg)
+                        val friend = FriendRequest(name = it.nick, msg = reason, status = STATUS_NORMAL, gender=it.gender,  url= it.avatar, openUid= it.open_uid, emMessage = msg)
+                        val cacheFriend = FriendRequest(name = it.nick, msg = reason, status = STATUS_NORMAL, gender=it.gender, url= it.avatar, openUid= it.open_uid, emMessage = msg)
 
                         if (status == InviteMessageStatus.BEINVITEED) {  // only show friend request
                             list.add(friend)
@@ -345,12 +355,12 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
             }
         }
 
-        list.forEach {
+      /*  list.forEach {
             Log.e(TAG, "freshData: $it" )
         }
         newUser.forEach {
             Log.e(TAG, "freshData: $it" )
-        }
+        }*/
 
         if(newUser.isNotEmpty()){
             viewModel.getIMNewFriendInfoList(newUser)
@@ -420,7 +430,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
 //            Log.e(TAG, "showContactListData: ${it.nick}  ${it}" )
 
-            Contact(name = it.nick, avatar = it.avatar, gender = it.gender).apply {
+            Contact(name = it.nick, avatar = it.avatar, gender = it.gender, openUid = it.open_uid).apply {
                 list.add(this)
                 allContactData.add(this)
             }
