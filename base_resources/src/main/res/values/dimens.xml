@@ -102,7 +102,10 @@
     <dimen name="dp_190">190dp</dimen>
     <dimen name="dp_194">194dp</dimen>
     <dimen name="dp_204">204dp</dimen>
+    <dimen name="dp_206">206dp</dimen>
     <dimen name="dp_215">215dp</dimen>
+    <dimen name="dp_260">260dp</dimen>
+    <dimen name="dp_277">277dp</dimen>
     <dimen name="dp_292">292dp</dimen>
     <dimen name="dp_303">303dp</dimen>
     <dimen name="dp_323">323dp</dimen>

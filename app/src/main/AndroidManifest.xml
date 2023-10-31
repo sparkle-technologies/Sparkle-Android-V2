@@ -59,6 +59,7 @@
 
         <activity android:name=".setting.view.SettingsActivity" />
         <activity android:name=".profile.view.ProfileAct"/>
+        <activity android:name=".profile.view.ShareAct"  android:theme="@style/Theme.AppCompat.Translucent"/>
 
         <activity android:name=".im.view.ChatActivity"/>
         <activity android:name=".im.view.IMSearchFriendAct"/>

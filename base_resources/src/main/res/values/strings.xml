@@ -81,5 +81,7 @@
     <string name="send_a_message">Send a message</string>
     <string name="send_to">Send to</string>
     <string name="profile">Profile</string>
+    <string name="share">Share</string>
     <string name="user_profile">User profile</string>
+    <string name="accept_friend">Accept friend</string>
 </resources>

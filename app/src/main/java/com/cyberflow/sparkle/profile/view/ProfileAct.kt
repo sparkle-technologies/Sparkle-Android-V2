@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.model.DetailResponseData
 import com.cyberflow.base.model.ManyImageData
@@ -55,33 +55,34 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
             context.startActivity(intent)
         }
     }
-    private var action = CHAT
-    private val txt = arrayListOf("Chat", "Add friend", "Accept friend")
 
     private fun hideOrShowAllIcons() {
-        mDataBinding.apply {
-            show(isMySelf).also {
-                btnSetting.visibility =  it
-                anchor.visibility = it
-                anchorBg.visibility = it
-                btnHoroscope.visibility = it
-                btnStar.visibility = it
-                btnShareBlue.visibility = it
-            }
 
-            show(!isMySelf).also {
-                btnSharePurple.visibility = it
-                btnProfileAction.visibility = it
-                btnProfileAction.setViewTxt(txt[action])
-            }
+        mDataBinding.apply {
+
+            btnSetting.isVisible =  isMySelf
+            btnSharePurple.isVisible = !isMySelf
+
+            anchor.isVisible = isMySelf
+            anchorBg.isVisible = isMySelf
+            btnHoroscope.isVisible = isMySelf
+            btnStar.isVisible = isMySelf
+            btnShareBlue.isVisible = isMySelf
+
+            btnProfileAction.isVisible = !isMySelf
+            btnProfileAction.setViewTxt(txt[action])
+
         }
     }
 
-    private fun show(data: Boolean): Int{
-        return if(data) View.VISIBLE else View.GONE
-    }
+    private var txt = arrayListOf<String>()
 
     override fun initView(savedInstanceState: Bundle?) {
+        txt = arrayListOf(
+            getString(com.cyberflow.base.resources.R.string.chat),
+            getString(com.cyberflow.base.resources.R.string.add_friend),
+            getString(com.cyberflow.base.resources.R.string.accept_friend))
+
         mDataBinding.llBack.setOnClickListener {
             onBackPressed()
         }
@@ -94,7 +95,7 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
 
         mDataBinding.btnSharePurple.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-
+                ShareAct.go(this@ProfileAct, user?.open_uid ?: "")
             }
         })
 
@@ -112,7 +113,7 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
 
         mDataBinding.btnShareBlue.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-
+                ShareAct.go(this@ProfileAct, user?.open_uid ?: "")
             }
         })
 
@@ -144,6 +145,8 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
     }
 
     private var user: User? = null
+
+    private var action = CHAT
 
     override fun initData() {
         intent.getIntExtra(FRIEND_STATUS, CHAT).apply {
