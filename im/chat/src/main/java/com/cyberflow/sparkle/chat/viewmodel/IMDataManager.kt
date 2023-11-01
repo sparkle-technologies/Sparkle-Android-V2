@@ -1,5 +1,6 @@
 package com.cyberflow.sparkle.chat.viewmodel
 
+import com.cyberflow.base.model.User
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.easeui.domain.EaseUser
 
@@ -41,9 +42,18 @@ class IMDataManager private constructor() {
         this.emMessage = emMessage
     }
 
+    private var user: User? = null
+    fun getUser(): User? {
+        return user
+    }
+    fun setUser(user: User?) {
+        this.user = user
+    }
+
     fun clearCache(){
         inviteCacheData = null
         contactCacheData = null
         emMessage = null
+        user = null
     }
 }

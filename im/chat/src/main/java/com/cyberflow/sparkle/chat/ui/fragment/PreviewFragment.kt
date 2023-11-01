@@ -112,7 +112,7 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
     }
 
     @SuppressLint("RestrictedApi")
-    private  fun checkIfHasPermissions(permission: String, requestCode: Int): Boolean {
+    private fun checkIfHasPermissions(permission: String, requestCode: Int): Boolean {
         if (!EasyPermissions.hasPermissions(requireContext(), permission)) {
             val request = PermissionRequest.Builder(this, requestCode, permission).build()
             request.helper.directRequestPermissions(requestCode, permission)

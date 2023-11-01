@@ -95,7 +95,7 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
 
         mDataBinding.btnSharePurple.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                ShareAct.go(this@ProfileAct, user?.open_uid ?: "")
+               goShare()
             }
         })
 
@@ -113,7 +113,7 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
 
         mDataBinding.btnShareBlue.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                ShareAct.go(this@ProfileAct, user?.open_uid ?: "")
+                goShare()
             }
         })
 
@@ -142,6 +142,13 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
                  }
             }
         })
+    }
+
+    private fun goShare(){
+        user?.also {
+            IMDataManager.instance.setUser(it)
+            ShareAct.go(this@ProfileAct, serverImageUrl)
+        }
     }
 
     private var user: User? = null
@@ -206,12 +213,17 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
             }.await()
             data?.let {
                 it.image_list?.profile_native?.apply {
-                    CacheUtil.savaString(CacheUtil.AVATAR_BIG, this)
+                    if(isMySelf){
+                        CacheUtil.savaString(CacheUtil.AVATAR_BIG, this)
+                    }
+                    serverImageUrl = this
                     loadBigImg(this)
                 }
             }
         }
     }
+
+    private var serverImageUrl : String?  = null
 
     private fun requestImgDialog(){
         scopeDialog {
@@ -220,7 +232,10 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
             }.await()
             data?.let {
                 it.image_list?.profile_native?.apply {
-                    CacheUtil.savaString(CacheUtil.AVATAR_BIG, this)
+                    if(isMySelf){
+                        CacheUtil.savaString(CacheUtil.AVATAR_BIG, this)
+                    }
+                    serverImageUrl = this
                     loadBigImg(this)
                 }
             }
