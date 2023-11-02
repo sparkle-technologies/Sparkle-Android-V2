@@ -84,4 +84,8 @@
     <string name="share">Share</string>
     <string name="user_profile">User profile</string>
     <string name="accept_friend">Accept friend</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+
+    <string name="scan_tip">Place the code within the frame</string>
+
 </resources>

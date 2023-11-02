@@ -79,6 +79,7 @@
         <activity android:name=".im.view.IMAddFriendAct"/>
         <activity android:name=".im.view.IMContactListAct"/>
         <activity android:name=".im.view.IMForwardListAct"/>
+        <activity android:name=".im.view.IMScanAct"/>
 
     </application>
 

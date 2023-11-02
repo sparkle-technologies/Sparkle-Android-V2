@@ -26,6 +26,7 @@ import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.im.view.IMContactListAct
+import com.cyberflow.sparkle.im.view.IMScanAct
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.viewmodel.parseResource
@@ -115,6 +116,10 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
             }
             findViewById<View>(R.id.lay_contacts).setOnClickListener {
                 IMContactListAct.go(this@MainActivity)
+                mDataBinding.layDialogAdd.visibility = View.GONE
+            }
+            findViewById<View>(R.id.lay_scan).setOnClickListener {
+                IMScanAct.go(this@MainActivity)
                 mDataBinding.layDialogAdd.visibility = View.GONE
             }
         }
