@@ -14,8 +14,8 @@ import com.cyberflow.sparkle.DBComponent.loadImage
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityImSearchFriendBinding
 import com.cyberflow.sparkle.databinding.ItemImSearchBinding
-import com.cyberflow.sparkle.im.db.IMSearchData
-import com.cyberflow.sparkle.im.db.IMUserSearchList
+import com.cyberflow.base.model.IMSearchData
+import com.cyberflow.base.model.IMUserSearchList
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.profile.view.ProfileAct
 import com.drake.brv.utils.linear

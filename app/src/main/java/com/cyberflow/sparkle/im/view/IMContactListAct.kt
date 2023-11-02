@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.util.KeyboardUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.DBComponent
@@ -26,7 +27,6 @@ import com.cyberflow.sparkle.databinding.ItemImRequestBodyBinding
 import com.cyberflow.sparkle.databinding.ItemImRequestHeaderBinding
 import com.cyberflow.sparkle.databinding.ItemImRequestHeaderEmptyBinding
 import com.cyberflow.sparkle.im.DBManager
-import com.cyberflow.sparkle.im.db.IMUserInfo
 import com.cyberflow.sparkle.im.viewmodel.Contact
 import com.cyberflow.sparkle.im.viewmodel.ContactLetter
 import com.cyberflow.sparkle.im.viewmodel.ContactList

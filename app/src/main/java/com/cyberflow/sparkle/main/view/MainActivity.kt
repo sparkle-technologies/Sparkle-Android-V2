@@ -12,6 +12,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
@@ -24,7 +25,6 @@ import com.cyberflow.sparkle.chat.common.utils.ChatPresenter
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityMainBinding
 import com.cyberflow.sparkle.im.DBManager
-import com.cyberflow.sparkle.im.db.IMUserInfo
 import com.cyberflow.sparkle.im.view.IMContactListAct
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel

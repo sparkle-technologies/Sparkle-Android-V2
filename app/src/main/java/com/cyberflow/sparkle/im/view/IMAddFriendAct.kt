@@ -9,7 +9,7 @@ import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.chat.DemoHelper
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.databinding.ActivityImAddFriendBinding
-import com.cyberflow.sparkle.im.db.IMSearchData
+import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.main.view.MainActivity
 import com.cyberflow.sparkle.main.viewmodel.parseResource

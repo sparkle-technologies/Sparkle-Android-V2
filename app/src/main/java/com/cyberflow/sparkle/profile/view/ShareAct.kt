@@ -81,14 +81,15 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
                  finish()
             }
         })
+
         dialog = ShareDialog(this, object : ShareDialog.Callback {
             override fun onSelected(openUid: String, type: Int) {
                 when(type){
                     ShareDialog.TYPE_SHARE -> {
-
+                        ToastUtil.show(this@ShareAct, "share - coming soon ")
                     }
                     ShareDialog.TYPE_MORE -> {
-
+                        ToastUtil.show(this@ShareAct, "more - coming soon ")
                     }
                     ShareDialog.TYPE_COPY_LINK -> {
                         textCopyThenPost(qrUrl)

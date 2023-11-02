@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item"
+        android:layout_width="90dp"
+        android:layout_height="92dp"
+        android:orientation="vertical">
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_action"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_60"
+            android:layout_marginTop="@dimen/dp_4"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:view_bg_src="@drawable/share_ic_click_bg"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/share_ic_more" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_regular"
+            android:gravity="center"
+            android:maxLines="2"
+            android:textColor="@color/color_2A2A2B"
+            android:textSize="@dimen/sp_10"
+            app:layout_constraintLeft_toLeftOf="@id/btn_action"
+            app:layout_constraintRight_toRightOf="@+id/btn_action"
+            app:layout_constraintTop_toBottomOf="@+id/btn_action"
+            tools:text="Download" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

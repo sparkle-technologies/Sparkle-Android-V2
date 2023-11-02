@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlinx-serialization")
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -91,5 +92,12 @@ dependencies {
 
     // cache mmkv
     api("com.tencent:mmkv:1.3.0")
+
+    //for database
+    val room_version = "2.5.1"
+    api("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    api("androidx.room:room-ktx:$room_version")
 
 }

@@ -9,7 +9,7 @@
 
         <variable
             name="m"
-            type="com.cyberflow.sparkle.im.db.IMSearchFriendHead" />
+            type="com.cyberflow.base.model.IMSearchFriendHead" />
     </data>
 
 

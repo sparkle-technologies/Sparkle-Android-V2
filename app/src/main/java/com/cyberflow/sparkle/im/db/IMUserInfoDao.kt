@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.cyberflow.base.model.IMUserInfo
 
 //save all user info include contact + invite friend
 @Dao

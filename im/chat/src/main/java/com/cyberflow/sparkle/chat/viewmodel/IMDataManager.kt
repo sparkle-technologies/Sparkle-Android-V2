@@ -1,5 +1,6 @@
 package com.cyberflow.sparkle.chat.viewmodel
 
+import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.model.User
 import com.hyphenate.chat.EMMessage
 import com.hyphenate.easeui.domain.EaseUser
@@ -14,6 +15,7 @@ class IMDataManager private constructor() {
 
     private var inviteCacheData : List<EMMessage>?  =  null
     private var contactCacheData : List<EaseUser>?  =  null
+    private var conversationCacheData : List<IMUserInfo>?  =  null   //for share page
 
     fun getInviteData(): List<EMMessage> {
         return inviteCacheData.orEmpty()
@@ -31,6 +33,13 @@ class IMDataManager private constructor() {
         contactCacheData = data
     }
 
+    fun setConversationData(data: List<IMUserInfo>?) {
+        conversationCacheData = data
+    }
+
+    fun getConversationData(): List<IMUserInfo> {
+        return conversationCacheData.orEmpty()
+    }
 
 
     // for profile page
@@ -53,6 +62,7 @@ class IMDataManager private constructor() {
     fun clearCache(){
         inviteCacheData = null
         contactCacheData = null
+        conversationCacheData = null
         emMessage = null
         user = null
     }

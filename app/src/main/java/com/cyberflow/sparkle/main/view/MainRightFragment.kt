@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.fragment.BaseDBFragment
+import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
@@ -18,7 +19,6 @@ import com.cyberflow.sparkle.databinding.ItemFriendsFeedEmptyBinding
 import com.cyberflow.sparkle.databinding.MainFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.MainOfficialBinding
 import com.cyberflow.sparkle.im.DBManager
-import com.cyberflow.sparkle.im.db.IMUserInfo
 import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
@@ -261,8 +261,11 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                         Log.e(TAG, "contactData: ${it.nick}" )
                     }
 
+
                     allData.addAll(conversaction)
                     allData.addAll(contactData)
+
+                    IMDataManager.instance.setConversationData(allData)   // save conversation data for share page
 
                     if (allData.isNotEmpty()) {
                         showConversationList(allData)
@@ -312,7 +315,9 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
         allData.clear()
         allData.addAll(headData)
         allData.addAll(modelData)
-        mDatabind.rv.models = allData
+        if(allData.isNotEmpty()){
+            mDatabind.rv.models = allData
+        }
     }
 
     private fun getData(empty: Boolean = false): List<Any> {

@@ -18,7 +18,7 @@ import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.DBComponent.loadImageWithHolder
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityProfileBinding
-import com.cyberflow.sparkle.im.db.IMSearchData
+import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMAddFriendAct
 import com.cyberflow.sparkle.profile.viewmodel.ProfileViewModel

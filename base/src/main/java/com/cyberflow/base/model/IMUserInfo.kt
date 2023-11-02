@@ -1,4 +1,4 @@
-package com.cyberflow.sparkle.im.db
+package com.cyberflow.base.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

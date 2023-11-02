@@ -7,7 +7,7 @@
 
         <variable
             name="m"
-            type="com.cyberflow.sparkle.im.db.IMSearchData" />
+            type="com.cyberflow.base.model.IMSearchData" />
 
     </data>
 

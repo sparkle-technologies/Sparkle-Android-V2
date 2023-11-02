@@ -14,8 +14,8 @@ import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.net.Resource
 import com.cyberflow.sparkle.chat.common.repositories.EMContactManagerRepository
-import com.cyberflow.sparkle.im.db.IMUserInfoList
-import com.cyberflow.sparkle.im.db.IMUserSearchList
+import com.cyberflow.base.model.IMUserInfoList
+import com.cyberflow.base.model.IMUserSearchList
 import com.drake.net.Post
 import com.drake.net.utils.scopeNet
 import com.hyphenate.chat.EMClient

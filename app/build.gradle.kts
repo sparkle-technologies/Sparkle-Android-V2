@@ -100,14 +100,11 @@ dependencies {
     kapt("cn.therouter:apt:1.2.0-rc1")
     implementation("cn.therouter:router:1.2.0-rc1")
 
-    //for database
-    val room_version = "2.5.1"
-    implementation("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-
     // for qr code
     implementation("com.huawei.hms:scanplus:2.12.0.301")
+
+    val room_version = "2.5.1"
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 
 }
