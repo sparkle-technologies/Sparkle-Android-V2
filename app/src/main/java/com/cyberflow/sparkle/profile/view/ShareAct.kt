@@ -7,6 +7,10 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.Paint
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -193,7 +197,9 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
         if (checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, ChatFragment.REQUEST_CODE_STORAGE_FILE)) {
             LoadingDialogHolder.getLoadingDialog()?.show(this)
             lifecycleScope.launch {
-                val bitmap = convertViewToBitmap(mDataBinding.bg)
+                val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)
+                val viewBitmap = convertViewToBitmap(mDataBinding.bg)
+                val bitmap = combineBitmap(bgBitmap, viewBitmap)
                 val storePath = application.getExternalFilesDir(null)!!.absolutePath
                 val appDir = File(storePath)
                 if (!appDir.exists()) {
@@ -228,6 +234,47 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
                 }
             }
         }
+    }
+
+
+    private fun combineBitmap(background: Bitmap, foreground: Bitmap): Bitmap{
+        if(background == null){
+            return foreground
+        }
+        val bgW = background.width
+        val bgH = background.height
+        val fgW = foreground.width
+        val fgH = foreground.height
+        // w=302  h=430    screenW = 375   screenH = 812
+        val targetW = bgW * 302 / 375
+        val targetH = targetW * fgH / fgW   // keep the origin picture ration
+        val zoomBitmap = zoomImg(foreground, targetW, targetH)
+
+        val left = (bgW - targetW).toFloat() / 2
+        val top =  (bgH - targetH).toFloat() / 2
+
+        val newBmp = Bitmap.createBitmap(bgW, bgH, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(newBmp)
+        canvas.drawBitmap(background, 0f, 0f, null)
+        canvas.drawBitmap(zoomBitmap, left, top, null)
+        canvas.save()
+        canvas.restore()
+        return newBmp
+    }
+
+
+    private fun zoomImg(bm: Bitmap, targetWidth: Int, targetHeight: Int): Bitmap {
+        val srcWidth = bm.width
+        val srcHeight = bm.height
+        val widthScale = targetWidth * 1.0f / srcWidth
+        val heightScale = targetHeight * 1.0f / srcHeight
+        val matrix = Matrix()
+        matrix.postScale(widthScale, heightScale, 0f, 0f)
+        val bmpRet = Bitmap.createBitmap(targetWidth, targetHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bmpRet)
+        val paint = Paint()
+        canvas.drawBitmap(bm, matrix, paint)
+        return bmpRet
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
