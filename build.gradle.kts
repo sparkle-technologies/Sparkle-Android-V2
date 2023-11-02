@@ -10,3 +10,9 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin") version "2.0.1" apply false
     id("cn.therouter.agp8") version "1.2.0-rc1" apply false
 }
+
+buildscript {
+    dependencies {
+        classpath("com.huawei.agconnect:agcp:1.9.1.301")
+    }
+}

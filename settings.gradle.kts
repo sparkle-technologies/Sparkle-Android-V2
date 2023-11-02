@@ -10,6 +10,8 @@ pluginManagement {
         maven { url = uri("https://maven.aliyun.com/repository/google") }
         maven { url = uri("https://maven.aliyun.com/repository/central") }
         maven { url = uri("https://mirrors.tencent.com/nexus/repository/maven-public/") }
+
+        maven { url = uri("https://developer.huawei.com/repo/") }
     }
 }
 dependencyResolutionManagement {
@@ -24,6 +26,8 @@ dependencyResolutionManagement {
         maven { url = uri("https://maven.aliyun.com/repository/google") }
         maven { url = uri("https://maven.aliyun.com/repository/central") }
         maven { url = uri("https://mirrors.tencent.com/nexus/repository/maven-public/") }
+
+        maven { url = uri("https://developer.huawei.com/repo/") }
     }
 }
 

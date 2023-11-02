@@ -9,6 +9,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.os.Build
@@ -44,6 +45,9 @@ import com.drake.spannable.setSpan
 import com.drake.spannable.span.CenterImageSpan
 import com.drake.spannable.span.ColorSpan
 import com.drake.spannable.span.HighlightSpan
+import com.huawei.hms.hmsscankit.ScanUtil
+import com.huawei.hms.ml.scan.HmsBuildBitmapOption
+import com.huawei.hms.ml.scan.HmsScan
 import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import com.luck.picture.lib.basic.PictureMediaScannerConnection
 import com.luck.picture.lib.interfaces.OnCallbackListener
@@ -138,7 +142,25 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
     private fun showBody(user: User){
         mDataBinding.tvName.text = user.nick  // name
         setSpan(mDataBinding.tvContent)       // content
-        // todo   generate QR code            // qr code
+//        generateQRcode("https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf")
+        generateQRcode("https://www.sparkle.fun/traveler/${user.open_uid}")
+    }
+
+    private var resultImage: Bitmap? = null
+
+    private fun generateQRcode(content: String) {
+        val margin = 0
+        val color = Color.BLACK
+        val background = Color.WHITE
+        val type = HmsScan.QRCODE_SCAN_TYPE
+        val width = dp2px(54f)
+        val height = width
+//        Log.e(TAG, "generateCodeBtnClick: content=$content", )
+//        Log.e(TAG, "generateCodeBtnClick: margin=$margin   color=$color    background=$background" )
+//        Log.e(TAG, "generateCodeBtnClick: type=$type   width=$width    height=$height" )
+        val options = HmsBuildBitmapOption.Creator().setBitmapMargin(margin).setBitmapColor(color).setBitmapBackgroundColor(background).create()
+        resultImage = ScanUtil.buildBitmap(content, type, width, height, options)
+        mDataBinding.ivQrCode.setImageBitmap(resultImage)
     }
 
     private fun setSpan(tv: TextView) {

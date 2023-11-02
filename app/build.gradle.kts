@@ -107,4 +107,7 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
 
+    // for qr code
+    implementation("com.huawei.hms:scanplus:2.12.0.301")
+
 }
