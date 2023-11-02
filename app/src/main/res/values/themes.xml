@@ -2,8 +2,28 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Sparkle" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="Theme.Sparkle" parent="Base.Theme.Sparkle" />
+    <style name="Theme.Sparkle" parent="Base.Theme.Sparkle">
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="ToolbarSubtitle" parent="Theme.Sparkle">
+        <item name="android:textSize">10dp</item>
+        <item name="android:textColor">@color/textSecond</item>
+    </style>
+
+    <style name="Theme.AppCompat.Translucent" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+
 </resources>

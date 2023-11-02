@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="m"
+            type="com.cyberflow.sparkle.main.view.FriendMessageInfo" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lay_go_chat"
+        android:layout_width="match_parent"
+        android:paddingBottom="@dimen/dp_6"
+        android:layout_height="183dp">
+
+        <View
+            android:id="@+id/bg_bottom_color"
+            android:layout_width="94dp"
+            android:layout_height="60dp"
+            android:background="@drawable/main_bg_friend_account"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:background="@drawable/main_bg_item_white" />
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_128"
+            android:layout_marginTop="@dimen/dp_3"
+            android:layout_marginStart="@dimen/dp_3"
+            android:layout_marginEnd="@dimen/dp_3"
+            android:scaleType="fitCenter"
+            holder="@{m.gender == 1 ? @drawable/place_holder_man :  @drawable/place_holder_women}"
+            corner="@{18}"
+            img="@{m.imageUrl}"
+            tools:src="@drawable/contact_pic"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_contact_name"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_21"
+            android:layout_marginStart="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_5"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:fontFamily="@font/poppins_semibold"
+            tools:text="Harry"
+            android:text="@{m.nickname}"
+            android:textColor="@color/color_000000"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_avatar" />
+
+        <View
+            android:id="@+id/contact_line"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_3"
+            android:background="@drawable/main_vertical_divider"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/bg_contact_msg"
+            android:layout_width="@dimen/dp_18"
+            android:layout_height="@dimen/dp_18"
+            android:src="@drawable/main_bg_msg_circle"
+            app:layout_constraintLeft_toLeftOf="@+id/contact_line"
+            app:layout_constraintRight_toRightOf="@+id/contact_line"
+            app:layout_constraintTop_toBottomOf="@+id/contact_line" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_10"
+            android:layout_height="@dimen/dp_8"
+            android:src="@drawable/main_ic_msg"
+            app:layout_constraintBottom_toBottomOf="@+id/bg_contact_msg"
+            app:layout_constraintLeft_toLeftOf="@+id/bg_contact_msg"
+            app:layout_constraintRight_toRightOf="@+id/bg_contact_msg"
+            app:layout_constraintTop_toTopOf="@+id/bg_contact_msg" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

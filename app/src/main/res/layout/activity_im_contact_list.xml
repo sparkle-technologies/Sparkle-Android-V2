@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_2nd">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/status_bar_height"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/contacts"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/ll_back"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_56"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title">
+
+            <ImageView
+                android:id="@+id/iv_btn_back"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:layout_centerInParent="true"
+                android:background="@drawable/svg_btn_left" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/lay_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingTop="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_20">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:id="@+id/bg_white"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp_40"
+                        android:background="@drawable/register_google_place_search_input_bg_white"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edt_search_contact"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/dp_15"
+                        android:layout_marginEnd="@dimen/dp_15"
+                        android:background="@null"
+                        android:drawableLeft="@drawable/svg_ic_search"
+                        android:drawablePadding="@dimen/dp_6"
+                        android:gravity="center_vertical"
+                        android:hint="Search"
+                        android:imeOptions="actionSearch"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="@color/color_000000"
+                        android:textColorHint="#7D7D80"
+                        android:textSize="@dimen/sp_14"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_white"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_white"
+                        app:layout_constraintRight_toRightOf="@+id/bg_white"
+                        app:layout_constraintTop_toTopOf="@+id/bg_white" />
+
+                    <ImageView
+                        android:id="@+id/iv_clear"
+                        android:layout_width="@dimen/dp_27"
+                        android:layout_height="0dp"
+                        android:paddingStart="@dimen/dp_5"
+                        android:paddingEnd="@dimen/dp_5"
+                        android:src="@drawable/svg_ic_clear"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="@+id/edt_search_contact"
+                        app:layout_constraintRight_toRightOf="@+id/edt_search_contact"
+                        app:layout_constraintTop_toTopOf="@+id/edt_search_contact" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_20"
+                    app:layout_constraintTop_toBottomOf="@id/edt_search_friend" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <com.drake.statelayout.StateLayout
+                android:id="@+id/state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingTop="@dimen/dp_16"
+                android:paddingEnd="@dimen/dp_20"
+                app:empty_layout="@layout/layout_im_request_empty"
+                app:layout_constraintTop_toBottomOf="@id/edt_search_friend">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCache"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/register_bg_gender_white"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_im_request" />
+
+            </com.drake.statelayout.StateLayout>
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

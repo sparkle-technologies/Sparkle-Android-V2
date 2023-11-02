@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="year_string">Year</string>
+    <string name="month_string">Month</string>
+    <string name="date_string">Date</string>
+    <string name="time_string">Time</string>
+    <string name="picker_title">Set Date</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+
+    <string name="location">Location</string>
+    <string name="birth_place">Birth Place</string>
+    <string name="Place">Place</string>
+    <string name="input_your_birth_place">input your birth place</string>
+
+    <string name="login_bg_string">Unlock the secrets of the stars and discover your true destiny with Sparkle</string>
+    <string name="meta_mask">MetaMask</string>
+    <string name="coin_base_wallet">Coinbase Wallet</string>
+    <string name="wallet_connect">WalletConnect</string>
+    <string name="connect_wallet">Connect Wallet</string>
+    <string name="before_you_begin">Before you begin</string>
+    <string name="before_you_begin_tips">Tell us your preference on avatar style. This will be your identity in web3 world.</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="ask_birthday">What is your date of birth?</string>
+    <string name="ask_birth_place">What is your place of birth?</string>
+    <string name="do_it_later">I\'ll do it later</string>
+    <string name="later">Later</string>
+    <string name="skip_place_of_birth_tips">Some features won\'t be available if birth place is missing.</string>
+    <string name="skip_time_of_birth_tips">Some features won\'t be available if birth time is missing.</string>
+    <string name="to_add">To add</string>
+    <string name="birth_time">What is your time of birth</string>
+    <string name="nickname">Nickname</string>
+    <string name="nickname_tips">Please enter your nickname</string>
+    <string name="set_your_nickname">Enter your nickname</string>
+    <string name="confirm">Confirm</string>
+    <string name="limit_edit_input">/30</string>
+    <string name="limit_edit_input_120">/120</string>
+    <string name="edit_input_num">0</string>
+    <string name="connect_with_third_platform">Or connect with social account</string>
+    <string name="birthday">Birthday</string>
+    <string name="birth_place_tips">Tell us what is your place of birth</string>
+    <string name="birthday_tips">Tell us what is your date of birth</string>
+    <string name="forget_birth_time">If you don\'t remember the time, you can do it later</string>
+    <string name="friends">Friends</string>
+    <string name="home_find_friend_title">Find Friends</string>
+    <string name="home_find_friend_desc">Discover more friends</string>
+    <string name="profile_title">Profile</string>
+    <string name="chat">Chat</string>
+    <string name="add">Add</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="view_detail">View Detail</string>
+    <string name="view_details">View Details</string>
+    <string name="settings_title">Settings</string>
+    <string name="account">Account</string>
+    <string name="accept">Accept</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="edit_avatar">Edit Avatar</string>
+    <string name="message_notifications">Message Notifications</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="logout">Log out</string>
+    <string name="save">Save</string>
+    <string name="signature">Signature</string>
+    <string name="open_sea">OpenSea</string>
+    <string name="get_it_for_free">Get it for free</string>
+    <string name="color">Color</string>
+    <string name="no_more_content">no more content</string>
+    <string name="complete_your_profile">Complete Your Profile</string>
+    <string name="friend_search_hint">Search contacts or new friends</string>
+    <string name="contact_list">Contact List</string>
+    <string name="contact">Contact</string>
+    <string name="contacts">Contacts</string>
+    <string name="friend_request">Friend Request</string>
+    <string name="current">Current</string>
+    <string name="birth">Birth</string>
+    <string name="more">More</string>
+    <string name="add_friends">Add Friends</string>
+    <string name="my_friends">My Friends</string>
+    <string name="send_message">Send message...</string>
+    <string name="send_a_message">Send a message</string>
+    <string name="send_to">Send to</string>
+    <string name="profile">Profile</string>
+    <string name="share">Share</string>
+    <string name="user_profile">User profile</string>
+    <string name="accept_friend">Accept friend</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+
+    <string name="scan_tip">Place the code within the frame</string>
+
+</resources>

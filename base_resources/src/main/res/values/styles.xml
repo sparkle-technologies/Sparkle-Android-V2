@@ -1,0 +1,148 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+
+    <!-- FONTS -->
+
+    <style name="font_light" parent="TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">@font/poppins_light</item>
+    </style>
+
+    <style name="font_semi_bold" parent="TextAppearance.AppCompat.Large">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+    </style>
+
+    <style name="font_bold" parent="TextAppearance.AppCompat.Large">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="font_italic_bold" parent="TextAppearance.AppCompat.Large">
+        <item name="android:fontFamily">@font/sigmarone</item>
+    </style>
+
+    <!-- FONTS end -->
+
+    <declare-styleable name="shadowButton">
+        <attr name="view_shadow_distance" format="dimension" />
+        <attr name="view_text" format="string" />
+        <attr name="view_left_drawable" format="reference" />
+        <attr name="view_text_color" format="color" />
+        <attr name="view_text_size" format="dimension" />
+        <attr name="view_text_bold" format="boolean" />
+        <attr name="view_text_disable_color" format="color" />
+
+        <attr name="view_bg" format="reference" />
+        <attr name="view_disable" format="boolean" />
+        <attr name="view_disable_bg" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="shadowImgButton">
+        <attr name="view_img_shadow_distance" format="dimension" />
+        <attr name="view_img_src" format="reference" />
+        <attr name="view_bg_src" format="reference" />
+    </declare-styleable>
+
+
+    <!-- login & register input field -->
+    <style name="OutlinedRoundedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="shapeAppearanceOverlay">
+            @style/ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded
+        </item>
+        <item name="boxStrokeColor">@color/color_000000</item>
+        <item name="boxStrokeWidth">@dimen/dp_1</item>
+
+        <item name="expandedHintEnabled">false</item>
+        <item name="android:textColorHint">@color/color_000000</item>
+        <item name="hintTextColor">@color/color_000000</item>
+        <item name="hintTextAppearance">@style/HintText</item>
+        <item name="errorTextAppearance">@style/error_appearance</item>
+        <item name="errorTextColor">@color/color_D93333</item>
+        <item name="errorEnabled">true</item>
+        <item name="errorIconDrawable">@null</item>
+
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.TextInputLayout.Rounded" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/dp_36</item>
+    </style>
+
+    <style name="HintText" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+
+    <style name="error_appearance" parent="@android:style/TextAppearance">
+        <item name="android:textSize">@dimen/sp_12</item>
+    </style>
+
+    <!-- login & register input field  end-->
+
+    <style name="date_picker_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@drawable/date_picker_bg</item>
+    </style>
+
+
+    <style name="share_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimaryDark">@color/white_3rd</item>
+        <!-- <item name="colorAccent">@color/white_3rd</item>
+         <item name="colorPrimary">@color/white_3rd</item>-->
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">#00000000</item>
+        <item name="actionMenuTextColor">@color/white_3rd</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">#00000000</item>
+
+    </style>
+
+
+    <style name="Theme.CenterDialog" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/white_3rd</item>
+        <!-- <item name="colorPrimaryVariant">@color/white_3rd</item>
+         <item name="colorOnPrimary">@color/white_3rd</item>
+         &lt;!&ndash; Secondary brand color. &ndash;&gt;
+         <item name="colorSecondary">@color/white_3rd</item>
+         <item name="colorSecondaryVariant">@color/white_3rd</item>
+         <item name="colorOnSecondary">@color/white_3rd</item>-->
+        <item name="windowNoTitle">true</item>
+        <item name="android:colorBackground">#00000000</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">#00000000</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+
+    <style name="Permission.Dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>  <!-- make bg dark-->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true
+        </item>   <!-- keyboard popu up, make content float  -->
+    </style>
+
+    <style name="BottomDialog.Animation" parent="Animation.AppCompat.Dialog">
+        <item name="android:windowEnterAnimation">@anim/tranlate_dialog_in</item>
+        <item name="android:windowExitAnimation">@anim/tranlate_dialog_out</item>
+    </style>
+
+    <declare-styleable name="CircleImageView">
+        <attr name="civ_border_width" format="dimension" />
+        <attr name="civ_border_color" format="color" />
+        <attr name="civ_border_overlay" format="boolean" />
+        <attr name="civ_circle_background_color" format="color" />
+    </declare-styleable>
+
+</resources>

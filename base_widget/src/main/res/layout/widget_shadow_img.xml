@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivBgShadow"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/button_circle_shadow" />
+
+    <ImageView
+        android:id="@+id/ivNormal"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/login_ic_twitter"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBgShadow"
+        app:layout_constraintEnd_toEndOf="@+id/ivBgShadow"
+        app:layout_constraintStart_toStartOf="@+id/ivBgShadow"
+        app:layout_constraintTop_toTopOf="@+id/ivBgShadow" />
+
+    <ImageButton
+        android:id="@+id/ivClicking"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:layout_marginBottom="2dp"
+        android:background="@null"
+        android:src="@drawable/login_ic_twitter"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

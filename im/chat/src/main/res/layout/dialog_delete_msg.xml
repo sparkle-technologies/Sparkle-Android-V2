@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/half_bg_input">
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/msg_delete_hint"
+        android:textColor="@color/ps_color_53575e"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/top_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/tv_msg"
+        android:background="@color/ps_color_e" />
+
+    <TextView
+        android:id="@+id/tv_ok"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/top_line"
+        android:background="@drawable/ps_item_select_bg"
+        android:gravity="center"
+        android:text="@string/ok"
+        android:textColor="@color/red_1st"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/tv_ok"
+        android:background="@color/ps_color_e" />
+
+    <TextView
+        android:id="@+id/bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_below="@id/tv_line"
+        android:background="@color/ps_color_e" />
+
+    <TextView
+        android:id="@+id/tv_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/bottom_line"
+        android:background="@drawable/ps_item_select_bg"
+        android:gravity="center"
+        android:text="@string/ps_cancel"
+        android:textColor="@color/ps_color_53575e"
+        android:textSize="14sp" />
+</RelativeLayout>

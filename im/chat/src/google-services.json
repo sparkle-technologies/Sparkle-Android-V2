@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "892786832819",
+    "project_id": "chat-d2066",
+    "storage_bucket": "chat-d2066.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:892786832819:android:06dc66de16cbfe94c807c6",
+        "android_client_info": {
+          "package_name": "com.cyberflow.sparkle.chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzLpQ1lCLHM-P927FWDRIe3K2jKEVYy98"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

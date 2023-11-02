@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lav_homepage"
+            android:layout_width="match_parent"
+            android:layout_height="378dp"
+            android:layout_marginTop="117dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="homepage.json"
+            app:lottie_imageAssetsFolder="images/"
+            app:lottie_loop="true" />
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_46"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_twitter_login"
+            android:layout_width="@dimen/dp_43"
+            android:layout_height="@dimen/dp_43"
+            android:layout_marginBottom="@dimen/dp_20"
+            app:layout_constraintBottom_toTopOf="@+id/compose_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/login_ic_twitter" />
+
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_google_login"
+            android:layout_width="@dimen/dp_43"
+            android:layout_height="@dimen/dp_43"
+            android:layout_marginEnd="@dimen/dp_25"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_twitter_login"
+            app:layout_constraintRight_toLeftOf="@+id/btn_twitter_login"
+            app:layout_constraintTop_toTopOf="@+id/btn_twitter_login"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/login_ic_google" />
+
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_ig_login"
+            android:layout_width="@dimen/dp_43"
+            android:layout_height="@dimen/dp_43"
+            android:layout_marginStart="@dimen/dp_25"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_twitter_login"
+            app:layout_constraintLeft_toRightOf="@+id/btn_twitter_login"
+            app:layout_constraintTop_toTopOf="@+id/btn_twitter_login"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/login_ic_ig" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

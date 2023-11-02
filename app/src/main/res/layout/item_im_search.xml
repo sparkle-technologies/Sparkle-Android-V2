@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="m"
+            type="com.cyberflow.base.model.IMSearchData" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_56">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardview"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="@dimen/dp_16"
+                app:cardCornerRadius="@dimen/dp_16"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@color/black"
+                app:strokeWidth="@dimen/dp_1">
+
+                <!-- holder="@{m.gender == 1 ? @drawable/place_holder_man :  @drawable/place_holder_women}"  -->
+
+                <ImageView
+                    android:id="@+id/iv_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.cyberflow.sparkle.widget.ShadowTxtButton
+                android:id="@+id/tv_add"
+                android:layout_width="@dimen/dp_59"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginEnd="@dimen/dp_22"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:view_bg="@drawable/im_bg_add_button"
+                app:view_disable="false"
+                app:view_shadow_distance="1dp"
+                app:view_text="@string/add"
+                app:view_text_color="@color/color_000000"
+                app:view_text_bold="false"
+                app:view_text_size="@dimen/sp_14" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="@dimen/dp_12"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_add"
+                app:layout_constraintLeft_toRightOf="@+id/cardview"
+                app:layout_constraintRight_toLeftOf="@+id/tv_add"
+                app:layout_constraintTop_toTopOf="@+id/tv_add">
+
+                <TextView
+                    android:id="@+id/tv_friend_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:fontFamily="@font/poppins_medium"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_17"
+                    tools:text="Arc Chan" />
+
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_light"
+                    android:textSize="@dimen/sp_12"
+                    tools:text="0xb98...3c6e" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="@dimen/dp_7"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:background="@drawable/register_google_place_divider" />
+
+    </LinearLayout>
+
+</layout>

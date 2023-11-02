@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="SemiCircleArcProgressBar">
+        <attr name="progressPlaceHolderColor" format="color" />
+        <attr name="progressBarColor" format="color" />
+        <attr name="progressPlaceHolderWidth" format="integer" />
+        <attr name="progressBarWidth" format="integer" />
+        <attr name="percent" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="NumView">
+        <attr name="num_view_color" format="color" />
+        <attr name="num_view_strokeColor" format="color" />
+        <attr name="num_view_strokeWidth" format="dimension" />
+        <attr name="num_text_size" format="dimension" />
+        <attr name="num_text_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="FlowLayout">
+        <attr name="horizontalSpacing" format="dimension" />
+        <attr name="verticalSpacing" format="dimension" />
+        <attr name="orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+        <attr name="debugDraw" format="boolean" />
+    </declare-styleable>
+
+</resources>
