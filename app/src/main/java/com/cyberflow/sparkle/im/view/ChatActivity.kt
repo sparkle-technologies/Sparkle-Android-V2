@@ -18,6 +18,7 @@ import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.databinding.ActivityImChatBinding
 import com.cyberflow.sparkle.chat.ui.fragment.ChatFragment
+import com.cyberflow.sparkle.chat.ui.goPreview
 import com.cyberflow.sparkle.chat.viewmodel.ChatViewModel
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel
 import com.cyberflow.sparkle.chat.viewmodel.parseResource
@@ -71,6 +72,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
 
         mDataBinding.ivAvatar.click {
             Log.e(TAG, "ivAvatar:  go chat detail or profile detail? ")
+            goPreview(conversationId.replace("_", "-"))
         }
 
         mDataBinding.ivBtnRight.click {

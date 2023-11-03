@@ -13,7 +13,7 @@
         <com.cyberflow.sparkle.widget.ShadowImgButton
             android:id="@+id/btn_action"
             android:layout_width="@dimen/dp_60"
-            android:layout_height="@dimen/dp_60"
+            android:layout_height="@dimen/dp_62"
             android:layout_marginTop="@dimen/dp_4"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

@@ -29,8 +29,8 @@
         <attr name="view_text_size" format="dimension" />
         <attr name="view_text_bold" format="boolean" />
         <attr name="view_text_disable_color" format="color" />
-
         <attr name="view_bg" format="reference" />
+        <attr name="view_click_enable" format="boolean" />
         <attr name="view_disable" format="boolean" />
         <attr name="view_disable_bg" format="reference" />
     </declare-styleable>

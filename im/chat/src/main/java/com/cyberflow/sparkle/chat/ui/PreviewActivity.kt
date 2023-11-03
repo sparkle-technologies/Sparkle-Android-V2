@@ -307,3 +307,15 @@ fun handleQRCode(result: Array<HmsScan>) {
         }
     }
 }
+
+fun goPreview(openUid: String) {
+    if (IMDataManager.instance.getConversationData().any { it.open_uid == openUid }) {
+        TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid)
+            .withInt("friend_status", 0).navigation()
+//            ProfileAct.go(act, openUid, ProfileAct.CHAT)
+    } else {
+        TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid)
+            .withInt("friend_status", 1).navigation()
+//            ProfileAct.go(act, openUid, ProfileAct.ADD_FRIEND)
+    }
+}

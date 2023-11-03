@@ -44,6 +44,7 @@ class ShadowTxtButton : ConstraintLayout {
     private var bg: Int = 0          // button background drawable, default is R.drawable.button_start
     private var bgDisable: Int = 0
     private var disable: Boolean = false
+    private var viewClickEnable: Boolean = true
     private var drawableLeft: Int = -1
 
     private fun attributes(attrs: AttributeSet?) {
@@ -72,6 +73,8 @@ class ShadowTxtButton : ConstraintLayout {
         bgDisable = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_disable_bg, com.cyberflow.base.resources.R.drawable.register_btn_next_disable)
 
         disable = mTypedArray.getBoolean(com.cyberflow.base.resources.R.styleable.shadowButton_view_disable, false)
+
+        viewClickEnable = mTypedArray.getBoolean(com.cyberflow.base.resources.R.styleable.shadowButton_view_click_enable, true)
 
         drawableLeft = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_left_drawable, -1)
 
@@ -129,20 +132,22 @@ class ShadowTxtButton : ConstraintLayout {
             }
         }
 
-        ivClicking?.setOnClickListener {
-            listener?.clicked(disable)
-        }
+        if(viewClickEnable){
+            ivClicking?.setOnClickListener {
+                listener?.clicked(disable)
+            }
 
-        ivClicking?.setOnTouchListener { v, motionEvent ->
-            staticButtonTouchAnim(
-                motionEvent,
-                ivClicking,
-                ivBgShadow,
-                tvClicking,
-                if(disable) bgDisable else bg,
-                com.cyberflow.base.resources.R.drawable.button_start_shadow
-            )
-            false
+            ivClicking?.setOnTouchListener { v, motionEvent ->
+                staticButtonTouchAnim(
+                    motionEvent,
+                    ivClicking,
+                    ivBgShadow,
+                    tvClicking,
+                    if(disable) bgDisable else bg,
+                    com.cyberflow.base.resources.R.drawable.button_start_shadow
+                )
+                false
+            }
         }
     }
 

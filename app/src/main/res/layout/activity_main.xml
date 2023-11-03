@@ -122,7 +122,7 @@
         <com.cyberflow.sparkle.widget.ShadowImgButton
             android:id="@+id/btn_add_friends"
             android:layout_width="@dimen/dp_40"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="@dimen/dp_42"
             android:layout_marginEnd="@dimen/dp_20"
             app:layout_constraintBottom_toBottomOf="@+id/bgMenu"
             app:layout_constraintRight_toRightOf="parent"

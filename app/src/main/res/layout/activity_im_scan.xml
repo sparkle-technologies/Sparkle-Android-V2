@@ -47,7 +47,7 @@
         <com.cyberflow.sparkle.widget.ShadowImgButton
             android:id="@+id/btn_back"
             android:layout_width="@dimen/dp_40"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="@dimen/dp_42"
             android:layout_marginStart="@dimen/dp_20"
             app:layout_constraintBottom_toBottomOf="@+id/tv_title"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -60,7 +60,7 @@
         <com.cyberflow.sparkle.widget.ShadowImgButton
             android:id="@+id/btn_gallery"
             android:layout_width="@dimen/dp_40"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="@dimen/dp_42"
             android:layout_marginBottom="@dimen/dp_54"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

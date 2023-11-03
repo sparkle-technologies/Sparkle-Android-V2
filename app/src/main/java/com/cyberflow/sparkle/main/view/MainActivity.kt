@@ -137,6 +137,10 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
                 override fun onPageSelected(position: Int) {
                     if (position == 0) clickTopMenu(true, false, true)
                     else clickTopMenu(false, true, true)
+
+                    if(mDataBinding.layDialogAdd.visibility == View.VISIBLE){
+                        mDataBinding.layDialogAdd.visibility = View.GONE
+                    }
                 }
             })
             setPageTransformer(MarginPageTransformer(100))
