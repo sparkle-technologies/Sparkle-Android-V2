@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_img"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/dp_20"
@@ -72,7 +73,37 @@
                 app:view_img_shadow_distance="1dp"
                 app:view_img_src="@drawable/im_ic_preview_share" />
 
+            <com.cyberflow.sparkle.widget.ShadowImgButton
+                android:id="@+id/shadow_btn_scan"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:visibility="gone"
+                app:layout_constraintRight_toLeftOf="@+id/shadow_btn_share"
+                app:layout_constraintTop_toTopOf="@+id/shadow_btn_share"
+                app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                app:view_img_shadow_distance="1dp"
+                app:view_img_src="@drawable/im_ic_preview_scan" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RelativeLayout
+            android:id="@+id/lay_scan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/dp_100"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/iv_anima"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/qr_bg_animator"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fl_fragment"

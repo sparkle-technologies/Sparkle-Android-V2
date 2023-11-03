@@ -9,16 +9,17 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.model.DetailResponseData
+import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.base.model.ManyImageData
 import com.cyberflow.base.model.User
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.DBComponent.loadImageWithHolder
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityProfileBinding
-import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMAddFriendAct
 import com.cyberflow.sparkle.profile.viewmodel.ProfileViewModel
@@ -36,8 +37,10 @@ import com.drake.spannable.setSpan
 import com.drake.spannable.span.CenterImageSpan
 import com.drake.spannable.span.ColorSpan
 import com.drake.spannable.span.HighlightSpan
+import com.therouter.router.Route
 import me.jessyan.autosize.utils.ScreenUtils
 
+@Route(path = PageConst.App.PAGE_PROFILE)
 class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
 
     companion object {
@@ -312,7 +315,11 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
                  if(data.signature.isNotEmpty()){
                      tvContent.text = data.signature
                  }else{
-                     setSpan(tvContent)
+                     if(isMySelf){
+                         setSpan(tvContent)
+                     }else{
+                         tvContent.text = "He has not yet constructed the bio."
+                     }
                  }
              }
          }

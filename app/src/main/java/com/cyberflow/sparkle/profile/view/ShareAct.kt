@@ -24,6 +24,7 @@ import com.cyberflow.base.model.ManyImageData
 import com.cyberflow.base.model.User
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.resources.R
+import com.cyberflow.base.util.ConstantGlobal
 import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.ViewExt.convertViewToBitmap
 import com.cyberflow.base.util.dp2px
@@ -144,7 +145,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
         mDataBinding.tvName.text = user.nick  // name
         setSpan(mDataBinding.tvContent)       // content
 //        generateQRcode("https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf")
-        generateQRcode("https://www.sparkle.fun/traveler/${user.open_uid}")
+        generateQRcode("${ConstantGlobal.SHARE_BODY}${user.open_uid}")
     }
 
     private var resultImage: Bitmap? = null
@@ -217,7 +218,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
     }
 
     private fun download() {
-        if (checkIfHasPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, ChatFragment.REQUEST_CODE_STORAGE_FILE)) {
+        if (checkIfHasPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, ChatFragment.REQUEST_CODE_STORAGE_FILE)) {
             LoadingDialogHolder.getLoadingDialog()?.show(this)
             lifecycleScope.launch {
                 val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)

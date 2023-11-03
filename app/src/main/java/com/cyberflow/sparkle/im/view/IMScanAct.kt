@@ -7,12 +7,14 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.util.Log
-import android.view.View
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
+import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.sparkle.R
+import com.cyberflow.sparkle.chat.ui.handleQRCode
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityImScanBinding
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
@@ -29,20 +31,15 @@ import java.io.IOException
 
 class IMScanAct : BaseDBAct<IMViewModel, ActivityImScanBinding>() {
 
-    var frameLayout: FrameLayout? = null
     var remoteView: RemoteView? = null
-    var imgBtn: ImageView? = null
-    var flushBtn: ImageView? = null
 
     var mScreenWidth = 0
     var mScreenHeight = 0
 
-    val SCAN_FRAME_SIZE = 240
     val img = intArrayOf(R.drawable.flashlight_on, R.drawable.flashlight_off)
 
     companion object {
 
-        const val SCAN_RESULT = "scanResult"
         const val REQUEST_CODE_PHOTO = 0X1113
         fun go(context: Context) {
             val intent = Intent(context, IMScanAct::class.java)
@@ -56,109 +53,78 @@ class IMScanAct : BaseDBAct<IMViewModel, ActivityImScanBinding>() {
                 onBackPressed()
             }
         })
-
-        frameLayout = findViewById(R.id.rim)
-
-        //1. Obtain the screen density to calculate the viewfinder's rectangle.
         val dm = resources.displayMetrics
         val density = dm.density
-        //2. Obtain the screen size.
-        //2. Obtain the screen size.
         mScreenWidth = resources.displayMetrics.widthPixels
         mScreenHeight = resources.displayMetrics.heightPixels
-
-        val scanFrameSize = (SCAN_FRAME_SIZE * density).toInt()
-
-        //3. Calculate the viewfinder's rectangle, which in the middle of the layout.
-        //Set the scanning area. (Optional. Rect can be null. If no settings are specified, it will be located in the middle of the layout.)
-
-        //3. Calculate the viewfinder's rectangle, which in the middle of the layout.
-        //Set the scanning area. (Optional. Rect can be null. If no settings are specified, it will be located in the middle of the layout.)
         val rect = Rect()
-        rect.left = mScreenWidth / 2 - scanFrameSize / 2
-        rect.right = mScreenWidth / 2 + scanFrameSize / 2
-        rect.top = mScreenHeight / 2 - scanFrameSize / 2
-        rect.bottom = mScreenHeight / 2 + scanFrameSize / 2
+        rect.left = 0
+        rect.right = mScreenWidth
+        rect.top = 0
+        rect.bottom = mScreenHeight
 
-
-        //Initialize the RemoteView instance, and set callback for the scanning result.
-
-
-        //Initialize the RemoteView instance, and set callback for the scanning result.
         remoteView = RemoteView.Builder().setContext(this).setBoundingBox(rect)
             .setFormat(HmsScan.ALL_SCAN_TYPE).build()
-        // When the light is dim, this API is called back to display the flashlight switch.
-        // When the light is dim, this API is called back to display the flashlight switch.
-        flushBtn = findViewById(R.id.flush_btn)
         remoteView?.setOnLightVisibleCallback(OnLightVisibleCallBack { visible ->
-            if (visible) {
-                flushBtn?.setVisibility(View.VISIBLE)
-            }
+//            if (visible) {
+//                mDataBinding.flushBtn.visibility = View.VISIBLE
+//            }
         })
-        // Subscribe to the scanning result callback event.
-        // Subscribe to the scanning result callback event.
-        remoteView?.setOnResultCallback(OnResultCallback { result -> //Check the result.
-            if (result != null && result.size > 0 && result[0] != null && !TextUtils.isEmpty(result[0].getOriginalValue())) {
-
-                if (result[0].scanType == HmsScan.QRCODE_SCAN_TYPE) {
-                    val url = result[0].getOriginalValue()
-                    Log.e(TAG, "setOnResultCallback: url=$url")
-                    val openUid = url.substring(url.lastIndexOf("/") + 1)
-
-                    if (IMDataManager.instance.getConversationData().filter {
-                            it.open_uid == openUid
-                        }.isNotEmpty()) {
-                        ProfileAct.go(this@IMScanAct, openUid, ProfileAct.CHAT)
-                    } else {
-                        ProfileAct.go(this@IMScanAct, openUid, ProfileAct.ADD_FRIEND)
-                    }
-                }
-
-//                val intent = Intent()
-//                intent.putExtra(SCAN_RESULT, result[0])
-//                setResult(RESULT_OK, intent)
+        remoteView?.setOnResultCallback(OnResultCallback { result ->
+            if (result != null && result.isNotEmpty() && result[0] != null && !TextUtils.isEmpty(
+                    result[0].getOriginalValue()
+                )
+            ) {
+                handleQRCode(result)
                 finish()
             }
         })
-
-        // Load the customized view to the activity.
-        // Load the customized view to the activity.
         remoteView?.onCreate(savedInstanceState)
         val params = FrameLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT
         )
-        frameLayout?.addView(remoteView, params)
-        // Set the back, photo scanning, and flashlight operations.
-        // Set the back, photo scanning, and flashlight operations.
+        mDataBinding.frameLayout.addView(remoteView, params)
         setPictureScanOperation()
-        setFlashOperation()
+//        setFlashOperation()
+
+        initAnimation()
     }
 
     override fun initData() {
 
     }
 
+    private fun initAnimation() {
+        val mAnimation = TranslateAnimation(TranslateAnimation.ABSOLUTE, 0f, TranslateAnimation.ABSOLUTE,0f, TranslateAnimation.RELATIVE_TO_PARENT, 0f,
+            TranslateAnimation.RELATIVE_TO_PARENT, 0.9f)
+        mAnimation.duration = 1500
+        mAnimation.repeatCount = -1
+        mAnimation.repeatMode = Animation.RESTART
+        mAnimation.interpolator = LinearInterpolator()
+        mDataBinding.ivAnima.animation = mAnimation
+    }
+
     private fun setPictureScanOperation() {
-        imgBtn = findViewById(R.id.img_btn)
-        imgBtn?.setOnClickListener(View.OnClickListener {
-            val pickIntent =
-                Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
-            this@IMScanAct.startActivityForResult(pickIntent, REQUEST_CODE_PHOTO)
+        mDataBinding.btnGallery.setClickListener(object: ShadowImgButton.ShadowClickListener{
+            override fun clicked() {
+                val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+                this@IMScanAct.startActivityForResult(pickIntent, REQUEST_CODE_PHOTO)
+            }
         })
     }
 
-    private fun setFlashOperation() {
-        flushBtn?.setOnClickListener {
-            if (remoteView?.lightStatus ?: false) {
+   /* private fun setFlashOperation() {
+        mDataBinding.flushBtn.setOnClickListener {
+            if (remoteView?.lightStatus == true) {
                 remoteView?.switchLight()
-                flushBtn?.setImageResource(img[1])
+                mDataBinding.flushBtn.setImageResource(img[1])
             } else {
                 remoteView?.switchLight()
-                flushBtn?.setImageResource(img[0])
+                mDataBinding.flushBtn.setImageResource(img[0])
             }
         }
-    }
+    }*/
 
 
     override fun onStart() {
@@ -214,11 +180,6 @@ class IMScanAct : BaseDBAct<IMViewModel, ActivityImScanBinding>() {
                             ProfileAct.go(this@IMScanAct, openUid, ProfileAct.ADD_FRIEND)
                         }
                     }
-
-//                    val intent = Intent()
-//                    intent.putExtra(SCAN_RESULT, hmsScans[0])
-//                    setResult(RESULT_OK, intent)
-//                    finish()
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -226,3 +187,4 @@ class IMScanAct : BaseDBAct<IMViewModel, ActivityImScanBinding>() {
         }
     }
 }
+

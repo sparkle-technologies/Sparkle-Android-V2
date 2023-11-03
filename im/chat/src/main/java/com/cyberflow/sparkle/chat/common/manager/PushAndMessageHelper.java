@@ -22,6 +22,7 @@ import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseFileUtils;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMFileHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -311,6 +312,8 @@ public class PushAndMessageHelper {
         sendMessage(message);
     }
 
+    private final static int MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+
     /**
      * send image message
      *
@@ -318,7 +321,13 @@ public class PushAndMessageHelper {
      * @param imageUri
      */
     private static void sendImageMessage(String toChatUsername, Uri imageUri) {
-        EMMessage message = EMMessage.createImageSendMessage(imageUri, true, toChatUsername);
+        boolean sendOriginalImg = true;
+        if(EMFileHelper.getInstance().isFileExist(imageUri)) {
+            if(EMFileHelper.getInstance().getFileLength(imageUri) > MAX_IMAGE_SIZE) {
+                sendOriginalImg = false;
+            }
+        }
+        EMMessage message = EMMessage.createImageSendMessage(imageUri, sendOriginalImg, toChatUsername);
         sendMessage(message);
     }
 

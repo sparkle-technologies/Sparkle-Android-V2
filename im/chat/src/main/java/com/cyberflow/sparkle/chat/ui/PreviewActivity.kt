@@ -2,15 +2,23 @@ package com.cyberflow.sparkle.chat.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
+import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseVBAct
+import com.cyberflow.base.util.ConstantGlobal
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.viewmodel.BaseViewModel
@@ -18,7 +26,12 @@ import com.cyberflow.sparkle.chat.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.databinding.ActivityPreivewBinding
 import com.cyberflow.sparkle.chat.ui.fragment.PreviewFragment
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.widget.ShadowImgButton
+import com.drake.net.utils.withMain
+import com.huawei.hms.hmsscankit.ScanUtil
+import com.huawei.hms.ml.scan.HmsScan
+import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions
 import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.utils.GlideEngine
 import com.luck.picture.lib.config.PictureConfig
@@ -30,13 +43,17 @@ import com.luck.picture.lib.utils.DensityUtil
 import com.luck.picture.lib.utils.MediaUtils
 import com.therouter.TheRouter
 import com.vanniktech.ui.hideKeyboard
+import kotlinx.coroutines.launch
 
 class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
 
     companion object {
         fun go(act: Activity, conversationId: String, chatType: Int, localMedia: LocalMedia) {
 
-            Log.e(TAG, "go: conversationId=$conversationId \t chatType=$chatType localMedia=${localMedia.path}")
+            Log.e(
+                TAG,
+                "go: conversationId=$conversationId \t chatType=$chatType localMedia=${localMedia.path}"
+            )
             val intent = Intent(act, PreviewActivity::class.java)
             intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
             intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType)
@@ -59,12 +76,18 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
                 finish()
             }
         })
+
+        mViewBind.shadowBtnScan.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+                Log.e(TAG, "shadowBtnScan  clicked: ")
+                fakeScanAnim()
+            }
+        })
         mViewBind.shadowBtnShare.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                Log.e(TAG, "clicked: localMedia?.forward_msg_id=${localMedia?.forward_msg_id}" )
+                Log.e(TAG, "clicked: localMedia?.forward_msg_id=${localMedia?.forward_msg_id}")
                 TheRouter.build(PageConst.IM.PAGE_IM_FORWARD)
-                    .withString("forward_msg_id", localMedia?.forward_msg_id)
-                    .navigation()
+                    .withString("forward_msg_id", localMedia?.forward_msg_id).navigation()
             }
         })
         mViewBind.shadowBtnDownload.setClickListener(object : ShadowImgButton.ShadowClickListener {
@@ -79,20 +102,21 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
 
         coverImageView?.setOnViewDragListener { dx, dy ->
 //            Log.e(TAG, "initView: $dy" )
-            if(dy > 30){
+            if (dy > 30) {
                 hideKeyboard()
                 finish()
             }
         }
     }
 
-    private var fragment : PreviewFragment? = null
+    private var fragment: PreviewFragment? = null
 
     private fun initChatFragment() {
         conversationId?.also {
             fragment = PreviewFragment().apply {
                 setData(it, chatType)
-                supportFragmentManager.beginTransaction().replace(R.id.fl_fragment, this, "preview").commit()
+                supportFragmentManager.beginTransaction().replace(R.id.fl_fragment, this, "preview")
+                    .commit()
             }
         }
     }
@@ -124,6 +148,7 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
         loadImage(media, maxImageSize[0], maxImageSize[1])
 //        setScaleDisplaySize(media)
         setCoverScaleType(media)
+        detectQR(media)
     }
 
     private var screenWidth = 0
@@ -143,6 +168,31 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
             intArrayOf(media.width, media.height)
         }
     }
+
+
+    private var hmsScans: Array<HmsScan>? = null
+
+    private fun detectQR(media: LocalMedia) {
+
+        lifecycleScope.launch {
+            val bitmap = BitmapFactory.decodeFile(media.availablePath)
+            hmsScans = ScanUtil.decodeWithBitmap(
+                this@PreviewActivity,
+                bitmap,
+                HmsScanAnalyzerOptions.Creator().setPhotoMode(true).create()
+            )
+            val scanResult = hmsScans?.filter {
+                it.scanType == HmsScan.QRCODE_SCAN_TYPE && it.originalValue.isNotEmpty()
+            }?.map {
+                it.originalValue
+            }
+
+            withMain {
+                mViewBind.shadowBtnScan.isVisible = !scanResult.isNullOrEmpty()
+            }
+        }
+    }
+
 
     private fun loadImage(media: LocalMedia, maxWidth: Int, maxHeight: Int) {
         Log.e(PreviewFragment.TAG, "loadImage: maxWidth=$maxWidth \t maxHeight=$maxHeight")
@@ -177,8 +227,51 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
     }
 
     override fun finish() {
-        LiveDataBus.get().with(DemoConstant.MSG_LIST_FRESH_TO_LATEST).postValue("${System.currentTimeMillis()}")
+        LiveDataBus.get().with(DemoConstant.MSG_LIST_FRESH_TO_LATEST)
+            .postValue("${System.currentTimeMillis()}")
         super.finish()
+    }
+
+
+    private fun fakeScanAnim() {
+        mViewBind.layScan.visibility = View.VISIBLE
+        TranslateAnimation(
+            TranslateAnimation.ABSOLUTE,
+            0f,
+            TranslateAnimation.ABSOLUTE,
+            0f,
+            TranslateAnimation.RELATIVE_TO_PARENT,
+            0f,
+            TranslateAnimation.RELATIVE_TO_PARENT,
+            0.9f
+        ).apply {
+            duration = 1500
+            repeatCount = 0
+//        mAnimation.repeatMode = Animation.REVERSE
+//        mAnimation.fillAfter = true
+            interpolator = LinearInterpolator()
+
+            setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) {
+                    Log.e(TAG, "onAnimationStart: ")
+
+                }
+
+                override fun onAnimationEnd(animation: Animation?) {
+                    Log.e(TAG, "onAnimationEnd: ")
+                    mViewBind.layScan.visibility = View.GONE
+                    hmsScans?.let {
+                        handleQRCode(it)
+                    }
+                }
+
+                override fun onAnimationRepeat(animation: Animation?) {
+
+                }
+            })
+            mViewBind.ivAnima.animation = this
+            mViewBind.ivAnima.startAnimation(this)
+        }
     }
 }
 
@@ -190,4 +283,27 @@ inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? = when {
 inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
     SDK_INT >= 33 -> getParcelable(key, T::class.java)
     else -> @Suppress("DEPRECATION") getParcelable(key) as? T
+}
+
+fun handleQRCode(result: Array<HmsScan>) {
+    result.filter {
+        it.scanType == HmsScan.QRCODE_SCAN_TYPE && it.originalValue.isNotEmpty()
+    }.map {
+        it.originalValue
+    }.filter {
+        it.startsWith(ConstantGlobal.SHARE_BODY)
+    }.take(1).apply {
+        val url = this[0]
+        Log.e("handleQRCode", " url=$url")
+        val openUid = url.substring(url.lastIndexOf("/") + 1)
+        if (IMDataManager.instance.getConversationData().any { it.open_uid == openUid }) {
+            TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid)
+                .withInt("friend_status", 0).navigation()
+//            ProfileAct.go(act, openUid, ProfileAct.CHAT)
+        } else {
+            TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid)
+                .withInt("friend_status", 1).navigation()
+//            ProfileAct.go(act, openUid, ProfileAct.ADD_FRIEND)
+        }
+    }
 }

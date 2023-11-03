@@ -11,65 +11,24 @@
 
 
         <FrameLayout
+            android:id="@+id/frameLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" />
 
-            <FrameLayout
-                android:id="@+id/rim"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/iv_anima"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></FrameLayout>
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/qr_bg_animator"
+                app:layout_constraintTop_toTopOf="parent" />
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/flush_btn"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center"
-                    android:src="@drawable/flashlight_off"
-                    android:visibility="gone" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerInParent="true"
-                    android:layout_centerHorizontal="true"
-                    android:alpha="0.1"
-                    android:background="#FF000000" />
-
-                <TextView
-                    android:layout_width="220dp"
-                    android:layout_height="20dp"
-                    android:layout_above="@id/scan_area"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/scan_tip"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:id="@+id/scan_area"
-                    android:layout_width="240dp"
-                    android:layout_height="240dp"
-                    android:layout_centerInParent="true"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/cloors" />
-            </RelativeLayout>
-
-        </FrameLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_title"
@@ -95,20 +54,33 @@
             app:layout_constraintTop_toTopOf="@+id/tv_title"
             app:view_bg_src="@drawable/main_ic_add_friends_bg"
             app:view_img_shadow_distance="1dp"
-            app:view_img_src="@drawable/share_ic_delete" />
+            app:view_img_src="@drawable/act_ic_back" />
 
 
-        <ImageView
-            android:id="@+id/img_btn"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginBottom="@dimen/dp_30"
-            android:gravity="center"
-            android:padding="12dp"
-            android:src="@drawable/photo"
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_gallery"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginBottom="@dimen/dp_54"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/qr_ic_gallery" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:fontFamily="@font/poppins_regular"
+            android:text="@string/gallery"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintLeft_toLeftOf="@+id/btn_gallery"
+            app:layout_constraintRight_toRightOf="@+id/btn_gallery"
+            app:layout_constraintTop_toBottomOf="@+id/btn_gallery" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

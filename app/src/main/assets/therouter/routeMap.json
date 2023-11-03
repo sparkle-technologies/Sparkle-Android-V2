@@ -1,5 +1,12 @@
 [
   {
+    "path": "/app/profile/ProfileAct",
+    "className": "com.cyberflow.sparkle.profile.view.ProfileAct",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
     "path": "/im/IMForwardListAct",
     "className": "com.cyberflow.sparkle.im.view.IMForwardListAct",
     "action": "",
