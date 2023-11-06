@@ -49,6 +49,7 @@
                 android:fontFamily="@font/poppins_semibold"
                 android:textColor="@color/color_2A2A2B"
                 android:textSize="@dimen/sp_17"
+                android:text="@{m.name}"
                 app:layout_constraintBottom_toBottomOf="@+id/cardview"
                 app:layout_constraintLeft_toRightOf="@+id/cardview"
                 app:layout_constraintRight_toRightOf="parent"

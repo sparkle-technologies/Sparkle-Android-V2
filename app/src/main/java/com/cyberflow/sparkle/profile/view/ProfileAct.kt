@@ -321,6 +321,10 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
                          tvContent.text = "He has not yet constructed the bio."
                      }
                  }
+
+                 if(!data.star_sign.isNullOrEmpty() && !isMySelf){
+                     btnTopStar.isVisible = false
+                 }
              }
          }
     }

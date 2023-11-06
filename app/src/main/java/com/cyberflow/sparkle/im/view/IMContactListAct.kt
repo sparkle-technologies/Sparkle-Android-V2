@@ -124,7 +124,11 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                     tvFriendName.text = model.name
                                     tvMsg.text = model.msg
                                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
-                                    cardview.setOnClickListener {
+
+//                                    cardview.setOnClickListener {
+//                                        goProfile(model)
+//                                    }
+                                    item.setOnClickListener {
                                         goProfile(model)
                                     }
                                     btnAccept.setClickListener(object : ShadowTxtButton.ShadowClickListener{
@@ -151,11 +155,12 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                         val condition = model.last || layoutPosition == modelCount - 1
                                         line.visibility = if ( condition ) View.INVISIBLE else View.VISIBLE
                                         DBComponent.loadAvatar(ivHead, model.avatar, model.gender)
-                                        cardview.setOnClickListener {
-                                            ProfileAct.go(this@IMContactListAct, model.openUid, ProfileAct.CHAT)
-                                        }
+//                                        cardview.setOnClickListener {
+//                                            ProfileAct.go(this@IMContactListAct, model.openUid, ProfileAct.CHAT)
+//                                        }
                                         item.setOnClickListener {
-                                            ChatActivity.launch(this@IMContactListAct, model.openUid, model.avatar, model.name, 1)  // go chat activity
+                                            ProfileAct.go(this@IMContactListAct, model.openUid, ProfileAct.CHAT)
+//                                            ChatActivity.launch(this@IMContactListAct, model.openUid, model.avatar, model.name, 1)  // go chat activity
                                         }
                                     }
                                 }

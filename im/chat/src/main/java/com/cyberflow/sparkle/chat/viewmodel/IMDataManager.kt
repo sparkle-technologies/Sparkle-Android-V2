@@ -15,7 +15,7 @@ class IMDataManager private constructor() {
 
     private var inviteCacheData : List<EMMessage>?  =  null
     private var contactCacheData : List<EaseUser>?  =  null
-    private var conversationCacheData : List<IMUserInfo>?  =  null   //for share page
+    private var conversationCacheData : List<IMUserInfo>?  =  null   // for share page & forwrd page
 
     fun getInviteData(): List<EMMessage> {
         return inviteCacheData.orEmpty()

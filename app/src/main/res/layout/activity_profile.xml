@@ -62,6 +62,18 @@
             app:view_img_shadow_distance="1dp"
             app:view_img_src="@drawable/profile_ic_share_purple" />
 
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_top_star"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_42"
+            android:layout_marginEnd="@dimen/dp_13"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+            app:layout_constraintRight_toLeftOf="@+id/btn_share_purple"
+            app:layout_constraintTop_toTopOf="@+id/tv_title"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/profile_ic_star" />
 
         <View
             android:layout_width="@dimen/dp_303"

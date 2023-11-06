@@ -4,21 +4,23 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.util.KeyboardUtil
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
+import com.cyberflow.sparkle.DBComponent.loadAvatar
 import com.cyberflow.sparkle.R
-import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.common.manager.PushAndMessageHelper
-import com.cyberflow.sparkle.chat.viewmodel.parseResource
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityImForwardListBinding
 import com.cyberflow.sparkle.databinding.ItemImContactBinding
 import com.cyberflow.sparkle.databinding.ItemImForwardContactBinding
 import com.cyberflow.sparkle.databinding.ItemImForwardContactSearchBinding
 import com.cyberflow.sparkle.databinding.ItemImForwardRecentBinding
+import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.im.viewmodel.Contact
 import com.cyberflow.sparkle.im.viewmodel.ContactLetter
 import com.cyberflow.sparkle.im.viewmodel.ContactList
@@ -28,14 +30,13 @@ import com.cyberflow.sparkle.im.viewmodel.SearchContactList
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.drake.net.utils.withMain
 import com.drake.spannable.replaceSpanFirst
 import com.drake.spannable.span.ColorSpan
-import com.hyphenate.chat.EMConversation
-import com.hyphenate.easeui.EaseIM
 import com.hyphenate.easeui.domain.EaseUser
-import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import com.therouter.TheRouter
 import com.therouter.router.Route
+import kotlinx.coroutines.launch
 
 
 @Route(path = PageConst.IM.PAGE_IM_FORWARD)
@@ -95,10 +96,13 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
                         getBinding<ItemImForwardRecentBinding>().rv.linear().setup {
                             addType<Contact>(R.layout.item_im_contact)
                             onBind {
-                                findView<View>(R.id.line).visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
-                                getBinding<ItemImContactBinding>().item.setOnClickListener {
-                                    val model = getModel<Contact>(layoutPosition)
-                                    forwardMsg(model)
+                                val model = getModel<Contact>(layoutPosition)
+                                getBinding<ItemImContactBinding>().apply {
+                                    line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
+                                    loadAvatar(ivHead, model.avatar, model.gender)
+                                    item.setOnClickListener {
+                                        forwardMsg(model)
+                                    }
                                 }
                             }
                         }
@@ -109,12 +113,16 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
                             addType<ContactLetter>(R.layout.item_im_contact_letter)
                             onBind {
                                 if(itemViewType == R.layout.item_im_contact){
-                                    findView<TextView>(R.id.tv_contact_name).text = getSpan(getModel<Contact>().name)
-                                    val condition = getModel<Contact>().last || layoutPosition == modelCount - 1
-                                    findView<View>(R.id.line).visibility = if ( condition ) View.INVISIBLE else View.VISIBLE
-                                    getBinding<ItemImContactBinding>().item.setOnClickListener {
-                                        val model = getModel<Contact>(layoutPosition)
-                                        forwardMsg(model)
+                                    val model = getModel<Contact>(layoutPosition)
+                                    getBinding<ItemImContactBinding>().apply {
+                                        tvContactName.text = getSpan(getModel<Contact>().name)
+                                        val condition = model.last || layoutPosition == modelCount - 1
+                                        line.visibility = if ( condition ) View.INVISIBLE else View.VISIBLE
+                                        loadAvatar(ivHead, model.avatar, model.gender)
+                                        item.setOnClickListener {
+                                            val model = getModel<Contact>(layoutPosition)
+                                            forwardMsg(model)
+                                        }
                                     }
                                 }
                             }
@@ -125,12 +133,15 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
                             addType<Contact>(R.layout.item_im_contact)
                             onBind {
                                 if(itemViewType == R.layout.item_im_contact){
-                                    findView<TextView>(R.id.tv_contact_name).text = getSpan(getModel<Contact>().name)
-                                    val condition = getModel<Contact>().last || layoutPosition == modelCount - 1
-                                    findView<View>(R.id.line).visibility = if ( condition ) View.INVISIBLE else View.VISIBLE
-                                    getBinding<ItemImContactBinding>().item.setOnClickListener {
-                                        val model = getModel<Contact>(layoutPosition)
-                                        forwardMsg(model)
+                                    val model = getModel<Contact>(layoutPosition)
+                                    getBinding<ItemImContactBinding>().apply {
+                                        tvContactName.text = getSpan(model.name)
+                                        val condition = getModel<Contact>().last || layoutPosition == modelCount - 1
+                                        line.visibility = if ( condition ) View.INVISIBLE else View.VISIBLE
+                                        loadAvatar(ivHead, model.avatar, model.gender)
+                                        item.setOnClickListener {
+                                            forwardMsg(model)
+                                        }
                                     }
                                 }
                             }
@@ -169,83 +180,75 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
     override fun initData() {
         mForwardMsgId = intent.extras?.getString("forward_msg_id").toString()
         Log.e(TAG, "initData: mForwardMsgId=$mForwardMsgId" )
-        freshData()
+        showCacheData()
     }
 
-    private fun freshData() {
-        viewModel.conversationCacheObservable?.observe(this) {
-            showConversationList(it)
+    private fun showCacheData() {
+        lifecycleScope.launch {
+            DBManager.instance.db?.imUserInfoDao()?.getAll()?.forEach {
+                it.open_uid = it.open_uid.replace("-", "_")
+                map[it.open_uid] = it
+            }
+            withMain {
+                showConversationList()
+                showContactListData()
+            }
         }
-        viewModel.getConversationFromCache()
-
-        viewModel.contactObservable.observe(this) { response ->
-            parseResource(response, object : OnResourceParseCallback<List<EaseUser>>() {
-                override fun onSuccess(data: List<EaseUser>?) {
-                    showContactListData(data)
-                }
-            })
-        }
-        viewModel.loadContactList(true)   // load contact data from local db
     }
 
-    private fun showConversationList(data: List<EaseConversationInfo>?) {
+    private fun showConversationList() {
         recentData.clear()
+        val data = IMDataManager.instance.getConversationData()
         if (data.isNullOrEmpty()) {
              return
         }else{
-            var conversactionList = arrayListOf<Contact>()
-            data?.also { list ->
-                list.forEach { item ->
-                    var imageUrl: String = ""
-                    var nickname: String = ""
-                    (item.info as? EMConversation)?.also {
-                        val username = it.conversationId()
-                        EaseIM.getInstance().userProvider?.also { provider ->
-                            provider.getUser(username)?.also { user ->
-                                val nickname = user.nickname
-                                val avatar = user.avatar
-                                val bgColor = ""   // todo waiting for our end developer to implement
-                            }
-                        }
-                        nickname = username
-                    }
-                    conversactionList.add(Contact(name = nickname))
-                }
-            }
-            recentData.addAll(conversactionList)
+            recentData.addAll(data.map {
+                Contact(name = it.nick, avatar = it.avatar, gender = it.gender, openUid = it.open_uid)
+            })
             freshNormalUI()
         }
-
     }
 
     private val allContactData = arrayListOf<Contact>()
     private val recentData = arrayListOf<Contact>()
     private val contactData = arrayListOf<Any>()
 
+    private val map = HashMap<String, IMUserInfo>()
+
     // show contact list
-    private fun showContactListData(data: List<EaseUser>?) {
+    private fun showContactListData() {
         allContactData.clear()
         contactData.clear()
         val list = arrayListOf<Any>()
+        val data = IMDataManager.instance.getContactData()
 
         data?.forEach {
             Log.e(TAG, "  userName=${it.username}  initialLetter=${it.initialLetter}" )
         }
-        val markArray = BooleanArray(array.size)  // handle letter missing problem
-        data?.sortedBy {
-            it.username
-        }?.forEach {
-            if (!markArray[array.indexOf(it.initialLetter)]) {
 
+        val markArray = BooleanArray(array.size)  // handle letter missing problem
+        val letter = EaseUser.GetInitialLetter()
+        data?.filter {
+            map.contains( it.username )
+        }?.mapNotNull {
+            map[it.username]
+        }?.sortedBy {
+            it.nick
+        }?.forEach {
+            val initialLetter = letter.getLetter(it.nick)
+            if (!markArray[array.indexOf(initialLetter)]) {
                 // if last name of a letter, change it to true
                 (list.lastOrNull() as? Contact)?.also {c->
                     c.last = true
                 }
 
-                list.add(ContactLetter(it.initialLetter))
-                markArray[array.indexOf(it.initialLetter)] = true
+                list.add(ContactLetter(initialLetter))
+                markArray[array.indexOf(initialLetter)] = true
             }
-            Contact(name = it.username).apply {
+
+//            Log.e(TAG, "showContactListData: ${it.nick}  ${it}" )
+
+            Contact(name = it.nick, avatar = it.avatar, gender = it.gender, openUid = it.open_uid).apply {
                 list.add(this)
                 allContactData.add(this)
             }
@@ -301,13 +304,4 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
         "Z",
         "#"
     )
-
-    private fun getData() : List<Any>{
-        val data = arrayListOf<Any>()
-        data.add(RecentContactList(arrayListOf(Contact(), Contact(), Contact(), Contact(), Contact())))
-        data.add(ContactList(arrayListOf(ContactLetter("A"), Contact(), Contact(), Contact(), Contact(), Contact(), Contact(last = true), ContactLetter("B"),Contact(), Contact(),  Contact(), Contact(), Contact(last = true), ContactLetter("Z"), Contact(), Contact(),  Contact(), Contact(), Contact(last = true))))
-        return data
-    }
-
-    private fun getCacheData(): SearchContactList = SearchContactList( list = arrayListOf(Contact(), Contact(), Contact(), Contact(), Contact()))
 }
