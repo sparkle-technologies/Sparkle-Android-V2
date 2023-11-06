@@ -86,6 +86,7 @@
     <string name="accept_friend">Accept friend</string>
     <string name="scan_qr_code">Scan QR Code</string>
     <string name="gallery">Gallery</string>
+    <string name="no_results">No results.</string>
 
 
 </resources>

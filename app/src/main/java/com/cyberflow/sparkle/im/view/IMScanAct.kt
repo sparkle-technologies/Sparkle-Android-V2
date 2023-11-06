@@ -12,6 +12,7 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.core.view.isVisible
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.ui.handleQRCode
@@ -75,8 +76,16 @@ class IMScanAct : BaseDBAct<IMViewModel, ActivityImScanBinding>() {
                     result[0].getOriginalValue()
                 )
             ) {
-                handleQRCode(result)
-                finish()
+                handleQRCode(result) {
+                    mDataBinding.layResult.apply {
+                        isVisible = true
+                        remoteView?.onPause()
+                        postDelayed({
+                            isVisible = false
+                            remoteView?.onResume()
+                        }, 2 * 1000)
+                    }
+                }
             }
         })
         remoteView?.onCreate(savedInstanceState)
@@ -95,8 +104,16 @@ class IMScanAct : BaseDBAct<IMViewModel, ActivityImScanBinding>() {
     }
 
     private fun initAnimation() {
-        val mAnimation = TranslateAnimation(TranslateAnimation.ABSOLUTE, 0f, TranslateAnimation.ABSOLUTE,0f, TranslateAnimation.RELATIVE_TO_PARENT, 0f,
-            TranslateAnimation.RELATIVE_TO_PARENT, 0.9f)
+        val mAnimation = TranslateAnimation(
+            TranslateAnimation.ABSOLUTE,
+            0f,
+            TranslateAnimation.ABSOLUTE,
+            0f,
+            TranslateAnimation.RELATIVE_TO_PARENT,
+            0f,
+            TranslateAnimation.RELATIVE_TO_PARENT,
+            0.9f
+        )
         mAnimation.duration = 1500
         mAnimation.repeatCount = -1
         mAnimation.repeatMode = Animation.RESTART
@@ -105,26 +122,27 @@ class IMScanAct : BaseDBAct<IMViewModel, ActivityImScanBinding>() {
     }
 
     private fun setPictureScanOperation() {
-        mDataBinding.btnGallery.setClickListener(object: ShadowImgButton.ShadowClickListener{
+        mDataBinding.btnGallery.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                val pickIntent =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
                 this@IMScanAct.startActivityForResult(pickIntent, REQUEST_CODE_PHOTO)
             }
         })
     }
 
-   /* private fun setFlashOperation() {
-        mDataBinding.flushBtn.setOnClickListener {
-            if (remoteView?.lightStatus == true) {
-                remoteView?.switchLight()
-                mDataBinding.flushBtn.setImageResource(img[1])
-            } else {
-                remoteView?.switchLight()
-                mDataBinding.flushBtn.setImageResource(img[0])
-            }
-        }
-    }*/
+    /* private fun setFlashOperation() {
+         mDataBinding.flushBtn.setOnClickListener {
+             if (remoteView?.lightStatus == true) {
+                 remoteView?.switchLight()
+                 mDataBinding.flushBtn.setImageResource(img[1])
+             } else {
+                 remoteView?.switchLight()
+                 mDataBinding.flushBtn.setImageResource(img[0])
+             }
+         }
+     }*/
 
 
     override fun onStart() {

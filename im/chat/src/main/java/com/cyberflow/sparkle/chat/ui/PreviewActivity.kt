@@ -3,10 +3,12 @@ package com.cyberflow.sparkle.chat.ui
 import android.app.Activity
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Parcelable
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -175,7 +177,10 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
     private fun detectQR(media: LocalMedia) {
 
         lifecycleScope.launch {
-            val bitmap = BitmapFactory.decodeFile(media.availablePath)
+
+            val bitmapUri = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(media.availablePath))
+            val bitmapFile = BitmapFactory.decodeFile(media.availablePath)
+            val bitmap = bitmapUri ?: bitmapFile
             hmsScans = ScanUtil.decodeWithBitmap(
                 this@PreviewActivity,
                 bitmap,
@@ -261,7 +266,14 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
                     Log.e(TAG, "onAnimationEnd: ")
                     mViewBind.layScan.visibility = View.GONE
                     hmsScans?.let {
-                        handleQRCode(it)
+                        handleQRCode(it){
+                            mViewBind.layResult.apply {
+                                isVisible = true
+                                postDelayed({
+                                    isVisible = false
+                                }, 2*1000)
+                            }
+                        }
                     }
                 }
 
@@ -285,17 +297,28 @@ inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
     else -> @Suppress("DEPRECATION") getParcelable(key) as? T
 }
 
-fun handleQRCode(result: Array<HmsScan>) {
-    result.filter {
+fun handleQRCode(result: Array<HmsScan>, failed: () -> Unit  ) {
+    val filterData = result.filter {
         it.scanType == HmsScan.QRCODE_SCAN_TYPE && it.originalValue.isNotEmpty()
     }.map {
         it.originalValue
     }.filter {
         it.startsWith(ConstantGlobal.SHARE_BODY)
-    }.take(1).apply {
+    }.take(1)
+
+    if(filterData.isNullOrEmpty()){
+        failed()
+        return
+    }
+
+    filterData.apply {
         val url = this[0]
         Log.e("handleQRCode", " url=$url")
         val openUid = url.substring(url.lastIndexOf("/") + 1)
+        if(openUid.isNullOrEmpty()){
+            failed()
+            return@apply
+        }
         if (IMDataManager.instance.getConversationData().any { it.open_uid == openUid }) {
             TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid)
                 .withInt("friend_status", 0).navigation()
