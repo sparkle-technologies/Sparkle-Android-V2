@@ -11,8 +11,10 @@ import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.util.KeyboardUtil
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.DBComponent.loadAvatar
 import com.cyberflow.sparkle.R
+import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.manager.PushAndMessageHelper
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityImForwardListBinding
@@ -27,6 +29,7 @@ import com.cyberflow.sparkle.im.viewmodel.ContactList
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.im.viewmodel.RecentContactList
 import com.cyberflow.sparkle.im.viewmodel.SearchContactList
+import com.cyberflow.sparkle.im.widget.ForwardDialog
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
@@ -34,6 +37,8 @@ import com.drake.net.utils.withMain
 import com.drake.spannable.replaceSpanFirst
 import com.drake.spannable.span.ColorSpan
 import com.hyphenate.easeui.domain.EaseUser
+import com.hyphenate.easeui.model.EaseEvent
+import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import com.therouter.TheRouter
 import com.therouter.router.Route
 import kotlinx.coroutines.launch
@@ -42,15 +47,39 @@ import kotlinx.coroutines.launch
 @Route(path = PageConst.IM.PAGE_IM_FORWARD)
 class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() {
 
+    private var dialog : ForwardDialog? = null
 
     private var mForwardMsgId = ""
-    private fun forwardMsg(model: Contact) {
-        Log.e(TAG, "forwardMsg: ${model.name} mForwardMsgId=$mForwardMsgId" )
 
-        ToastUtil.show(this, "Message Sent!")
-        PushAndMessageHelper.sendForwardMessage(model.name, mForwardMsgId)
-//        finish()
+    private fun setMsgCallBack(){
+        LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java).observe(this) {
+            LoadingDialogHolder.getLoadingDialog()?.hide()
+            ToastUtil.show(this@IMForwardListAct, "Message Sent!")
+            finish()
+        }
+
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR, String::class.java).observe(this) {
+            LoadingDialogHolder.getLoadingDialog()?.hide()
+            ToastUtil.show(this@IMForwardListAct, "Send Message error")
+        }
     }
+    private fun forwardMsg(model: Contact) {
+        Log.e(TAG, "forwardMsg: name=${model.name}  openUid=${model.openUid}  mForwardMsgId=$mForwardMsgId" )
+        dialog = ForwardDialog(this, mForwardMsgId,  model, object : ForwardDialog.Callback {
+            override fun onSelected(ok: Boolean) {
+                if(ok){
+                    dialog?.onDestroy()
+                    LoadingDialogHolder.getLoadingDialog()?.show(this@IMForwardListAct)
+                    PushAndMessageHelper.sendForwardMessage(model.openUid.replace("-", "_"), mForwardMsgId)
+                }else{
+                    dialog?.onDestroy()
+                }
+            }
+        })
+        dialog?.show()
+    }
+
+
 
     override fun initView(savedInstanceState: Bundle?) {
         TheRouter.inject(this)
@@ -180,6 +209,7 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
     override fun initData() {
         mForwardMsgId = intent.extras?.getString("forward_msg_id").toString()
         Log.e(TAG, "initData: mForwardMsgId=$mForwardMsgId" )
+        setMsgCallBack()
         showCacheData()
     }
 

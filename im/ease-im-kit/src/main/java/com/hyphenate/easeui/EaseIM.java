@@ -116,7 +116,6 @@ public class EaseIM {
         options.setRequireAck(true);
         // set if need delivery ack
         options.setRequireDeliveryAck(false);
-
         return options;
     }
 

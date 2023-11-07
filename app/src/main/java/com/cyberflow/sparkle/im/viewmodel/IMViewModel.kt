@@ -6,6 +6,8 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cyberflow.base.BaseApp
+import com.cyberflow.base.model.IMUserInfoList
+import com.cyberflow.base.model.IMUserSearchList
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SingleSourceLiveData
@@ -14,8 +16,6 @@ import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.net.Resource
 import com.cyberflow.sparkle.chat.common.repositories.EMContactManagerRepository
-import com.cyberflow.base.model.IMUserInfoList
-import com.cyberflow.base.model.IMUserSearchList
 import com.drake.net.Post
 import com.drake.net.utils.scopeNet
 import com.hyphenate.chat.EMClient

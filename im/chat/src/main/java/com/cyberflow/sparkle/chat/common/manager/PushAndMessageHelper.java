@@ -17,6 +17,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.EMVideoMessageBody;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
@@ -67,8 +68,25 @@ public class PushAndMessageHelper {
                 if (uri != null) {
                     sendImageMessage(toChatUsername, uri);
                 } else {
-                    LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD)
-                            .postValue(new EaseEvent(BaseApp.getInstance().getApplicationContext().getString(R.string.no_image_resource), EaseEvent.TYPE.MESSAGE));
+                    LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR).postValue(BaseApp.getInstance().getApplicationContext().getString(R.string.no_image_resource));
+                }
+                break;
+            case VIDEO:
+                if(message.getBody() instanceof EMVideoMessageBody){
+                    EMVideoMessageBody body = (EMVideoMessageBody)message.getBody();
+                    int videoLength = body.getDuration();
+                    Uri videoUri = body.getLocalUri();
+                    //EMFileHelper.getInstance().formatInUri("");
+                    String thumbPath = body.getLocalThumb();
+
+//                    Log.e("TAG", "getDuration: " + body.getDuration() );
+//                    Log.e("TAG", "getThumbnailUrl: " + body.getThumbnailUrl() );
+//                    Log.e("TAG", "getLocalThumb: " + body.getLocalThumb() );
+//                    Log.e("TAG", "getLocalUri: " + body.getLocalUri() );
+//                    Log.e("TAG", "getRemoteUrl: " + body.getRemoteUrl() );
+
+                    EMMessage newMsg = EMMessage.createVideoSendMessage(videoUri, thumbPath, videoLength, toChatUsername);
+                    sendMessage(newMsg);
                 }
                 break;
         }
@@ -358,7 +376,7 @@ public class PushAndMessageHelper {
 
             @Override
             public void onError(int code, String error) {
-
+                LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR).postValue(error);
             }
 
             @Override

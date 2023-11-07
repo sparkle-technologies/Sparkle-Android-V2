@@ -50,6 +50,7 @@ import com.cyberflow.sparkle.chat.ui.dialog.DemoDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.DemoListDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.LabelEditDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.SimpleDialogFragment;
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager;
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel;
 import com.cyberflow.sparkle.widget.PermissionDialog;
 import com.drake.tooltip.dialog.BubbleDialog;
@@ -862,8 +863,11 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 if (v.getId() == com.hyphenate.easeui.R.id.subBubble) {
                     helper.findItemVisible(R.id.action_chat_forward, false);
                 }
+                if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
+                    helper.findItemVisible(R.id.action_chat_forward, false);
+                }
                 break;
-            case IMAGE:
+            case IMAGE, VIDEO:
                 helper.findItemVisible(R.id.action_chat_forward, true);
                 break;
         }
@@ -876,9 +880,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     @Override
     public boolean onMenuItemClick(MenuItemBean item, EMMessage message) {
         if (item.getItemId() == R.id.action_chat_forward) {
-
             Log.e(TAG, "onMenuItemClick: message.getMsgId()="+ message.getMsgId() );
 
+            IMDataManager.Companion.getInstance().setForwardMsg(message);
             TheRouter.build(PageConst.IM.PAGE_IM_FORWARD)
                     .withString("forward_msg_id", message.getMsgId())
                     .navigation();

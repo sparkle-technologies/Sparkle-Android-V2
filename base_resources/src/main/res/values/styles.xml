@@ -94,6 +94,14 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
+    <style name="forward_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
     <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorPrimaryDark">@color/white_3rd</item>
         <!-- <item name="colorAccent">@color/white_3rd</item>

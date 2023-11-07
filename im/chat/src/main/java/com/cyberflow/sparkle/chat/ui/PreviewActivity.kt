@@ -2,6 +2,7 @@ package com.cyberflow.sparkle.chat.ui
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
@@ -175,11 +176,18 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
     private var hmsScans: Array<HmsScan>? = null
 
     private fun detectQR(media: LocalMedia) {
-
         lifecycleScope.launch {
+            var bitmapUri: Bitmap? = null
+            var bitmapFile: Bitmap? = null
+            try{
+                if(media.availablePath.startsWith("content://")){
+                     bitmapUri = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(media.availablePath))
+                }else{
+                     bitmapFile = BitmapFactory.decodeFile(media.availablePath)
+                }
+            }catch (e: Exception){
 
-            val bitmapUri = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(media.availablePath))
-            val bitmapFile = BitmapFactory.decodeFile(media.availablePath)
+            }
             val bitmap = bitmapUri ?: bitmapFile
             hmsScans = ScanUtil.decodeWithBitmap(
                 this@PreviewActivity,

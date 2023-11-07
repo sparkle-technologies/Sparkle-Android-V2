@@ -1098,6 +1098,9 @@ public class EaseChatLayout extends RelativeLayout implements
                     if (showTranslation(message))
                         menuHelper.findItemVisible(R.id.action_chat_translate, true);
                 }
+                if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
+                    menuHelper.findItemVisible(R.id.action_chat_copy, false);
+                }
                 break;
             case LOCATION:
             case FILE:

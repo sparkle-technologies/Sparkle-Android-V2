@@ -41,7 +41,6 @@ class IMDataManager private constructor() {
         return conversationCacheData.orEmpty()
     }
 
-
     // for profile page
     private var emMessage: EMMessage? = null
     fun getEmMessage(): EMMessage? {
@@ -49,6 +48,14 @@ class IMDataManager private constructor() {
     }
     fun setEmMessage(emMessage: EMMessage?) {
         this.emMessage = emMessage
+    }
+
+    private var forwardMsg: EMMessage? = null   // for forward page
+    fun getForwardMsg(): EMMessage? {
+        return forwardMsg
+    }
+    fun setForwardMsg(forwardMsg: EMMessage?) {
+        this.forwardMsg = forwardMsg
     }
 
     private var user: User? = null
@@ -64,6 +71,7 @@ class IMDataManager private constructor() {
         contactCacheData = null
         conversationCacheData = null
         emMessage = null
+        forwardMsg = null
         user = null
     }
 }
