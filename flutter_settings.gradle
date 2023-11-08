@@ -1,0 +1,5 @@
+setBinding(new Binding([gradle: this]))
+evaluate(new File(
+        settingsDir.parentFile,
+        'flutter_workspace/sparkle-flutter/.android/include_flutter.groovy'
+))

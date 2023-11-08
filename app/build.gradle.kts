@@ -104,4 +104,7 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
 
+
+    implementation(project(mapOf("path" to ":flutter")))
+
 }

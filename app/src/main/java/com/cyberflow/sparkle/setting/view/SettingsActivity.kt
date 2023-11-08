@@ -17,8 +17,46 @@ import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.view.LoginAct
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.google.firebase.auth.FirebaseAuth
+import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
+import io.flutter.embedding.engine.dart.DartExecutor
 import kotlinx.coroutines.launch
 
+
+// aar 方式导入module
+// https://medium.com/@FlavioAro/how-to-integrate-a-flutter-module-into-your-native-android-application-52c41eeb6154
+
+// 依赖方式  目前用这种
+// https://flutter.cn/docs/add-to-app/android/project-setup#option-b---depend-on-the-modules-source-code
+// https://github.com/flutter/flutter/issues/99735
+
+// 数据传递  消息双向通行
+//https://juejin.cn/post/7220295071060164663
+// https://blog.csdn.net/zhujiangtaotaise/article/details/111352652
+
+// 初始化的时候带参数过去  考虑用框架
+// https://github.com/alibaba/flutter_boost/blob/master/docs/install.md
+
+// 原生 flutter 相互调用方法
+//https://blog.csdn.net/zhujiangtaotaise/article/details/111352652
+
+// 打包release报错  ...':flutter:copyFlutterAssetsRelease' (type 'Copy').
+// 改了代码 /Users/blackjack/Desktop/flutter/flutter/packages/flutter_tools/gradle/src/main/groovy/flutter.groovy
+// https://github.com/flutter/flutter/issues/129471
+/**
+//if (!isUsedAsSubproject) {
+//    def variantOutput = variant.outputs.first()
+//    def processResources = variantOutput.hasProperty("processResourcesProvider") ?
+//        variantOutput.processResourcesProvider.get() : variantOutput.processResources
+//    processResources.dependsOn(copyFlutterAssetsTask)
+//}
+
+def variantOutput = variant.outputs.first()
+def processResources = variantOutput.hasProperty("processResourcesProvider") ?
+variantOutput.processResourcesProvider.get() : variantOutput.processResources
+processResources.dependsOn(copyFlutterAssetsTask)
+ */
 class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
     companion object {
@@ -51,15 +89,14 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
             }
         }
         mDataBinding.layEditProfile.setOnClickListener {
-            ToastUtil.show(this, "coming soon - edit profile flutter")
+            goEditProfile()
         }
         mDataBinding.layAccountPrivacy.setOnClickListener {
-            ToastUtil.show(this, "coming soon - account privacy flutter")
+            goAccountPrivacy()
         }
         mDataBinding.layConnectedAccounts.setOnClickListener {
-            ToastUtil.show(this, "coming soon - connected account flutter")
+            goConnetedAccount()
         }
-
         mDataBinding.btnLogout.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(d: Boolean) {
                 Toast.makeText(this@SettingsActivity, "ready logout now", Toast.LENGTH_LONG).show()
@@ -170,6 +207,39 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
 
     override fun initData() {
+        initFlutter()
+    }
 
+
+    private val ENGINE_ID_EDIT_PROFILE = "eidt_profile"
+    private val ENGINE_ID_ACCOUNT_PRIVACY = "account_privacy"
+    private val ENGINE_ID_CONNECTED_ACCOUNT = "connected_account"
+
+    lateinit var flutterEngine_edit_profile: FlutterEngine
+    lateinit var flutterEngine_account_privacy: FlutterEngine
+    private fun initFlutter() {
+        flutterEngine_edit_profile = FlutterEngine(this)
+        flutterEngine_account_privacy = FlutterEngine(this)
+
+        flutterEngine_edit_profile.navigationChannel.setInitialRoute("/profile/edit")
+        flutterEngine_account_privacy.navigationChannel.setInitialRoute("/profile/accountPrivacy")
+
+        flutterEngine_edit_profile.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
+        flutterEngine_account_privacy.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
+
+        FlutterEngineCache.getInstance().put(ENGINE_ID_EDIT_PROFILE, flutterEngine_edit_profile)
+        FlutterEngineCache.getInstance().put(ENGINE_ID_ACCOUNT_PRIVACY, flutterEngine_account_privacy)
+    }
+
+    private fun goEditProfile(){
+        startActivity(FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).build(this))
+    }
+
+    private fun goAccountPrivacy(){
+        startActivity(FlutterActivity.withCachedEngine(ENGINE_ID_ACCOUNT_PRIVACY).build(this))
+    }
+
+    private fun goConnetedAccount(){
+        ToastUtil.show(this, "coming soon ")
     }
 }
