@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
@@ -27,13 +28,54 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         }
     }
 
+    override fun initView(savedInstanceState: Bundle?) {
+        CacheUtil.apply {
+            getUserInfo()?.let {
+                it.user?.let {
+                    userInfo = "name: ${it.nick}  \t gender: ${it.gender} \t birthdate: ${it.birthdate} \t birthtime: ${it.birth_time} \t birth_location: ${it.birthplace_info} \n open_uid: ${it.open_uid}"
+                    it.bind_list?.first()?.let {
+                        bindList = "type: ${it.type} \t nick: ${it.nick}"
+                    }
+                    wallets = "wallet_address: ${it.wallet_address} \t ca_wallet: ${it.ca_wallet}"
+                    other = "task_completed: ${it.task_completed} \t profile_permission: ${it.profile_permission} \t signature: ${it.signature}"
+                }
+            }
+            getString(LOGIN_METHOD)?.let {
+                loginMethod = it
+            }
+            getString(UNIPASS_PUBK)?.let {
+                publicKey = it
+            }
+            getString(UNIPASS_PRIK)?.let {
+                privateKey = it
+            }
+        }
+        mDataBinding.layEditProfile.setOnClickListener {
+            ToastUtil.show(this, "coming soon - edit profile flutter")
+        }
+        mDataBinding.layAccountPrivacy.setOnClickListener {
+            ToastUtil.show(this, "coming soon - account privacy flutter")
+        }
+        mDataBinding.layConnectedAccounts.setOnClickListener {
+            ToastUtil.show(this, "coming soon - connected account flutter")
+        }
+
+        mDataBinding.btnLogout.setClickListener(object : ShadowTxtButton.ShadowClickListener {
+            override fun clicked(d: Boolean) {
+                Toast.makeText(this@SettingsActivity, "ready logout now", Toast.LENGTH_LONG).show()
+                logout()
+            }
+        })
+        getInitInfo()
+        freshUI()
+    }
+
     // 0. clear cache
     // 1. walletConnect
     // 2. twitter
     // 3. web3Auth
     // 4. unipass
     private fun logout() {
-
         sb.clear()
         if (loginMethod == "Twitter") {
             sb.append("exit twitter")
@@ -99,41 +141,6 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     var publicKey = ""
     var privateKey = ""
 
-    override fun initView(savedInstanceState: Bundle?) {
-        CacheUtil.apply {
-            getUserInfo()?.let {
-                it.user?.let {
-                    userInfo =
-                        "name: ${it.nick}  \t gender: ${it.gender} \t birthdate: ${it.birthdate} \t birthtime: ${it.birth_time} \t birth_location: ${it.birthplace_info} \n open_uid: ${it.open_uid}"
-                    it.bind_list?.first()?.let {
-                        bindList = "type: ${it.type} \t nick: ${it.nick}"
-                    }
-                    wallets = "wallet_address: ${it.wallet_address} \t ca_wallet: ${it.ca_wallet}"
-                    other =
-                        "task_completed: ${it.task_completed} \t profile_permission: ${it.profile_permission} \t signature: ${it.signature}"
-                }
-            }
-            getString(LOGIN_METHOD)?.let {
-                loginMethod = it
-            }
-            getString(UNIPASS_PUBK)?.let {
-                publicKey = it
-            }
-            getString(UNIPASS_PRIK)?.let {
-                privateKey = it
-            }
-        }
-
-        mDataBinding.btnLogout.setClickListener(object : ShadowTxtButton.ShadowClickListener {
-            override fun clicked(d: Boolean) {
-                Toast.makeText(this@SettingsActivity, "ready logout now", Toast.LENGTH_LONG).show()
-                logout()
-            }
-        })
-        getInitInfo()
-        freshUI()
-    }
-
     private fun walletConnect() {
         MyApp.instance.checkWalletConnect()
         MyApp.instance.walletConnectKit?.disconnect {
@@ -158,7 +165,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     }
 
     private fun freshUI() {
-        mDataBinding.tv.text = sb.toString()
+//        mDataBinding.tv.text = sb.toString()
     }
 
 
