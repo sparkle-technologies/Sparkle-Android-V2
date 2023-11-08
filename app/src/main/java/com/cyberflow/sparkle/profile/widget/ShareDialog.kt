@@ -25,9 +25,8 @@ class ShareDialog {
 
     private var mDialog: Dialog? = null
 
-
     interface Callback {
-        fun onSelected(openUid: String, type: Int)
+        fun onSelected(user: IMUserInfo?, type: Int)
     }
 
     companion object {
@@ -114,8 +113,8 @@ class ShareDialog {
                             getBinding<ItemShareRecentHorizontalBinding>().apply {
                                 DBComponent.loadAvatar(ivHead, model.avatar, model.gender)
                                 tvName.text = model.nick
-                                item.setOnClickListener {
-                                    mCallback?.onSelected(model.open_uid, TYPE_SHARE)
+                                layImg.setOnClickListener {
+                                    mCallback?.onSelected(model, TYPE_SHARE)
                                 }
                             }
                         }
@@ -149,7 +148,7 @@ class ShareDialog {
             }
             btnAction.setClickListener(object : ShadowImgButton.ShadowClickListener{
                 override fun clicked() {
-                    mCallback?.onSelected("", model)
+                    mCallback?.onSelected(null, model)
                 }
             })
         }

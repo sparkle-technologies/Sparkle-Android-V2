@@ -12,6 +12,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -20,18 +21,24 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.model.ManyImageData
 import com.cyberflow.base.model.User
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.resources.R
 import com.cyberflow.base.util.ConstantGlobal
+import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.ViewExt.convertViewToBitmap
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.DBComponent
-import com.cyberflow.sparkle.chat.ui.fragment.ChatFragment
+import com.cyberflow.sparkle.chat.common.constant.DemoConstant
+import com.cyberflow.sparkle.chat.common.manager.PushAndMessageHelper
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityShareBinding
+import com.cyberflow.sparkle.im.viewmodel.Contact
+import com.cyberflow.sparkle.im.widget.ForwardDialog
 import com.cyberflow.sparkle.profile.viewmodel.ShareViewModel
 import com.cyberflow.sparkle.profile.widget.ShareDialog
 import com.cyberflow.sparkle.widget.PermissionDialog
@@ -49,12 +56,15 @@ import com.drake.spannable.span.HighlightSpan
 import com.huawei.hms.hmsscankit.ScanUtil
 import com.huawei.hms.ml.scan.HmsBuildBitmapOption
 import com.huawei.hms.ml.scan.HmsScan
+import com.hyphenate.chat.EMMessage
+import com.hyphenate.easeui.model.EaseEvent
 import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import com.luck.picture.lib.basic.PictureMediaScannerConnection
 import com.luck.picture.lib.interfaces.OnCallbackListener
 import com.luck.picture.lib.permissions.PermissionUtil
 import com.luck.picture.lib.utils.DownloadFileUtils
 import com.luck.picture.lib.utils.ToastUtils
+import com.therouter.TheRouter
 import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
@@ -65,6 +75,9 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
 
     companion object {
         const val USER_AVATAR_URL = "server_img_url"
+
+        const val REQUEST_DOWNLOAD = 233
+        const val REQUEST_SHARE = 234
 
         fun go(context: Context,  serverImageUrl: String?) {
             val intent = Intent(context, ShareAct::class.java)
@@ -84,13 +97,18 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
         })
 
         dialog = ShareDialog(this, object : ShareDialog.Callback {
-            override fun onSelected(openUid: String, type: Int) {
+            override fun onSelected(user: IMUserInfo?, type: Int) {
+//                Log.e(TAG, "onSelected: type=$type  user=$user" )
                 when(type){
                     ShareDialog.TYPE_SHARE -> {
-                        ToastUtil.show(this@ShareAct, "share - coming soon ")
+                        isMore = false
+                        shareUser = user
+                        share()
                     }
                     ShareDialog.TYPE_MORE -> {
-                        ToastUtil.show(this@ShareAct, "more - coming soon ")
+                        isMore = true
+                        shareUser = null
+                        share()
                     }
                     ShareDialog.TYPE_COPY_LINK -> {
                         textCopyThenPost(qrUrl)
@@ -103,9 +121,64 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
         })
     }
 
+    private var isMore = false
+    private var shareUser: IMUserInfo? = null
+
+    /**
+     * more: jump to IMForwardListAct   or  just show the ForwardDialog
+     */
+    private fun share() {
+        if(imgUri == null){
+            generateIMShareBitmap()
+            return
+        }
+        val msg = EMMessage.createImageSendMessage(imgUri, true, "")
+        IMDataManager.instance.setForwardMsg(msg)
+        IMDataManager.instance.setForwardImageUri(imgUri)
+        if(isMore){
+            TheRouter.build(PageConst.IM.PAGE_IM_FORWARD)
+                .withString("forward_msg_id", "")  // must be empty, clear to know is this a forward msg, or a new created msg?
+                .navigation()
+        }else{
+            shareUser?.also {
+                shareTo(Contact(name=it.nick, openUid=it.open_uid, avatar=it.avatar, gender = it.gender))
+            }
+        }
+    }
+
+
+    private var sendDialog : ForwardDialog? = null
+    private var imgUri : Uri? = null
+    private fun shareTo(model: Contact) {
+        sendDialog = ForwardDialog(this, model, object: ForwardDialog.Callback {
+            override fun onSelected(ok: Boolean) {
+                if(ok){
+                    sendDialog?.onDestroy()
+                    LoadingDialogHolder.getLoadingDialog()?.show(this@ShareAct)
+                    PushAndMessageHelper.sendImageMessage(model.openUid.replace("-", "_"), imgUri)
+                }else{
+                    sendDialog?.onDestroy()
+                }
+            }
+        })
+        sendDialog?.show()
+    }
+
+    private fun setMsgCallBack(){
+        LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java).observe(this) {
+            LoadingDialogHolder.getLoadingDialog()?.hide()
+            ToastUtil.show(this@ShareAct, "Message Sent!")
+            finish()
+        }
+
+        LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR, String::class.java).observe(this) {
+            LoadingDialogHolder.getLoadingDialog()?.hide()
+            ToastUtil.show(this@ShareAct, "Send Message error")
+        }
+    }
 
     private var serverImageUrl : String?  = null
-    private var qrUrl : String  = "https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf\n"
+    private var qrUrl : String  = "https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf"
 
     override fun initData() {
         IMDataManager.instance.getUser()?.also {
@@ -120,6 +193,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
             }
             showBody(it)
         }
+        setMsgCallBack()
     }
 
     private fun requestImgNoDialog(open_uid: String){
@@ -139,10 +213,13 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
     private fun loadBigImg(url:String){
         val holder = ResourcesCompat.getDrawable(resources, com.cyberflow.sparkle.R.drawable.profile_default_avatar,null)
         DBComponent.loadImageWithHolder(mDataBinding.ivAvatar, url, holder, 24)
+        // the reason I made two same image views is save time under pressure, make sure finish it before Friday
+        DBComponent.loadImageWithHolder(mDataBinding.ivAvatarIm, url, holder, 24)
     }
 
     private fun showBody(user: User){
         mDataBinding.tvName.text = user.nick  // name
+        mDataBinding.tvNameIm.text = user.nick   
         setSpan(mDataBinding.tvContent)       // content
 //        generateQRcode("https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf")
         generateQRcode("${ConstantGlobal.SHARE_BODY}${user.open_uid}")
@@ -216,10 +293,37 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
-
+    
+    private fun generateIMShareBitmap(){
+        if (checkIfHasPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_SHARE)) {
+            lifecycleScope.launch {
+                val bitmap = convertViewToBitmap(mDataBinding.bgIm)
+                val storePath = application.getExternalFilesDir(null)!!.absolutePath
+                val appDir = File(storePath)
+                if (!appDir.exists()) {
+                    appDir.mkdir()
+                }
+                val fileName = System.currentTimeMillis().toString() + ".png"
+                val file = File(appDir, fileName)
+                val fileOutputStream = FileOutputStream(file)
+                val isSuccess = bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+                fileOutputStream.flush()
+                fileOutputStream.close()
+                if(isSuccess){
+                    imgUri = Uri.fromFile(file)
+                    share()
+                }else{
+                    withMain {
+                        ToastUtils.showToast(this@ShareAct, "fail to generate image")
+                    }
+                }
+            }
+        }
+    }
+    
     private fun download() {
-        if (checkIfHasPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, ChatFragment.REQUEST_CODE_STORAGE_FILE)) {
-            LoadingDialogHolder.getLoadingDialog()?.show(this)
+        if (checkIfHasPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_DOWNLOAD)) {
+            LoadingDialogHolder.getLoadingDialog()?.show(this@ShareAct)
             lifecycleScope.launch {
                 val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)
                 val viewBitmap = convertViewToBitmap(mDataBinding.bg)
@@ -302,15 +406,18 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
     }
 
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        if(requestCode == ChatFragment.REQUEST_CODE_STORAGE_FILE){
+        if(requestCode == REQUEST_DOWNLOAD){
              download()
+        }
+        if(requestCode == REQUEST_SHARE){
+            generateIMShareBitmap()
         }
     }
 
     override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
         var title = ""
         var content  = ""
-        if(requestCode == ChatFragment.REQUEST_CODE_STORAGE_FILE){
+        if(requestCode == REQUEST_DOWNLOAD){
             title = "Unable to save files"
             content  = "You have turned off storage  permissions"
         }

@@ -37,13 +37,12 @@ class ForwardDialog {
 
     private var who: Contact? = null
     private var msg: EMMessage? = null
-    private var mForwardMsgId: String? = null
 
     interface Callback {
         fun onSelected(ok: Boolean)
     }
 
-    constructor(context: Context, msgId: String, model: Contact, callback: Callback) {
+    constructor(context: Context, model: Contact, callback: Callback) {
         if (context == null || callback == null) {
             return
         }
@@ -51,7 +50,7 @@ class ForwardDialog {
         mContext = context
         mCallback = callback
         who = model
-        mForwardMsgId = msgId
+        Log.e("ForwardDialog", " who:  $model " )
         msg = IMDataManager.instance.getForwardMsg()
 
         initView()
@@ -60,7 +59,7 @@ class ForwardDialog {
 
     private fun initData() {
         val data = arrayListOf<Any>()
-        if (mForwardMsgId.equals(msg?.msgId)) {
+        if (msg!=null) {
             tvName?.text = who?.name
             if (ivHead != null && who != null) {
                 loadAvatar(ivHead!!, who!!.avatar, who!!.gender)

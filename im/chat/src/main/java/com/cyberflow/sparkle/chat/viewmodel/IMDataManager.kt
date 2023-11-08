@@ -1,5 +1,6 @@
 package com.cyberflow.sparkle.chat.viewmodel
 
+import android.net.Uri
 import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.model.User
 import com.hyphenate.chat.EMMessage
@@ -58,6 +59,14 @@ class IMDataManager private constructor() {
         this.forwardMsg = forwardMsg
     }
 
+    private var forwardImageUri : Uri? = null   // not forward, share image to contact
+    fun getForwardImageUri(): Uri? {
+        return forwardImageUri
+    }
+    fun setForwardImageUri(forwardImageUri: Uri?) {
+        this.forwardImageUri = forwardImageUri
+    }
+
     private var user: User? = null
     fun getUser(): User? {
         return user
@@ -72,6 +81,7 @@ class IMDataManager private constructor() {
         conversationCacheData = null
         emMessage = null
         forwardMsg = null
+        forwardImageUri = null
         user = null
     }
 }

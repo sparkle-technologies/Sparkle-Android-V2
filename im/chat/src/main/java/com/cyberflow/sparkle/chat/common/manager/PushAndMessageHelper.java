@@ -338,7 +338,7 @@ public class PushAndMessageHelper {
      * @param toChatUsername
      * @param imageUri
      */
-    private static void sendImageMessage(String toChatUsername, Uri imageUri) {
+    public static void sendImageMessage(String toChatUsername, Uri imageUri) {
         boolean sendOriginalImg = true;
         if(EMFileHelper.getInstance().isFileExist(imageUri)) {
             if(EMFileHelper.getInstance().getFileLength(imageUri) > MAX_IMAGE_SIZE) {

@@ -63,14 +63,26 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
             ToastUtil.show(this@IMForwardListAct, "Send Message error")
         }
     }
+
+    /**
+     * the message data store at IMDataManager.forwardMsg before show this dialog
+     * if need forward msg, it only need    1.forwardMsg:EMMessage   2.model:Contact
+     * if share a img at ShareAct, just create a EMMessage without mForwardMsgId , and then save image uri to IMDataManager.forwardImageUri
+     * so, that's all, two usage for now
+      */
     private fun forwardMsg(model: Contact) {
-        Log.e(TAG, "forwardMsg: name=${model.name}  openUid=${model.openUid}  mForwardMsgId=$mForwardMsgId" )
-        dialog = ForwardDialog(this, mForwardMsgId,  model, object : ForwardDialog.Callback {
+//        Log.e(TAG, "forwardMsg: name=${model.name}  openUid=${model.openUid}  mForwardMsgId=$mForwardMsgId" )
+        dialog = ForwardDialog(this, model, object : ForwardDialog.Callback {
             override fun onSelected(ok: Boolean) {
                 if(ok){
                     dialog?.onDestroy()
                     LoadingDialogHolder.getLoadingDialog()?.show(this@IMForwardListAct)
-                    PushAndMessageHelper.sendForwardMessage(model.openUid.replace("-", "_"), mForwardMsgId)
+                    if(mForwardMsgId.isNullOrEmpty()){   // it means not forward, just share image
+                        val imgUri = IMDataManager.instance.getForwardImageUri()
+                        PushAndMessageHelper.sendImageMessage(model.openUid.replace("-", "_"), imgUri)
+                    }else{
+                        PushAndMessageHelper.sendForwardMessage(model.openUid.replace("-", "_"), mForwardMsgId)
+                    }
                 }else{
                     dialog?.onDestroy()
                 }
@@ -78,8 +90,6 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
         })
         dialog?.show()
     }
-
-
 
     override fun initView(savedInstanceState: Bundle?) {
         TheRouter.inject(this)
