@@ -16,47 +16,15 @@ import com.cyberflow.sparkle.databinding.ActivitySettingBinding
 import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.view.LoginAct
 import com.cyberflow.sparkle.widget.ShadowTxtButton
+import com.drake.net.utils.withMain
 import com.google.firebase.auth.FirebaseAuth
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
+import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
 
-
-// aar 方式导入module
-// https://medium.com/@FlavioAro/how-to-integrate-a-flutter-module-into-your-native-android-application-52c41eeb6154
-
-// 依赖方式  目前用这种
-// https://flutter.cn/docs/add-to-app/android/project-setup#option-b---depend-on-the-modules-source-code
-// https://github.com/flutter/flutter/issues/99735
-
-// 数据传递  消息双向通行
-//https://juejin.cn/post/7220295071060164663
-// https://blog.csdn.net/zhujiangtaotaise/article/details/111352652
-
-// 初始化的时候带参数过去  考虑用框架
-// https://github.com/alibaba/flutter_boost/blob/master/docs/install.md
-
-// 原生 flutter 相互调用方法
-//https://blog.csdn.net/zhujiangtaotaise/article/details/111352652
-
-// 打包release报错  ...':flutter:copyFlutterAssetsRelease' (type 'Copy').
-// 改了代码 /Users/blackjack/Desktop/flutter/flutter/packages/flutter_tools/gradle/src/main/groovy/flutter.groovy
-// https://github.com/flutter/flutter/issues/129471
-/**
-//if (!isUsedAsSubproject) {
-//    def variantOutput = variant.outputs.first()
-//    def processResources = variantOutput.hasProperty("processResourcesProvider") ?
-//        variantOutput.processResourcesProvider.get() : variantOutput.processResources
-//    processResources.dependsOn(copyFlutterAssetsTask)
-//}
-
-def variantOutput = variant.outputs.first()
-def processResources = variantOutput.hasProperty("processResourcesProvider") ?
-variantOutput.processResourcesProvider.get() : variantOutput.processResources
-processResources.dependsOn(copyFlutterAssetsTask)
- */
 class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
     companion object {
@@ -70,12 +38,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         CacheUtil.apply {
             getUserInfo()?.let {
                 it.user?.let {
-                    userInfo = "name: ${it.nick}  \t gender: ${it.gender} \t birthdate: ${it.birthdate} \t birthtime: ${it.birth_time} \t birth_location: ${it.birthplace_info} \n open_uid: ${it.open_uid}"
-                    it.bind_list?.first()?.let {
-                        bindList = "type: ${it.type} \t nick: ${it.nick}"
-                    }
-                    wallets = "wallet_address: ${it.wallet_address} \t ca_wallet: ${it.ca_wallet}"
-                    other = "task_completed: ${it.task_completed} \t profile_permission: ${it.profile_permission} \t signature: ${it.signature}"
+
                 }
             }
             getString(LOGIN_METHOD)?.let {
@@ -103,8 +66,6 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
                 logout()
             }
         })
-        getInitInfo()
-        freshUI()
     }
 
     // 0. clear cache
@@ -113,26 +74,10 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     // 3. web3Auth
     // 4. unipass
     private fun logout() {
-        sb.clear()
         if (loginMethod == "Twitter") {
-            sb.append("exit twitter")
-            sb.append("\n")
-            freshUI()
             twitter()
         } else {
-            sb.append("exit wallet-connect")
-            sb.append("\n")
-            freshUI()
             walletConnect()
-        }
-
-        sb.append("clear local cache")
-        sb.append("\n")
-        freshUI()
-
-        lifecycleScope.launch {
-            DBManager.instance.db?.imUserInfoDao()?.deleteAll()
-            IMDataManager.instance.clearCache()
         }
 
         CacheUtil.setUserInfo(null)
@@ -140,40 +85,18 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         CacheUtil.savaString(CacheUtil.UNIPASS_PUBK, "")
         CacheUtil.savaString(CacheUtil.UNIPASS_PRIK, "")
 
-        sb.append("waiting for 5 seconds then go login page.......")
-        freshUI()
+        lifecycleScope.launch {
+            DBManager.instance.db?.imUserInfoDao()?.deleteAll()
+            IMDataManager.instance.clearCache()
 
-        Thread {
-            Thread.sleep(1 * 1000)
-            runOnUiThread {
-                LoginAct.go(this)
+            withMain{
+                LoginAct.go(this@SettingsActivity)
                 finish()
             }
-        }.start()
+        }
     }
 
-    var sb = StringBuilder("")
 
-    private fun getInitInfo() {
-        sb.append("userInfo: $userInfo")
-        sb.append("\n")
-        sb.append("bindList: $bindList")
-        sb.append("\n")
-        sb.append("wallets: $wallets")
-        sb.append("\n")
-        sb.append(other)
-        sb.append("\n")
-        sb.append("loginMethod: $loginMethod")
-        sb.append("\n")
-        sb.append("publicKey: $publicKey")
-        sb.append("\n")
-        sb.append("privateKey: $privateKey")
-    }
-
-    var userInfo = ""
-    var bindList = ""
-    var wallets = ""
-    var other = ""
     var loginMethod = ""
     var publicKey = ""
     var privateKey = ""
@@ -182,27 +105,15 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         MyApp.instance.checkWalletConnect()
         MyApp.instance.walletConnectKit?.disconnect {
             it.printStackTrace()
-            Log.e(TAG, "clicked:  $it")
-
-            sb.append("succeed exit wallet-connect")
-            sb.append("\n")
-            freshUI()
         }
     }
 
     private fun twitter() {
         FirebaseAuth.getInstance().signOut()
-        sb.append("succeed exit twitter")
-        sb.append("\n")
-        freshUI()
     }
 
     private fun web3Auth() {
 
-    }
-
-    private fun freshUI() {
-//        mDataBinding.tv.text = sb.toString()
     }
 
 
@@ -210,6 +121,42 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         initFlutter()
     }
 
+    // aar 方式导入module
+    // https://medium.com/@FlavioAro/how-to-integrate-a-flutter-module-into-your-native-android-application-52c41eeb6154
+
+    // 依赖方式  目前用这种
+    // https://flutter.cn/docs/add-to-app/android/project-setup#option-b---depend-on-the-modules-source-code
+    // https://github.com/flutter/flutter/issues/99735
+
+    // 数据传递  消息双向通行
+    //https://juejin.cn/post/7220295071060164663
+    // https://blog.csdn.net/zhujiangtaotaise/article/details/111352652
+
+    // 初始化的时候带参数过去  考虑用框架
+    // https://github.com/alibaba/flutter_boost/blob/master/docs/install.md
+
+    // 原生 flutter 相互调用方法
+    //https://blog.csdn.net/zhujiangtaotaise/article/details/111352652
+
+    // 打包release报错  ...':flutter:copyFlutterAssetsRelease' (type 'Copy').
+    // 改了代码 /Users/blackjack/Desktop/flutter/flutter/packages/flutter_tools/gradle/src/main/groovy/flutter.groovy
+    // https://github.com/flutter/flutter/issues/129471
+
+    /**
+
+    // if (!isUsedAsSubproject) {
+    //     def variantOutput = variant.outputs.first()
+    //     def processResources = variantOutput.hasProperty("processResourcesProvider") ?
+    //     variantOutput.processResourcesProvider.get() : variantOutput.processResources
+    //     processResources.dependsOn(copyFlutterAssetsTask)
+    // }
+
+        def variantOutput = variant.outputs.first()
+        def processResources = variantOutput.hasProperty("processResourcesProvider") ?
+        variantOutput.processResourcesProvider.get() : variantOutput.processResources
+        processResources.dependsOn(copyFlutterAssetsTask)
+
+     */
 
     private val ENGINE_ID_EDIT_PROFILE = "eidt_profile"
     private val ENGINE_ID_ACCOUNT_PRIVACY = "account_privacy"
@@ -228,18 +175,48 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         flutterEngine_account_privacy.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
 
         FlutterEngineCache.getInstance().put(ENGINE_ID_EDIT_PROFILE, flutterEngine_edit_profile)
-        FlutterEngineCache.getInstance().put(ENGINE_ID_ACCOUNT_PRIVACY, flutterEngine_account_privacy)
+        FlutterEngineCache.getInstance()
+            .put(ENGINE_ID_ACCOUNT_PRIVACY, flutterEngine_account_privacy)
+
+        methodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "methodChannel")
+        methodChannel?.setMethodCallHandler { call, result ->
+            // handle flutter caller
+            if (call.method == "openMethodChannel") {
+                val name = call.argument<String>("name")
+                val age = call.argument<Int>("age")
+                Log.e("flutter", "android receive form:$name ,$age ")
+                result.success("success")
+            }
+        }
     }
 
-    private fun goEditProfile(){
+    var methodChannel: MethodChannel? = null
+
+    private fun callFlutter() {
+        methodChannel?.invokeMethod("increment", "aaa", object : MethodChannel.Result {
+            override fun success(result: Any?) {
+                Log.e(TAG, "callFlutter success: ")
+            }
+
+            override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                Log.e(TAG, "callFlutter errorCode: ")
+            }
+
+            override fun notImplemented() {
+                Log.e(TAG, "callFlutter notImplemented: ")
+            }
+        })
+    }
+
+    private fun goEditProfile() {
         startActivity(FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).build(this))
     }
 
-    private fun goAccountPrivacy(){
+    private fun goAccountPrivacy() {
         startActivity(FlutterActivity.withCachedEngine(ENGINE_ID_ACCOUNT_PRIVACY).build(this))
     }
 
-    private fun goConnetedAccount(){
+    private fun goConnetedAccount() {
         ToastUtil.show(this, "coming soon ")
     }
 }
