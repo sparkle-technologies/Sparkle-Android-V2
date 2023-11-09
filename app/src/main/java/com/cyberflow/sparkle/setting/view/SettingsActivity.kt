@@ -35,6 +35,9 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        mDataBinding.llBack.setOnClickListener {
+            onBackPressed()
+        }
         CacheUtil.apply {
             getUserInfo()?.let {
                 it.user?.let {
@@ -116,7 +119,6 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
     }
 
-
     override fun initData() {
         initFlutter()
     }
@@ -156,6 +158,10 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         variantOutput.processResourcesProvider.get() : variantOutput.processResources
         processResources.dependsOn(copyFlutterAssetsTask)
 
+    useful commands:
+        flutter clean
+        flutter pub get
+
      */
 
     private val ENGINE_ID_EDIT_PROFILE = "eidt_profile"
@@ -175,16 +181,26 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         flutterEngine_account_privacy.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
 
         FlutterEngineCache.getInstance().put(ENGINE_ID_EDIT_PROFILE, flutterEngine_edit_profile)
-        FlutterEngineCache.getInstance()
-            .put(ENGINE_ID_ACCOUNT_PRIVACY, flutterEngine_account_privacy)
+        FlutterEngineCache.getInstance().put(ENGINE_ID_ACCOUNT_PRIVACY, flutterEngine_account_privacy)
 
-        methodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "methodChannel")
+        methodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "profileEditChannel")
         methodChannel?.setMethodCallHandler { call, result ->
             // handle flutter caller
+            Log.e(TAG, "handle flutter event   method: ${call.method}" )
+
             if (call.method == "openMethodChannel") {
                 val name = call.argument<String>("name")
                 val age = call.argument<Int>("age")
                 Log.e("flutter", "android receive form:$name ,$age ")
+                result.success("success")
+            }
+
+            if(call.method == "popPage"){
+//                FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).destroyEngineWithActivity(false)
+                result.success("success")
+            }
+
+            if(call.method == "getParam"){
                 result.success("success")
             }
         }

@@ -5,7 +5,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingEnd="@dimen/dp_20"
+        android:paddingTop="@dimen/status_bar_height">
 
         <ImageView
             android:id="@+id/iv_owl"
@@ -45,10 +48,10 @@
 
                     <TextView
                         android:id="@+id/tv_horoscope_title"
+                        style="@style/font_semi_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_11"
-                        style="@style/font_semi_bold"
                         android:text="Today's Horoscope"
                         android:textColor="@color/color_000000"
                         android:textSize="@dimen/sp_18"
@@ -296,9 +299,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_6"
+            android:fontFamily="@font/poppins_bold"
             android:text="666"
             android:textColor="@color/color_000000"
-            android:fontFamily="@font/poppins_bold"
             android:textSize="@dimen/sp_15"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/iv_bg_score"

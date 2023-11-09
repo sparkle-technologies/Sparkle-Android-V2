@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.fragment.BaseDBFragment
@@ -13,16 +14,19 @@ import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
-import com.cyberflow.sparkle.databinding.FragmentMainRightBinding
+import com.cyberflow.sparkle.databinding.FragmentMainFriendsBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedEmptyBinding
 import com.cyberflow.sparkle.databinding.MainFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.MainOfficialBinding
 import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.im.view.ChatActivity
+import com.cyberflow.sparkle.im.view.IMContactListAct
+import com.cyberflow.sparkle.im.view.IMScanAct
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.viewmodel.parseResource
+import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.divider
@@ -34,7 +38,7 @@ import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
-class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding>() {
+class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBinding>() {
 
 
     private val TAG = "MainRightFragment"
@@ -47,7 +51,40 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
 
     override fun initView(savedInstanceState: Bundle?) {
         Log.e(TAG, "initView: ")
+
+        initAddFriend()
+
         initListView()
+    }
+
+    private fun initAddFriend() {
+
+        mDatabind.btnAddFriends.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+                mDatabind.layDialogAdd.apply {
+                    visibility = if (this.visibility == View.VISIBLE) {
+                        View.GONE
+                    } else {
+                        View.VISIBLE
+                    }
+                }
+            }
+        })
+
+        mDatabind.layDialogAdd.apply {
+            findViewById<View>(R.id.lay_add_friends).setOnClickListener {
+                IMSearchFriendAct.go(requireActivity())
+                mDatabind.layDialogAdd.visibility = View.GONE
+            }
+            findViewById<View>(R.id.lay_contacts).setOnClickListener {
+                IMContactListAct.go(requireActivity())
+                mDatabind.layDialogAdd.visibility = View.GONE
+            }
+            findViewById<View>(R.id.lay_scan).setOnClickListener {
+                IMScanAct.go(requireActivity())
+                mDatabind.layDialogAdd.visibility = View.GONE
+            }
+        }
     }
 
     private fun initListView() {
@@ -90,8 +127,8 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                             addType<FriendMessageInfo>(R.layout.item_friends_feed)
                             addType<FriendsAddModel>(R.layout.item_friends_feed_add)
                             onBind {
-                                when(itemViewType){
-                                    R.layout.item_friends_feed ->{
+                                when (itemViewType) {
+                                    R.layout.item_friends_feed -> {
                                         val model = getModel<FriendMessageInfo>()
                                         getBinding<ItemFriendsFeedBinding>().bgBottomColor.apply {
                                             (background as? GradientDrawable)?.also {
@@ -165,7 +202,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
     }
 
     private fun freshIMData() {
-        Log.e(TAG, "freshIMData: ", )
+        Log.e(TAG, "freshIMData: ")
         actVm?.freshContactData()
     }
 
@@ -186,7 +223,9 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
         actVm?.conversationInfoObservable?.observe(requireActivity()) { response ->
             mDatabind.page.finishRefresh()
             Log.e("MainRightFragment", "conversation from server ")
-            parseResource(response, object : OnResourceParseCallback<List<EaseConversationInfo>>(true) {
+            parseResource(
+                response,
+                object : OnResourceParseCallback<List<EaseConversationInfo>>(true) {
                     override fun onSuccess(data: List<EaseConversationInfo>?) {
                         fetchUserInfoFromLocalDB(data)
                     }
@@ -229,7 +268,8 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                     it.open_uid.replace("-", "_") to it
                 }?.also { allContactMap ->
                     val allData = arrayListOf<IMUserInfo>()
-                    val contactOpenUidList = IMDataManager.instance.getContactData().map { it.username }
+                    val contactOpenUidList =
+                        IMDataManager.instance.getContactData().map { it.username }
                     val conversaction = data?.filter {
                         contactOpenUidList.contains((it.info as? EMConversation)?.conversationId())
                     }?.mapNotNull {
@@ -241,10 +281,10 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
 
                     val mark = conversaction.map { it.open_uid.replace("-", "_") }.toSet()
 
-                    Log.e(TAG, "mark: ${mark.toString()}" )
+                    Log.e(TAG, "mark: ${mark.toString()}")
 
                     allContactMap.forEach {
-                        Log.e(TAG, "allContactMap.forEach: key=${it.key}   value=${it.value}", )
+                        Log.e(TAG, "allContactMap.forEach: key=${it.key}   value=${it.value}")
                     }
 
                     val contactData = contactOpenUidList.filter {
@@ -254,11 +294,11 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
                     }.sortedBy { it.nick }.orEmpty()
 
                     conversaction.forEach {
-                        Log.e(TAG, "conversaction: ${it.nick}" )
+                        Log.e(TAG, "conversaction: ${it.nick}")
                     }
 
                     contactData.forEach {
-                        Log.e(TAG, "contactData: ${it.nick}" )
+                        Log.e(TAG, "contactData: ${it.nick}")
                     }
 
 
@@ -315,7 +355,7 @@ class MainRightFragment : BaseDBFragment<BaseViewModel, FragmentMainRightBinding
         allData.clear()
         allData.addAll(headData)
         allData.addAll(modelData)
-        if(allData.isNotEmpty()){
+        if (allData.isNotEmpty()) {
             mDatabind.rv.models = allData
         }
     }

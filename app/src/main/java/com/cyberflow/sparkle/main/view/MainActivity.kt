@@ -77,8 +77,8 @@ class MainActivity : BaseDBAct<MainViewModel, ActivityMainBinding>() {
         if (right) goNext()
     }
 
-    private val left: MainLeftFragment by lazy { MainLeftFragment() }
-    private val right: MainRightFragment by lazy { MainRightFragment() }
+    private val left: MainHoroscopeFragment by lazy { MainHoroscopeFragment() }
+    private val right: MainFriendsFragment by lazy { MainFriendsFragment() }
 
     override fun initView(savedInstanceState: Bundle?) {
         mDataBinding.viewMenuLeft.setOnClickListener { clickTopMenu(true, false) }

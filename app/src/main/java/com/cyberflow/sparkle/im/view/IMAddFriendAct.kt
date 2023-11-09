@@ -13,6 +13,7 @@ import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.main.view.MainActivity
 import com.cyberflow.sparkle.main.viewmodel.parseResource
+import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.utils.TipUtils
 import com.google.android.material.snackbar.Snackbar
@@ -62,7 +63,7 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
                 override fun onSuccess(data: Boolean?) {
                     if (data == true) {
                         Snackbar.make(mDataBinding.ivHead, "request send successfully", Snackbar.LENGTH_SHORT).show()
-                        MainActivity.go(this@IMAddFriendAct)
+                        MainActivityV2.go(this@IMAddFriendAct)
                         finish()
                     } else {
                         TipUtils.toast("failed to send request")

@@ -24,7 +24,7 @@ import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
-import com.cyberflow.sparkle.databinding.FragmentMainLeftBinding
+import com.cyberflow.sparkle.databinding.FragmentMainHoroscopeBinding
 import com.cyberflow.sparkle.databinding.ItemHoroscopeBinding
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.widget.ShadowTxtButton
@@ -36,11 +36,11 @@ import com.drake.net.utils.scope
 import java.util.Calendar
 import kotlin.math.abs
 
-class MainLeftFragment : BaseDBFragment<BaseViewModel, FragmentMainLeftBinding>() {
+class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscopeBinding>() {
 
     override fun initData() {
         actVm?.apply {
-            horoScopeData.observe(this@MainLeftFragment) {
+            horoScopeData.observe(this@MainHoroscopeFragment) {
                 Log.e("TAG", "horoScopeData.observe ")
                 mDatabind.state.showContent()
                 freshData(it)

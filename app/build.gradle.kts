@@ -37,7 +37,7 @@ android {
             )
         }
     }
-    
+
     lint {
         checkReleaseBuilds = false
         abortOnError = false
@@ -109,7 +109,6 @@ dependencies {
     val room_version = "2.5.1"
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
-
 
     implementation(project(mapOf("path" to ":flutter")))
 
