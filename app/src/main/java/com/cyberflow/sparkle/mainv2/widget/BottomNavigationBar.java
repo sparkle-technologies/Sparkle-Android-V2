@@ -24,6 +24,8 @@ import com.cyberflow.sparkle.main.widget.NumView;
 public class BottomNavigationBar extends LinearLayout implements View.OnClickListener {
 
     private Paint paint;
+
+    private Paint borderPaint;
     private Path path;
     private float width;
     private onBottomNavClickListener listener;
@@ -69,6 +71,12 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         path = new Path();
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         paint.setColor(Color.WHITE);
+
+        borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setColor(Color.BLACK);
+        borderPaint.setStrokeWidth(dip2px(1));
+
         View view = LayoutInflater.from(context).inflate(R.layout.bottom_nav_bar, this);
 
         img1 = view.findViewById(R.id.first);
@@ -109,7 +117,6 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         int high = 90;//底部导航的高度
         int marginTop = 30;//剧顶边高度
         Log.d("onDraw", "width:" + width);
@@ -159,6 +166,8 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
 
         path.close();
         canvas.drawPath(path, paint); //绘制路径 使用指定的油漆绘制指定的路径。路径将根据绘画的风格被填充或框起来。
+
+        canvas.drawPath(path, borderPaint);
 
         super.onDraw(canvas);
     }
