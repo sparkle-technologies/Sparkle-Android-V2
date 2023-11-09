@@ -6,6 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.fragment.BaseDBFragment
@@ -26,6 +27,7 @@ import com.cyberflow.sparkle.im.view.IMScanAct
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.viewmodel.parseResource
+import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.annotaion.DividerOrientation
@@ -36,7 +38,6 @@ import com.drake.net.utils.withMain
 import com.hyphenate.chat.EMConversation
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBinding>() {
 
@@ -326,6 +327,8 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         } else {
             var friendMessageList = arrayListOf<Any>()
             data?.also { list ->
+
+                var unreadTotalCount = 0
                 list.forEach { item ->
 
                     var avatar = item.avatar
@@ -334,6 +337,8 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                     var openUid = item.open_uid.replace("-", "_")
                     var bgColor = item.feed_card_color
                     var num: Int = unRead[item.open_uid] ?: 0
+
+                    unreadTotalCount += num
 
                     friendMessageList.add(
                         FriendMessageInfo(
@@ -346,6 +351,8 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                         )
                     )
                 }
+                (requireActivity() as? MainActivityV2)?.setUnRead(unreadTotalCount)
+
                 if (friendMessageList.size <= 6) {
                     friendMessageList.add(FriendsAddModel())
                 }
@@ -358,29 +365,26 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         if (allData.isNotEmpty()) {
             mDatabind.rv.models = allData
         }
+
+        showFriendRequestNum()
     }
 
-    private fun getData(empty: Boolean = false): List<Any> {
-        val r = Random.nextInt(10)
-        return listOf(
-            HeaderModel(title = "Official"),
-            OfficialModel(arrayListOf("Cora-Official", "King-Official")),
-            HeaderModel(title = "Friends Feed"),
-            if (empty) FriendsEmptyModel() else FriendsModel(
-                arrayListOf(
-                    FriendMessageInfo(nickname = "Cora-$r"),
-                    FriendMessageInfo(nickname = "King-$r"),
-                    FriendMessageInfo(nickname = "Cora-$r"),
+    override fun onResume() {
+        super.onResume()
+        showFriendRequestNum()
+    }
 
-                    FriendMessageInfo(nickname = "King-$r"),
-                    FriendMessageInfo(nickname = "Cora-$r"),
-                    FriendMessageInfo(nickname = "King-$r"),
+    var totalUnread = 0
 
-                    FriendMessageInfo(nickname = "King-$r"),
-                    FriendMessageInfo(nickname = "Cora-$r"),
-                    FriendMessageInfo(nickname = "King-$r")
-                )
-            )
-        )
+    fun showFriendRequestNum() {
+        Log.e(TAG, "showFriendRequestNum: isVisible=$isVisible" )
+        if(isVisible){
+            if(totalUnread > 0){
+                mDatabind.tvNum.isVisible = true
+                mDatabind.tvNum.setNum(totalUnread)
+            }else{
+                mDatabind.tvNum?.isVisible = false
+            }
+        }
     }
 }

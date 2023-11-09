@@ -102,6 +102,12 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
             }
         })
 
+        mDataBinding.btnTopStar.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+                ToastUtil.show(this@ProfileAct, "coming soon...0")
+            }
+        })
+
         mDataBinding.btnHoroscope.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 ToastUtil.show(this@ProfileAct, "coming soon...1")
@@ -323,7 +329,7 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
                  }
 
                  if(!data.star_sign.isNullOrEmpty() && !isMySelf){
-                     btnTopStar.isVisible = false
+                     btnTopStar.isVisible = true
                  }
              }
          }

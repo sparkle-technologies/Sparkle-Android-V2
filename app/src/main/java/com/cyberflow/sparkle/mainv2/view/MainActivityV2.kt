@@ -95,39 +95,16 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
     private fun loadIMConversations() {
         DBManager.instance.initDB(this)
 
-        ChatPresenter.getInstance()
-            .init()  // chat global observer, like msg received , it should be called after login
+        ChatPresenter.getInstance().init()  // chat global observer, like msg received , it should be called after login
 
         LiveDataBus.get().apply {
-            with(DemoConstant.NOTIFY_CHANGE, EaseEvent::class.java).observe(
-                this@MainActivityV2,
-                this@MainActivityV2::freshConversationData
-            )
-            with(
-                DemoConstant.MESSAGE_CHANGE_CHANGE,
-                EaseEvent::class.java
-            ).observe(this@MainActivityV2, this@MainActivityV2::freshConversationData)
-            with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java).observe(
-                this@MainActivityV2,
-                this@MainActivityV2::freshConversationData
-            )
-            with(DemoConstant.CONVERSATION_READ, EaseEvent::class.java).observe(
-                this@MainActivityV2,
-                this@MainActivityV2::freshConversationData
-            )
-
-            with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java).observe(
-                this@MainActivityV2,
-                this@MainActivityV2::freshContactData
-            )
-            with(DemoConstant.CONTACT_ADD, EaseEvent::class.java).observe(
-                this@MainActivityV2,
-                this@MainActivityV2::freshContactData
-            )
-            with(DemoConstant.CONTACT_UPDATE, EaseEvent::class.java).observe(
-                this@MainActivityV2,
-                this@MainActivityV2::freshContactData
-            )
+            with(DemoConstant.NOTIFY_CHANGE, EaseEvent::class.java).observe(this@MainActivityV2, this@MainActivityV2::freshConversationData)
+            with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent::class.java).observe(this@MainActivityV2, this@MainActivityV2::freshConversationData)
+            with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java).observe(this@MainActivityV2, this@MainActivityV2::freshConversationData)
+            with(DemoConstant.CONVERSATION_READ, EaseEvent::class.java).observe(this@MainActivityV2, this@MainActivityV2::freshConversationData)
+            with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java).observe(this@MainActivityV2, this@MainActivityV2::freshContactData)
+            with(DemoConstant.CONTACT_ADD, EaseEvent::class.java).observe(this@MainActivityV2, this@MainActivityV2::freshContactData)
+            with(DemoConstant.CONTACT_UPDATE, EaseEvent::class.java).observe(this@MainActivityV2, this@MainActivityV2::freshContactData)
         }
 
         viewModel.inviteMsgObservable.observe(this) { list ->
@@ -139,6 +116,12 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
                     status == InviteMessageStatus.BEINVITEED
                 }
                 val count = res.size
+
+                friends.apply {
+                    totalUnread = count
+                    showFriendRequestNum()
+                }
+
 
                 val open_uid_list = res.map {
                     it.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM).replace("_", "-")
@@ -218,5 +201,9 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
             return true
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    fun setUnRead(unreadTotalCount: Int) {
+         mDataBinding.bottomNarBar.setNum(unreadTotalCount)
     }
 }

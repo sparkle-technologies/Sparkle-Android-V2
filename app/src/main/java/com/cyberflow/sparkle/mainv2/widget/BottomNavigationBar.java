@@ -18,8 +18,9 @@ import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.cyberflow.sparkle.R;
+import com.cyberflow.sparkle.main.widget.NumView;
 
-
+// https://blog.csdn.net/weixin_47884471/article/details/123619002
 public class BottomNavigationBar extends LinearLayout implements View.OnClickListener {
 
     private Paint paint;
@@ -32,6 +33,8 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
 
     private ImageButton img1, img2, img3, img4;
     private ImageButton imgCenter;
+
+    private NumView tvNum;
 
     public void setViewPager(ViewPager2 viewPager) {
         this.viewPager = viewPager;
@@ -73,6 +76,8 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         imgCenter = view.findViewById(R.id.centerIcon);
         img3 = view.findViewById(R.id.third);
         img4 = view.findViewById(R.id.fourth);
+
+        tvNum = view.findViewById(R.id.tv_num);
 
         setWillNotDraw(false);
 
@@ -252,4 +257,12 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         this.listener = listener;
     }
 
+    public void setNum(int num){
+        if(num > 0){
+            tvNum.setVisibility(View.VISIBLE);
+            tvNum.setNum(num);
+        }else{
+            tvNum.setVisibility(View.INVISIBLE);
+        }
+    }
 }
