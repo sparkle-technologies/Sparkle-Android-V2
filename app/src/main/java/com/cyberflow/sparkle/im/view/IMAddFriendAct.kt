@@ -52,10 +52,10 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
 
             mDataBinding.tvName.text = nick
 
-            val address = if(wallet_address.isNullOrEmpty()) ca_wallet else wallet_address
+           /* val address = if(wallet_address.isNullOrEmpty()) ca_wallet else wallet_address
             if(address.length > 5){
                 mDataBinding.tvAddress.text = "${address.substring(0, 5)}...${address.substring(address.length - 5, address.length)}"
-            }
+            }*/
         }
 
         viewModel.friendObservable.observe(this) { response ->

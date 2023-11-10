@@ -103,13 +103,13 @@
                     android:textSize="@dimen/sp_17"
                     tools:text="Arc Chan" />
 
-                <TextView
+              <!--  <TextView
                     android:id="@+id/tv_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
                     android:textSize="@dimen/sp_12"
-                    tools:text="0xb98...3c6e" />
+                    tools:text="0xb98...3c6e" />-->
             </LinearLayout>
 
 

@@ -28,7 +28,6 @@ import com.cyberflow.sparkle.setting.view.SettingsActivity
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.Post
-import com.drake.net.utils.scopeDialog
 import com.drake.net.utils.scopeNetLife
 import com.drake.spannable.addSpan
 import com.drake.spannable.movement.ClickableMovementMethod
@@ -195,27 +194,24 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
 
         if(isMySelf){  // if user is me  - img logic
             val cache = CacheUtil.getString(CacheUtil.AVATAR_BIG)
-
             Log.e(TAG, "loadProfile: cache img: $cache" )
-
             if(cache.isNullOrEmpty()){
-               requestImgDialog()
+               requestImg()
             }else{
                 loadBigImg(cache)
-                requestImgNoDialog()
+                requestImg()
             }
         }else{
-            requestImgDialog()
+            requestImg()
         }
-
         if(isMySelf){   // if user is me  - the rest UI logic
             showUserInfo(user)
         }else{
-            requestDetailDialog()
+            requestDetail()
         }
     }
 
-    private fun requestImgNoDialog(){
+    private fun requestImg(){
         scopeNetLife {
             val data = Post<ManyImageData>(Api.GET_IMAGE_URLS) {
                 json("open_uid" to open_uid)
@@ -234,30 +230,13 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
 
     private var serverImageUrl : String?  = null
 
-    private fun requestImgDialog(){
-        scopeDialog {
-            val data = Post<ManyImageData>(Api.GET_IMAGE_URLS) {
-                json("open_uid" to open_uid)
-            }.await()
-            data?.let {
-                it.image_list?.profile_native?.apply {
-                    if(isMySelf){
-                        CacheUtil.savaString(CacheUtil.AVATAR_BIG, this)
-                    }
-                    serverImageUrl = this
-                    loadBigImg(this)
-                }
-            }
-        }
-    }
-
     private fun loadBigImg(url:String){
         val holder = ResourcesCompat.getDrawable(resources, com.cyberflow.sparkle.R.drawable.profile_default_avatar,null)
         loadImageWithHolder(mDataBinding.ivAvatar, url, holder, 24)
     }
 
-    private fun requestDetailDialog(){
-        scopeDialog {
+    private fun requestDetail(){
+        scopeNetLife {
             val data = Post<DetailResponseData>(Api.USER_DETAIL) {
                 json("open_uid" to open_uid)
             }.await()
