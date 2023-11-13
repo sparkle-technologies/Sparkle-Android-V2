@@ -2,6 +2,7 @@ package com.cyberflow.sparkle.main.view
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -12,6 +13,7 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.Toast
@@ -19,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.DailyHoroScopeData
+import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
@@ -27,6 +30,7 @@ import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainHoroscopeBinding
 import com.cyberflow.sparkle.databinding.ItemHoroscopeBinding
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
+import com.cyberflow.sparkle.main.widget.calendar.CalendarDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
@@ -102,13 +106,28 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
         actVm = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun initView(savedInstanceState: Bundle?) {
         mDatabind.ivOwl.setOnClickListener {
 //            mDatabind.smc.setPercentWithAnimation(50)
         }
-        mDatabind.ivBgScore.setOnClickListener {
-//            val data = listOf(HoroscopeHeadItem(), EmptyItem())
-//            mDatabind.rv.linear().models = data
+
+        mDatabind.layCalendar.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    mDatabind.layCalendar.visibility = View.INVISIBLE
+                    mDatabind.layCalendarShadow.visibility = View.VISIBLE
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    mDatabind.layCalendar.visibility = View.VISIBLE
+                    mDatabind.layCalendarShadow.visibility = View.INVISIBLE
+                }
+            }
+            false
+        }
+
+        mDatabind.layCalendar.setOnClickListener {
+            showCalendarDialog()
         }
 
         mDatabind.rv.linear().setup {
@@ -164,6 +183,17 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             else
                 mDatabind.layPan.alpha = 1.0f
         }
+    }
+
+    private var dialog : CalendarDialog? = null
+
+    private fun showCalendarDialog() {
+        dialog = CalendarDialog(requireActivity(), object : CalendarDialog.Callback {
+            override fun onSelected(user: IMUserInfo?, type: Int) {
+
+            }
+        })
+        dialog?.show()
     }
 
     private val arrays = arrayOf(
