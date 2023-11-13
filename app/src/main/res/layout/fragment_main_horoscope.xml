@@ -1,22 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="@dimen/dp_20"
-        android:paddingEnd="@dimen/dp_20"
-        android:paddingTop="@dimen/status_bar_height">
+        android:paddingTop="@dimen/status_bar_height"
+        android:paddingEnd="@dimen/dp_20">
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/dp_1"
+            android:background="@drawable/main_bg_horoscope_top_shadow"/>
+
+        <com.flyco.tablayout.SegmentTabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+
+            tl:tl_bar_color="#ffffff"
+            tl:tl_bar_corner_radius="16dp"
+            tl:tl_bar_stroke_color="@color/black"
+            tl:tl_bar_stroke_width="1dp"
+
+            tl:tl_indicator_anim_enable="true"
+            tl:tl_indicator_bounce_enable="false"
+            tl:tl_indicator_color="@color/color_A89FF9"
+            tl:tl_indicator_corner_radius="12dp"
+            tl:tl_indicator_height="30dp"
+            tl:tl_indicator_margin_bottom="5dp"
+            tl:tl_indicator_margin_left="5dp"
+            tl:tl_indicator_margin_right="5dp"
+            tl:tl_indicator_margin_top="5dp"
+            tl:tl_indicator_width="75dp"
+            tl:tl_tab_space_equal="true"
+            tl:tl_textSelectColor="@color/black"
+
+            tl:tl_textUnselectColor="#7D7D80" />
+
 
         <ImageView
             android:id="@+id/iv_owl"
-            android:layout_width="120dp"
-            android:layout_height="173dp"
-            android:layout_marginStart="20dp"
+            android:layout_width="108dp"
+            android:layout_height="117dp"
+            android:layout_marginTop="@dimen/dp_80"
+            android:layout_marginEnd="@dimen/dp_37"
             android:src="@drawable/main_ic_owl"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

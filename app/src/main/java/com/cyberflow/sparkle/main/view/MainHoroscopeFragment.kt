@@ -39,6 +39,9 @@ import kotlin.math.abs
 class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscopeBinding>() {
 
     override fun initData() {
+
+        mDatabind.tabLayout.setTabData(arrayOf("Daily", "Weekly", "Monthly", "Yearly"))
+
         actVm?.apply {
             horoScopeData.observe(this@MainHoroscopeFragment) {
                 Log.e("TAG", "horoScopeData.observe ")
