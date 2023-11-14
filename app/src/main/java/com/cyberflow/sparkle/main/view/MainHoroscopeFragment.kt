@@ -30,6 +30,7 @@ import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainHoroscopeBinding
 import com.cyberflow.sparkle.databinding.ItemHoroscopeBinding
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
+import com.cyberflow.sparkle.main.widget.SelectMonthDialog
 import com.cyberflow.sparkle.main.widget.calendar.CalendarDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.utils.linear
@@ -185,10 +186,35 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
         }
     }
 
-    private var dialog : CalendarDialog? = null
+
 
     private fun showCalendarDialog() {
-        dialog = CalendarDialog(requireActivity(), object : CalendarDialog.Callback {
+        when(mDatabind.tabLayout.currentTab){
+            0 -> { showDailyOrWeekly(false) }
+            1 -> { showDailyOrWeekly(true)  }
+            2 -> { showMonth() }
+            3 -> { showYear() }
+        }
+    }
+
+    private fun showYear(){
+
+    }
+
+    private var monthDialog : SelectMonthDialog? = null
+
+    private fun showMonth(){
+        monthDialog = SelectMonthDialog(requireActivity() ,  object : SelectMonthDialog.Callback {
+            override fun onSelected(user: String?, type: Int) {
+
+            }
+        })
+        monthDialog?.show()
+    }
+
+    private var dialog : CalendarDialog? = null
+    private fun showDailyOrWeekly(isWeek: Boolean){
+        dialog = CalendarDialog(requireActivity(), isWeek ,  object : CalendarDialog.Callback {
             override fun onSelected(user: IMUserInfo?, type: Int) {
 
             }

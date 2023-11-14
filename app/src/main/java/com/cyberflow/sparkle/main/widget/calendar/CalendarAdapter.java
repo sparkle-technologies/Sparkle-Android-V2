@@ -16,8 +16,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarView> {
     private List<Calendar> calendar = new ArrayList<>();
     private boolean weekMode = false;
 
-    public CalendarAdapter() {
-
+    public CalendarAdapter(boolean _weekMode) {
+        this.weekMode = _weekMode;
     }
 
     @NonNull

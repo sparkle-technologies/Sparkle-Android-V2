@@ -48,36 +48,35 @@ public class CalendarView extends RecyclerView.ViewHolder {
             for (int i = 0; i < adapterView.getCount(); i++) {
                 View v = adapterView.getChildAt(i);
                 CalendarDateAdapter.ViewHolder vh = ((CalendarDateAdapter.ViewHolder) v.getTag());
-
                 DateBean current = (DateBean) calendarDateAdapter.getItem(i);
-                boolean isSame = isSameWeek(selected, current);
 
-//                Log.e(TAG, "isSameWeek: " + isSame + " \t " + selected + "\t " + current);
-
-                if(current.isThisMonth()){
-                    vh.tvData.setTextColor(Color.BLACK);
-                }else{
-                    vh.tvData.setTextColor(ResourcesCompat.getColor(context.getResources(), com.cyberflow.base.resources.R.color.color_7D7D80, null));
-                }
-
-                if (isSame) {
-                    vh.tvData.setTextColor(Color.WHITE);
-                    if (i % 7 == 0) {
-                        vh.root.setBackgroundResource(com.cyberflow.base.resources.R.drawable.main_bg_horoscope_calendar_select_half_left);
-                    } else if (i % 7 == 6) {
-                        vh.root.setBackgroundResource(com.cyberflow.base.resources.R.drawable.main_bg_horoscope_calendar_select_half_right);
+                if(weekMode){
+                    boolean isSame = isSameWeek(selected, current);
+                    if (current.isThisMonth()) {
+                        vh.tvData.setTextColor(Color.BLACK);
                     } else {
-                        vh.root.setBackgroundResource(com.cyberflow.base.resources.R.color.black);
+                        vh.tvData.setTextColor(ResourcesCompat.getColor(context.getResources(), com.cyberflow.base.resources.R.color.color_7D7D80, null));
                     }
-                } else {
-                    vh.root.setBackground(null);
-                }
 
-                if (i == position) {
-                    vh.tvData.setTextColor(Color.BLACK);
-                    vh.tvData.setBackgroundResource(com.cyberflow.base.resources.R.drawable.main_bg_calendar_clicked);
-                } else {
-                    vh.tvData.setBackground(null);
+                    if (isSame) {
+                        vh.tvData.setTextColor(Color.WHITE);
+                        if (i % 7 == 0) {
+                            vh.root.setBackgroundResource(com.cyberflow.base.resources.R.drawable.main_bg_horoscope_calendar_select_half_left);
+                        } else if (i % 7 == 6) {
+                            vh.root.setBackgroundResource(com.cyberflow.base.resources.R.drawable.main_bg_horoscope_calendar_select_half_right);
+                        } else {
+                            vh.root.setBackgroundResource(com.cyberflow.base.resources.R.color.black);
+                        }
+                    } else {
+                        vh.root.setBackground(null);
+                    }
+                }else{
+                    if (i == position) {
+                        vh.tvData.setTextColor(Color.BLACK);
+                        vh.tvData.setBackgroundResource(com.cyberflow.base.resources.R.drawable.main_bg_calendar_clicked);
+                    } else {
+                        vh.tvData.setBackground(null);
+                    }
                 }
             }
         });
@@ -86,32 +85,37 @@ public class CalendarView extends RecyclerView.ViewHolder {
     public void initData(Calendar calendar) {
         ArrayList<DateBean> data = new ArrayList<>();
 
-        int dayOfWeek = getMonthOneDayWeek(calendar);   //获取第一天是星期几然后计算出需要填充的空白数据
-        if(dayOfWeek > 0){
-            Calendar previous = (Calendar)calendar.clone();  // 上个月   30
-            previous.add(Calendar.MONTH, -1);
-            int totalDays = previous.getActualMaximum(Calendar.DAY_OF_MONTH);
+        if(weekMode){
+            int dayOfWeek = getMonthOneDayWeek(calendar);
+            if (dayOfWeek > 0) {
+                Calendar previous = (Calendar) calendar.clone();  // 上个月   30
+                previous.add(Calendar.MONTH, -1);
+                int totalDays = previous.getActualMaximum(Calendar.DAY_OF_MONTH);
 //            Log.e(TAG, "initData: dayOfWeek=" + dayOfWeek + "\t  totalDays=" + totalDays );
-            for (int i = totalDays - dayOfWeek; i < totalDays; i++) {
-                //填充空白的
-                DateBean dateBean = new DateBean(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), i + 1);
-                dateBean.setThisMonth(false);
-                data.add(dateBean);
+                for (int i = totalDays - dayOfWeek; i < totalDays; i++) {
+                    //填充空白的
+                    data.add(new DateBean(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), i + 1, false));
+                }
+            }
+        }else{
+            for (int i = 0; i < getMonthOneDayWeek(calendar); i++) {  //获取第一天是星期几然后计算出需要填充的空白数据
+                data.add(new DateBean(0, 0, 0, false));
             }
         }
 
         //填充数据
         for (int i = 0; i < getMonthMaxData(calendar); i++) {
-            data.add(new DateBean(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, i + 1));
+            data.add(new DateBean(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, i + 1, true));
         }
 
-        int left = data.size() % 7;
-
-        if (left > 0) {
-            for (int i = 0; i < 7 - left; i++) {
-                DateBean dateBean = new DateBean(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 2, i + 1);
-                dateBean.setThisMonth(false);
-                data.add(dateBean);
+        if (weekMode) {
+            int left = data.size() % 7;
+            if (left > 0) {
+                for (int i = 0; i < 7 - left; i++) {
+                    DateBean dateBean = new DateBean(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 2, i + 1, false);
+                    dateBean.setThisMonth(false);
+                    data.add(dateBean);
+                }
             }
         }
 
@@ -146,8 +150,8 @@ public class CalendarView extends RecyclerView.ViewHolder {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         try {
-            Date date1 = dateFormat.parse(dateBean1.year + "-" + dateBean1.month + "-" + dateBean1.day);
-            Date date2 = dateFormat.parse(dateBean2.year + "-" + dateBean2.month + "-" + dateBean2.day);
+            Date date1 = dateFormat.parse(dateBean1.getYear() + "-" + dateBean1.getMonth() + "-" + dateBean1.getDay());
+            Date date2 = dateFormat.parse(dateBean2.getYear() + "-" + dateBean2.getMonth() + "-" + dateBean2.getDay());
             cal1.setTime(date1);
             cal2.setTime(date2);
             return isSameWeek(cal1, cal2);

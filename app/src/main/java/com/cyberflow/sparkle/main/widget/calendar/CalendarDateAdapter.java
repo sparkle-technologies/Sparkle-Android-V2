@@ -56,12 +56,17 @@ public class CalendarDateAdapter extends BaseAdapter {
         }
 
         DateBean data = mData.get(i);
-        if (data.isThisMonth()) {
-            viewHolder.tvData.setText("" + data.getDay());
-            viewHolder.tvData.setTextColor(Color.BLACK);
+        if (data.getDay() != 0) {
+            if (data.isThisMonth()) {
+                viewHolder.tvData.setText("" + data.getDay());
+                viewHolder.tvData.setTextColor(Color.BLACK);
+            } else {
+                viewHolder.tvData.setText("" + data.getDay());
+                viewHolder.tvData.setTextColor(ResourcesCompat.getColor(context.getResources(), com.cyberflow.base.resources.R.color.color_7D7D80, null));
+            }
         } else {
-            viewHolder.tvData.setText("" + data.getDay());
-            viewHolder.tvData.setTextColor(ResourcesCompat.getColor(context.getResources(), com.cyberflow.base.resources.R.color.color_7D7D80, null));
+            viewHolder.tvData.setText("");
+            viewHolder.ivSelected.setVisibility(View.GONE);
         }
 
         //选中日期 表示为今天

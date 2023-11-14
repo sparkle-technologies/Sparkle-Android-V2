@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="m"
+            type="com.cyberflow.sparkle.main.widget.calendar.DateBean" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/item"
+        android:layout_width="match_parent"
+        android:layout_height="76dp">
+
+        <ImageView
+            android:id="@+id/iv_selected"
+            android:layout_width="74dp"
+            android:layout_height="36dp"
+            android:layout_centerInParent="true"
+            tools:src="@drawable/main_bg_horoscope_month_selected_yellow" />
+
+        <TextView
+            android:id="@+id/tv_data"
+            android:layout_width="74dp"
+            android:layout_height="36dp"
+            android:layout_centerInParent="true"
+            android:background="@{m.checked ? @drawable/main_bg_horoscope_month_clicked : null}"
+            android:fontFamily="@font/poppins_regular"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            tools:background="@drawable/main_bg_horoscope_month_clicked"
+            tools:text="Jan" />
+
+    </RelativeLayout>
+
+</layout>

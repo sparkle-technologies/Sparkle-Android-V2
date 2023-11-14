@@ -20,19 +20,20 @@ class CalendarDialog {
     private var mCallback: Callback? = null
 
     private var mDialog: Dialog? = null
+    private var isWeek = false
 
     interface Callback {
         fun onSelected(user: IMUserInfo?, type: Int)
     }
 
-
-    constructor(context: Context, callback: Callback) {
+    constructor(context: Context, week: Boolean,  callback: Callback) {
         if (context == null || callback == null) {
             return
         }
 
         mContext = context
         mCallback = callback
+        isWeek = week
 
         initView()
         initData()
@@ -64,7 +65,7 @@ class CalendarDialog {
             tvMonth = findViewById(R.id.tv_month)
             tvYear = findViewById(R.id.tv_year)
             viewPager2 = findViewById(R.id.vpContainer)
-            calendarAdapter = CalendarAdapter()
+            calendarAdapter = CalendarAdapter(isWeek)
             viewPager2?.adapter = calendarAdapter
             btnPrevious = findViewById(R.id.btn_previous)
             btnNext = findViewById(R.id.btn_next)
@@ -109,7 +110,7 @@ class CalendarDialog {
         calendarAdapter?.refreshData(data)
 //        val txt =  "${data[data.size - 1][Calendar.YEAR]}-${(data[data.size - 1][Calendar.MONTH] + 1)}"
         data[data.size - 1].apply {
-            tvMonth?.text = DateBean.getMonthEngStr(get(Calendar.MONTH) + 1)
+            tvMonth?.text = getMonthEngStr(get(Calendar.MONTH) + 1)
             tvYear?.text = get(Calendar.YEAR).toString()
         }
         viewPager2?.apply {
@@ -121,7 +122,7 @@ class CalendarDialog {
                     super.onPageSelected(position)
                     val year = data[position][Calendar.YEAR]
                     val month = data[position][Calendar.MONTH] + 1
-                    tvMonth?.text = DateBean.getMonthEngStr(month)
+                    tvMonth?.text = getMonthEngStr(month)
                     tvYear?.text = year.toString()
 //                    val recyclerView = viewPager2!!.getChildAt(0) as RecyclerView
 //                    val view = recyclerView.layoutManager!!.findViewByPosition(position)
