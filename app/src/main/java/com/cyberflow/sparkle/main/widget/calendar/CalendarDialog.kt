@@ -98,9 +98,10 @@ class CalendarDialog {
     private var btnPrevious: ShadowImgButton? = null
     private var btnNext: ShadowImgButton? = null
 
+    private var monthCount = 240
     private fun initData() {
         val data: MutableList<Calendar> = ArrayList()
-        for (i in 11 downTo 0) {
+        for (i in monthCount downTo 0) {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.MONTH, -i)
             data.add(calendar)
@@ -112,7 +113,8 @@ class CalendarDialog {
             tvYear?.text = get(Calendar.YEAR).toString()
         }
         viewPager2?.apply {
-            setCurrentItem(11, false)
+            offscreenPageLimit = 5
+            setCurrentItem(monthCount, false)
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
                 override fun onPageSelected(position: Int) {

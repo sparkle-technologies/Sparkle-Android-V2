@@ -34,7 +34,7 @@
         android:layout_height="@dimen/dp_50"
         android:layout_marginTop="@dimen/dp_18"
         android:scaleType="fitCenter"
-        android:paddingEnd="6dp"
+        android:paddingEnd="7dp"
         android:src="@drawable/nav_eye_close"
         app:layout_constraintLeft_toRightOf="@+id/iv2"
         app:layout_constraintRight_toLeftOf="@+id/iv4"

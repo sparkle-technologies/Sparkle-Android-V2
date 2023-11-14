@@ -1,11 +1,14 @@
 package com.cyberflow.sparkle.main.widget.calendar;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.core.content.res.ResourcesCompat;
 
 import com.cyberflow.sparkle.R;
 
@@ -33,8 +36,9 @@ public class CalendarDateAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return i;
     }
+
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
@@ -42,6 +46,7 @@ public class CalendarDateAdapter extends BaseAdapter {
         if (view == null) {
             view = View.inflate(context, R.layout.calender_data_item, null);
             viewHolder = new ViewHolder();
+            viewHolder.root = view.findViewById(R.id.root);
             viewHolder.tvTop = view.findViewById(R.id.tv_top);
             viewHolder.ivSelected = view.findViewById(R.id.iv_selected);
             viewHolder.tvData = view.findViewById(R.id.tv_data);
@@ -49,12 +54,14 @@ public class CalendarDateAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+
         DateBean data = mData.get(i);
-        if (data.getDay() != 0) {
+        if (data.isThisMonth()) {
             viewHolder.tvData.setText("" + data.getDay());
+            viewHolder.tvData.setTextColor(Color.BLACK);
         } else {
-            viewHolder.tvData.setText("");
-            viewHolder.ivSelected.setVisibility(View.GONE);
+            viewHolder.tvData.setText("" + data.getDay());
+            viewHolder.tvData.setTextColor(ResourcesCompat.getColor(context.getResources(), com.cyberflow.base.resources.R.color.color_7D7D80, null));
         }
 
         //选中日期 表示为今天
@@ -68,6 +75,7 @@ public class CalendarDateAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
+        public View root;
         public TextView tvTop;
         public ImageView ivSelected;
         public TextView tvData;

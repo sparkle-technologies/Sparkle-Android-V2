@@ -14,6 +14,7 @@ import java.util.List;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarView> {
     private List<Calendar> calendar = new ArrayList<>();
+    private boolean weekMode = false;
 
     public CalendarAdapter() {
 
@@ -22,7 +23,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarView> {
     @NonNull
     @Override
     public CalendarView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new CalendarView(LayoutInflater.from(parent.getContext()).inflate(R.layout.calender_view, parent, false));
+        return new CalendarView(LayoutInflater.from(parent.getContext()).inflate(R.layout.calender_view, parent, false), weekMode);
     }
 
     @Override
