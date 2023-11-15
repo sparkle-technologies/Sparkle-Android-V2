@@ -9,7 +9,6 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
-import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import java.util.Calendar
@@ -23,7 +22,7 @@ class CalendarDialog {
     private var isWeek = false
 
     interface Callback {
-        fun onSelected(user: IMUserInfo?, type: Int)
+        fun onSelected(select: DateBean?)
     }
 
     constructor(context: Context, week: Boolean,  callback: Callback) {
@@ -65,7 +64,7 @@ class CalendarDialog {
             tvMonth = findViewById(R.id.tv_month)
             tvYear = findViewById(R.id.tv_year)
             viewPager2 = findViewById(R.id.vpContainer)
-            calendarAdapter = CalendarAdapter(isWeek)
+            calendarAdapter = CalendarAdapter(mCallback, isWeek)
             viewPager2?.adapter = calendarAdapter
             btnPrevious = findViewById(R.id.btn_previous)
             btnNext = findViewById(R.id.btn_next)

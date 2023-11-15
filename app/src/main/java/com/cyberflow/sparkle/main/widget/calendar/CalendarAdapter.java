@@ -15,15 +15,17 @@ import java.util.List;
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarView> {
     private List<Calendar> calendar = new ArrayList<>();
     private boolean weekMode = false;
+    private CalendarDialog.Callback callback;
 
-    public CalendarAdapter(boolean _weekMode) {
+    public CalendarAdapter(CalendarDialog.Callback callback, boolean _weekMode) {
+        this.callback = callback;
         this.weekMode = _weekMode;
     }
 
     @NonNull
     @Override
     public CalendarView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new CalendarView(LayoutInflater.from(parent.getContext()).inflate(R.layout.calender_view, parent, false), weekMode);
+        return new CalendarView(LayoutInflater.from(parent.getContext()).inflate(R.layout.calender_view, parent, false), callback, weekMode);
     }
 
     @Override

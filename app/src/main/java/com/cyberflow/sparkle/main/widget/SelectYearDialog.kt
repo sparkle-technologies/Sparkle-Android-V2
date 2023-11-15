@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.Gravity
 import android.view.Window
 import android.view.WindowManager
@@ -14,14 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ItemHoroscopeSelectMonthBinding
 import com.cyberflow.sparkle.main.widget.calendar.DateBean
-import com.cyberflow.sparkle.main.widget.calendar.getMonthEngStr
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import java.util.Calendar
 
-class SelectMonthDialog {
+class SelectYearDialog {
 
     private var mContext: Context? = null
     private var mCallback: Callback? = null
@@ -86,7 +84,7 @@ class SelectMonthDialog {
             singleMode = true
             addType<DateBean>(R.layout.item_horoscope_select_month)
             onChecked { position, checked, allChecked ->
-//                Log.e("TAG", "onChecked:  position=$position  checked=$checked" )
+//                Log.e("TAG", "onChecked:  position=$position  checked=$checked")
                 val model = getModel<DateBean>(position)
                 model.checked = checked
                 model.notifyChange()
@@ -94,26 +92,20 @@ class SelectMonthDialog {
             onBind {
                 val model = getModel<DateBean>()
                 getBinding<ItemHoroscopeSelectMonthBinding>().apply {
-
-//                    Log.e("TAG", "onBind:  layoutPosition=$layoutPosition  model=${model.toString()}  currentYear=$currentYear  currentMonth=$currentMonth" )
-
-                    if (model.year == currentYear && model.month == currentMonth) {
+                    if (model.year == currentYear) {
                         ivSelected.setImageResource(com.cyberflow.base.resources.R.drawable.main_bg_horoscope_month_selected_yellow)
-                    }else{
+                    } else {
                         ivSelected.setImageDrawable(null)
                     }
-
-                    if( (model.year > currentYear) || (model.year == currentYear && model.month > currentMonth)){
+                    if(model.year > currentYear){
                         tvData.setTextColor(ResourcesCompat.getColor(context.resources, com.cyberflow.base.resources.R.color.color_7D7D80, null))
                     }else{
                         tvData.setTextColor(Color.BLACK)
                     }
-
-                    tvData.text = getMonthEngStr(model.month)?.substring(0, 3)
+                    tvData.text = "${model.year}"
                 }
             }
             R.id.item.onClick {
-                Log.e("TAG", "onClick:  position=$layoutPosition  checked=true" )
                 setChecked(layoutPosition, true)
                 mCallback?.onSelected(getModel<DateBean>(layoutPosition))
             }
@@ -127,38 +119,39 @@ class SelectMonthDialog {
 
     private var selectYear = 0
     private var currentYear = 0
-    private var currentMonth = 0
 
     private fun initData() {
         val calendar = Calendar.getInstance()
         currentYear = calendar[Calendar.YEAR]
-        currentMonth = calendar[Calendar.MONTH] + 1
-        selectYear = currentYear - 1
+        selectYear = 2030 - COUNT
         action(true)
     }
 
+    private val COUNT = 12
+
     private fun action(next: Boolean) {
         if (next) {
-            selectYear++
+            selectYear += COUNT
         } else {
-            selectYear--
+            selectYear -= COUNT
         }
-        tvYear?.text = "$selectYear"
-        getMonthData(selectYear).apply {
+        tvYear?.text = "${selectYear - COUNT + 1} - $selectYear"
+        getYearData(selectYear).apply {
             rv?.models = this
             this.forEachIndexed { index, dateBean ->
-                if (dateBean.year == currentYear && dateBean.month == currentMonth) {
+                if (dateBean.year == currentYear) {
                     rv?.bindingAdapter?.setChecked(index, true)
                 }
             }
         }
     }
 
-    private fun getMonthData(year: Int): List<DateBean> {
+    private fun getYearData(year: Int): List<DateBean> {
+//        Log.e("TAG", "getYearData:  year=$year", )
         val data = arrayListOf<DateBean>()
-        for (i in 1 until  13) {
-            val bean = DateBean(year, i)
-            data.add(bean)
+        repeat(COUNT){
+//            Log.e("TAG", "getYearData:  ${year - COUNT + it + 1}   it=$it", )
+            data.add(DateBean(year - COUNT + it + 1, 0))
         }
         return data
     }

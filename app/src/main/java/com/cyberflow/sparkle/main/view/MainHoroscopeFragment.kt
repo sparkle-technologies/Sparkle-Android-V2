@@ -4,26 +4,16 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.DailyHoroScopeData
-import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.net.Api
-import com.cyberflow.base.util.bus.LiveDataBus
+import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
@@ -31,17 +21,20 @@ import com.cyberflow.sparkle.databinding.FragmentMainHoroscopeBinding
 import com.cyberflow.sparkle.databinding.ItemHoroscopeBinding
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.widget.SelectMonthDialog
+import com.cyberflow.sparkle.main.widget.SelectYearDialog
 import com.cyberflow.sparkle.main.widget.calendar.CalendarDialog
+import com.cyberflow.sparkle.main.widget.calendar.DateBean
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.drake.net.Post
 import com.drake.net.utils.scope
-import java.util.Calendar
 import kotlin.math.abs
 
 class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscopeBinding>() {
+
+    private val TAG = "MainHoroscopeFragment"
 
     override fun initData() {
 
@@ -65,7 +58,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             })
         }
 
-        setAlarm()
+//        setAlarm()
     }
 
     private fun requestData() {
@@ -197,29 +190,42 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
         }
     }
 
+    private var yearDialog : SelectYearDialog? = null
     private fun showYear(){
-
+        Log.e("TAG", "showYear: " )
+        yearDialog = SelectYearDialog(requireActivity() ,  object : SelectYearDialog.Callback {
+            override fun onSelected(select: DateBean?) {
+                Log.e(TAG, "onSelected: $select" )
+                ToastUtil.show(requireContext(), "${select?.year}")
+//                yearDialog?.onDestroy()
+            }
+        })
+        yearDialog?.show()
     }
 
     private var monthDialog : SelectMonthDialog? = null
 
     private fun showMonth(){
         monthDialog = SelectMonthDialog(requireActivity() ,  object : SelectMonthDialog.Callback {
-            override fun onSelected(user: String?, type: Int) {
-
+            override fun onSelected(select: DateBean?) {
+                Log.e(TAG, "onSelected: $select" )
+                ToastUtil.show(requireContext(), "${select?.month}")
+//                monthDialog?.onDestroy()
             }
         })
         monthDialog?.show()
     }
 
-    private var dialog : CalendarDialog? = null
+    private var calendarDialog : CalendarDialog? = null
     private fun showDailyOrWeekly(isWeek: Boolean){
-        dialog = CalendarDialog(requireActivity(), isWeek ,  object : CalendarDialog.Callback {
-            override fun onSelected(user: IMUserInfo?, type: Int) {
-
+        calendarDialog = CalendarDialog(requireActivity(), isWeek ,  object : CalendarDialog.Callback {
+            override fun onSelected(select: DateBean??) {
+                Log.e(TAG, "onSelected: $select" )
+                ToastUtil.show(requireContext(), "${select?.year}-${select?.month}-${select?.day}")
+//                calendarDialog?.onDestroy()
             }
         })
-        dialog?.show()
+        calendarDialog?.show()
     }
 
     private val arrays = arrayOf(
@@ -265,7 +271,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
         const val LIVEDATA_BUS_EVENT = "alarm_refresh_horoscope"
     }
 
-    private var alarmReceiver: AlarmReceiver? = null
+   /* private var alarmReceiver: AlarmReceiver? = null
 
 
     class AlarmReceiver : BroadcastReceiver() {
@@ -274,9 +280,9 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             Log.e("TAG", "AlarmReceiver onReceive: ")
             LiveDataBus.get().with(LIVEDATA_BUS_EVENT).postValue("AlarmReceiver ${System.currentTimeMillis()}")
         }
-    }
+    }*/
 
-    private fun setAlarm() {
+   /* private fun setAlarm() {
         val intent = Intent(ALARM_EVENT)
         val pIntent = PendingIntent.getBroadcast(
             requireActivity(),
@@ -312,7 +318,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             requireActivity().unregisterReceiver(alarmReceiver)
         }
-    }
+    }*/
 
     // 数据转化
     private fun getData(index: Int = INDEX_LOVE): List<Any> {

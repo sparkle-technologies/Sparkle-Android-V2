@@ -3,7 +3,6 @@ package com.cyberflow.sparkle.main.widget.calendar;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -30,10 +29,12 @@ public class CalendarView extends RecyclerView.ViewHolder {
     private CalendarDateAdapter calendarDateAdapter;
     private Context context;
 
+    private CalendarDialog.Callback callback;
     private boolean weekMode = false;
 
-    public CalendarView(@NonNull View itemView, boolean _weekMode) {
+    public CalendarView(@NonNull View itemView, CalendarDialog.Callback callback, boolean _weekMode) {
         super(itemView);
+        this.callback = callback;
         this.weekMode = _weekMode;
         gridView = itemView.findViewById(R.id.wgvCalendar);
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
@@ -45,6 +46,11 @@ public class CalendarView extends RecyclerView.ViewHolder {
         gridView.getSelectedItem();
         gridView.setOnItemClickListener((adapterView, view, position, l) -> {
             DateBean selected = (DateBean) calendarDateAdapter.getItem(position);
+
+            if(callback!=null){
+                callback.onSelected(selected);
+            }
+
             for (int i = 0; i < adapterView.getCount(); i++) {
                 View v = adapterView.getChildAt(i);
                 CalendarDateAdapter.ViewHolder vh = ((CalendarDateAdapter.ViewHolder) v.getTag());
@@ -70,6 +76,7 @@ public class CalendarView extends RecyclerView.ViewHolder {
                     } else {
                         vh.root.setBackground(null);
                     }
+
                 }else{
                     if (i == position) {
                         vh.tvData.setTextColor(Color.BLACK);
