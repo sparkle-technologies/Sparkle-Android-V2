@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:view_bg_src="@drawable/main_ic_add_friends_bg"
         app:view_img_shadow_distance="1dp"
-        app:view_img_src="@drawable/main_ic_add_friends" />
+        app:view_img_src="@drawable/main_ic_calendar_previous" />
 
     <com.cyberflow.sparkle.widget.ShadowImgButton
         android:id="@+id/btn_next"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:view_bg_src="@drawable/main_ic_add_friends_bg"
         app:view_img_shadow_distance="1dp"
-        app:view_img_src="@drawable/main_ic_add_friends" />
+        app:view_img_src="@drawable/main_ic_calendar_next" />
 
     <View
         android:id="@+id/line_horizon"

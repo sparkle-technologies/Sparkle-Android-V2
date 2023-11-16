@@ -14,6 +14,7 @@
             android:id="@+id/page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_40"
             app:srlEnableLoadMore="false"
             app:stateEnabled="true">
 
@@ -25,7 +26,6 @@
 
         </com.drake.brv.PageRefreshLayout>
 
-
         <com.cyberflow.sparkle.widget.ShadowImgButton
             android:id="@+id/btn_add_friends"
             android:layout_width="@dimen/dp_40"
@@ -35,6 +35,19 @@
             app:view_bg_src="@drawable/main_ic_add_friends_bg"
             app:view_img_shadow_distance="1dp"
             app:view_img_src="@drawable/main_ic_add_friends" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_add_friends"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_add_friends"
+            android:gravity="center|left"
+            android:text="Chats"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold" />
 
         <com.cyberflow.sparkle.main.widget.NumView
             android:id="@+id/tv_num"
@@ -55,8 +68,8 @@
             android:id="@+id/lay_dialog_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_marginEnd="@dimen/dp_20"
+            android:visibility="gone"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_add_friends">
 

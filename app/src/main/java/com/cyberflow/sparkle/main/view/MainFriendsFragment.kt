@@ -90,8 +90,9 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
     private fun initListView() {
         mDatabind.rv.setup {
-            addType<HeaderModel>(R.layout.item_hover_header)
-            addType<OfficialModel>(R.layout.main_official)
+//            addType<HeaderModel>(R.layout.item_hover_header)
+//            addType<OfficialModel>(R.layout.main_official)
+            addType<OfficialCoraModel>(R.layout.item_official_cora)
             addType<FriendsModel>(R.layout.main_friends_feed)
             addType<FriendsEmptyModel>(R.layout.item_friends_feed_empty)
             onCreate {
@@ -247,8 +248,10 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
     private fun initHeadData() {
         Log.e(TAG, "initHeadData: ")
-        headData.add(HeaderModel(title = "Official"))
-        headData.add(OfficialModel(arrayListOf("Cora-Official", "King-Official")))
+//        headData.add(HeaderModel(title = "Official"))
+//        headData.add(OfficialModel(arrayListOf("Cora-Official", "King-Official")))
+
+        headData.add(OfficialCoraModel( "Cora"))
         allData.clear()
         allData.addAll(headData)
         mDatabind.rv.models = allData
@@ -321,7 +324,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     private fun showConversationList(data: List<IMUserInfo>?) {
         Log.e(TAG, "showConversationList: ")
         var modelData = arrayListOf<Any>()
-        modelData.add(HeaderModel(title = "Friends Feed"))
+//        modelData.add(HeaderModel(title = "Friends Feed"))
         if (data.isNullOrEmpty()) {
             modelData.add(FriendsEmptyModel())
         } else {
