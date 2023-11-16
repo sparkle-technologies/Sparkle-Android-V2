@@ -249,7 +249,7 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         }
     }
 
-    private int[] normalIcon = {R.drawable.nav_friends_off, R.drawable.nav_feed_off, R.drawable.nav_eye_close, R.drawable.nav_notify_off, R.drawable.nav_profile_off};
+//    private int[] normalIcon = {R.drawable.nav_friends_off, R.drawable.nav_feed_off, R.drawable.nav_eye_close, R.drawable.nav_notify_off, R.drawable.nav_profile_off};
 
     private void setUnSelect(int position) {
         switch (position) {

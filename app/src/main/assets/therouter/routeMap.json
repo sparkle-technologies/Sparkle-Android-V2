@@ -7,6 +7,13 @@
     "params": {}
   },
   {
+    "path": "/app/MainActivityV2",
+    "className": "com.cyberflow.sparkle.mainv2.view.MainActivityV2",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
     "path": "/im/IMForwardListAct",
     "className": "com.cyberflow.sparkle.im.view.IMForwardListAct",
     "action": "",

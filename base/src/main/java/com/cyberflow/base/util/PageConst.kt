@@ -3,7 +3,7 @@ package com.cyberflow.base.util
 object PageConst {
 
     object App {
-        const val PAGE_MAIN = "/app/MainActivity"
+        const val PAGE_MAIN = "/app/MainActivityV2"
         const val PAGE_PROFILE = "/app/profile/ProfileAct"
     }
 

@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.model.IMUserInfo
+import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
@@ -28,8 +29,10 @@ import com.cyberflow.sparkle.register.view.PageAdapter
 import com.drake.net.utils.withMain
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.model.EaseEvent
+import com.therouter.router.Route
 import kotlinx.coroutines.launch
 
+@Route(path = PageConst.App.PAGE_MAIN)
 class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>() {
 
     companion object {

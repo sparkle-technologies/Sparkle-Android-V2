@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.click
 import com.cyberflow.sparkle.DBComponent.loadImage
@@ -26,6 +27,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.chat.EMClient
 import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.model.EaseEvent
+import com.therouter.TheRouter
 
 class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     ChatFragment.OnFragmentInfoListener {
@@ -46,6 +48,10 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
             intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType)
             context.startActivity(intent)
         }
+    }
+
+    private fun goMain(){
+        TheRouter.build(PageConst.App.PAGE_MAIN).navigation()
     }
 
     override fun initView(savedInstanceState: Bundle?) {
@@ -172,15 +178,13 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         if (imm != null && window.attributes.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN) {
             if (currentFocus != null) {
-                imm.hideSoftInputFromWindow(
-                    currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS
-                )
-                super.onBackPressed()
+                imm.hideSoftInputFromWindow(currentFocus!!.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+                goMain()
             } else {
-                super.onBackPressed()
+                goMain()
             }
         } else {
-            super.onBackPressed()
+            goMain()
         }
     }
 }
