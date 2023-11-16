@@ -89,6 +89,7 @@ dependencies {
 
     //image
     api("com.github.bumptech.glide:glide:4.15.1")
+    api("com.github.penfeizhou.android.animation:apng:2.28.0")
 
     // cache mmkv
     api("com.tencent:mmkv:1.3.0")

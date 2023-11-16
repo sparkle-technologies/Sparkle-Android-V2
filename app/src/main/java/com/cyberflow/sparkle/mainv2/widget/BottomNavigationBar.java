@@ -12,12 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.cyberflow.sparkle.R;
-import com.cyberflow.sparkle.main.widget.NumView;
+import com.github.penfeizhou.animation.apng.APNGDrawable;
+import com.github.penfeizhou.animation.loader.AssetStreamLoader;
 
 // https://blog.csdn.net/weixin_47884471/article/details/123619002
 public class BottomNavigationBar extends LinearLayout implements View.OnClickListener {
@@ -27,14 +30,13 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
     private Path path;
     private float width;
     private onBottomNavClickListener listener;
-
-    private int[] selectIcon = {R.drawable.nav_friends_on, R.drawable.nav_feed_on, R.drawable.nav_eye_open, R.drawable.nav_notify_on, R.drawable.nav_profile_on};
-    private int[] normalIcon = {R.drawable.nav_friends_off, R.drawable.nav_feed_off, R.drawable.nav_eye_close, R.drawable.nav_notify_off, R.drawable.nav_profile_off};
+    private RelativeLayout lay1, lay2, lay3, lay4, lay5;
 
     private ImageView img1, img2, img3, img4;
     private ImageView imgCenter;
 
-    private NumView tvNum;
+    private View layUnread;
+    private TextView tvUnread;
 
     public void setViewPager(ViewPager2 viewPager) {
         this.viewPager = viewPager;
@@ -73,10 +75,17 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
 
         borderPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setAntiAlias(true);
         borderPaint.setColor(Color.BLACK);
         borderPaint.setStrokeWidth(dip2px(1));
 
         View view = LayoutInflater.from(context).inflate(R.layout.bottom_nav_bar, this);
+
+        lay1 = view.findViewById(R.id.lay1);
+        lay2 = view.findViewById(R.id.lay2);
+        lay3 = view.findViewById(R.id.lay3);
+        lay4 = view.findViewById(R.id.lay4);
+        lay5 = view.findViewById(R.id.lay5);
 
         img1 = view.findViewById(R.id.iv1);
         img2 = view.findViewById(R.id.iv2);
@@ -84,7 +93,8 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         img3 = view.findViewById(R.id.iv4);
         img4 = view.findViewById(R.id.iv5);
 
-        tvNum = view.findViewById(R.id.tv_num);
+        layUnread = view.findViewById(R.id.lay_unread);
+        tvUnread = view.findViewById(R.id.tv_unread);
 
         setWillNotDraw(false);
 
@@ -92,11 +102,11 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         DisplayMetrics dm = getResources().getDisplayMetrics();
         width = dm.widthPixels; //设备屏幕宽度
 
-        img1.setOnClickListener(this);
-        img2.setOnClickListener(this);
-        imgCenter.setOnClickListener(this);
-        img3.setOnClickListener(this);
-        img4.setOnClickListener(this);
+        lay1.setOnClickListener(this);
+        lay2.setOnClickListener(this);
+        lay3.setOnClickListener(this);
+        lay4.setOnClickListener(this);
+        lay5.setOnClickListener(this);
 
         a = new PointF(0, 0);
         b = new PointF(0, 0);
@@ -109,6 +119,8 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         a3 = new PointF(0, 0);
         b3 = new PointF(0, 0);
         c3 = new PointF(0, 0);
+
+        initAnimation();
 
         setCurrentPage(0);
     }
@@ -138,7 +150,7 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         a2.x = c.x;
         a2.y = c.y;
         b2.x = width / 2;
-        b2.y = 15;   // 靠感觉调 可以是负数
+        b2.y = 23;   // 往大了调  可无限贴近那个猫头鹰
         c2.x = width - x3;
         c2.y = dip2px(marginTop - borderHigh);
 
@@ -185,31 +197,27 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.iv1) {
-            setUnSelect(currentPosition);
+        if (v.getId() == R.id.lay1) {
             if (listener != null) {
                 listener.onIconClick(v.getId(), 0);
             }
             setCurrentPage(0);
-        } else if (v.getId() == R.id.iv2) {
-            setUnSelect(currentPosition);
+        } else if (v.getId() == R.id.lay2) {
             if (listener != null) {
                 listener.onIconClick(v.getId(), 1);
             }
             setCurrentPage(1);
-        } else if (v.getId() == R.id.iv3) {
+        } else if (v.getId() == R.id.lay3) {
             if (listener != null) {
                 listener.onCenterIconClick();
             }
             setCurrentPage(2);
-        } else if (v.getId() == R.id.iv4) {
-            setUnSelect(currentPosition);
+        } else if (v.getId() == R.id.lay4) {
             if (listener != null) {
                 listener.onIconClick(v.getId(), 2);
             }
             setCurrentPage(3);
-        } else if (v.getId() == R.id.iv5) {
-            setUnSelect(currentPosition);
+        } else if (v.getId() == R.id.lay5) {
             if (listener != null) {
                 listener.onIconClick(v.getId(), 3);
             }
@@ -224,36 +232,101 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         setUnSelect(currentPosition);
         currentPosition = page;
         if (page == 0) {
-            img1.setImageResource(selectIcon[currentPosition]);
+            img1.setImageDrawable(adFriendOn);
+            adFriendOn.start();
         } else if (page == 1) {
-            img2.setImageResource(selectIcon[currentPosition]);
+            img2.setImageDrawable(adFeedOn);
+            adFeedOn.start();
         } else if (page == 2) {
-            imgCenter.setImageResource(selectIcon[currentPosition]);
+            imgCenter.setImageDrawable(adOwlOn);
+            adOwlOn.start();
         } else if (page == 3) {
-            img3.setImageResource(selectIcon[currentPosition]);
+            img3.setImageDrawable(adNotifyOn);
+            adNotifyOn.start();
         } else if (page == 4) {
-            img4.setImageResource(selectIcon[currentPosition]);
+            img4.setImageDrawable(adProfileOn);
+            adProfileOn.start();
         }
     }
+
+    private int[] normalIcon = {R.drawable.nav_friends_off, R.drawable.nav_feed_off, R.drawable.nav_eye_close, R.drawable.nav_notify_off, R.drawable.nav_profile_off};
 
     private void setUnSelect(int position) {
         switch (position) {
             case 0:
-                img1.setImageResource(normalIcon[0]);
+                img1.setImageDrawable(adFriendOff);
+                adFriendOff.start();
                 break;
             case 1:
-                img2.setImageResource(normalIcon[1]);
+                img2.setImageDrawable(adFeedOff);
+                adFeedOff.start();
                 break;
             case 2:
-                imgCenter.setImageResource(normalIcon[2]);
+                adOwlOff.reset();
+                imgCenter.setImageDrawable(adOwlOff);
+                adOwlOff.start();
                 break;
             case 3:
-                img3.setImageResource(normalIcon[3]);
+                img3.setImageDrawable(adNotifyOff);
+                adNotifyOff.start();
                 break;
             case 4:
-                img4.setImageResource(normalIcon[4]);
+                img4.setImageDrawable(adProfileOff);
+                adProfileOff.start();
                 break;
         }
+    }
+
+    private APNGDrawable adOwlOn;
+    private APNGDrawable adFriendOn;
+    private APNGDrawable adFeedOn;
+    private APNGDrawable adNotifyOn;
+    private APNGDrawable adProfileOn;
+
+    private APNGDrawable adOwlOff;
+    private APNGDrawable adFriendOff;
+    private APNGDrawable adFeedOff;
+    private APNGDrawable adNotifyOff;
+    private APNGDrawable adProfileOff;
+
+
+    private void initAnimation() {
+        AssetStreamLoader asOwlOn = new AssetStreamLoader(getContext(), "owl_on.png");
+        AssetStreamLoader asFriendOn = new AssetStreamLoader(getContext(), "friends_on.png");
+        AssetStreamLoader asFeedOn = new AssetStreamLoader(getContext(), "feed_on.png");
+        AssetStreamLoader asNotifyOn = new AssetStreamLoader(getContext(), "notify_on.png");
+        AssetStreamLoader asProfileOn = new AssetStreamLoader(getContext(), "profile_on.png");
+
+        AssetStreamLoader asOwlOff = new AssetStreamLoader(getContext(), "owl_off.png");
+        AssetStreamLoader asFriendOff = new AssetStreamLoader(getContext(), "friends_off.png");
+        AssetStreamLoader asFeedOff = new AssetStreamLoader(getContext(), "feed_off.png");
+        AssetStreamLoader asNotifyOff = new AssetStreamLoader(getContext(), "notify_off.png");
+        AssetStreamLoader asProfileOff = new AssetStreamLoader(getContext(), "profile_off.png");
+
+        adOwlOn = new APNGDrawable(asOwlOn);
+        adFriendOn = new APNGDrawable(asFriendOn);
+        adFeedOn = new APNGDrawable(asFeedOn);
+        adNotifyOn = new APNGDrawable(asNotifyOn);
+        adProfileOn = new APNGDrawable(asProfileOn);
+
+        adOwlOff = new APNGDrawable(asOwlOff);
+        adFriendOff = new APNGDrawable(asFriendOff);
+        adFeedOff = new APNGDrawable(asFeedOff);
+        adNotifyOff = new APNGDrawable(asNotifyOff);
+        adProfileOff = new APNGDrawable(asProfileOff);
+
+        adOwlOn.setLoopLimit(1);
+        adFriendOn.setLoopLimit(1);
+        adFeedOn.setLoopLimit(1);
+        adNotifyOn.setLoopLimit(1);
+        adProfileOn.setLoopLimit(1);
+
+        adOwlOff.setLoopLimit(1);
+        adFriendOff.setLoopLimit(1);
+        adFeedOff.setLoopLimit(1);
+        adNotifyOff.setLoopLimit(1);
+        adProfileOff.setLoopLimit(1);
+
     }
 
     public interface onBottomNavClickListener {
@@ -262,17 +335,16 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         void onCenterIconClick();
     }
 
-
     public void setOnListener(onBottomNavClickListener listener) {
         this.listener = listener;
     }
 
     public void setNum(int num) {
         if (num > 0) {
-            tvNum.setVisibility(View.VISIBLE);
-            tvNum.setNum(num);
+            layUnread.setVisibility(View.VISIBLE);
+            tvUnread.setText(String.valueOf(num));
         } else {
-            tvNum.setVisibility(View.INVISIBLE);
+            layUnread.setVisibility(View.INVISIBLE);
         }
     }
 }
