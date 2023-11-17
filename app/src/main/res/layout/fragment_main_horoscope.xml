@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_28"
             android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/black"
             android:text="Horoscope"
             android:textSize="@dimen/sp_24"
             app:layout_constraintLeft_toLeftOf="@+id/tabLayout"
@@ -92,6 +93,7 @@
                 android:id="@+id/tv_calendar_shadow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Dec 13, 2023" />
 
@@ -120,10 +122,21 @@
                 android:id="@+id/tv_calendar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Dec 13, 2023" />
 
         </LinearLayout>
+
+
+        <com.youth.banner.Banner
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="-28dp"
+            android:layout_marginBottom="-7dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_owl" />
 
         <ImageView
             android:id="@+id/iv_owl"
@@ -131,18 +144,10 @@
             android:layout_height="117dp"
             android:layout_marginTop="@dimen/dp_80"
             android:layout_marginEnd="@dimen/dp_17"
+            android:elevation="@dimen/dp_20"
             android:src="@drawable/main_ic_owl"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <com.youth.banner.Banner
-            android:id="@+id/banner"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="-30dp"
-            android:layout_marginBottom="-7dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_owl" />
 
         <ImageView
             android:layout_width="15.57dp"
