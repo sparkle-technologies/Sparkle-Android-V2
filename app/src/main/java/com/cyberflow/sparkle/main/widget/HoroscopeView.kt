@@ -103,27 +103,26 @@ class HoroscopeView : RecyclerView.ViewHolder {
 
     // 外部切换   左右滑  切换周期的时候
     fun slideUpdate(currentPos: Int, realPos: Int) {
-        Log.e(TAG, "notifyUpdate: currentPos=$currentPos  realPos=$realPos   $params")
-        if(currentPos == params?.initTabIdx ){
-            dailyTransform(params, currentPos, realPos)
-        }
+        Log.e(TAG, "slideUpdate: currentPos=$currentPos  realPos=$realPos   $params")
+        dailyTransform(params, currentPos, realPos)
     }
 
     private var params: HoroscopeReq? = null
 
     // 第一次初始化的时候  调用这个      选择模式  当前tab下标  日期
     fun injectData(reqData: HoroscopeReq) {
-//        Log.e(TAG, "injectData: $reqData" )
+        Log.e(TAG, "injectData: $reqData" )
         params = reqData
-        reqData.param?.let {
-            requestData(it.year, it.month, it.day)
+        if(reqData.initTabIdx == 0){
+            slideUpdate(0, 0)
         }
-        mDatabind?.tvHoroscopeTitle?.text = "${params?.param?.year}-${params?.param?.month}-${params?.param?.day}"
     }
+
+
 
     // 计算相差的天数  得到一个新的 yyyy-MM-dd
     private fun dailyTransform(origin: HoroscopeReq?, currentPos: Int, realPos: Int){
-        if(currentPos != realPos){
+        if(currentPos == params?.initTabIdx){
             origin?.param?.let {
                 val dayDiff = realPos - currentPos     // 例如 realPos=5  currentPos=2   相差3天     如果 realPos=-3  currentPos=0  相差-3 天
                 val calendar = Calendar.getInstance()
@@ -186,14 +185,11 @@ class HoroscopeView : RecyclerView.ViewHolder {
     }
 
     private fun showData() {
-//        Log.e("TAG", "showData horoScopeData ")
         mDatabind?.state?.showContent()
         showData(horoScopeData)
     }
 
     private fun initData() {
-
-
         mDatabind?.state?.onError {
             findViewById<ShadowTxtButton>(R.id.btn).setClickListener(object :
                 ShadowTxtButton.ShadowClickListener {

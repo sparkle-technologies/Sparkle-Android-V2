@@ -77,8 +77,6 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                     Log.e(TAG, "onPageSelected: realPos=${horoAdpter.getRealPosition(position)}", )
 
                     horoAdpter.slideUpdate(position, realPos)
-
-
                 }
 
                 override fun onPageScrollStateChanged(state: Int) {

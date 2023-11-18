@@ -14,7 +14,6 @@ class HoroscopeAdapter(imageUrls: List<HoroscopeReq>) : BannerAdapter<HoroscopeR
 
     private val views = arrayListOf<HoroscopeView>()
 
-
     override fun onCreateHolder(parent: ViewGroup?, viewType: Int): HoroscopeView {
         Log.e(TAG, "onCreateHolder: viewType=$viewType" )
         val view = HoroscopeView(LayoutInflater.from(parent!!.context).inflate(R.layout.item_horoscope_banner, parent, false))
@@ -34,6 +33,8 @@ class HoroscopeAdapter(imageUrls: List<HoroscopeReq>) : BannerAdapter<HoroscopeR
             it.slideUpdate(position, realPos)
         }
     }
+
+
 }
 
 data class HoroscopeReq(val selectMode: Int, val initTabIdx: Int, var param: DateBean? = null)
