@@ -17,37 +17,113 @@ import com.flyco.tablayout.listener.OnTabSelectListener
 import com.youth.banner.Banner
 import com.youth.banner.listener.OnPageChangeListener
 import com.youth.banner.transformer.AlphaPageTransformer
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscopeBinding>() {
 
     private val TAG = "MainHoroscopeFragment"
 
+    private fun topBar(position: Int){
+        selectMode = position
+        startDate = today()
+        setAdapter()
+    }
+
+    private fun calendar(select: DateBean?){
+        select?.let {
+            startDate = it
+            setAdapter()
+        }
+    }
+
+    private var startDate : DateBean? = null
+
+    private fun today(): DateBean{
+        val c = Calendar.getInstance()
+        return DateBean(year = c[Calendar.YEAR], month = c[Calendar.MONTH] + 1, day = c[Calendar.DAY_OF_MONTH])
+    }
+
+    var horoAdpter:HoroscopeAdapter? = null
+    var realPos = 0
+    var previousPos = 0
+
+    private fun setAdapter(){
+        realPos = 0
+        previousPos = 0
+
+        startDate?.let {
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.YEAR, it.year)
+            calendar.set(Calendar.MONTH, it.month - 1)
+            calendar.set(Calendar.DAY_OF_MONTH, it.day)
+
+            showSelectDateTitle(calendar, selectMode)
+
+            var d1 = DateBean(year = it.year, month = it.month, day = it.day)
+            var d2 = DateBean(year = it.year, month = it.month, day = it.day)
+            var d3 = DateBean(year = it.year, month = it.month, day = it.day)
+
+            when(selectMode){
+                DAILY -> {
+                    calendar.add(Calendar.DAY_OF_MONTH, 1)
+                    updateDate(d2, calendar)
+                    calendar.add(Calendar.DAY_OF_MONTH, 1)
+                    updateDate(d3, calendar)
+                }
+                WEEKLY -> {
+                    calendar.add(Calendar.WEEK_OF_MONTH, 1)
+                    updateDate(d2, calendar)
+                    calendar.add(Calendar.WEEK_OF_MONTH, 1)
+                    updateDate(d3, calendar)
+                }
+                MONTH -> {
+                    calendar.add(Calendar.MONTH, 1)
+                    updateDate(d2, calendar)
+                    calendar.add(Calendar.MONTH, 1)
+                    updateDate(d3, calendar)
+                }
+                YEAR -> {
+                    calendar.add(Calendar.YEAR, 1)
+                    updateDate(d2, calendar)
+                    calendar.add(Calendar.YEAR, 1)
+                    updateDate(d3, calendar)
+                }
+            }
+
+            horoAdpter = HoroscopeAdapter(arrayListOf(HoroscopeReq(selectMode, 0, d1), HoroscopeReq(selectMode, 1, d2), HoroscopeReq(selectMode, 2, d3)))
+            var banner2 = (mDatabind.banner as Banner<HoroscopeReq, HoroscopeAdapter>)
+            banner2.setAdapter(horoAdpter)
+        }
+    }
+
+    private fun updateDate(dd: DateBean, calendar: Calendar){
+        val realYear = calendar.get(Calendar.YEAR)
+        val realMonth = calendar.get(Calendar.MONTH) + 1
+        val realDay = calendar.get(Calendar.DAY_OF_MONTH)
+        dd.year = realYear
+        dd.month = realMonth
+        dd.day = realDay
+    }
+
     override fun initData() {
         mDatabind.tabLayout.setTabData(arrayOf("Daily", "Weekly", "Monthly", "Yearly"))
         mDatabind.tabLayout.setOnTabSelectListener(object : OnTabSelectListener{
             override fun onTabSelect(position: Int) {
-                Log.e(TAG, "onTabSelect: position=$position", )
-                selectMode = position
+                Log.e(TAG, "onTabSelect: position=$position")
+                topBar(position)
             }
 
             override fun onTabReselect(position: Int) {
-                Log.e(TAG, "onTabReselect: position=$position", )
+                Log.e(TAG, "onTabReselect: position=$position")
             }
         })
-
-        val d1 = DateBean(year = 2023, month = 11, day = 17)
-        val d2 = DateBean(year = 2023, month = 11, day = 18)
-        val d3 = DateBean(year = 2023, month = 11, day = 19)
-
-        val horoAdpter = HoroscopeAdapter(arrayListOf(HoroscopeReq(DAILY, 0, d1), HoroscopeReq(DAILY, 1, d2), HoroscopeReq(DAILY, 2, d3)))
-        var realPos = 0
-        var previousPos = 0
 
         var banner2 = (mDatabind.banner as Banner<HoroscopeReq, HoroscopeAdapter>)
         banner2.apply {
             addBannerLifecycleObserver(requireActivity())
             viewPager2.offscreenPageLimit = 1
-            setAdapter(horoAdpter)
+//            setAdapter(horoAdpter)
             removeIndicator()
             isAutoLoop(false)
             setBannerGalleryEffect(10, 10, 1f)
@@ -74,9 +150,29 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                     }
                     previousPos = position
 
-                    Log.e(TAG, "onPageSelected: realPos=${horoAdpter.getRealPosition(position)}", )
+                    startDate?.let {
+                        val calendar = Calendar.getInstance()
+                        calendar.set(Calendar.YEAR, it.year)
+                        calendar.set(Calendar.MONTH, it.month - 1)
+                        calendar.set(Calendar.DAY_OF_MONTH, it.day)
+                        when(selectMode){
+                            DAILY -> {
+                                calendar.add(Calendar.DAY_OF_MONTH, realPos)
+                            }
+                            WEEKLY -> {
+                                calendar.add(Calendar.WEEK_OF_MONTH, realPos)
+                            }
+                            MONTH -> {
+                                calendar.add(Calendar.MONTH, realPos)
+                            }
+                            YEAR -> {
+                                calendar.add(Calendar.YEAR, realPos)
+                            }
+                        }
+                        showSelectDateTitle(calendar, selectMode)
+                    }
 
-                    horoAdpter.slideUpdate(position, realPos)
+                    horoAdpter?.slideUpdate(position, realPos)
                 }
 
                 override fun onPageScrollStateChanged(state: Int) {
@@ -84,6 +180,8 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 }
             })
         }
+
+        topBar(DAILY)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -104,6 +202,43 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
 
         mDatabind.layCalendar.setOnClickListener {
             showCalendarDialog()
+        }
+    }
+
+    // take a look: https://www.digitalocean.com/community/tutorials/java-simpledateformat-java-date-format
+    private fun showSelectDateTitle(calendar: Calendar, selectMode : Int){
+        var pattern = "MM-dd-yyyy"
+        when(selectMode){
+            DAILY -> {
+                // Dec 13, 2023
+                pattern = "MMM dd, yyyy"
+            }
+            WEEKLY -> {
+                // Dec 13-Dec 23
+                pattern = "MMM dd"
+                val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1
+                calendar.add(Calendar.DAY_OF_MONTH, -dayOfWeek)
+            }
+            MONTH -> {
+                // Dec 2023
+                pattern = "MMM yyyy"
+            }
+            YEAR -> {
+                // 2023
+                pattern ="yyyy"
+            }
+        }
+        val simpleDateFormat = SimpleDateFormat(pattern)
+        val dateStr = simpleDateFormat.format(calendar.time)
+        Log.e(TAG, "showSelectDateTitle: $dateStr" )
+        if(selectMode == WEEKLY){
+            calendar.add(Calendar.DAY_OF_MONTH, 6)
+            val weekStr = simpleDateFormat.format(calendar.time)
+            mDatabind.tvCalendar.text = "$dateStr-$weekStr"
+            mDatabind.tvCalendarShadow.text = "$dateStr-$weekStr"
+        }else{
+            mDatabind.tvCalendar.text = dateStr
+            mDatabind.tvCalendarShadow.text = dateStr
         }
     }
 
@@ -132,6 +267,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             override fun onSelected(select: DateBean?) {
                 Log.e(TAG, "onSelected: $select" )
                 ToastUtil.show(requireContext(), "${select?.year}")
+                calendar(select)
 //                yearDialog?.onDestroy()
             }
         })
@@ -145,7 +281,8 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             override fun onSelected(select: DateBean?) {
                 Log.e(TAG, "onSelected: $select" )
                 ToastUtil.show(requireContext(), "${select?.month}")
-//                monthDialog?.onDestroy()
+                calendar(select)
+            //                monthDialog?.onDestroy()
             }
         })
         monthDialog?.show()
@@ -157,7 +294,8 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             override fun onSelected(select: DateBean??) {
                 Log.e(TAG, "onSelected: $select" )
                 ToastUtil.show(requireContext(), "${select?.year}-${select?.month}-${select?.day}")
-//                calendarDialog?.onDestroy()
+                calendar(select)
+            //                calendarDialog?.onDestroy()
             }
         })
         calendarDialog?.show()

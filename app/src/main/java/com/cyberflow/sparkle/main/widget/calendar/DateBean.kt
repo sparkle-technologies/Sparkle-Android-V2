@@ -3,9 +3,9 @@ package com.cyberflow.sparkle.main.widget.calendar
 import androidx.databinding.BaseObservable
 
 data class DateBean(
-    val year: Int,
-    val month: Int,
-    val day: Int = 0,
+    var year: Int,
+    var month: Int,
+    var day: Int = 0,
     var isThisMonth: Boolean = true,
 ): BaseObservable(){
     var checked = false

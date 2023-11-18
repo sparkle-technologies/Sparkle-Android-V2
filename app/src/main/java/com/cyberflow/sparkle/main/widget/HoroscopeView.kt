@@ -111,26 +111,38 @@ class HoroscopeView : RecyclerView.ViewHolder {
 
     // 第一次初始化的时候  调用这个      选择模式  当前tab下标  日期
     fun injectData(reqData: HoroscopeReq) {
-        Log.e(TAG, "injectData: $reqData" )
+//        Log.e(TAG, "injectData: $reqData" )
         params = reqData
         if(reqData.initTabIdx == 0){
             slideUpdate(0, 0)
         }
     }
 
-
-
     // 计算相差的天数  得到一个新的 yyyy-MM-dd
     private fun dailyTransform(origin: HoroscopeReq?, currentPos: Int, realPos: Int){
         if(currentPos == params?.initTabIdx){
             origin?.param?.let {
-                val dayDiff = realPos - currentPos     // 例如 realPos=5  currentPos=2   相差3天     如果 realPos=-3  currentPos=0  相差-3 天
+                val diff = realPos - currentPos     // 例如 realPos=5  currentPos=2   相差3天     如果 realPos=-3  currentPos=0  相差-3 天
+
                 val calendar = Calendar.getInstance()
                 calendar.set(Calendar.YEAR, it.year)
                 calendar.set(Calendar.MONTH, it.month - 1)
                 calendar.set(Calendar.DAY_OF_MONTH, it.day)
 
-                calendar.add(Calendar.DAY_OF_MONTH, dayDiff)
+                when(params?.selectMode){
+                    DAILY -> {
+                        calendar.add(Calendar.DAY_OF_MONTH, diff)
+                    }
+                    WEEKLY -> {
+                        calendar.add(Calendar.WEEK_OF_MONTH, diff)
+                    }
+                    MONTH -> {
+                        calendar.add(Calendar.MONTH, diff)
+                    }
+                    YEAR -> {
+                        calendar.add(Calendar.YEAR, diff)
+                    }
+                }
 
                 val realYear = calendar.get(Calendar.YEAR)
                 val realMonth = calendar.get(Calendar.MONTH) + 1
@@ -148,13 +160,23 @@ class HoroscopeView : RecyclerView.ViewHolder {
         }
     }
 
+
+    private var requestYear = 0
+    private var requestMonth = 0
+    private var requestDay = 0
+
     fun requestData(year: Int, month: Int, day: Int) {
+        this.requestYear = year
+        this.requestMonth = month
+        this.requestDay = day
+
+        Log.e(TAG, "requestData: requestYear=$requestYear \t requestMonth=$requestMonth \t requestDay=$requestDay " )
+
         mDatabind?.state?.apply {
             showLoading()
             scope {
                 when (params?.selectMode) {
                     DAILY -> {
-                        Log.e(TAG, "requestData: $params   \t data=${params?.param?.year}-${params?.param?.month}-${params?.param?.day}" )
                         horoScopeData = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {
                             param("date", "${year}-${month}-${day}")  //YYYY-MM-DD
                         }.await()
@@ -194,7 +216,7 @@ class HoroscopeView : RecyclerView.ViewHolder {
             findViewById<ShadowTxtButton>(R.id.btn).setClickListener(object :
                 ShadowTxtButton.ShadowClickListener {
                 override fun clicked(disable: Boolean) {
-//                    requestData()
+                    requestData(requestYear, requestMonth, requestDay)
                 }
             })
         }
