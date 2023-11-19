@@ -7,6 +7,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.net.GsonConverter
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
@@ -183,7 +184,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         FlutterEngineCache.getInstance().put(ENGINE_ID_EDIT_PROFILE, flutterEngine_edit_profile)
         FlutterEngineCache.getInstance().put(ENGINE_ID_ACCOUNT_PRIVACY, flutterEngine_account_privacy)
 
-        methodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "profileEditChannel")
+        methodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "flutter_bridge")
         methodChannel?.setMethodCallHandler { call, result ->
             // handle flutter caller
             Log.e(TAG, "handle flutter event   method: ${call.method}" )
@@ -195,33 +196,45 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
                 result.success("success")
             }
 
-            if(call.method == "popPage"){
+            if(call.method == "flutterDestroy"){
 //                FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).destroyEngineWithActivity(false)
+                SettingsActivity.go(MyApp.instance) // singleTask
                 result.success("success")
             }
 
-            if(call.method == "getParam"){
+            if(call.method == "flutterInitalized"){
                 result.success("success")
+                callFlutter()
             }
         }
     }
 
-    var methodChannel: MethodChannel? = null
+    private var methodChannel: MethodChannel? = null
 
     private fun callFlutter() {
-        methodChannel?.invokeMethod("increment", "aaa", object : MethodChannel.Result {
-            override fun success(result: Any?) {
-                Log.e(TAG, "callFlutter success: ")
-            }
+        CacheUtil.getUserInfo()?.apply {
+            val openUid = user?.open_uid.orEmpty()
+            val token = token
+            var map = mutableMapOf<String, String>()
+            map["local"] = "en"
+            map["token"] = token
+            map["openuid"] = openUid
+            val params = GsonConverter.gson.toJson(map)
+            Log.e(TAG, "callFlutter:  params: $params" )
+            methodChannel?.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
+                override fun success(result: Any?) {
+                    Log.e(TAG, "callFlutter success: ")
+                }
 
-            override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                Log.e(TAG, "callFlutter errorCode: ")
-            }
+                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                    Log.e(TAG, "callFlutter errorCode: ")
+                }
 
-            override fun notImplemented() {
-                Log.e(TAG, "callFlutter notImplemented: ")
-            }
-        })
+                override fun notImplemented() {
+                    Log.e(TAG, "callFlutter notImplemented: ")
+                }
+            })
+        }
     }
 
     private fun goEditProfile() {

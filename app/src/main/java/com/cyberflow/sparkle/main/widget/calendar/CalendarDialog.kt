@@ -3,6 +3,7 @@ package com.cyberflow.sparkle.main.widget.calendar
 import android.app.Dialog
 import android.content.Context
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.Window
@@ -20,12 +21,13 @@ class CalendarDialog {
 
     private var mDialog: Dialog? = null
     private var isWeek = false
+    private var birthDate: DateBean? = null
 
     interface Callback {
         fun onSelected(select: DateBean?)
     }
 
-    constructor(context: Context, week: Boolean,  callback: Callback) {
+    constructor(context: Context, week: Boolean, birth: DateBean?, callback: Callback) {
         if (context == null || callback == null) {
             return
         }
@@ -33,6 +35,7 @@ class CalendarDialog {
         mContext = context
         mCallback = callback
         isWeek = week
+        birthDate = birth
 
         initView()
         initData()
@@ -73,7 +76,7 @@ class CalendarDialog {
         btnPrevious?.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 viewPager2?.apply {
-                    if (currentItem != 0) {
+                    if (currentItem > 0) {
                         setCurrentItem(currentItem - 1, false)
                     }
                 }
@@ -83,7 +86,7 @@ class CalendarDialog {
         btnNext?.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 viewPager2?.apply {
-                    if (currentItem != 11) {
+                    if (currentItem < calendarAdapter?.itemCount!! - 1){
                         setCurrentItem(currentItem + 1, false)
                     }
                 }
@@ -98,23 +101,54 @@ class CalendarDialog {
     private var btnPrevious: ShadowImgButton? = null
     private var btnNext: ShadowImgButton? = null
 
-    private var monthCount = 240
+
     private fun initData() {
         val data: MutableList<Calendar> = ArrayList()
-        for (i in monthCount downTo 0) {
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH) + 1
+
+        Log.e("TAG", "initData: $birthDate    currentYear=$currentYear  currentMonth=$currentMonth", )
+
+        birthDate?.let {  // 从出生日期到去年
+            val count =  currentYear*12 + currentMonth - (it.year * 12 + it.month)
+            Log.e("TAG", "--1---count--: $count", )
+            for(i in count downTo 1){
+                Log.e("TAG", "-----1-----: i=$i", )
+                val calendar = Calendar.getInstance()
+                calendar.add(Calendar.MONTH, -i)
+                data.add(calendar)
+            }
+        }
+
+        val currentIdx = data.size - 1
+
+        Log.e("TAG", "after count1    data.size=${data.size}" )
+
+        // 从今年 到  2100 年
+        val count = 2100 * 12 - (currentYear * 12 + currentMonth)
+        Log.e("TAG", "---2---:  count=$count" )
+
+        for (i in 0 until count) {
+//            Log.e("TAG", "-----2-----: i=$i", )
+
             val calendar = Calendar.getInstance()
-            calendar.add(Calendar.MONTH, -i)
+            calendar.add(Calendar.MONTH, i)
             data.add(calendar)
         }
+
+        Log.e("TAG", "initData: data.size=${data.size}" )
         calendarAdapter?.refreshData(data)
 //        val txt =  "${data[data.size - 1][Calendar.YEAR]}-${(data[data.size - 1][Calendar.MONTH] + 1)}"
-        data[data.size - 1].apply {
+
+        data[currentIdx + 1].apply {
             tvMonth?.text = getMonthEngStr(get(Calendar.MONTH) + 1)
             tvYear?.text = get(Calendar.YEAR).toString()
         }
+
         viewPager2?.apply {
-            offscreenPageLimit = 5
-            setCurrentItem(monthCount, false)
+            offscreenPageLimit = 3
+            setCurrentItem(currentIdx + 1, false)
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 
                 override fun onPageSelected(position: Int) {

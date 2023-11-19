@@ -44,6 +44,5 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarView> {
             calendar.add(data.get(i));
         }
         notifyDataSetChanged();
-
     }
 }

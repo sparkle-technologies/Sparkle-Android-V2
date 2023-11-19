@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.cyberflow.base.fragment.BaseDBFragment
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.databinding.FragmentMainHoroscopeBinding
@@ -180,7 +181,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 }
             })
         }
-
+        initBirthDate()
         topBar(DAILY)
     }
 
@@ -277,7 +278,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
     private var monthDialog : SelectMonthDialog? = null
 
     private fun showMonth(){
-        monthDialog = SelectMonthDialog(requireActivity() ,  object : SelectMonthDialog.Callback {
+        monthDialog = SelectMonthDialog(requireActivity(), object : SelectMonthDialog.Callback {
             override fun onSelected(select: DateBean?) {
                 Log.e(TAG, "onSelected: $select" )
                 ToastUtil.show(requireContext(), "${select?.month}")
@@ -290,7 +291,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
 
     private var calendarDialog : CalendarDialog? = null
     private fun showDailyOrWeekly(isWeek: Boolean){
-        calendarDialog = CalendarDialog(requireActivity(), isWeek ,  object : CalendarDialog.Callback {
+        calendarDialog = CalendarDialog(requireActivity(), isWeek, birthDate,  object : CalendarDialog.Callback {
             override fun onSelected(select: DateBean??) {
                 Log.e(TAG, "onSelected: $select" )
                 ToastUtil.show(requireContext(), "${select?.year}-${select?.month}-${select?.day}")
@@ -299,5 +300,20 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             }
         })
         calendarDialog?.show()
+    }
+
+    private var birthDate : DateBean? = null
+
+    private fun initBirthDate(){
+        CacheUtil.getUserInfo()?.user?.apply {
+            try{
+                Log.e(TAG, "initBirthDate: birthdate=$birthdate" )
+                val format = "yyyy-MM-dd"
+                val date = SimpleDateFormat(format).parse(birthdate)
+                val calendar = Calendar.getInstance()
+                calendar.time = date
+                birthDate = DateBean(year = calendar[Calendar.YEAR], month = calendar[Calendar.MONTH] + 1, day = calendar[Calendar.DAY_OF_MONTH])
+            }catch (e: Exception){}
+        }
     }
 }
