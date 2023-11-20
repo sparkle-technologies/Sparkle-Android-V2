@@ -25,19 +25,20 @@ class SelectMonthDialog {
 
     private var mContext: Context? = null
     private var mCallback: Callback? = null
-
+    private var birthDate: DateBean? = null
     private var mDialog: Dialog? = null
 
     interface Callback {
         fun onSelected(select: DateBean?)
     }
 
-    constructor(context: Context, callback: Callback) {
+    constructor(context: Context,birth: DateBean?, callback: Callback) {
         if (context == null || callback == null) {
             return
         }
 
         mContext = context
+        birthDate = birth
         mCallback = callback
 
         initView()
@@ -94,16 +95,21 @@ class SelectMonthDialog {
             onBind {
                 val model = getModel<DateBean>()
                 getBinding<ItemHoroscopeSelectMonthBinding>().apply {
-
 //                    Log.e("TAG", "onBind:  layoutPosition=$layoutPosition  model=${model.toString()}  currentYear=$currentYear  currentMonth=$currentMonth" )
-
                     if (model.year == currentYear && model.month == currentMonth) {
                         ivSelected.setImageResource(com.cyberflow.base.resources.R.drawable.main_bg_horoscope_month_selected_yellow)
                     }else{
                         ivSelected.setImageDrawable(null)
                     }
 
-                    if( (model.year > currentYear) || (model.year == currentYear && model.month > currentMonth)){
+                    var min = 1900 * 12 + 1
+                    birthDate?.let {
+                        min = it.year * 12 +  it.month
+                    }
+                    val count = model.year * 12 + model.month
+                    val max = 2100 * 12 + 1
+
+                    if( count < min ||  count > max){
                         tvData.setTextColor(ResourcesCompat.getColor(context.resources, com.cyberflow.base.resources.R.color.color_7D7D80, null))
                     }else{
                         tvData.setTextColor(Color.BLACK)
@@ -114,8 +120,19 @@ class SelectMonthDialog {
             }
             R.id.item.onClick {
                 Log.e("TAG", "onClick:  position=$layoutPosition  checked=true" )
-                setChecked(layoutPosition, true)
-                mCallback?.onSelected(getModel<DateBean>(layoutPosition))
+                val model = getModel<DateBean>(layoutPosition)
+                var min = 1900 * 12 + 1
+                birthDate?.let {
+                    min = it.year * 12 +  it.month
+                }
+                val count = model.year * 12 + model.month
+                val max = 2100 * 12 + 1
+                if(count in min..max){
+                    setChecked(layoutPosition, true)
+                    itemView.postDelayed({
+                        mCallback?.onSelected(getModel<DateBean>(layoutPosition))
+                    }, 200)
+                }
             }
         }
     }
@@ -139,8 +156,14 @@ class SelectMonthDialog {
 
     private fun action(next: Boolean) {
         if (next) {
+            if(selectYear >= 2100){
+                return
+            }
             selectYear++
         } else {
+            if(selectYear <= (birthDate?.year ?: 1900)){
+                return
+            }
             selectYear--
         }
         tvYear?.text = "$selectYear"

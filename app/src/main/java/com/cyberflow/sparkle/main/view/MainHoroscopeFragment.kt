@@ -108,11 +108,18 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
     }
 
     override fun initData() {
-        mDatabind.tabLayout.setTabData(arrayOf("Daily", "Weekly", "Monthly", "Yearly"))
+//        mDatabind.tabLayout.setTabData(arrayOf("Daily", "Weekly", "Monthly", "Yearly"))
+        mDatabind.tabLayout.setTabData(arrayOf("Daily", "Monthly", "Yearly"))
         mDatabind.tabLayout.setOnTabSelectListener(object : OnTabSelectListener{
             override fun onTabSelect(position: Int) {
                 Log.e(TAG, "onTabSelect: position=$position")
-                topBar(position)
+
+                when(position){
+                    0 -> topBar(DAILY)
+//                    1 -> topBar(WEEKLY)
+                    1 -> topBar(MONTH)
+                    2 -> topBar(YEAR)
+                }
             }
 
             override fun onTabReselect(position: Int) {
@@ -254,22 +261,22 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
 
     private fun showCalendarDialog() {
         when(mDatabind.tabLayout.currentTab){
-            DAILY -> { showDailyOrWeekly(false) }
-            WEEKLY -> { showDailyOrWeekly(true)  }
-            MONTH -> { showMonth() }
-            YEAR -> { showYear() }
+            0 -> { showDailyOrWeekly(false) }
+//            1 -> { showDailyOrWeekly(true)  }
+            1 -> { showMonth() }
+            2 -> { showYear() }
         }
     }
 
     private var yearDialog : SelectYearDialog? = null
     private fun showYear(){
         Log.e("TAG", "showYear: " )
-        yearDialog = SelectYearDialog(requireActivity() ,  object : SelectYearDialog.Callback {
+        yearDialog = SelectYearDialog(requireActivity() , birthDate, object : SelectYearDialog.Callback {
             override fun onSelected(select: DateBean?) {
                 Log.e(TAG, "onSelected: $select" )
                 ToastUtil.show(requireContext(), "${select?.year}")
                 calendar(select)
-//                yearDialog?.onDestroy()
+                yearDialog?.onDestroy()
             }
         })
         yearDialog?.show()
@@ -278,12 +285,12 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
     private var monthDialog : SelectMonthDialog? = null
 
     private fun showMonth(){
-        monthDialog = SelectMonthDialog(requireActivity(), object : SelectMonthDialog.Callback {
+        monthDialog = SelectMonthDialog(requireActivity(), birthDate, object : SelectMonthDialog.Callback {
             override fun onSelected(select: DateBean?) {
                 Log.e(TAG, "onSelected: $select" )
                 ToastUtil.show(requireContext(), "${select?.month}")
                 calendar(select)
-            //                monthDialog?.onDestroy()
+                monthDialog?.onDestroy()
             }
         })
         monthDialog?.show()
@@ -296,7 +303,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 Log.e(TAG, "onSelected: $select" )
                 ToastUtil.show(requireContext(), "${select?.year}-${select?.month}-${select?.day}")
                 calendar(select)
-            //                calendarDialog?.onDestroy()
+                calendarDialog?.onDestroy()
             }
         })
         calendarDialog?.show()
@@ -312,7 +319,8 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 val date = SimpleDateFormat(format).parse(birthdate)
                 val calendar = Calendar.getInstance()
                 calendar.time = date
-                birthDate = DateBean(year = calendar[Calendar.YEAR], month = calendar[Calendar.MONTH] + 1, day = calendar[Calendar.DAY_OF_MONTH])
+//                birthDate = DateBean(year = calendar[Calendar.YEAR], month = calendar[Calendar.MONTH] + 1, day = calendar[Calendar.DAY_OF_MONTH])
+                birthDate = DateBean(year = 2000, month = 7, day = 26)
             }catch (e: Exception){}
         }
     }

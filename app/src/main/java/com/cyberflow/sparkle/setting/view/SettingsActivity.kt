@@ -198,7 +198,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
             if(call.method == "flutterDestroy"){
 //                FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).destroyEngineWithActivity(false)
-                SettingsActivity.go(MyApp.instance) // singleTask
+                SettingsActivity.go(this) // singleTask
                 result.success("success")
             }
 
@@ -216,7 +216,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
             val openUid = user?.open_uid.orEmpty()
             val token = token
             var map = mutableMapOf<String, String>()
-            map["local"] = "en"
+            map["local"] = "zh"
             map["token"] = token
             map["openuid"] = openUid
             val params = GsonConverter.gson.toJson(map)

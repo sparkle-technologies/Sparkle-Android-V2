@@ -75,6 +75,7 @@ public class CalendarDateAdapter extends BaseAdapter {
             viewHolder.tvTop.setVisibility(View.VISIBLE);
             viewHolder.ivSelected.setImageResource(com.cyberflow.base.resources.R.drawable.main_bg_calendar_selected_yellow);
             viewHolder.tvData.setBackgroundResource(com.cyberflow.base.resources.R.drawable.main_bg_calendar_clicked);
+            viewHolder.tvData.setTextColor(Color.BLACK);
         }
         return view;
     }

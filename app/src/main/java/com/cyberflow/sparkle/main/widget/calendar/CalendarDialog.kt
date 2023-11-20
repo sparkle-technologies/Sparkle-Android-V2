@@ -67,7 +67,7 @@ class CalendarDialog {
             tvMonth = findViewById(R.id.tv_month)
             tvYear = findViewById(R.id.tv_year)
             viewPager2 = findViewById(R.id.vpContainer)
-            calendarAdapter = CalendarAdapter(mCallback, isWeek)
+            calendarAdapter = CalendarAdapter(mCallback, isWeek, birthDate)
             viewPager2?.adapter = calendarAdapter
             btnPrevious = findViewById(R.id.btn_previous)
             btnNext = findViewById(R.id.btn_next)
@@ -112,26 +112,22 @@ class CalendarDialog {
 
         birthDate?.let {  // 从出生日期到去年
             val count =  currentYear*12 + currentMonth - (it.year * 12 + it.month)
-            Log.e("TAG", "--1---count--: $count", )
+//            Log.e("TAG", "--1---count--: $count", )
             for(i in count downTo 1){
-                Log.e("TAG", "-----1-----: i=$i", )
+//                Log.e("TAG", "-----1-----: i=$i", )
                 val calendar = Calendar.getInstance()
                 calendar.add(Calendar.MONTH, -i)
                 data.add(calendar)
             }
         }
-
         val currentIdx = data.size - 1
-
-        Log.e("TAG", "after count1    data.size=${data.size}" )
-
+//        Log.e("TAG", "after count1    data.size=${data.size}" )
         // 从今年 到  2100 年
         val count = 2100 * 12 - (currentYear * 12 + currentMonth)
-        Log.e("TAG", "---2---:  count=$count" )
+//        Log.e("TAG", "---2---:  count=$count" )
 
         for (i in 0 until count) {
 //            Log.e("TAG", "-----2-----: i=$i", )
-
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.MONTH, i)
             data.add(calendar)

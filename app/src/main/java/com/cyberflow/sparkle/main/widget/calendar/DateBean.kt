@@ -4,8 +4,8 @@ import androidx.databinding.BaseObservable
 
 data class DateBean(
     var year: Int,
-    var month: Int,
-    var day: Int = 0,
+    var month: Int = 1,
+    var day: Int = 1,
     var isThisMonth: Boolean = true,
 ): BaseObservable(){
     var checked = false

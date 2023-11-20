@@ -32,10 +32,13 @@ public class CalendarView extends RecyclerView.ViewHolder {
     private CalendarDialog.Callback callback;
     private boolean weekMode = false;
 
-    public CalendarView(@NonNull View itemView, CalendarDialog.Callback callback, boolean _weekMode) {
+    private DateBean birthDate;
+
+    public CalendarView(@NonNull View itemView, CalendarDialog.Callback callback, boolean _weekMode, DateBean _birth) {
         super(itemView);
         this.callback = callback;
         this.weekMode = _weekMode;
+        this.birthDate = _birth;
         gridView = itemView.findViewById(R.id.wgvCalendar);
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         context = itemView.getContext();
@@ -47,8 +50,11 @@ public class CalendarView extends RecyclerView.ViewHolder {
         gridView.setOnItemClickListener((adapterView, view, position, l) -> {
             DateBean selected = (DateBean) calendarDateAdapter.getItem(position);
 
-            if(callback!=null){
-                callback.onSelected(selected);
+            int min = birthDate.getYear() * 365 + birthDate.getMonth()*30 + birthDate.getDay();
+            int max = 2100 * 365 + 1*30 + 1;
+            int count = selected.getYear()* 365 + selected.getMonth()*30 + selected.getDay();
+            if(count < min || count > max){
+                return;
             }
 
             for (int i = 0; i < adapterView.getCount(); i++) {
@@ -85,6 +91,15 @@ public class CalendarView extends RecyclerView.ViewHolder {
                         vh.tvData.setBackground(null);
                     }
                 }
+            }
+
+            if(callback!=null){
+                gridView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSelected(selected);
+                    }
+                }, 200);
             }
         });
     }

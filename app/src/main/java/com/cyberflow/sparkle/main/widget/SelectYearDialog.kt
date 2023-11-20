@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Gravity
 import android.view.Window
 import android.view.WindowManager
@@ -23,19 +24,20 @@ class SelectYearDialog {
 
     private var mContext: Context? = null
     private var mCallback: Callback? = null
-
+    private var birthDate: DateBean? = null
     private var mDialog: Dialog? = null
 
     interface Callback {
         fun onSelected(select: DateBean?)
     }
 
-    constructor(context: Context, callback: Callback) {
+    constructor(context: Context, birth: DateBean?, callback: Callback) {
         if (context == null || callback == null) {
             return
         }
 
         mContext = context
+        birthDate = birth
         mCallback = callback
 
         initView()
@@ -97,7 +99,7 @@ class SelectYearDialog {
                     } else {
                         ivSelected.setImageDrawable(null)
                     }
-                    if(model.year > currentYear){
+                    if(model.year < (birthDate?.year ?: 1900) || model.year > 2100){
                         tvData.setTextColor(ResourcesCompat.getColor(context.resources, com.cyberflow.base.resources.R.color.color_7D7D80, null))
                     }else{
                         tvData.setTextColor(Color.BLACK)
@@ -106,8 +108,13 @@ class SelectYearDialog {
                 }
             }
             R.id.item.onClick {
-                setChecked(layoutPosition, true)
-                mCallback?.onSelected(getModel<DateBean>(layoutPosition))
+                val model = getModel<DateBean>(layoutPosition)
+                if(model.year >= (birthDate?.year ?: 1900) && model.year <= 2100){
+                    setChecked(layoutPosition, true)
+                    itemView.postDelayed({
+                        mCallback?.onSelected(getModel<DateBean>(layoutPosition))
+                    }, 200)
+                }
             }
         }
     }
@@ -123,16 +130,24 @@ class SelectYearDialog {
     private fun initData() {
         val calendar = Calendar.getInstance()
         currentYear = calendar[Calendar.YEAR]
-        selectYear = 2030 - COUNT
+        selectYear = (currentYear + 7) - COUNT
         action(true)
     }
 
     private val COUNT = 12
 
     private fun action(next: Boolean) {
+
+        Log.e("TAG", "action: selectYear=$selectYear   birthDate=$birthDate" )  // 2018
         if (next) {
+            if(selectYear > 2100 ){
+                return
+            }
             selectYear += COUNT
         } else {
+            if(selectYear - COUNT < (birthDate?.year ?: 1900)){
+                return
+            }
             selectYear -= COUNT
         }
         tvYear?.text = "${selectYear - COUNT + 1} - $selectYear"
@@ -147,11 +162,12 @@ class SelectYearDialog {
     }
 
     private fun getYearData(year: Int): List<DateBean> {
-//        Log.e("TAG", "getYearData:  year=$year", )
+//        Log.e("TAG", "getYearData:  year=$year", )  // 2030
         val data = arrayListOf<DateBean>()
         repeat(COUNT){
 //            Log.e("TAG", "getYearData:  ${year - COUNT + it + 1}   it=$it", )
-            data.add(DateBean(year - COUNT + it + 1, 0))
+            // 2019  it=0    ...    2020   it=1
+            data.add(DateBean(year - COUNT + it + 1, 1))
         }
         return data
     }
