@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="@+id/btn_add_friends"
             app:layout_constraintBottom_toBottomOf="@+id/btn_add_friends"
             android:gravity="center|left"
-            android:text="Chats"
+            android:text="@string/friends"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_16"
             android:textStyle="bold" />

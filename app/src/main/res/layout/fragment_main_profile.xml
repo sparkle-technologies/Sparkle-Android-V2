@@ -35,7 +35,7 @@
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/height_top_bar"
             android:fontFamily="@font/poppins_bold"
-            android:text="Profile"
+            android:text="@string/profile"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_18"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -59,13 +59,53 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_6"
             android:fontFamily="@font/poppins_regular"
-            android:text="Comming soon..."
+            android:text="@string/comming_soon"
             android:textColor="@color/color_2A2A2B"
             android:textSize="@dimen/sp_16"
             app:layout_constraintLeft_toLeftOf="@+id/iv"
             app:layout_constraintRight_toRightOf="@+id/iv"
             app:layout_constraintTop_toBottomOf="@+id/iv" />
 
+
+        <LinearLayout
+            android:id="@+id/layLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/iv"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="follow system" />
+
+            <Button
+                android:id="@+id/btn2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="中文模式" />
+
+            <Button
+                android:id="@+id/btn3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="english mode" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_hint"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:padding="10dp"
+            android:text="current mode: "
+            app:layout_constraintBottom_toTopOf="@+id/layLanguage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

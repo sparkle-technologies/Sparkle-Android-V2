@@ -1,5 +1,6 @@
 package com.cyberflow.base.act
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,7 @@ import com.cyberflow.base.ext.COLOR_TRANSPARENT
 import com.cyberflow.base.ext.immersive
 import com.cyberflow.base.ext.notNull
 import com.cyberflow.base.viewmodel.BaseViewModel
+import com.hjq.language.MultiLanguages
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
@@ -56,5 +58,9 @@ abstract class BaseVMAct<VM : BaseViewModel> : AppCompatActivity() {
 
     open fun initDataBind(): View? {
         return null
+    }
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(MultiLanguages.attach(newBase))
     }
 }

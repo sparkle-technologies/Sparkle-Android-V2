@@ -1,5 +1,6 @@
 package com.cyberflow.sparkle
 
+import android.content.Context
 import android.util.Log
 import com.cyberflow.base.BaseApp
 import com.cyberflow.base.net.initNetSpark
@@ -8,6 +9,7 @@ import com.cyberflow.sparkle.chat.IMManager
 import com.drake.brv.utils.BRV
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.FirebaseApp
+import com.hjq.language.MultiLanguages
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.scwang.smart.refresh.footer.ClassicsFooter
@@ -54,6 +56,8 @@ class MyApp : BaseApp() {
         IMManager.instance.initUI()
         IMManager.instance.initSDKAndDB(this)
 
+        MultiLanguages.init(this)
+
         Log.e(TAG, "onCreate:  time cost: ${System.currentTimeMillis() - st}")
     }
 
@@ -70,5 +74,9 @@ class MyApp : BaseApp() {
         SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
             ClassicsFooter(this)
         }
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(MultiLanguages.attach(base))
     }
 }

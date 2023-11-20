@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_20"
             android:fontFamily="@font/poppins_extrabold"
-            android:text="Nickname"
+            android:text="@string/nick_name"
             android:textSize="@dimen/sp_36"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -40,7 +40,7 @@
             android:layout_marginTop="@dimen/dp_3"
             android:layout_marginEnd="@dimen/dp_28"
             android:fontFamily="@font/poppins_regular"
-            android:text="Please enter your nickname"
+            android:text="@string/please_enter_your_nick_name"
             android:textSize="@dimen/sp_16"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -55,8 +55,7 @@
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_20"
             android:layout_marginEnd="@dimen/dp_20"
-            android:hint="Nickname"
-
+            android:hint="Name"
 
             app:endIconMode="custom"
 
@@ -69,7 +68,7 @@
                 android:id="@+id/et_nice_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="What should we call you?"
+                android:hint="@string/how_would_you_like_to_be_identified"
                 android:maxLength="30"
                 android:fontFamily="@font/poppins_regular"
                 android:maxLines="1"
@@ -90,7 +89,7 @@
             app:layout_constraintRight_toLeftOf="@+id/btn_register_next"
             app:view_bg="@drawable/register_btn_previous"
             app:view_shadow_distance="1dp"
-            app:view_text="Previous" />
+            app:view_text="@string/previous" />
 
         <com.cyberflow.sparkle.widget.ShadowTxtButton
             android:id="@+id/btn_register_next"
@@ -106,7 +105,7 @@
             app:view_disable="true"
             app:view_disable_bg="@drawable/register_btn_next_disable"
             app:view_shadow_distance="1dp"
-            app:view_text="Done"
+            app:view_text="@string/done"
             app:view_text_color="@color/almost_black"
             app:view_text_disable_color="@color/color_7D7D80" />
 

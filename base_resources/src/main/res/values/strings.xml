@@ -10,7 +10,6 @@
     <string name="done">Done</string>
 
     <string name="location">Location</string>
-    <string name="birth_place">Birth Place</string>
     <string name="Place">Place</string>
     <string name="input_your_birth_place">input your birth place</string>
 
@@ -19,10 +18,6 @@
     <string name="coin_base_wallet">Coinbase Wallet</string>
     <string name="wallet_connect">WalletConnect</string>
     <string name="connect_wallet">Connect Wallet</string>
-    <string name="before_you_begin">Before you begin</string>
-    <string name="before_you_begin_tips">Tell us your preference on avatar style. This will be your identity in web3 world.</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
     <string name="ask_birthday">What is your date of birth?</string>
     <string name="ask_birth_place">What is your place of birth?</string>
     <string name="do_it_later">I\'ll do it later</string>
@@ -30,7 +25,6 @@
     <string name="skip_place_of_birth_tips">Some features won\'t be available if birth place is missing.</string>
     <string name="skip_time_of_birth_tips">Some features won\'t be available if birth time is missing.</string>
     <string name="to_add">To add</string>
-    <string name="birth_time">What is your time of birth</string>
     <string name="nickname">Nickname</string>
     <string name="nickname_tips">Please enter your nickname</string>
     <string name="set_your_nickname">Enter your nickname</string>
@@ -39,7 +33,6 @@
     <string name="limit_edit_input_120">/120</string>
     <string name="edit_input_num">0</string>
     <string name="connect_with_third_platform">Or connect with social account</string>
-    <string name="birthday">Birthday</string>
     <string name="birth_place_tips">Tell us what is your place of birth</string>
     <string name="birthday_tips">Tell us what is your date of birth</string>
     <string name="forget_birth_time">If you don\'t remember the time, you can do it later</string>
@@ -56,7 +49,6 @@
     <string name="settings_title">Settings</string>
     <string name="account">Account</string>
     <string name="accept">Accept</string>
-    <string name="edit_profile">Edit Profile</string>
     <string name="edit_avatar">Edit Avatar</string>
     <string name="message_notifications">Message Notifications</string>
     <string name="transaction_history">Transaction History</string>
@@ -71,17 +63,14 @@
     <string name="friend_search_hint">Search contacts or new friends</string>
     <string name="contact_list">Contact List</string>
     <string name="contact">Contact</string>
-    <string name="contacts">Contacts</string>
     <string name="friend_request">Friend Request</string>
     <string name="current">Current</string>
     <string name="birth">Birth</string>
     <string name="more">More</string>
-    <string name="add_friends">Add Friends</string>
     <string name="my_friends">My Friends</string>
     <string name="send_message">Send message...</string>
     <string name="send_a_message">Send a message</string>
     <string name="send_to">Send to</string>
-    <string name="profile">Profile</string>
     <string name="share">Share</string>
     <string name="user_profile">User profile</string>
     <string name="accept_friend">Accept friend</string>
@@ -89,5 +78,51 @@
     <string name="gallery">Gallery</string>
     <string name="no_results">No results.</string>
 
+    <!-- Mon 20 Nov 2023  -->
+    <string name="chats">Chats</string>
+    <string name="what_s_in_your_mind">What\'s in your mind？</string>
+    <string name="add_friends">Add friends</string>
+    <string name="contacts">Contacts</string>
+    <string name="scan">Scan</string>
+    <string name="feed">Feed</string>
+    <string name="profile">Profile</string>
+    <string name="before_you_begin">Before you begin</string>
+    <string name="before_you_begin_tips">Choose your favorite avatar design to represent you in the web3 world.</string>
+    <string name="birthday">Birthday</string>
+    <string name="tell_us_what_is_your_date_of_birth">Tell us what is your date of birth</string>
+    <string name="birth_date">Birth Date</string>
+    <string name="select_your_birthday">Select your birthday</string>
+    <string name="birth_time">Birth Time</string>
+    <string name="select_your_birth_time">Select your birth time</string>
+    <string name="time_is_important_for_determining_your_horoscope">Time is important for determining your horoscope.</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="please_select_birth_date">please select birth date</string>
+    <string name="please_select_birth_time">please select birth time</string>
+    <string name="set_date">Set Date</string>
+    <string name="set_time">Set Time</string>
+    <string name="birth_place">Birth Place</string>
+    <string name="tell_us_where_is_your_birth_place">Tell us where is your birth place</string>
+    <string name="select_your_birth_place">Select your birth place</string>
+    <string name="birth_place_help_txt">We need your birth place to analyze the positions of the stars and planets.</string>
+    <string name="please_select_your_birth_place">please select your birth place</string>
+    <string name="nick_name">Nick Name</string>
+    <string name="please_enter_your_nick_name">Please enter your nick name</string>
+    <string name="how_would_you_like_to_be_identified">How would you like to be identified?</string>
+    <string name="opps_something_s_wrong_please_change_to_another_nickname">"Opps！ Something’s wrong. Please change to another nickname. "</string>
+    <string name="daily">Daily</string>
+    <string name="weekly">Weekly</string>
+    <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
+    <string name="horoscope">Horoscope</string>
+    <string name="comming_soon">Comming soon...</string>
+    <string name="empty_feed">Empty Feed</string>
+    <string name="the_magic_seems_to_have_nmalfunctioned">The magic seems to have \nmalfunctioned.</string>
+    <string name="reload">Reload</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="account_privacy">Account Privacy</string>
+    <string name="connected_accounts">Connected Accounts</string>
+    <string name="log_out">Log out</string>
+    <!-- Mon 20 Nov 2023  -->
 
 </resources>

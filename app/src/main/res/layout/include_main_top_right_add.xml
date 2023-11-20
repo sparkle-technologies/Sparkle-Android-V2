@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_5"
                 android:fontFamily="@font/poppins_regular"
-                android:text="Add friends"
+                android:text="@string/add_friends"
                 android:textColor="@color/color_000000"
                 android:textSize="@dimen/sp_14" />
 
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_5"
                 android:fontFamily="@font/poppins_regular"
-                android:text="Contacts"
+                android:text="@string/contacts"
                 android:textColor="@color/color_000000"
                 android:textSize="@dimen/sp_14" />
 
@@ -153,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_5"
                 android:fontFamily="@font/poppins_regular"
-                android:text="Scan"
+                android:text="@string/scan"
                 android:textColor="@color/color_000000"
                 android:textSize="@dimen/sp_14" />
 

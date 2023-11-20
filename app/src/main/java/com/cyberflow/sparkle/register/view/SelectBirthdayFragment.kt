@@ -9,9 +9,9 @@ import com.cyberflow.base.model.GENDER_MAN
 import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.sparkle.databinding.FragmentSelectBirthdayBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.widget.daytimepicker.CustomDatePicker
 import com.cyberflow.sparkle.register.widget.daytimepicker.DateFormatUtils
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -57,11 +57,13 @@ class SelectBirthdayFragment :
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(disable: Boolean) {
                  if(selectDate.isNullOrEmpty()){
-                    Snackbar.make(mViewBind.btnRegisterNext, "please select birth date", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(mViewBind.btnRegisterNext,
+                        getString(com.cyberflow.base.resources.R.string.please_select_birth_date), Snackbar.LENGTH_SHORT).show()
                     return
                 }
                 if(selectTime.isNullOrEmpty()){
-                    Snackbar.make(mViewBind.btnRegisterNext, "please select birth time", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(mViewBind.btnRegisterNext,
+                        getString(com.cyberflow.base.resources.R.string.please_select_birth_time), Snackbar.LENGTH_SHORT).show()
                     return
                }
                 if(disable) return
@@ -117,7 +119,7 @@ class SelectBirthdayFragment :
             beginTimestamp,
             endTimestamp
         ).apply {
-            setTitle("Set Date");
+            setTitle(getString(com.cyberflow.base.resources.R.string.set_date));
             setCancelable(true)
             setCanShowPreciseTime(false)
             setScrollLoop(false)
@@ -147,7 +149,7 @@ class SelectBirthdayFragment :
                 beginTime,
                 endTime
             ).apply {
-                setTitle("Set Time")
+                setTitle(getString(com.cyberflow.base.resources.R.string.set_time))
                 setCancelable(true)
                 setCanShowPreciseDate(false)
                 setCanShowPreciseTime(true)

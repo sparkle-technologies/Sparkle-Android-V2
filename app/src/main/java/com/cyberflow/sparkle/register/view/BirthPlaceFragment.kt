@@ -10,8 +10,8 @@ import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.base.model.LocationInfo
 import com.cyberflow.sparkle.databinding.FragmentRegisterBirthPlaceBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.widget.searchplace.SearchPlaceDialog
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.google.android.material.snackbar.Snackbar
 
 class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegisterBirthPlaceBinding>() {
@@ -50,7 +50,8 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(disable: Boolean) {
                 if(disable){
-                    Snackbar.make(mViewBind.btnRegisterNext, "please select your birth place", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(mViewBind.btnRegisterNext,
+                        getString(com.cyberflow.base.resources.R.string.please_select_your_birth_place), Snackbar.LENGTH_SHORT).show()
                     return
                 }
                 actVm?.clickNext()
@@ -75,6 +76,6 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
                 }
             }
         })
-        searchPlaceDialog.show(requireActivity().supportFragmentManager, "Birth Place")
+        searchPlaceDialog.show(requireActivity().supportFragmentManager, getString(com.cyberflow.base.resources.R.string.birth_place))
     }
 }

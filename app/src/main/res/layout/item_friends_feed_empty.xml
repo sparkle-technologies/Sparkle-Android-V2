@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:text="Empty Feed"
+            android:text="@string/empty_feed"
             android:textColor="@color/color_2A2A2B"
             android:textSize="@dimen/sp_17"
             app:layout_constraintLeft_toLeftOf="@+id/iv"
@@ -39,7 +39,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv"
             app:view_bg="@drawable/main_bg_add_friends_empty_white"
             app:view_shadow_distance="1dp"
-            app:view_text="Add Friends"
+            app:view_text="@string/add_friends"
             app:view_text_bold="true"
             app:view_text_color="@color/black" />
 

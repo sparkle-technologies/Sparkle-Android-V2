@@ -108,8 +108,8 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
     }
 
     override fun initData() {
-//        mDatabind.tabLayout.setTabData(arrayOf("Daily", "Weekly", "Monthly", "Yearly"))
-        mDatabind.tabLayout.setTabData(arrayOf("Daily", "Monthly", "Yearly"))
+//        mDatabind.tabLayout.setTabData(arrayOf(getString(R.string.daily), getString(R.string.weekly), getString(R.string.monthly), getString(R.string.yearly)))
+        mDatabind.tabLayout.setTabData(arrayOf(getString(com.cyberflow.base.resources.R.string.daily), getString(com.cyberflow.base.resources.R.string.monthly), getString(com.cyberflow.base.resources.R.string.yearly)))
         mDatabind.tabLayout.setOnTabSelectListener(object : OnTabSelectListener{
             override fun onTabSelect(position: Int) {
                 Log.e(TAG, "onTabSelect: position=$position")

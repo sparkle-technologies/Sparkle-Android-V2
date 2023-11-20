@@ -104,4 +104,6 @@ dependencies {
     // for qr code
     api("com.huawei.hms:scanplus:2.12.0.301")
 
+    // for multi languages
+    api("com.github.getActivity:MultiLanguages:9.0")
 }

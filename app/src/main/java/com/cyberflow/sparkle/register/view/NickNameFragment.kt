@@ -69,8 +69,7 @@ class NickNameFragment :
                 val txt = mViewBind.etNiceName.text.toString().trim()
                 val pass = txt.isNotEmpty()
                 mViewBind.outlinedTextField.also {
-                    it.error =
-                        if (pass) null else "Opps！ Something’s wrong. Please change to another nickname. "
+                    it.error = if (pass) null else getString(com.cyberflow.base.resources.R.string.opps_something_s_wrong_please_change_to_another_nickname)
                 }
                 if (pass) {
                     submitRegister()
