@@ -1,18 +1,4 @@
 <resources>
-    <string name="app_name">Sparkle</string>
-    <string name="new_friend">新的好友</string>
-    <string name="search">搜索</string>
-    <string name="send">发送</string>
-    <string name="hello_stellar_greetings_on_our_astrology_journey">你好，很高兴认识你</string>
-    <string name="say_hello_and_introduce_yourself">发送招呼语</string>
-    <string name="friends_request">好友请求</string>
-    <string name="friend_request">好友请求</string>
-    <string name="see_all">查看更多</string>
-    <string name="your_contacts">联系人</string>
-    <string name="accept">接受</string>
-    <string name="refused">拒绝</string>
-    <string name="no_friend_request_yet">暂时还没有好友申请</string>
-    <string name="cora_is_analyzing">Cora正在分析你在宇宙中的轨迹。请稍候</string>
 
 
 </resources>

@@ -48,7 +48,6 @@
     <string name="view_details">View Details</string>
     <string name="settings_title">设置</string>
     <string name="account">账号</string>
-    <string name="accept">Accept</string>
     <string name="edit_avatar">Edit Avatar</string>
     <string name="message_notifications">Message Notifications</string>
     <string name="transaction_history">Transaction History</string>
@@ -63,17 +62,16 @@
     <string name="friend_search_hint">Search contacts or new friends</string>
     <string name="contact_list">Contact List</string>
     <string name="contact">Contact</string>
-    <string name="friend_request">Friend Request</string>
     <string name="current">Current</string>
     <string name="birth">Birth</string>
     <string name="more">More</string>
     <string name="my_friends">My Friends</string>
     <string name="send_message">Send message...</string>
     <string name="send_a_message">Send a message</string>
-    <string name="send_to">Send to</string>
-    <string name="share">Share</string>
-    <string name="user_profile">User profile</string>
-    <string name="accept_friend">Accept friend</string>
+    <string name="send_to">转发给</string>
+    <string name="share">分享</string>
+    <string name="user_profile">用户资料</string>
+    <string name="accept_friend">同意请求</string>
     <string name="scan_qr_code">扫描二维码</string>
     <string name="gallery">相册</string>
     <string name="no_results">未找到结果</string>
@@ -123,5 +121,25 @@
     <string name="account_privacy">账户隐私</string>
     <string name="connected_accounts">已连接账户</string>
     <string name="log_out">退出登录</string>
+
+
+
+    <string name="new_friend">新的好友</string>
+    <string name="search">搜索</string>
+    <string name="send">发送</string>
+    <string name="hello_stellar_greetings_on_our_astrology_journey">你好，很高兴认识你</string>
+    <string name="say_hello_and_introduce_yourself">发送招呼语</string>
+    <string name="friends_request">好友请求</string>
+    <string name="friend_request">好友请求</string>
+    <string name="see_all">查看更多</string>
+    <string name="your_contacts">联系人</string>
+    <string name="accept">接受</string>
+    <string name="refused">拒绝</string>
+    <string name="no_friend_request_yet">暂时还没有好友申请</string>
+    <string name="cora_is_analyzing">Cora正在分析你在宇宙中的轨迹。请稍候</string>
+
+    <string name="recent">近期</string>
+    <string name="message_sent">消息已发送!</string>
+    <string name="send_message_error">消息发送异常</string>
 
 </resources>

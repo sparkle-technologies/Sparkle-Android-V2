@@ -1,18 +1,5 @@
 <resources>
-    <string name="app_name">Sparkle</string>
-    <string name="new_friend">New friend</string>
-    <string name="search">Search</string>
-    <string name="send">Send</string>
-    <string name="hello_stellar_greetings_on_our_astrology_journey">Hello, stellar greetings on our astrology journey!</string>
-    <string name="say_hello_and_introduce_yourself">Say hello and introduce yourself</string>
-    <string name="friends_request">Friends Request</string>
-    <string name="friend_request">Friend Request</string>
-    <string name="see_all">See all</string>
-    <string name="your_contacts">Your contacts</string>
-    <string name="accept">Accept</string>
-    <string name="refused">Refused</string>
-    <string name="no_friend_request_yet">No friend request yet.</string>
-    <string name="cora_is_analyzing">Cora is analyzing your trajectory in the universe. Please stay tuned.</string>
+
 
 
 </resources>

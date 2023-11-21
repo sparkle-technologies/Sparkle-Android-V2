@@ -54,13 +54,13 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
     private fun setMsgCallBack(){
         LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java).observe(this) {
             LoadingDialogHolder.getLoadingDialog()?.hide()
-            ToastUtil.show(this@IMForwardListAct, "Message Sent!")
+            ToastUtil.show(this@IMForwardListAct, getString(com.cyberflow.base.resources.R.string.message_sent))
             finish()
         }
 
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR, String::class.java).observe(this) {
             LoadingDialogHolder.getLoadingDialog()?.hide()
-            ToastUtil.show(this@IMForwardListAct, "Send Message error")
+            ToastUtil.show(this@IMForwardListAct, getString(com.cyberflow.base.resources.R.string.send_message_error))
         }
     }
 

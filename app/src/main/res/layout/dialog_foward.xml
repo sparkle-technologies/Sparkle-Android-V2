@@ -132,7 +132,7 @@
             android:layout_weight="1"
             app:view_bg="@drawable/register_btn_next_disable"
             app:view_shadow_distance="1dp"
-            app:view_text="Cancel"
+            app:view_text="@string/cancel"
             app:view_text_bold="true"
             app:view_text_size="@dimen/sp_17" />
 
@@ -144,7 +144,7 @@
             android:layout_weight="1"
             app:view_bg="@drawable/register_btn_next"
             app:view_shadow_distance="1dp"
-            app:view_text="Send"
+            app:view_text="@string/send"
             app:view_text_bold="true"
             app:view_text_size="@dimen/sp_17" />
 
