@@ -7,6 +7,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.recyclerview.widget.RecyclerView
 import com.cyberflow.base.model.DailyHoroScopeData
+import com.cyberflow.base.model.YearlyHoroScopeData
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.R
@@ -97,10 +98,6 @@ class HoroscopeView : RecyclerView.ViewHolder {
         }
     }
 
-    fun clickTopUpdata(reqData: HoroscopeReq) {
-
-    }
-
     // 外部切换   左右滑  切换周期的时候
     fun slideUpdate(currentPos: Int, realPos: Int) {
         Log.e(TAG, "slideUpdate: currentPos=$currentPos  realPos=$realPos   $params")
@@ -113,8 +110,11 @@ class HoroscopeView : RecyclerView.ViewHolder {
     fun injectData(reqData: HoroscopeReq) {
 //        Log.e(TAG, "injectData: $reqData" )
         params = reqData
-        if(reqData.initTabIdx == 0){
+       /* if(reqData.initTabIdx == 0){
             slideUpdate(0, 0)
+        }*/
+        if(firstRequest){
+            slideUpdate(reqData.initTabIdx, reqData.initTabIdx)
         }
     }
 
@@ -164,11 +164,13 @@ class HoroscopeView : RecyclerView.ViewHolder {
     private var requestYear = 0
     private var requestMonth = 0
     private var requestDay = 0
+    private var firstRequest = true
 
     fun requestData(year: Int, month: Int, day: Int) {
         this.requestYear = year
         this.requestMonth = month
         this.requestDay = day
+        firstRequest = false
 
         Log.e(TAG, "requestData: requestYear=$requestYear \t requestMonth=$requestMonth \t requestDay=$requestDay " )
 
@@ -178,26 +180,25 @@ class HoroscopeView : RecyclerView.ViewHolder {
                 when (params?.selectMode) {
                     DAILY -> {
                         horoScopeData = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {
-                            param("date", "${year}-${month}-${day}")  //YYYY-MM-DD
+                            json("date" to "${year}-${month}-${day}")  //YYYY-MM-DD
                         }.await()
                     }
 
                     WEEKLY -> {
                         horoScopeData = Post<DailyHoroScopeData>(Api.WEEKLY_HOROSCOPE) {
-                            param("date", "${year}-${month}-${day}")  // "2023-11-11"
+                            json("date" to "${year}-${month}-${day}")  // "2023-11-11"
                         }.await()
                     }
 
                     MONTH -> {
                         horoScopeData = Post<DailyHoroScopeData>(Api.MONTHLY_HOROSCOPE) {
-                            param("year", "$year")   //2023
-                            param("month", "$month")  //12
+                            json("year" to year, "month" to month)
                         }.await()
                     }
 
                     YEAR -> {
-                        horoScopeData = Post<DailyHoroScopeData>(Api.YEARLY_HOROSCOPE) {
-                            param("year", "$year")   //2023
+                        yearlyHoroScopeData = Post<YearlyHoroScopeData>(Api.YEARLY_HOROSCOPE) {
+                            json("year" to year)   //2023
                         }.await()
                     }
                 }
@@ -208,6 +209,9 @@ class HoroscopeView : RecyclerView.ViewHolder {
 
     private fun showData() {
         mDatabind?.state?.showContent()
+        if(params?.selectMode == YEAR){
+            showData(yearlyHoroScopeData)
+        }
         showData(horoScopeData)
     }
 
@@ -223,16 +227,27 @@ class HoroscopeView : RecyclerView.ViewHolder {
     }
 
     private var horoScopeData: DailyHoroScopeData? = null
+    private var yearlyHoroScopeData: YearlyHoroScopeData? = null
 
     private fun showData(data: DailyHoroScopeData?) {
         data?.also {
             mDatabind?.apply {
+                layMain.visibility = View.VISIBLE
+                layEmpty.visibility = View.GONE
                 showTotalAnima(it.total_score)
                 tvLove.text = it.love_score.toString()
                 tvFortune.text = it.wealth_score.toString()
                 tvCareer.text = it.career_score.toString()
                 anima(INDEX_LOVE)
             }
+        }
+    }
+
+    // 目前接口还没数据  后面好了再整活
+    private fun showData(data: YearlyHoroScopeData?) {
+        mDatabind?.apply {
+            layMain.visibility = View.GONE
+            layEmpty.visibility = View.VISIBLE
         }
     }
 

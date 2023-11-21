@@ -27,3 +27,14 @@ fun <T : View> T.click(
         block.onClick(this)
     }
 }
+
+fun View.safeClick(debounceInterval: Long = 1000L, onClickListener: (view: View) -> Unit) {
+    var lastClickTime = 0L
+    setOnClickListener {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastClickTime >= debounceInterval) {
+            lastClickTime = currentTime
+            onClickListener(it)
+        }
+    }
+}

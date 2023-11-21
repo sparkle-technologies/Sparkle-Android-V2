@@ -7,7 +7,7 @@ import android.view.MotionEvent
 import android.view.View
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.util.CacheUtil
-import com.cyberflow.base.util.ToastUtil
+import com.cyberflow.base.util.safeClick
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.databinding.FragmentMainHoroscopeBinding
 import com.cyberflow.sparkle.main.widget.SelectMonthDialog
@@ -108,17 +108,17 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
     }
 
     override fun initData() {
-//        mDatabind.tabLayout.setTabData(arrayOf(getString(R.string.daily), getString(R.string.weekly), getString(R.string.monthly), getString(R.string.yearly)))
-        mDatabind.tabLayout.setTabData(arrayOf(getString(com.cyberflow.base.resources.R.string.daily), getString(com.cyberflow.base.resources.R.string.monthly), getString(com.cyberflow.base.resources.R.string.yearly)))
+        mDatabind.tabLayout.setTabData(arrayOf(getString(com.cyberflow.base.resources.R.string.daily), getString(com.cyberflow.base.resources.R.string.weekly), getString(com.cyberflow.base.resources.R.string.monthly), getString(com.cyberflow.base.resources.R.string.yearly)))
+//        mDatabind.tabLayout.setTabData(arrayOf(getString(com.cyberflow.base.resources.R.string.daily), getString(com.cyberflow.base.resources.R.string.monthly), getString(com.cyberflow.base.resources.R.string.yearly)))
         mDatabind.tabLayout.setOnTabSelectListener(object : OnTabSelectListener{
             override fun onTabSelect(position: Int) {
                 Log.e(TAG, "onTabSelect: position=$position")
 
                 when(position){
                     0 -> topBar(DAILY)
-//                    1 -> topBar(WEEKLY)
-                    1 -> topBar(MONTH)
-                    2 -> topBar(YEAR)
+                    1 -> topBar(WEEKLY)
+                    2 -> topBar(MONTH)
+                    3 -> topBar(YEAR)
                 }
             }
 
@@ -207,8 +207,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             }
             false
         }
-
-        mDatabind.layCalendar.setOnClickListener {
+        mDatabind.layCalendar.safeClick{
             showCalendarDialog()
         }
     }
@@ -262,9 +261,9 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
     private fun showCalendarDialog() {
         when(mDatabind.tabLayout.currentTab){
             0 -> { showDailyOrWeekly(false) }
-//            1 -> { showDailyOrWeekly(true)  }
-            1 -> { showMonth() }
-            2 -> { showYear() }
+            1 -> { showDailyOrWeekly(true)  }
+            2 -> { showMonth() }
+            3 -> { showYear() }
         }
     }
 
@@ -274,7 +273,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
         yearDialog = SelectYearDialog(requireActivity() , birthDate, object : SelectYearDialog.Callback {
             override fun onSelected(select: DateBean?) {
                 Log.e(TAG, "onSelected: $select" )
-                ToastUtil.show(requireContext(), "${select?.year}")
+//                ToastUtil.show(requireContext(), "${select?.year}")
                 calendar(select)
                 yearDialog?.onDestroy()
             }
@@ -288,7 +287,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
         monthDialog = SelectMonthDialog(requireActivity(), birthDate, object : SelectMonthDialog.Callback {
             override fun onSelected(select: DateBean?) {
                 Log.e(TAG, "onSelected: $select" )
-                ToastUtil.show(requireContext(), "${select?.month}")
+//                ToastUtil.show(requireContext(), "${select?.month}")
                 calendar(select)
                 monthDialog?.onDestroy()
             }
@@ -301,7 +300,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
         calendarDialog = CalendarDialog(requireActivity(), isWeek, birthDate,  object : CalendarDialog.Callback {
             override fun onSelected(select: DateBean??) {
                 Log.e(TAG, "onSelected: $select" )
-                ToastUtil.show(requireContext(), "${select?.year}-${select?.month}-${select?.day}")
+//                ToastUtil.show(requireContext(), "${select?.year}-${select?.month}-${select?.day}")
                 calendar(select)
                 calendarDialog?.onDestroy()
             }
@@ -319,8 +318,8 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 val date = SimpleDateFormat(format).parse(birthdate)
                 val calendar = Calendar.getInstance()
                 calendar.time = date
-//                birthDate = DateBean(year = calendar[Calendar.YEAR], month = calendar[Calendar.MONTH] + 1, day = calendar[Calendar.DAY_OF_MONTH])
-                birthDate = DateBean(year = 2000, month = 7, day = 26)
+                birthDate = DateBean(year = calendar[Calendar.YEAR], month = calendar[Calendar.MONTH] + 1, day = calendar[Calendar.DAY_OF_MONTH])
+//                birthDate = DateBean(year = 2000, month = 7, day = 26)
             }catch (e: Exception){}
         }
     }

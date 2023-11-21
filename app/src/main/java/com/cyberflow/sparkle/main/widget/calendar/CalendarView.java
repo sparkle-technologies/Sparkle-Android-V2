@@ -71,7 +71,11 @@ public class CalendarView extends RecyclerView.ViewHolder {
                     }
 
                     if (isSame) {
-                        vh.tvData.setTextColor(Color.WHITE);
+                        if(isToday(current)){
+                            vh.tvData.setTextColor(Color.BLACK);
+                        }else{
+                            vh.tvData.setTextColor(Color.WHITE);
+                        }
                         if (i % 7 == 0) {
                             vh.root.setBackgroundResource(com.cyberflow.base.resources.R.drawable.main_bg_horoscope_calendar_select_half_left);
                         } else if (i % 7 == 6) {
@@ -181,6 +185,12 @@ public class CalendarView extends RecyclerView.ViewHolder {
             e.printStackTrace();
         }
         return false;
+    }
+
+    Calendar calendar = Calendar.getInstance();
+
+    private boolean isToday(DateBean dateBean) {
+        return (dateBean.getDay() == calendar.get(Calendar.DAY_OF_MONTH) && dateBean.getMonth() == (calendar.get(Calendar.MONTH) + 1) && dateBean.getYear() == calendar.get(Calendar.YEAR));
     }
 
     public static void setGridViewHeight(GridView gridView, int size) {

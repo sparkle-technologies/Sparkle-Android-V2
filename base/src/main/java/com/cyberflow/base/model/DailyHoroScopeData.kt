@@ -18,3 +18,8 @@ data class HoroProgress(
     val content: String,
     val title: String,
 )
+
+@Serializable
+data class YearlyHoroScopeData(
+    val progress_content: String,
+)
