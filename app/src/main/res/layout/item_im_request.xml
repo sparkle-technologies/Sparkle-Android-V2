@@ -83,7 +83,7 @@
                     app:view_disable="false"
                     app:view_disable_bg="@drawable/register_btn_next_disable"
                     app:view_shadow_distance="1dp"
-                    app:view_text="Accept"
+                    app:view_text="@string/accept"
                     app:view_text_bold="false"
                     app:view_text_size="@dimen/sp_14" />
 
@@ -93,7 +93,6 @@
                     android:layout_height="@dimen/dp_30"
                     android:fontFamily="@font/poppins_regular"
                     android:gravity="center"
-                    android:text="@{m.freshTxt}"
                     android:textColor="@color/color_7d7d80"
                     android:textSize="@dimen/sp_14"
                     android:visibility="@{m.status == 0  ? View.GONE : View.VISIBLE}"

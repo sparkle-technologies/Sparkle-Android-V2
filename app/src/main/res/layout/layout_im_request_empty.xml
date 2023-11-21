@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_6"
             android:fontFamily="@font/poppins_regular"
-            android:text="No friend request yet."
+            android:text="@string/no_friend_request_yet"
             android:textColor="@color/color_2A2A2B"
             android:textSize="@dimen/sp_16"
             app:layout_constraintLeft_toLeftOf="@+id/iv"

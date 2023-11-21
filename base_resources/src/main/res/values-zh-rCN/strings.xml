@@ -40,9 +40,9 @@
     <string name="home_find_friend_title">Find Friends</string>
     <string name="home_find_friend_desc">Discover more friends</string>
     <string name="profile_title">Profile</string>
-    <string name="chat">Chat</string>
-    <string name="add">Add</string>
-    <string name="add_friend">Add Friend</string>
+    <string name="chat">聊天</string>
+    <string name="add">添加</string>
+    <string name="add_friend">添加好友</string>
     <string name="view">View</string>
     <string name="view_detail">View Detail</string>
     <string name="view_details">View Details</string>
@@ -74,7 +74,7 @@
     <string name="share">Share</string>
     <string name="user_profile">User profile</string>
     <string name="accept_friend">Accept friend</string>
-    <string name="scan_qr_code">扫码</string>
+    <string name="scan_qr_code">扫描二维码</string>
     <string name="gallery">相册</string>
     <string name="no_results">未找到结果</string>
 
@@ -83,7 +83,7 @@
     <string name="what_s_in_your_mind">你在想什么？</string>
     <string name="add_friends">添加好友</string>
     <string name="contacts">联系人</string>
-    <string name="scan">扫码</string>
+    <string name="scan">扫一扫</string>
     <string name="feed">动态</string>
     <string name="profile">资料</string>
     <string name="before_you_begin">准备起航</string>

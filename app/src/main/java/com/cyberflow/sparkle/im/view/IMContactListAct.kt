@@ -120,7 +120,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                     val model = getModel<FriendRequest>()
 
                                     DBComponent.loadAvatar(ivHead, model.url, model.gender)
-
+                                    tvStatus.text = if (model.status == 1) getString(R.string.accept) else getString(R.string.refused)
                                     tvFriendName.text = model.name
                                     tvMsg.text = model.msg
                                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE

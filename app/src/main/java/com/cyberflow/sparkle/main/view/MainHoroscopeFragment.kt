@@ -135,10 +135,10 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             removeIndicator()
             isAutoLoop(false)
             setBannerGalleryEffect(10, 10, 1f)
-            addPageTransformer(AlphaPageTransformer())
+            addPageTransformer(AlphaPageTransformer(0.2f))
             addOnPageChangeListener(object : OnPageChangeListener{
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-//                    Log.e(TAG, "onPageScrolled: position=$position positionOffset=$positionOffset   positionOffsetPixels=$positionOffsetPixels" )
+                    Log.e(TAG, "onPageScrolled: position=$position positionOffset=$positionOffset   positionOffsetPixels=$positionOffsetPixels" )
                 }
 
                 // 初始化是0  左滑是2  右滑是1   201   012  120
@@ -184,7 +184,8 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 }
 
                 override fun onPageScrollStateChanged(state: Int) {
-//                    Log.e(TAG, "onPageScrollStateChanged: state=$state" )
+                    Log.e(TAG, "onPageScrollStateChanged: state=$state" )
+//                    viewPager2.isUserInputEnabled = !(state == ViewPager2.SCROLL_STATE_DRAGGING && viewPager2.currentItem == 2)
                 }
             })
         }

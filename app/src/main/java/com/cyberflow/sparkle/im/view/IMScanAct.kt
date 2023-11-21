@@ -14,7 +14,6 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import com.cyberflow.base.act.BaseDBAct
-import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.ui.handleQRCode
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityImScanBinding
@@ -37,7 +36,7 @@ class IMScanAct : BaseDBAct<IMViewModel, ActivityImScanBinding>() {
     var mScreenWidth = 0
     var mScreenHeight = 0
 
-    val img = intArrayOf(R.drawable.flashlight_on, R.drawable.flashlight_off)
+//    val img = intArrayOf(R.drawable.flashlight_on, R.drawable.flashlight_off)
 
     companion object {
 
