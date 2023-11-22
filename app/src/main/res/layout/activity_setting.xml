@@ -184,6 +184,55 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+            <View
+                android:id="@+id/line3"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginStart="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_6"
+                android:layout_marginEnd="@dimen/dp_12"
+                android:layout_marginBottom="@dimen/dp_6"
+                android:background="@drawable/register_google_place_divider" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/lay_language"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_56">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_16"
+                    android:layout_height="@dimen/dp_16"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:src="@drawable/setting_ic_language"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_44"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="@string/language"
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/sp_14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="@dimen/dp_20"
+                    android:layout_height="@dimen/dp_20"
+                    android:layout_marginRight="@dimen/dp_12"
+                    android:src="@drawable/svg_ic_more"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </LinearLayout>
 
 

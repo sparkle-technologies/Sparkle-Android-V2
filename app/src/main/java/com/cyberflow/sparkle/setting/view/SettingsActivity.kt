@@ -19,12 +19,15 @@ import com.cyberflow.sparkle.login.view.LoginAct
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.utils.withMain
 import com.google.firebase.auth.FirebaseAuth
+import com.hjq.language.MultiLanguages
+import com.hjq.language.OnLanguageListener
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
@@ -64,12 +67,19 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         mDataBinding.layConnectedAccounts.setOnClickListener {
             goConnetedAccount()
         }
+        mDataBinding.layLanguage.setOnClickListener {
+            goLanguage()
+        }
         mDataBinding.btnLogout.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(d: Boolean) {
                 Toast.makeText(this@SettingsActivity, "ready logout now", Toast.LENGTH_LONG).show()
                 logout()
             }
         })
+    }
+
+    private fun goLanguage() {
+        LanguageActivity.go(this)
     }
 
     // 0. clear cache
@@ -116,12 +126,23 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         FirebaseAuth.getInstance().signOut()
     }
 
-    private fun web3Auth() {
-
-    }
 
     override fun initData() {
         initFlutter()
+//        initMultiLanguage()
+    }
+
+    private fun initMultiLanguage() {
+        MultiLanguages.setOnLanguageListener(object : OnLanguageListener{
+            override fun onAppLocaleChange(oldLocale: Locale?, newLocale: Locale?) {
+                Log.e(TAG, "onAppLocaleChange: old=$oldLocale  \t new=$newLocale" )
+//                MultiLanguages.updateAppLanguage(this@SettingsActivity)
+            }
+
+            override fun onSystemLocaleChange(oldLocale: Locale?, newLocale: Locale?) {
+
+            }
+        })
     }
 
     // aar 方式导入module

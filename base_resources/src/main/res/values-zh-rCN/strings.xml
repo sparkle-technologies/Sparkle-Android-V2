@@ -120,6 +120,7 @@
     <string name="edit_profile">编辑资料</string>
     <string name="account_privacy">账户隐私</string>
     <string name="connected_accounts">已连接账户</string>
+    <string name="language">语言</string>
     <string name="log_out">退出登录</string>
 
 

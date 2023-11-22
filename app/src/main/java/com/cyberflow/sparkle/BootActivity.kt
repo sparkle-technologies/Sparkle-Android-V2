@@ -8,7 +8,8 @@ import com.cyberflow.base.util.callback.IMV2Callback
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.chat.IMManager
 import com.cyberflow.sparkle.databinding.ActivityBootBinding
-import com.cyberflow.sparkle.register.view.RegisterAct
+import com.cyberflow.sparkle.login.view.LoginAct
+import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 
 class BootActivity : BaseDBAct<BaseViewModel, ActivityBootBinding>() {
 
@@ -37,11 +38,10 @@ class BootActivity : BaseDBAct<BaseViewModel, ActivityBootBinding>() {
     }
 
     private fun jump(){
-        RegisterAct.go(this)
-        /*if(usedGun){
+        if(usedGun){
             MainActivityV2.go(this)
         }else{
             LoginAct.go(this)
-        }*/
+        }
     }
 }
