@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseVBFragment
-import com.cyberflow.base.model.GENDER_MAN
-import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.base.model.LocationInfo
 import com.cyberflow.sparkle.databinding.FragmentRegisterBirthPlaceBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
@@ -16,14 +14,14 @@ import com.google.android.material.snackbar.Snackbar
 
 class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegisterBirthPlaceBinding>() {
     override fun initData() {
-        actVm?.registerBean?.gender?.apply {
+        /*actVm?.registerBean?.gender?.apply {
             if(this == GENDER_MAN){
                 mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_man_divider)
             }
             if(this == GENDER_WOMEN){
                 mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_women_divider)
             }
-        }
+        }*/
     }
 
     private var actVm: LoginRegisterViewModel? = null

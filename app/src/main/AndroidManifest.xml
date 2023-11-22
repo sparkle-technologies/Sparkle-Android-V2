@@ -44,6 +44,12 @@
             android:name=".login.view.LoginAct"
             android:exported="true">
 
+        </activity>
+
+        <activity
+            android:name=".BootActivity"
+            android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,14 +63,6 @@
             android:exported="true">
 
         </activity>
-
-        <receiver
-            android:name=".main.view.MainHoroscopeFragment$AlarmReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.cyberflow.sparkle.main.view.MainLeftFragment.AlarmReceiver" />
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name=".main.view.MainActivity"

@@ -95,7 +95,7 @@ dependencies {
     implementation("com.github.UniPassID:android-custom-auth-sdk:v0.0.1-alpha.9")
 
     // for UI
-    implementation("com.tbuonomo:dotsindicator:5.0")        // viewpager2 indicator
+//    implementation("com.tbuonomo:dotsindicator:5.0")        // viewpager2 indicator
     implementation("io.github.youth5201314:banner:2.2.2")
 
 //    kapt("cn.therouter:apt:1.2.0-rc1")

@@ -1,10 +1,13 @@
 package com.cyberflow.sparkle.register.widget.searchplace
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
@@ -171,17 +174,19 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
     override fun onStart() {
         super.onStart()
         val dialog = dialog
+        val dm: DisplayMetrics = requireContext().resources.displayMetrics
+        val width = (dm.heightPixels.toFloat() * 755 / 812).toInt()
         if (dialog != null) {
-            val width = ViewGroup.LayoutParams.MATCH_PARENT
-            val height = ViewGroup.LayoutParams.MATCH_PARENT
             dialog.window?.apply {
-                setLayout(width, height)
-                setDimAmount(0.0f)
-                setWindowAnimations(com.cyberflow.base.resources.R.style.Theme_CenterDialog)
+                val lp = attributes
+                lp.gravity = Gravity.BOTTOM
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT
+                lp.height = width
+                attributes = lp
+                setWindowAnimations(com.cyberflow.base.resources.R.style.BottomDialog_Animation)
             }
         }
     }
-
 
     override fun dismiss() {
         KeyboardUtil.hide(binding.edtSearchPlace)

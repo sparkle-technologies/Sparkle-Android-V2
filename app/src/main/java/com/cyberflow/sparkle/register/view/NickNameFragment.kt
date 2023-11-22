@@ -6,8 +6,6 @@ import android.util.Log
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseVBFragment
-import com.cyberflow.base.model.GENDER_MAN
-import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.net.GsonConverter
@@ -22,14 +20,14 @@ import com.drake.net.utils.scopeDialog
 class NickNameFragment :
     BaseVBFragment<LoginRegisterViewModel, FragmentRegisterNicknameBinding>() {
     override fun initData() {
-        actVm?.registerBean?.gender?.apply {
+        /*actVm?.registerBean?.gender?.apply {
             if (this == GENDER_MAN) {
                 mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_man_divider)
             }
             if (this == GENDER_WOMEN) {
                 mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_women_divider)
             }
-        }
+        }*/
     }
 
     private var actVm: LoginRegisterViewModel? = null
