@@ -72,7 +72,8 @@
             android:name=".mainv2.view.MainActivityV2"
             android:launchMode="singleTask" />
 
-        <activity android:name=".register.view.RegisterAct" />
+        <activity android:name=".register.view.RegisterAct"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".setting.view.SettingsActivity"

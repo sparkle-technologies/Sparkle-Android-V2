@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
@@ -89,6 +90,14 @@ class SearchPlaceDialog(val title: String = "") : DialogFragment(), PlaceResultC
         }
 
         binding.edtSearchPlace.apply {
+            setOnEditorActionListener { textView, i, keyEvent ->
+                if(i == EditorInfo.IME_ACTION_SEARCH || i == EditorInfo.IME_ACTION_DONE || i == EditorInfo.IME_ACTION_NEXT) {
+                    clearFocus()
+                    KeyboardUtil.hide(this)
+                    true
+                }
+                false
+            }
             addTextChangedListener {
                 if (!it.isNullOrEmpty()) {
                     binding.rvPlaceResult.visibility = View.VISIBLE

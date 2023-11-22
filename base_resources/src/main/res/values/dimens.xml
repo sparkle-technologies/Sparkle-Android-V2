@@ -99,9 +99,11 @@
     <dimen name="dp_150">150dp</dimen>
     <dimen name="dp_154">154dp</dimen>
     <dimen name="dp_155">155dp</dimen>
+    <dimen name="dp_157">157dp</dimen>
     <dimen name="dp_158">158dp</dimen>
     <dimen name="dp_160">160dp</dimen>
     <dimen name="dp_166">166dp</dimen>
+    <dimen name="dp_169">169dp</dimen>
     <dimen name="dp_188">188dp</dimen>
     <dimen name="dp_190">190dp</dimen>
     <dimen name="dp_194">194dp</dimen>

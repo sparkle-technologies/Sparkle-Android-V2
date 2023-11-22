@@ -17,6 +17,8 @@ import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
 import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MyApp : BaseApp() {
 
@@ -43,22 +45,29 @@ class MyApp : BaseApp() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-
         var st = System.currentTimeMillis()
+        runOnMainThread()
+        runOnBackgroundThread()
+        Log.e(TAG, "onCreate:  time cost: ${System.currentTimeMillis() - st}")
+    }
 
-        BRV.modelId = BR.m
+    // for necessary library, high priority, must be init at Main Thread
+    private fun runOnMainThread() {
         initNetSpark(cacheDir)
         CacheUtil.init(this)
-        initRefresh()
         FirebaseApp.initializeApp(this)
-        Logger.addLogAdapter(AndroidLogAdapter())
-
-        IMManager.instance.initUI()
-        IMManager.instance.initSDKAndDB(this)
-
         MultiLanguages.init(this)
+    }
 
-        Log.e(TAG, "onCreate:  time cost: ${System.currentTimeMillis() - st}")
+    // low priority
+    private fun runOnBackgroundThread() {
+        GlobalScope.launch {
+            BRV.modelId = BR.m
+            initRefresh()
+            Logger.addLogAdapter(AndroidLogAdapter())
+            IMManager.instance.initUI()
+            IMManager.instance.initSDKAndDB(instance)
+        }
     }
 
     fun initGooglePlace() {

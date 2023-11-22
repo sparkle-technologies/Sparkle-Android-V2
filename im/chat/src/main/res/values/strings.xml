@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="MissingTranslation">
 
-    <string name="app_name">chat</string>
+    <string name="app_name">Sparkle</string>
 
     <string name="username">Username</string>
     <string name="password">Password</string>
