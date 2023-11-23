@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.cyberflow.base.util.dialogSlipDismiss
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ItemHoroscopeSelectMonthBinding
 import com.cyberflow.sparkle.main.widget.calendar.DateBean
@@ -68,6 +69,10 @@ class SelectYearDialog {
             btnPrevious = findViewById(R.id.btn_previous)
             btnNext = findViewById(R.id.btn_next)
             rv = findViewById(R.id.rv)
+        }
+
+        mDialog?.window?.decorView?.dialogSlipDismiss {
+            mDialog?.dismiss()
         }
 
         btnPrevious?.setClickListener(object : ShadowImgButton.ShadowClickListener {

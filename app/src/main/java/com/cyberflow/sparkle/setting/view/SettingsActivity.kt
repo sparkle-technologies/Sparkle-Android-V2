@@ -28,6 +28,7 @@ import com.hjq.language.MultiLanguages
 import com.hjq.language.OnLanguageListener
 import dev.pinkroom.walletconnectkit.core.chains.toJson
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterActivityLaunchConfigs
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
@@ -110,7 +111,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
             DBManager.instance.db?.imUserInfoDao()?.deleteAll()
             IMDataManager.instance.clearCache()
 
-            withMain{
+            withMain {
                 LoginAct.go(this@SettingsActivity)
                 finish()
             }
@@ -140,9 +141,9 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     }
 
     private fun initMultiLanguage() {
-        MultiLanguages.setOnLanguageListener(object : OnLanguageListener{
+        MultiLanguages.setOnLanguageListener(object : OnLanguageListener {
             override fun onAppLocaleChange(oldLocale: Locale?, newLocale: Locale?) {
-                Log.e(TAG, "onAppLocaleChange: old=$oldLocale  \t new=$newLocale" )
+                Log.e(TAG, "onAppLocaleChange: old=$oldLocale  \t new=$newLocale")
 //                MultiLanguages.updateAppLanguage(this@SettingsActivity)
             }
 
@@ -182,20 +183,18 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     //     processResources.dependsOn(copyFlutterAssetsTask)
     // }
 
-        def variantOutput = variant.outputs.first()
-        def processResources = variantOutput.hasProperty("processResourcesProvider") ?
-        variantOutput.processResourcesProvider.get() : variantOutput.processResources
-        processResources.dependsOn(copyFlutterAssetsTask)
+    def variantOutput = variant.outputs.first()
+    def processResources = variantOutput.hasProperty("processResourcesProvider") ?
+    variantOutput.processResourcesProvider.get() : variantOutput.processResources
+    processResources.dependsOn(copyFlutterAssetsTask)
 
     useful commands:
-        flutter clean
-        flutter pub get
+    flutter clean
+    flutter pub get
 
      */
-
     private val ENGINE_ID_EDIT_PROFILE = "eidt_profile"
     private val ENGINE_ID_ACCOUNT_PRIVACY = "account_privacy"
-    private val ENGINE_ID_CONNECTED_ACCOUNT = "connected_account"
 
     lateinit var flutterEngine_edit_profile: FlutterEngine
     lateinit var flutterEngine_account_privacy: FlutterEngine
@@ -212,40 +211,35 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         FlutterEngineCache.getInstance().put(ENGINE_ID_EDIT_PROFILE, flutterEngine_edit_profile)
         FlutterEngineCache.getInstance().put(ENGINE_ID_ACCOUNT_PRIVACY, flutterEngine_account_privacy)
 
-        methodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "settingChannel")
-        methodChannel?.setMethodCallHandler { call, result ->
-            handleFlutterEvent(call, result)
+        editMethodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "settingChannel")
+        editMethodChannel?.setMethodCallHandler { call, result ->
+            handleFlutterEvent(call, result, true)
         }
 
-        methodChannel2 = MethodChannel(flutterEngine_account_privacy.dartExecutor.binaryMessenger, "settingChannel")
-        methodChannel2?.setMethodCallHandler { call, result ->
-            handleFlutterEvent(call, result)
+        privacyMethodChannel = MethodChannel(flutterEngine_account_privacy.dartExecutor.binaryMessenger, "settingChannel")
+        privacyMethodChannel?.setMethodCallHandler { call, result ->
+            handleFlutterEvent(call, result, false)
         }
     }
 
-    private var methodChannel: MethodChannel? = null
-    private var methodChannel2: MethodChannel? = null
+    private var editMethodChannel: MethodChannel? = null
+    private var privacyMethodChannel: MethodChannel? = null
 
-    private fun handleFlutterEvent(call: MethodCall, result: MethodChannel.Result) {
+    private fun handleFlutterEvent(call: MethodCall, result: MethodChannel.Result, isEditProfile: Boolean = false) {
         // handle flutter caller
-        Log.e(TAG, "handle flutter event   method: ${call.method}" )
+        Log.e(TAG, "handle flutter event   method: ${call.method}")
 
-        if (call.method == "openMethodChannel") {
-            val name = call.argument<String>("name")
-            val age = call.argument<Int>("age")
-            Log.e("flutter", "android receive form:$name ,$age ")
+        if (call.method == "flutterDestroy") {
             result.success("success")
-        }
-
-        if(call.method == "flutterDestroy"){
-            result.success("success")
+            recreate()
 //                FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).destroyEngineWithActivity(false)
-            go(this) // singleTask
+//            go(this) // singleTask
+//            recreate()
         }
 
-        if(call.method == "flutterInitalized"){
+        if (call.method == "flutterInitalized") {
             result.success("success")
-            callFlutter()
+            callFlutter(isEditProfile)
         }
 
         if (call.method == "saveProfileSuccess") {
@@ -258,7 +252,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
             CacheUtil.getUserInfo()?.also {
                 it.user?.apply {
-                    user?.also { new->
+                    user?.also { new ->
                         birth_time = new.birth_time
                         birthdate = new.birthdate
                         birthplace_info = new.birthplace_info
@@ -269,17 +263,18 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
                         gender = new.gender
 
                         CacheUtil.setUserInfo(it)
-                        LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED).postValue("time:${System.currentTimeMillis()}")
+                        LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED)
+                            .postValue("time:${System.currentTimeMillis()}")
                     }
                 }
             }
         }
     }
 
-    private fun callFlutter() {
+    private fun callFlutter(isEditProfile: Boolean) {
         var local = "zh-Hans-CN"
         val current = MultiLanguages.getAppLanguage()
-        if(current.language.equals(LocaleContract.getEnglishLocale().language)){
+        if (current.language.equals(LocaleContract.getEnglishLocale().language)) {
             local = "en_US"
         }
         CacheUtil.getUserInfo()?.apply {
@@ -290,34 +285,44 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
             val jsonString = GsonConverter.gson.toJson(user)
             val userMap = Klaxon().parse<Map<String, String>>(jsonString).orEmpty()
             map["token"] = token
-            map["user"] =  userMap
-            map["editBio"] = 0
-            map["localeLanguage"] = local
             map["openuid"] = openUid
+            map["localeLanguage"] = local
+            map["editBio"] = 0
+            map["user"] = userMap
             val params = GsonConverter.gson.toJson(map)
-            Log.e(TAG, "callFlutter:  params: $params" )
-            methodChannel?.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
-                override fun success(result: Any?) {
-                    Log.e(TAG, "callFlutter success: ")
-                }
+            Log.e(TAG, "callFlutter:  params: $params")
 
-                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                    Log.e(TAG, "callFlutter errorCode: ")
-                }
+            (if(isEditProfile) editMethodChannel else privacyMethodChannel)?.apply {
+                this.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
+                    override fun success(result: Any?) {
+                        Log.e(TAG, "callFlutter success: ")
+                    }
 
-                override fun notImplemented() {
-                    Log.e(TAG, "callFlutter notImplemented: ")
-                }
-            })
+                    override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                        Log.e(TAG, "callFlutter errorCode: ")
+                    }
+
+                    override fun notImplemented() {
+                        Log.e(TAG, "callFlutter notImplemented: ")
+                    }
+                })
+            }
         }
     }
 
     private fun goEditProfile() {
-        startActivity(FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).build(this))
+        startActivity(
+            FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE)
+                .backgroundMode(FlutterActivityLaunchConfigs.BackgroundMode.transparent).build(this)
+        )
     }
 
     private fun goAccountPrivacy() {
-        startActivity(FlutterActivity.withCachedEngine(ENGINE_ID_ACCOUNT_PRIVACY).build(this))
+        startActivity(
+            FlutterActivity.withCachedEngine(ENGINE_ID_ACCOUNT_PRIVACY)
+                .backgroundMode(FlutterActivityLaunchConfigs.BackgroundMode.transparent)
+                .build(this)
+        )
     }
 
     private fun goConnetedAccount() {

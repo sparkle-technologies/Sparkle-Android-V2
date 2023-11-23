@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/main_horoscope_calendar_bg_half_16_radius"
@@ -75,31 +76,31 @@
 
         <TextView
             style="@style/horoscope_calendar_title"
-            android:text="SUN" />
+            android:text="@string/sun" />
 
         <TextView
             style="@style/horoscope_calendar_title"
-            android:text="MON" />
+            android:text="@string/mon" />
 
         <TextView
             style="@style/horoscope_calendar_title"
-            android:text="TUE" />
+            android:text="@string/tue" />
 
         <TextView
             style="@style/horoscope_calendar_title"
-            android:text="WED" />
+            android:text="@string/wed" />
 
         <TextView
             style="@style/horoscope_calendar_title"
-            android:text="THU" />
+            android:text="@string/thu" />
 
         <TextView
             style="@style/horoscope_calendar_title"
-            android:text="FRI" />
+            android:text="@string/fri" />
 
         <TextView
             style="@style/horoscope_calendar_title"
-            android:text="SAT" />
+            android:text="@string/sat" />
 
     </LinearLayout>
 

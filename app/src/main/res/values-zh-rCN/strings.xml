@@ -1,6 +1,26 @@
 <resources>
 
-
-
-
+    <string name="more">更多</string>
+    <string name="copy_link">复制链接</string>
+    <string name="download">下载</string>
+    <string name="sun">日</string>
+    <string name="mon">一</string>
+    <string name="tue">二</string>
+    <string name="wed">三</string>
+    <string name="thu">四</string>
+    <string name="fri">五</string>
+    <string name="sat">六</string>
+    <string name="january">一月</string>
+    <string name="february">二月</string>
+    <string name="march">三月</string>
+    <string name="april">四月</string>
+    <string name="may">五月</string>
+    <string name="june">六月</string>
+    <string name="july">七月</string>
+    <string name="august">八月</string>
+    <string name="september">九月</string>
+    <string name="october">十月</string>
+    <string name="november">十一月</string>
+    <string name="december">十二月</string>
+    <string name="today">今天</string>
 </resources>

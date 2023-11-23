@@ -10,6 +10,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
+import com.cyberflow.base.util.dialogSlipDismiss
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import java.util.Calendar
@@ -64,6 +65,7 @@ class CalendarDialog {
         }
 
         mDialog?.apply {
+            root = findViewById(R.id.root)
             tvMonth = findViewById(R.id.tv_month)
             tvYear = findViewById(R.id.tv_year)
             viewPager2 = findViewById(R.id.vpContainer)
@@ -73,11 +75,18 @@ class CalendarDialog {
             btnNext = findViewById(R.id.btn_next)
         }
 
+        mDialog?.window?.decorView?.dialogSlipDismiss {
+            mDialog?.dismiss()
+        }
+       /* root?.dialogSlipDismiss {
+            mDialog?.dismiss()
+        }*/
+
         btnPrevious?.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 viewPager2?.apply {
                     if (currentItem > 0) {
-                        setCurrentItem(currentItem - 1, false)
+                        setCurrentItem(currentItem - 1, true)
                     }
                 }
             }
@@ -86,14 +95,16 @@ class CalendarDialog {
         btnNext?.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 viewPager2?.apply {
-                    if (currentItem < calendarAdapter?.itemCount!! - 1){
-                        setCurrentItem(currentItem + 1, false)
+                    if (currentItem < calendarAdapter?.itemCount!! - 1) {
+                        setCurrentItem(currentItem + 1, true)
                     }
                 }
             }
         })
     }
 
+
+    private var root: View? = null
     private var tvMonth: TextView? = null
     private var tvYear: TextView? = null
     private var viewPager2: ViewPager2? = null
@@ -108,12 +119,15 @@ class CalendarDialog {
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH) + 1
 
-        Log.e("TAG", "initData: $birthDate    currentYear=$currentYear  currentMonth=$currentMonth", )
+        Log.e(
+            "TAG",
+            "initData: $birthDate    currentYear=$currentYear  currentMonth=$currentMonth",
+        )
 
         birthDate?.let {  // 从出生日期到去年
-            val count =  currentYear*12 + currentMonth - (it.year * 12 + it.month)
+            val count = currentYear * 12 + currentMonth - (it.year * 12 + it.month)
 //            Log.e("TAG", "--1---count--: $count", )
-            for(i in count downTo 1){
+            for (i in count downTo 1) {
 //                Log.e("TAG", "-----1-----: i=$i", )
                 val calendar = Calendar.getInstance()
                 calendar.add(Calendar.MONTH, -i)
@@ -133,7 +147,7 @@ class CalendarDialog {
             data.add(calendar)
         }
 
-        Log.e("TAG", "initData: data.size=${data.size}" )
+        Log.e("TAG", "initData: data.size=${data.size}")
         calendarAdapter?.refreshData(data)
 //        val txt =  "${data[data.size - 1][Calendar.YEAR]}-${(data[data.size - 1][Calendar.MONTH] + 1)}"
 
@@ -163,8 +177,10 @@ class CalendarDialog {
 
     fun updatePagerHeightForChild(view: View, pager: ViewPager2?) {
         view.post {
-            val weightMeasureSpec = View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
-            val heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            val weightMeasureSpec =
+                View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
+            val heightMeasureSpec =
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
             view.measure(weightMeasureSpec, heightMeasureSpec)
             pager?.apply {
                 if (layoutParams.height != view.measuredHeight) {

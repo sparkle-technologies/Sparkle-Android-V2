@@ -425,7 +425,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
     }
 
     private fun showPermissionDialog(title: String, content: String, requestCode: Int) {
-        val dialog = PermissionDialog(this, title, content, object : PermissionDialog.PermissionClickListener {
+        val permissionDialog = PermissionDialog(this, title, content, object : PermissionDialog.PermissionClickListener {
             override fun leftClicked() {
                 // do nothing
             }
@@ -434,7 +434,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
                 PermissionUtil.goIntentSetting(this@ShareAct, requestCode)
             }
         })
-        dialog.show()
+        permissionDialog.show()
     }
 
     @SuppressLint("RestrictedApi")

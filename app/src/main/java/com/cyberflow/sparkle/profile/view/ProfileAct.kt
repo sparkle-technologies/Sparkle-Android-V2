@@ -45,6 +45,7 @@ import com.hjq.language.MultiLanguages
 import com.therouter.router.Route
 import dev.pinkroom.walletconnectkit.core.chains.toJson
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterActivityLaunchConfigs
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
@@ -66,11 +67,6 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
             val intent = Intent(context, ProfileAct::class.java)
             intent.putExtra(OPEN_UID, openUid)
             intent.putExtra(FRIEND_STATUS, friendStatus)
-            context.startActivity(intent)
-        }
-
-        fun go(context: Context) {
-            val intent = Intent(context, ProfileAct::class.java)
             context.startActivity(intent)
         }
     }
@@ -227,7 +223,6 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
                 loadBigImg(cache)
                 requestImg()
             }
-            initFlutter()
         }else{
             requestImg()
         }
@@ -315,8 +310,9 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
             Log.e(TAG, "handle flutter event   method: ${call.method}" )
 
             if(call.method == "flutterDestroy"){
-                go(this@ProfileAct)
+//                go(this@ProfileAct)
                 result.success("success")
+                recreate()
             }
 
             if(call.method == "flutterInitalized"){
@@ -353,7 +349,8 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
         }
     }
     private fun goFlutter(){
-        startActivity(FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).build(this))
+        startActivity(FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).backgroundMode(
+            FlutterActivityLaunchConfigs.BackgroundMode.transparent).build(this))
     }
 
     private fun callFlutter() {
@@ -424,6 +421,7 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
                  }else{
                      if(isMySelf){
                          setSpan(tvContent)
+                         initFlutter()
                      }else{
                          tvContent.text = "He has not yet constructed the bio."
                      }

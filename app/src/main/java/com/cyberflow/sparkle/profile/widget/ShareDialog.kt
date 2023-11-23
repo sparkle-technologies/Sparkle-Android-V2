@@ -91,6 +91,7 @@ class ShareDialog {
             lp.height = WindowManager.LayoutParams.WRAP_CONTENT
 //            lp.height = WindowManager.LayoutParams.MATCH_PARENT
             window.attributes = lp
+
             window.setWindowAnimations(R.style.BottomDialog_Animation)
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,

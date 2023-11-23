@@ -1,5 +1,27 @@
 <resources>
 
 
-
+    <string name="more">More</string>
+    <string name="copy_link">Copy link</string>
+    <string name="download">Download</string>
+    <string name="sun">SUN</string>
+    <string name="mon">MON</string>
+    <string name="tue">TUE</string>
+    <string name="wed">WED</string>
+    <string name="thu">THU</string>
+    <string name="fri">FRI</string>
+    <string name="sat">SAT</string>
+    <string name="january">January</string>
+    <string name="february">February</string>
+    <string name="march">March</string>
+    <string name="april">April</string>
+    <string name="may">May</string>
+    <string name="june">June</string>
+    <string name="july">July</string>
+    <string name="august">August</string>
+    <string name="september">September</string>
+    <string name="october">October</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    <string name="today">TODAY</string>
 </resources>
