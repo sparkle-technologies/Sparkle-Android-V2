@@ -17,6 +17,7 @@ import com.cyberflow.base.model.RegisterRequestBean
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.databinding.ActivityRegiserBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
+import com.hyphenate.easeui.input.util.ViewUtil
 
 class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() {
 
@@ -46,6 +47,11 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
             })
         }
 //        mViewBind.dotsIndicator.attachTo(mViewBind.pager)
+
+        mViewBind.root.setOnClickListener {
+            mViewBind.pager.clearFocus()
+            ViewUtil.hideKeyboard(this, mViewBind.pager)
+        }
     }
 
     private fun handleIndicator(position: Int) {

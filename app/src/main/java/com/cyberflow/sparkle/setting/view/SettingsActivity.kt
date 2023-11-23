@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.beust.klaxon.Klaxon
 import com.cyberflow.base.act.BaseDBAct
@@ -80,7 +79,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         }
         mDataBinding.btnLogout.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(d: Boolean) {
-                Toast.makeText(this@SettingsActivity, "ready logout now", Toast.LENGTH_LONG).show()
+//                Toast.makeText(this@SettingsActivity, "ready logout now", Toast.LENGTH_LONG).show()
                 logout()
             }
         })

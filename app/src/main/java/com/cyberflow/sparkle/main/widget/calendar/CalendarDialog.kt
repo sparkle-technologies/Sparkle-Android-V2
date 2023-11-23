@@ -1,6 +1,5 @@
 package com.cyberflow.sparkle.main.widget.calendar
 
-import android.app.Dialog
 import android.content.Context
 import android.util.DisplayMetrics
 import android.util.Log
@@ -10,9 +9,9 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
-import com.cyberflow.base.util.dialogSlipDismiss
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.widget.ShadowImgButton
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Calendar
 
 class CalendarDialog {
@@ -20,7 +19,7 @@ class CalendarDialog {
     private var mContext: Context? = null
     private var mCallback: Callback? = null
 
-    private var mDialog: Dialog? = null
+    private var mDialog: BottomSheetDialog? = null
     private var isWeek = false
     private var birthDate: DateBean? = null
 
@@ -44,7 +43,7 @@ class CalendarDialog {
 
 
     private fun initView() {
-        mDialog = Dialog(mContext!!, com.cyberflow.base.resources.R.style.forward_dialog)
+        mDialog = BottomSheetDialog(mContext!!, com.cyberflow.base.resources.R.style.forward_dialog)
         mDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         mDialog?.setContentView(R.layout.dialog_calendar)
 
@@ -65,7 +64,6 @@ class CalendarDialog {
         }
 
         mDialog?.apply {
-            root = findViewById(R.id.root)
             tvMonth = findViewById(R.id.tv_month)
             tvYear = findViewById(R.id.tv_year)
             viewPager2 = findViewById(R.id.vpContainer)
@@ -74,13 +72,6 @@ class CalendarDialog {
             btnPrevious = findViewById(R.id.btn_previous)
             btnNext = findViewById(R.id.btn_next)
         }
-
-        mDialog?.window?.decorView?.dialogSlipDismiss {
-            mDialog?.dismiss()
-        }
-       /* root?.dialogSlipDismiss {
-            mDialog?.dismiss()
-        }*/
 
         btnPrevious?.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
@@ -103,7 +94,6 @@ class CalendarDialog {
         })
     }
 
-    private var root: View? = null
     private var tvMonth: TextView? = null
     private var tvYear: TextView? = null
     private var viewPager2: ViewPager2? = null
@@ -117,10 +107,7 @@ class CalendarDialog {
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH) + 1
 
-        Log.e(
-            "TAG",
-            "initData: $birthDate    currentYear=$currentYear  currentMonth=$currentMonth",
-        )
+        Log.e("TAG", "initData: $birthDate    currentYear=$currentYear  currentMonth=$currentMonth",)
 
         birthDate?.let {  // 从出生日期到去年
             val count = currentYear * 12 + currentMonth - (it.year * 12 + it.month)

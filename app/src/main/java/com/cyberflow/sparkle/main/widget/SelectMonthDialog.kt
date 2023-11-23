@@ -1,6 +1,5 @@
 package com.cyberflow.sparkle.main.widget
 
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.util.DisplayMetrics
@@ -11,7 +10,6 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.cyberflow.base.util.dialogSlipDismiss
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ItemHoroscopeSelectMonthBinding
 import com.cyberflow.sparkle.main.widget.calendar.DateBean
@@ -20,6 +18,7 @@ import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Calendar
 
 class SelectMonthDialog {
@@ -27,7 +26,7 @@ class SelectMonthDialog {
     private var mContext: Context? = null
     private var mCallback: Callback? = null
     private var birthDate: DateBean? = null
-    private var mDialog: Dialog? = null
+    private var mDialog: BottomSheetDialog? = null
 
     interface Callback {
         fun onSelected(select: DateBean?)
@@ -47,7 +46,7 @@ class SelectMonthDialog {
     }
 
     private fun initView() {
-        mDialog = Dialog(mContext!!, com.cyberflow.base.resources.R.style.forward_dialog)
+        mDialog = BottomSheetDialog(mContext!!, com.cyberflow.base.resources.R.style.forward_dialog)
         mDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         mDialog?.setContentView(R.layout.dialog_select_month)
 
@@ -72,9 +71,6 @@ class SelectMonthDialog {
             rv = findViewById(R.id.rv)
         }
 
-        mDialog?.window?.decorView?.dialogSlipDismiss {
-            mDialog?.dismiss()
-        }
 
         btnPrevious?.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {

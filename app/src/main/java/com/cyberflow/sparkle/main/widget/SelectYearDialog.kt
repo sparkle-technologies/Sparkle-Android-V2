@@ -1,17 +1,16 @@
 package com.cyberflow.sparkle.main.widget
 
-import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.cyberflow.base.util.dialogSlipDismiss
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ItemHoroscopeSelectMonthBinding
 import com.cyberflow.sparkle.main.widget.calendar.DateBean
@@ -19,6 +18,7 @@ import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.Calendar
 
 class SelectYearDialog {
@@ -26,7 +26,7 @@ class SelectYearDialog {
     private var mContext: Context? = null
     private var mCallback: Callback? = null
     private var birthDate: DateBean? = null
-    private var mDialog: Dialog? = null
+    private var mDialog: BottomSheetDialog? = null
 
     interface Callback {
         fun onSelected(select: DateBean?)
@@ -46,7 +46,7 @@ class SelectYearDialog {
     }
 
     private fun initView() {
-        mDialog = Dialog(mContext!!, com.cyberflow.base.resources.R.style.forward_dialog)
+        mDialog = BottomSheetDialog(mContext!!, com.cyberflow.base.resources.R.style.forward_dialog)
         mDialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         mDialog?.setContentView(R.layout.dialog_select_month)
 
@@ -65,14 +65,11 @@ class SelectYearDialog {
         }
 
         mDialog?.apply {
+            root = findViewById(R.id.root)
             tvYear = findViewById(R.id.tv_year)
             btnPrevious = findViewById(R.id.btn_previous)
             btnNext = findViewById(R.id.btn_next)
             rv = findViewById(R.id.rv)
-        }
-
-        mDialog?.window?.decorView?.dialogSlipDismiss {
-            mDialog?.dismiss()
         }
 
         btnPrevious?.setClickListener(object : ShadowImgButton.ShadowClickListener {
@@ -124,6 +121,7 @@ class SelectYearDialog {
         }
     }
 
+    private var root: View? = null
     private var tvYear: TextView? = null
     private var btnPrevious: ShadowImgButton? = null
     private var btnNext: ShadowImgButton? = null
