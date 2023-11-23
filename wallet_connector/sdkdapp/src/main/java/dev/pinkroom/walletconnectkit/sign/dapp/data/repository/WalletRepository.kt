@@ -62,6 +62,7 @@ internal class WalletRepository(
     private suspend fun getAllWallets(chains: List<String>): ExplorerResponse? {
         try {
             // todo : save wallet info to local file, no need to request every time
+//            explorerService.getWallets(walletConnectKitConfig.projectId, chains.joinToString(","))
             val json = readJSONFromAssets(context, "wallet.json")
             if(json.isNotEmpty()){
                 Log.e("TAG", "getAllWallets: json is not empty", )

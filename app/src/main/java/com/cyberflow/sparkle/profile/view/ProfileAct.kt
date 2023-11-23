@@ -7,15 +7,19 @@ import android.util.Log
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
+import com.beust.klaxon.Klaxon
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.model.DetailResponseData
 import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.base.model.ManyImageData
 import com.cyberflow.base.model.User
 import com.cyberflow.base.net.Api
+import com.cyberflow.base.net.GsonConverter
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
+import com.cyberflow.base.util.bus.LiveDataBus
+import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.DBComponent.loadImageWithHolder
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
@@ -36,7 +40,15 @@ import com.drake.spannable.setSpan
 import com.drake.spannable.span.CenterImageSpan
 import com.drake.spannable.span.ColorSpan
 import com.drake.spannable.span.HighlightSpan
+import com.hjq.language.LocaleContract
+import com.hjq.language.MultiLanguages
 import com.therouter.router.Route
+import dev.pinkroom.walletconnectkit.core.chains.toJson
+import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineCache
+import io.flutter.embedding.engine.dart.DartExecutor
+import io.flutter.plugin.common.MethodChannel
 import me.jessyan.autosize.utils.ScreenUtils
 
 @Route(path = PageConst.App.PAGE_PROFILE)
@@ -54,6 +66,11 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
             val intent = Intent(context, ProfileAct::class.java)
             intent.putExtra(OPEN_UID, openUid)
             intent.putExtra(FRIEND_STATUS, friendStatus)
+            context.startActivity(intent)
+        }
+
+        fun go(context: Context) {
+            val intent = Intent(context, ProfileAct::class.java)
             context.startActivity(intent)
         }
     }
@@ -179,6 +196,15 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
                 mDataBinding.btnProfileAction.setViewTxt(txt[action])
             }
         }
+
+        LiveDataBus.get().apply {
+            with(SparkleEvent.PROFILE_CHANGED, String::class.java).observe(this@ProfileAct, this@ProfileAct::profileDataChanged)
+        }
+    }
+
+
+    private fun profileDataChanged(s: String){
+        loadProfile()
     }
 
     private var open_uid = ""
@@ -201,6 +227,7 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
                 loadBigImg(cache)
                 requestImg()
             }
+            initFlutter()
         }else{
             requestImg()
         }
@@ -261,15 +288,110 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
             .addSpan(" edit")
             .replaceSpan("image"){
                 HighlightSpan("#8B82DB"){
-                    ToastUtil.show(this, "click img, go flutter page ")
+//                    ToastUtil.show(this, "click img, go flutter page ")
+                    goFlutter()
                 }
             }
             .replaceSpan("edit"){
                 HighlightSpan("#8B82DB"){
-                    ToastUtil.show(this, "click txt, go flutter page ")
+//                    ToastUtil.show(this, "click txt, go flutter page ")
+                    goFlutter()
                 }
             }
     }
+
+    private val ENGINE_ID_EDIT_PROFILE = "eidt_profile"
+    lateinit var flutterEngine_edit_profile: FlutterEngine
+    private var methodChannel: MethodChannel? = null
+
+    private fun initFlutter(){
+        flutterEngine_edit_profile = FlutterEngine(this)
+        flutterEngine_edit_profile.navigationChannel.setInitialRoute("/profile/edit")
+        flutterEngine_edit_profile.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
+        FlutterEngineCache.getInstance().put(ENGINE_ID_EDIT_PROFILE, flutterEngine_edit_profile)
+        methodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "settingChannel")
+        methodChannel?.setMethodCallHandler { call, result ->
+            // handle flutter caller
+            Log.e(TAG, "handle flutter event   method: ${call.method}" )
+
+            if(call.method == "flutterDestroy"){
+                go(this@ProfileAct)
+                result.success("success")
+            }
+
+            if(call.method == "flutterInitalized"){
+                result.success("success")
+                callFlutter()
+            }
+
+            if (call.method == "saveProfileSuccess") {
+                val userStr = call.argument<HashMap<String, String>>("user")
+                result.success("success")
+
+                Log.e("flutter", "android receive form:${userStr.toJson()} ")
+                val user = GsonConverter.gson.fromJson(userStr.toJson(), User::class.java)
+                Log.e("flutter", "android receive form:$user ")
+
+                CacheUtil.getUserInfo()?.also {
+                    it.user?.apply {
+                        user?.also { new->
+                            birth_time = new.birth_time
+                            birthdate = new.birthdate
+                            birthplace_info = new.birthplace_info
+                            location_info = new.location_info
+                            nick = new.nick
+                            signature = new.signature
+                            profile_permission = new.profile_permission
+                            gender = new.gender
+
+                            CacheUtil.setUserInfo(it)
+                            LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED).postValue("time:${System.currentTimeMillis()}")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private fun goFlutter(){
+        startActivity(FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).build(this))
+    }
+
+    private fun callFlutter() {
+        var local = "zh-Hans-CN"
+        val current = MultiLanguages.getAppLanguage()
+        if(current.language.equals(LocaleContract.getEnglishLocale().language)){
+            local = "en_US"
+        }
+        CacheUtil.getUserInfo()?.apply {
+            val openUid = user?.open_uid.orEmpty()
+            val token = token
+            var map = mutableMapOf<String, Any>()
+
+            val jsonString = GsonConverter.gson.toJson(user)
+            val userMap = Klaxon().parse<Map<String, String>>(jsonString).orEmpty()
+            map["token"] = token
+            map["user"] =  userMap
+            map["editBio"] = 1
+            map["localeLanguage"] = local
+            map["openuid"] = openUid
+            val params = GsonConverter.gson.toJson(map)
+            Log.e(TAG, "callFlutter:  params: $params" )
+            methodChannel?.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
+                override fun success(result: Any?) {
+                    Log.e(TAG, "callFlutter success: ")
+                }
+
+                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                    Log.e(TAG, "callFlutter errorCode: ")
+                }
+
+                override fun notImplemented() {
+                    Log.e(TAG, "callFlutter notImplemented: ")
+                }
+            })
+        }
+    }
+
 
     private fun getIconByBindType(type: String) : Int{
         return when(type){

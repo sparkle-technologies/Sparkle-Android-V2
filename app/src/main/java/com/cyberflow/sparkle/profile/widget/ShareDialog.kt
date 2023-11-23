@@ -89,6 +89,7 @@ class ShareDialog {
             lp.gravity = Gravity.BOTTOM
             lp.width = WindowManager.LayoutParams.MATCH_PARENT
             lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+//            lp.height = WindowManager.LayoutParams.MATCH_PARENT
             window.attributes = lp
             window.setWindowAnimations(R.style.BottomDialog_Animation)
             window.setFlags(

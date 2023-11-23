@@ -6,10 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.beust.klaxon.Klaxon
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.User
 import com.cyberflow.base.net.GsonConverter
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.ToastUtil
+import com.cyberflow.base.util.bus.LiveDataBus
+import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
@@ -19,12 +23,15 @@ import com.cyberflow.sparkle.login.view.LoginAct
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.utils.withMain
 import com.google.firebase.auth.FirebaseAuth
+import com.hjq.language.LocaleContract
 import com.hjq.language.MultiLanguages
 import com.hjq.language.OnLanguageListener
+import dev.pinkroom.walletconnectkit.core.chains.toJson
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
+import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -205,40 +212,87 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         FlutterEngineCache.getInstance().put(ENGINE_ID_EDIT_PROFILE, flutterEngine_edit_profile)
         FlutterEngineCache.getInstance().put(ENGINE_ID_ACCOUNT_PRIVACY, flutterEngine_account_privacy)
 
-        methodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "flutter_bridge")
+        methodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "settingChannel")
         methodChannel?.setMethodCallHandler { call, result ->
-            // handle flutter caller
-            Log.e(TAG, "handle flutter event   method: ${call.method}" )
+            handleFlutterEvent(call, result)
+        }
 
-            if (call.method == "openMethodChannel") {
-                val name = call.argument<String>("name")
-                val age = call.argument<Int>("age")
-                Log.e("flutter", "android receive form:$name ,$age ")
-                result.success("success")
-            }
-
-            if(call.method == "flutterDestroy"){
-//                FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).destroyEngineWithActivity(false)
-                SettingsActivity.go(this) // singleTask
-                result.success("success")
-            }
-
-            if(call.method == "flutterInitalized"){
-                result.success("success")
-                callFlutter()
-            }
+        methodChannel2 = MethodChannel(flutterEngine_account_privacy.dartExecutor.binaryMessenger, "settingChannel")
+        methodChannel2?.setMethodCallHandler { call, result ->
+            handleFlutterEvent(call, result)
         }
     }
 
     private var methodChannel: MethodChannel? = null
+    private var methodChannel2: MethodChannel? = null
+
+    private fun handleFlutterEvent(call: MethodCall, result: MethodChannel.Result) {
+        // handle flutter caller
+        Log.e(TAG, "handle flutter event   method: ${call.method}" )
+
+        if (call.method == "openMethodChannel") {
+            val name = call.argument<String>("name")
+            val age = call.argument<Int>("age")
+            Log.e("flutter", "android receive form:$name ,$age ")
+            result.success("success")
+        }
+
+        if(call.method == "flutterDestroy"){
+            result.success("success")
+//                FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).destroyEngineWithActivity(false)
+            go(this) // singleTask
+        }
+
+        if(call.method == "flutterInitalized"){
+            result.success("success")
+            callFlutter()
+        }
+
+        if (call.method == "saveProfileSuccess") {
+            val userStr = call.argument<HashMap<String, String>>("user")
+            result.success("success")
+
+            Log.e("flutter", "android receive form:${userStr.toJson()} ")
+            val user = GsonConverter.gson.fromJson(userStr.toJson(), User::class.java)
+            Log.e("flutter", "android receive form:$user ")
+
+            CacheUtil.getUserInfo()?.also {
+                it.user?.apply {
+                    user?.also { new->
+                        birth_time = new.birth_time
+                        birthdate = new.birthdate
+                        birthplace_info = new.birthplace_info
+                        location_info = new.location_info
+                        nick = new.nick
+                        signature = new.signature
+                        profile_permission = new.profile_permission
+                        gender = new.gender
+
+                        CacheUtil.setUserInfo(it)
+                        LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED).postValue("time:${System.currentTimeMillis()}")
+                    }
+                }
+            }
+        }
+    }
 
     private fun callFlutter() {
+        var local = "zh-Hans-CN"
+        val current = MultiLanguages.getAppLanguage()
+        if(current.language.equals(LocaleContract.getEnglishLocale().language)){
+            local = "en_US"
+        }
         CacheUtil.getUserInfo()?.apply {
             val openUid = user?.open_uid.orEmpty()
             val token = token
-            var map = mutableMapOf<String, String>()
-            map["local"] = "zh"
+            var map = mutableMapOf<String, Any>()
+
+            val jsonString = GsonConverter.gson.toJson(user)
+            val userMap = Klaxon().parse<Map<String, String>>(jsonString).orEmpty()
             map["token"] = token
+            map["user"] =  userMap
+            map["editBio"] = 0
+            map["localeLanguage"] = local
             map["openuid"] = openUid
             val params = GsonConverter.gson.toJson(map)
             Log.e(TAG, "callFlutter:  params: $params" )

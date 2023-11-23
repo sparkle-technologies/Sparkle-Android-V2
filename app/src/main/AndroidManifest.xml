@@ -82,7 +82,8 @@
 
         <activity android:name=".setting.view.LanguageActivity" />
 
-        <activity android:name=".profile.view.ProfileAct" />
+        <activity android:name=".profile.view.ProfileAct"
+            android:launchMode="singleTask"/>
         <activity
             android:name=".profile.view.ShareAct"
             android:theme="@style/Theme.AppCompat.Translucent" />
