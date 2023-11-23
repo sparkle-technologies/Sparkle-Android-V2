@@ -16,6 +16,7 @@ import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.Post
 import com.drake.net.utils.scopeDialog
+import com.hyphenate.easeui.input.util.ViewUtil.hideKeyboard
 
 class NickNameFragment :
     BaseVBFragment<LoginRegisterViewModel, FragmentRegisterNicknameBinding>() {
@@ -46,6 +47,11 @@ class NickNameFragment :
                 error = !error
             }
         })*/
+
+        mViewBind.root.setOnClickListener {
+            mViewBind.etNiceName.clearFocus()
+            hideKeyboard(requireActivity(), mViewBind.etNiceName)
+        }
 
         mViewBind.etNiceName.addTextChangedListener {
             if (it.isNullOrEmpty()) {
@@ -91,7 +97,7 @@ class NickNameFragment :
                     val token = CacheUtil.getUserInfo()?.token.orEmpty()
                     Log.e("NickNameFragment", "got new token from login :  $token")
                     LoginAct.imLogin(requireActivity())
-                    requireActivity().finish()
+//                    requireActivity().finish()
                 }
             }
         }

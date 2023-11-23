@@ -103,7 +103,6 @@ class CalendarDialog {
         })
     }
 
-
     private var root: View? = null
     private var tvMonth: TextView? = null
     private var tvYear: TextView? = null
@@ -111,7 +110,6 @@ class CalendarDialog {
     private var calendarAdapter: CalendarAdapter? = null
     private var btnPrevious: ShadowImgButton? = null
     private var btnNext: ShadowImgButton? = null
-
 
     private fun initData() {
         val data: MutableList<Calendar> = ArrayList()
