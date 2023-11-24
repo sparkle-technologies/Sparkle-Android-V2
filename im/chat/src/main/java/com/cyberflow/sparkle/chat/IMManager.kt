@@ -13,6 +13,8 @@ import com.cyberflow.sparkle.chat.common.db.DemoDbHelper
 import com.cyberflow.sparkle.chat.common.repositories.EMChatManagerRepository
 import com.cyberflow.sparkle.chat.common.repositories.EMClientRepository
 import com.cyberflow.sparkle.chat.common.utils.PreferenceManager
+import com.cyberflow.sparkle.widget.ToastDialog
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.hyphenate.EMCallBack
 import com.hyphenate.chat.EMClient
 import com.hyphenate.easeui.ui.dialog.LoadingDialog
@@ -36,6 +38,7 @@ class IMManager private constructor() {
     @UiThread
     fun initUI() {
         LoadingDialogHolder.setLoadingDialog(LoadingDialog.Companion)
+        ToastDialogHolder.setDialog(ToastDialog.Companion)
         EmojiManager.install(IosEmojiProvider())
     }
 
