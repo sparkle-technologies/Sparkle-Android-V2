@@ -5,36 +5,26 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
-import com.beust.klaxon.Klaxon
 import com.cyberflow.base.act.BaseDBAct
-import com.cyberflow.base.model.User
-import com.cyberflow.base.net.GsonConverter
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.ToastUtil
-import com.cyberflow.base.util.bus.LiveDataBus
-import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivitySettingBinding
+import com.cyberflow.sparkle.flutter.FlutterProxyActivity
+import com.cyberflow.sparkle.flutter.FlutterProxyActivity.Companion.handleFlutterCommonEvent
+import com.cyberflow.sparkle.flutter.FlutterProxyActivity.Companion.initParams
+import com.cyberflow.sparkle.flutter.FlutterProxyActivity.Companion.prepareFlutterEngine
 import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.view.LoginAct
-import com.cyberflow.sparkle.widget.NotificationDialog.Companion.TYPE_ERROR
-import com.cyberflow.sparkle.widget.NotificationDialog.Companion.TYPE_SUCCESS
-import com.cyberflow.sparkle.widget.NotificationDialog.Companion.TYPE_WARN
+import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.utils.withMain
 import com.google.firebase.auth.FirebaseAuth
-import com.hjq.language.LocaleContract
 import com.hjq.language.MultiLanguages
 import com.hjq.language.OnLanguageListener
-import dev.pinkroom.walletconnectkit.core.chains.toJson
-import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.embedding.engine.FlutterEngineCache
-import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
@@ -83,7 +73,6 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         }
         mDataBinding.btnLogout.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(d: Boolean) {
-//                Toast.makeText(this@SettingsActivity, "ready logout now", Toast.LENGTH_LONG).show()
                 logout()
             }
         })
@@ -137,7 +126,6 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         FirebaseAuth.getInstance().signOut()
     }
 
-
     override fun initData() {
         initFlutter()
 //        initMultiLanguage()
@@ -156,190 +144,63 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         })
     }
 
-    // aar 方式导入module
-    // https://medium.com/@FlavioAro/how-to-integrate-a-flutter-module-into-your-native-android-application-52c41eeb6154
+    private var editMethodChannel : MethodChannel? = null
+    private var privacyMethodChannel : MethodChannel? = null
 
-    // 依赖方式  目前用这种
-    // https://flutter.cn/docs/add-to-app/android/project-setup#option-b---depend-on-the-modules-source-code
-    // https://github.com/flutter/flutter/issues/99735
-
-    // 数据传递  消息双向通行
-    //https://juejin.cn/post/7220295071060164663
-    // https://blog.csdn.net/zhujiangtaotaise/article/details/111352652
-
-    // 初始化的时候带参数过去  考虑用框架
-    // https://github.com/alibaba/flutter_boost/blob/master/docs/install.md
-
-    // 原生 flutter 相互调用方法
-    //https://blog.csdn.net/zhujiangtaotaise/article/details/111352652
-
-    // 打包release报错  ...':flutter:copyFlutterAssetsRelease' (type 'Copy').
-    // 改了代码 /Users/blackjack/Desktop/flutter/flutter/packages/flutter_tools/gradle/src/main/groovy/flutter.groovy
-    // https://github.com/flutter/flutter/issues/129471
-
-    /**
-
-    // if (!isUsedAsSubproject) {
-    //     def variantOutput = variant.outputs.first()
-    //     def processResources = variantOutput.hasProperty("processResourcesProvider") ?
-    //     variantOutput.processResourcesProvider.get() : variantOutput.processResources
-    //     processResources.dependsOn(copyFlutterAssetsTask)
-    // }
-
-    def variantOutput = variant.outputs.first()
-    def processResources = variantOutput.hasProperty("processResourcesProvider") ?
-    variantOutput.processResourcesProvider.get() : variantOutput.processResources
-    processResources.dependsOn(copyFlutterAssetsTask)
-
-    useful commands:
-    flutter clean
-    flutter pub get
-
-     */
-    private val ENGINE_ID_EDIT_PROFILE = "eidt_profile"
-    private val ENGINE_ID_ACCOUNT_PRIVACY = "account_privacy"
-
-    lateinit var flutterEngine_edit_profile: FlutterEngine
-    lateinit var flutterEngine_account_privacy: FlutterEngine
     private fun initFlutter() {
-        flutterEngine_edit_profile = FlutterEngine(this)
-        flutterEngine_account_privacy = FlutterEngine(this)
-
-        flutterEngine_edit_profile.navigationChannel.setInitialRoute("/profile/edit")
-        flutterEngine_account_privacy.navigationChannel.setInitialRoute("/profile/accountPrivacy")
-
-        flutterEngine_edit_profile.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
-        flutterEngine_account_privacy.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
-
-        FlutterEngineCache.getInstance().put(ENGINE_ID_EDIT_PROFILE, flutterEngine_edit_profile)
-        FlutterEngineCache.getInstance().put(ENGINE_ID_ACCOUNT_PRIVACY, flutterEngine_account_privacy)
-
-        editMethodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "settingChannel")
-        editMethodChannel?.setMethodCallHandler { call, result ->
-            handleFlutterEvent(call, result, true)
+        editMethodChannel = prepareFlutterEngine(this, FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE, FlutterProxyActivity.ROUTE_EDIT_PROFILE, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_EDIT){
+            scene, method, call, result ->
+            handleFlutterEvent( method, call, result)
         }
 
-        privacyMethodChannel = MethodChannel(flutterEngine_account_privacy.dartExecutor.binaryMessenger, "settingChannel")
-        privacyMethodChannel?.setMethodCallHandler { call, result ->
-            handleFlutterEvent(call, result, false)
+        privacyMethodChannel = prepareFlutterEngine(this, FlutterProxyActivity.ENGINE_ID_ACCOUNT_PRIVACY, FlutterProxyActivity.ROUTE_ACCOUNT_PRIVACY, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_PRIVACY){
+                engineName, method, call, result ->
+            handleFlutterEvent( method, call, result)
         }
     }
 
-    private var editMethodChannel: MethodChannel? = null
-    private var privacyMethodChannel: MethodChannel? = null
-
-    private fun handleFlutterEvent(call: MethodCall, result: MethodChannel.Result, isEditProfile: Boolean = false) {
-        // handle flutter caller
-        Log.e(TAG, "handle flutter event   method: ${call.method}")
-
-        if (call.method == "flutterDestroy") {
-            result.success("success")
-//            recreate()
-//                FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).destroyEngineWithActivity(false)
-//            go(this) // singleTask
-//            recreate()
-        }
-
-        if (call.method == "flutterInitalized") {
-            result.success("success")
-            callFlutter(isEditProfile)
-        }
-
-        if (call.method == "saveProfileSuccess") {
-            val userStr = call.argument<HashMap<String, String>>("user")
-            result.success("success")
-
-            Log.e("flutter", "android receive form:${userStr.toJson()} ")
-            val user = GsonConverter.gson.fromJson(userStr.toJson(), User::class.java)
-            Log.e("flutter", "android receive form:$user ")
-
-            CacheUtil.getUserInfo()?.also {
-                it.user?.apply {
-                    user?.also { new ->
-                        birth_time = new.birth_time
-                        birthdate = new.birthdate
-                        birthplace_info = new.birthplace_info
-                        location_info = new.location_info
-                        nick = new.nick
-                        signature = new.signature
-                        profile_permission = new.profile_permission
-                        gender = new.gender
-
-                        CacheUtil.setUserInfo(it)
-                        LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED)
-                            .postValue("time:${System.currentTimeMillis()}")
-                    }
-                }
-            }
-        }
-
-        if(call.method == "flutterToast"){
+    private fun handleFlutterEvent(
+        method: MethodChannel,
+        call: MethodCall,
+        result: MethodChannel.Result
+    ) {
+        if (call.method == "flutterToast") {
             val type = call.argument<String>("type")
             val content = call.argument<String>("content")
-            if(content?.isNotEmpty() == true){
-                val t = when(type){
-                    "success" -> TYPE_SUCCESS
-                    "error" -> TYPE_ERROR
-                    else ->  TYPE_WARN
+            if (content?.isNotEmpty() == true) {
+                val t = when (type) {
+                    "success" -> NotificationDialog.TYPE_SUCCESS
+                    "error" -> NotificationDialog.TYPE_ERROR
+                    else -> NotificationDialog.TYPE_WARN
                 }
                 ToastDialogHolder.getDialog()?.show(this@SettingsActivity, t, content)
             }
             result.success("success")
+        }else{
+            handleFlutterCommonEvent(0, method, call, result)
         }
     }
 
-    private fun callFlutter(isEditProfile: Boolean) {
-        var local = "zh-Hans-CN"
-        val current = MultiLanguages.getAppLanguage()
-        if (current.language.equals(LocaleContract.getEnglishLocale().language)) {
-            local = "en_US"
-        }
-        CacheUtil.getUserInfo()?.apply {
-            val openUid = user?.open_uid.orEmpty()
-            val token = token
-            var map = mutableMapOf<String, Any>()
-
-            val jsonString = GsonConverter.gson.toJson(user)
-            val userMap = Klaxon().parse<Map<String, String>>(jsonString).orEmpty()
-            map["token"] = token
-            map["openuid"] = openUid
-            map["localeLanguage"] = local
-            map["editBio"] = 0
-            map["user"] = userMap
-            val params = GsonConverter.gson.toJson(map)
-            Log.e(TAG, "callFlutter:  params: $params")
-
-            (if(isEditProfile) editMethodChannel else privacyMethodChannel)?.apply {
-                this.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
-                    override fun success(result: Any?) {
-                        Log.e(TAG, "callFlutter success: ")
-                    }
-
-                    override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                        Log.e(TAG, "callFlutter errorCode: ")
-                    }
-
-                    override fun notImplemented() {
-                        Log.e(TAG, "callFlutter notImplemented: ")
-                    }
-                })
-            }
-        }
-    }
+    private var isFirstTimeForEdit = true
 
     private fun goEditProfile() {
-        startActivity(
-            FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE)
-                .backgroundMode(FlutterActivityLaunchConfigs.BackgroundMode.transparent).build(this)
-        )
+        if(isFirstTimeForEdit){
+            isFirstTimeForEdit = false
+        }else{
+            editMethodChannel?.let { initParams(FlutterProxyActivity.SCENE_SETTING_EDIT, it) }
+        }
+        FlutterProxyActivity.go(this, FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE)
     }
 
+    private var isFirstTimeForPrivacy = true
+
     private fun goAccountPrivacy() {
-        startActivity(
-            FlutterActivity.withCachedEngine(ENGINE_ID_ACCOUNT_PRIVACY)
-                .backgroundMode(FlutterActivityLaunchConfigs.BackgroundMode.transparent)
-                .build(this)
-        )
+        if(isFirstTimeForPrivacy){
+            isFirstTimeForPrivacy = false
+        }else{
+            privacyMethodChannel?.let { initParams(FlutterProxyActivity.SCENE_SETTING_PRIVACY, it) }
+        }
+        FlutterProxyActivity.go(this, FlutterProxyActivity.ENGINE_ID_ACCOUNT_PRIVACY)
     }
 
     private fun goConnetedAccount() {

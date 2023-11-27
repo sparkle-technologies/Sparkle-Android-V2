@@ -7,14 +7,12 @@ import android.util.Log
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
-import com.beust.klaxon.Klaxon
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.model.DetailResponseData
 import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.base.model.ManyImageData
 import com.cyberflow.base.model.User
 import com.cyberflow.base.net.Api
-import com.cyberflow.base.net.GsonConverter
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
@@ -24,6 +22,7 @@ import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.DBComponent.loadImageWithHolder
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityProfileBinding
+import com.cyberflow.sparkle.flutter.FlutterProxyActivity
 import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMAddFriendAct
 import com.cyberflow.sparkle.profile.viewmodel.ProfileViewModel
@@ -42,15 +41,8 @@ import com.drake.spannable.setSpan
 import com.drake.spannable.span.CenterImageSpan
 import com.drake.spannable.span.ColorSpan
 import com.drake.spannable.span.HighlightSpan
-import com.hjq.language.LocaleContract
-import com.hjq.language.MultiLanguages
 import com.therouter.router.Route
-import dev.pinkroom.walletconnectkit.core.chains.toJson
-import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.embedding.engine.FlutterEngineCache
-import io.flutter.embedding.engine.dart.DartExecutor
+import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import me.jessyan.autosize.utils.ScreenUtils
 
@@ -286,123 +278,57 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
             .replaceSpan("image"){
                 HighlightSpan("#8B82DB"){
 //                    ToastUtil.show(this, "click img, go flutter page ")
-                    goFlutter()
+                    goEditProfile()
                 }
             }
             .replaceSpan("edit"){
                 HighlightSpan("#8B82DB"){
 //                    ToastUtil.show(this, "click txt, go flutter page ")
-                    goFlutter()
+                    goEditProfile()
                 }
             }
     }
 
-    private val ENGINE_ID_EDIT_PROFILE = "eidt_profile"
-    lateinit var flutterEngine_edit_profile: FlutterEngine
-    private var methodChannel: MethodChannel? = null
+    private var editMethodChannel : MethodChannel? = null
 
     private fun initFlutter(){
-        flutterEngine_edit_profile = FlutterEngine(this)
-        flutterEngine_edit_profile.navigationChannel.setInitialRoute("/profile/edit")
-        flutterEngine_edit_profile.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
-        FlutterEngineCache.getInstance().put(ENGINE_ID_EDIT_PROFILE, flutterEngine_edit_profile)
-        methodChannel = MethodChannel(flutterEngine_edit_profile.dartExecutor.binaryMessenger, "settingChannel")
-        methodChannel?.setMethodCallHandler { call, result ->
-            // handle flutter caller
-            Log.e(TAG, "handle flutter event   method: ${call.method}" )
-
-            if(call.method == "flutterDestroy"){
-//                go(this@ProfileAct)
-                result.success("success")
-                recreate()
-            }
-
-            if(call.method == "flutterInitalized"){
-                result.success("success")
-                callFlutter()
-            }
-
-            if (call.method == "saveProfileSuccess") {
-                val userStr = call.argument<HashMap<String, String>>("user")
-                result.success("success")
-
-                Log.e("flutter", "android receive form:${userStr.toJson()} ")
-                val user = GsonConverter.gson.fromJson(userStr.toJson(), User::class.java)
-                Log.e("flutter", "android receive form:$user ")
-
-                CacheUtil.getUserInfo()?.also {
-                    it.user?.apply {
-                        user?.also { new->
-                            birth_time = new.birth_time
-                            birthdate = new.birthdate
-                            birthplace_info = new.birthplace_info
-                            location_info = new.location_info
-                            nick = new.nick
-                            signature = new.signature
-                            profile_permission = new.profile_permission
-                            gender = new.gender
-
-                            CacheUtil.setUserInfo(it)
-                            LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED).postValue("time:${System.currentTimeMillis()}")
-                        }
-                    }
-                }
-            }
-
-            if(call.method == "flutterToast"){
-                val type = call.argument<String>("type")
-                val content = call.argument<String>("content")
-                if(content?.isNotEmpty() == true){
-                    val t = when(type){
-                        "success" -> NotificationDialog.TYPE_SUCCESS
-                        "error" -> NotificationDialog.TYPE_ERROR
-                        else -> NotificationDialog.TYPE_WARN
-                    }
-                    ToastDialogHolder.getDialog()?.show(applicationContext, t, content)
-                }
-                result.success("success")
-            }
+        editMethodChannel = FlutterProxyActivity.prepareFlutterEngine(this, FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE, FlutterProxyActivity.ROUTE_EDIT_PROFILE, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_PROFILE_EDIT) { scene, method, call, result ->
+            handleFlutterEvent(scene, method, call, result)
         }
     }
-    private fun goFlutter(){
-        startActivity(FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).backgroundMode(
-            FlutterActivityLaunchConfigs.BackgroundMode.transparent).build(this))
+
+    private fun handleFlutterEvent(
+        scene: Int,
+        method: MethodChannel,
+        call: MethodCall,
+        result: MethodChannel.Result
+    ) {
+        if (call.method == "flutterToast") {
+            val type = call.argument<String>("type")
+            val content = call.argument<String>("content")
+            if (content?.isNotEmpty() == true) {
+                val t = when (type) {
+                    "success" -> NotificationDialog.TYPE_SUCCESS
+                    "error" -> NotificationDialog.TYPE_ERROR
+                    else -> NotificationDialog.TYPE_WARN
+                }
+                ToastDialogHolder.getDialog()?.show(this@ProfileAct, t, content)
+            }
+            result.success("success")
+        }else{
+            FlutterProxyActivity.handleFlutterCommonEvent(scene, method, call, result)
+        }
     }
 
-    private fun callFlutter() {
-        var local = "zh-Hans-CN"
-        val current = MultiLanguages.getAppLanguage()
-        if(current.language.equals(LocaleContract.getEnglishLocale().language)){
-            local = "en_US"
+    private var isFirstTimeForEdit = true
+
+    private fun goEditProfile() {
+        if(isFirstTimeForEdit){
+            isFirstTimeForEdit = false
+        }else{
+            editMethodChannel?.let { FlutterProxyActivity.initParams(FlutterProxyActivity.SCENE_PROFILE_EDIT, it) }
         }
-        CacheUtil.getUserInfo()?.apply {
-            val openUid = user?.open_uid.orEmpty()
-            val token = token
-            var map = mutableMapOf<String, Any>()
-
-            val jsonString = GsonConverter.gson.toJson(user)
-            val userMap = Klaxon().parse<Map<String, String>>(jsonString).orEmpty()
-            map["token"] = token
-            map["user"] =  userMap
-            map["editBio"] = 1
-            map["localeLanguage"] = local
-            map["openuid"] = openUid
-            val params = GsonConverter.gson.toJson(map)
-            Log.e(TAG, "callFlutter:  params: $params" )
-            methodChannel?.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
-                override fun success(result: Any?) {
-                    Log.e(TAG, "callFlutter success: ")
-                }
-
-                override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                    Log.e(TAG, "callFlutter errorCode: ")
-                }
-
-                override fun notImplemented() {
-                    Log.e(TAG, "callFlutter notImplemented: ")
-                }
-            })
-        }
+        FlutterProxyActivity.go(this, FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE)
     }
 
 

@@ -80,6 +80,8 @@
             android:name=".setting.view.SettingsActivity"
             android:launchMode="singleTask" />
 
+        <activity android:name=".flutter.FlutterProxyActivity" />
+
         <activity android:name=".setting.view.LanguageActivity" />
 
         <activity android:name=".profile.view.ProfileAct"
@@ -95,12 +97,12 @@
         <activity android:name=".im.view.IMForwardListAct" />
         <activity android:name=".im.view.IMScanAct" />
 
-        <activity
+       <!-- <activity
             android:name="io.flutter.embedding.android.FlutterActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:theme="@style/MyTheme"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize" />-->
 
     </application>
 
