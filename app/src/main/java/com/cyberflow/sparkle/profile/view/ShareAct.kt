@@ -41,8 +41,10 @@ import com.cyberflow.sparkle.im.viewmodel.Contact
 import com.cyberflow.sparkle.im.widget.ForwardDialog
 import com.cyberflow.sparkle.profile.viewmodel.ShareViewModel
 import com.cyberflow.sparkle.profile.widget.ShareDialog
+import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.PermissionDialog
 import com.cyberflow.sparkle.widget.ShadowImgButton
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.Post
 import com.drake.net.utils.scopeNetLife
 import com.drake.net.utils.withMain
@@ -281,7 +283,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
         clipboardManager.setPrimaryClip(ClipData.newPlainText("", textCopied))
         // Only show a toast for Android 12 and lower.
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
-            ToastUtils.showToast(this, "Copied")
+            ToastDialogHolder.getDialog()?.show(this@ShareAct, NotificationDialog.TYPE_SUCCESS, getString(com.cyberflow.sparkle.R.string.link_copied))
         }
     }
 

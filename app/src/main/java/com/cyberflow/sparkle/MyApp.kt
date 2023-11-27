@@ -38,7 +38,7 @@ class MyApp : BaseApp() {
                 projectId = "216dc6e2b36be94b855cd28ea41fda6d",
                 appUrl = "https://sparkle.fun",
             )
-            walletConnectKit = WalletConnectKit.builder(MyApp.instance).config(config).build()
+            walletConnectKit = WalletConnectKit.builder(instance).config(config).build()
         }
     }
 

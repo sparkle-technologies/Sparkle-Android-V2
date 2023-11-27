@@ -24,4 +24,9 @@
     <string name="november">November</string>
     <string name="december">December</string>
     <string name="today">TODAY</string>
+    <string name="request_sent">Request sent</string>
+    <string name="oops_request_failed">Oops! Request failed.</string>
+    <string name="friend_successfully_removed">Friend successfully removed.</string>
+    <string name="oops_failed_to_remove_friend">Oops! Failed to remove friend.</string>
+    <string name="link_copied">Link Copied!</string>
 </resources>

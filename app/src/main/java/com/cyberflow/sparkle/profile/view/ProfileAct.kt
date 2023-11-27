@@ -29,8 +29,10 @@ import com.cyberflow.sparkle.im.view.IMAddFriendAct
 import com.cyberflow.sparkle.profile.viewmodel.ProfileViewModel
 import com.cyberflow.sparkle.profile.widget.Tag
 import com.cyberflow.sparkle.setting.view.SettingsActivity
+import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.Post
 import com.drake.net.utils.scopeNetLife
 import com.drake.spannable.addSpan
@@ -345,6 +347,20 @@ class ProfileAct : BaseDBAct<ProfileViewModel, ActivityProfileBinding>() {
                         }
                     }
                 }
+            }
+
+            if(call.method == "flutterToast"){
+                val type = call.argument<String>("type")
+                val content = call.argument<String>("content")
+                if(content?.isNotEmpty() == true){
+                    val t = when(type){
+                        "success" -> NotificationDialog.TYPE_SUCCESS
+                        "error" -> NotificationDialog.TYPE_ERROR
+                        else -> NotificationDialog.TYPE_WARN
+                    }
+                    ToastDialogHolder.getDialog()?.show(applicationContext, t, content)
+                }
+                result.success("success")
             }
         }
     }

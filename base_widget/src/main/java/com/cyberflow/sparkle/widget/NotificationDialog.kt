@@ -38,6 +38,8 @@ object ToastDialogHolder {
     fun getDialog(): IToastDialog? {
         return toastDialog
     }
+
+    const val MAIN_ACTIVITY_NOTIFY = "main_activity_notify"
 }
 
 
@@ -199,6 +201,9 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
         showDialogAutoDismiss()
     }
 
+    fun addMsg(content: String){
+        queue.add(ToastBody(0, content))
+    }
     private fun afterDismiss() {
         Log.e(TAG, "afterDismiss: ", )
         if(queue.isNotEmpty()){
@@ -220,9 +225,7 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
         }
     }
 
-
-
-   private fun showDialogAutoDismiss() {
+   fun showDialogAutoDismiss() {
        Log.e(TAG, "showDialogAutoDismiss: ", )
         if (!isShowing && queue.isNotEmpty()) {
             show()

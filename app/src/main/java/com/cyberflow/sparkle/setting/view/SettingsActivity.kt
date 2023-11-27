@@ -19,7 +19,11 @@ import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivitySettingBinding
 import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.view.LoginAct
+import com.cyberflow.sparkle.widget.NotificationDialog.Companion.TYPE_ERROR
+import com.cyberflow.sparkle.widget.NotificationDialog.Companion.TYPE_SUCCESS
+import com.cyberflow.sparkle.widget.NotificationDialog.Companion.TYPE_WARN
 import com.cyberflow.sparkle.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.utils.withMain
 import com.google.firebase.auth.FirebaseAuth
 import com.hjq.language.LocaleContract
@@ -230,7 +234,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
         if (call.method == "flutterDestroy") {
             result.success("success")
-            recreate()
+//            recreate()
 //                FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).destroyEngineWithActivity(false)
 //            go(this) // singleTask
 //            recreate()
@@ -267,6 +271,20 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
                     }
                 }
             }
+        }
+
+        if(call.method == "flutterToast"){
+            val type = call.argument<String>("type")
+            val content = call.argument<String>("content")
+            if(content?.isNotEmpty() == true){
+                val t = when(type){
+                    "success" -> TYPE_SUCCESS
+                    "error" -> TYPE_ERROR
+                    else ->  TYPE_WARN
+                }
+                ToastDialogHolder.getDialog()?.show(this@SettingsActivity, t, content)
+            }
+            result.success("success")
         }
     }
 

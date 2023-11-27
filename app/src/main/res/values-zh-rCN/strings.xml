@@ -23,4 +23,9 @@
     <string name="november">十一月</string>
     <string name="december">十二月</string>
     <string name="today">今天</string>
+    <string name="request_sent">好友请求已发送</string>
+    <string name="oops_request_failed">发送请求失败, 请重试</string>
+    <string name="friend_successfully_removed">删除成功.</string>
+    <string name="oops_failed_to_remove_friend">删除失败</string>
+    <string name="link_copied">链接复制成功</string>
 </resources>

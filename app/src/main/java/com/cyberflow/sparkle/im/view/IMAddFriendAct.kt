@@ -5,18 +5,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.IMSearchData
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.DBComponent
+import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.DemoHelper
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.databinding.ActivityImAddFriendBinding
-import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
-import com.cyberflow.sparkle.main.view.MainActivity
 import com.cyberflow.sparkle.main.viewmodel.parseResource
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
+import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.utils.TipUtils
-import com.google.android.material.snackbar.Snackbar
 import com.vanniktech.ui.hideKeyboard
 
 class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
@@ -62,11 +64,11 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
             parseResource(response, object : OnResourceParseCallback<Boolean>() {
                 override fun onSuccess(data: Boolean?) {
                     if (data == true) {
-                        Snackbar.make(mDataBinding.ivHead, "request send successfully", Snackbar.LENGTH_SHORT).show()
+                        LiveDataBus.get().with(ToastDialogHolder.MAIN_ACTIVITY_NOTIFY).postValue(NotificationDialog.ToastBody(NotificationDialog.TYPE_SUCCESS, getString(R.string.request_sent)))
                         MainActivityV2.go(this@IMAddFriendAct)
                         finish()
                     } else {
-                        TipUtils.toast("failed to send request")
+                        ToastDialogHolder.getDialog()?.show(this@IMAddFriendAct, NotificationDialog.TYPE_ERROR, getString(R.string.oops_request_failed))
                     }
                 }
             })

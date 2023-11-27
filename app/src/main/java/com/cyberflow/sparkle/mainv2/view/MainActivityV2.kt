@@ -26,6 +26,8 @@ import com.cyberflow.sparkle.main.view.MainProfileFragment
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.main.viewmodel.parseResource
 import com.cyberflow.sparkle.register.view.PageAdapter
+import com.cyberflow.sparkle.widget.NotificationDialog
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.utils.withMain
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.model.EaseEvent
@@ -73,6 +75,9 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
 
     override fun initData() {
         loadIMConversations()
+        LiveDataBus.get().with(ToastDialogHolder.MAIN_ACTIVITY_NOTIFY, NotificationDialog.ToastBody::class.java).observe(this){
+            ToastDialogHolder.getDialog()?.show(this@MainActivityV2, it.type, it.content)
+        }
     }
 
     /********************* IM ***********************/

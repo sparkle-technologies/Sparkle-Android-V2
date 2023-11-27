@@ -9,6 +9,8 @@ import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainNotifyBinding
+import com.cyberflow.sparkle.widget.NotificationDialog
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.hjq.language.LocaleContract
 import com.hjq.language.MultiLanguages
 import io.flutter.embedding.android.FlutterFragment
@@ -49,6 +51,20 @@ class MainNotifyFragment : BaseDBFragment<BaseViewModel, FragmentMainNotifyBindi
             if(call.method == "flutterInitalized"){
                 result.success("success")
                 callFlutter()
+            }
+
+            if(call.method == "flutterToast"){
+                val type = call.argument<String>("type")
+                val content = call.argument<String>("content")
+                if(content?.isNotEmpty() == true){
+                    val t = when(type){
+                        "success" -> NotificationDialog.TYPE_SUCCESS
+                        "error" -> NotificationDialog.TYPE_ERROR
+                        else -> NotificationDialog.TYPE_WARN
+                    }
+                    ToastDialogHolder.getDialog()?.show(requireActivity().applicationContext, t, content)
+                }
+                result.success("success")
             }
         }
 
