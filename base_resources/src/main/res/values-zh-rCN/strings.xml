@@ -140,8 +140,8 @@
     <string name="cora_is_analyzing">Cora正在分析你在宇宙中的轨迹。请稍候</string>
 
     <string name="recent">近期</string>
-    <string name="message_sent">消息已发送!</string>
-    <string name="send_message_error">消息发送异常</string>
+    <string name="message_sent">消息已发送</string>
+    <string name="send_message_error">消息发送失败</string>
 
 
     <string name="name">昵称</string>

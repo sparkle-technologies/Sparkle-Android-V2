@@ -40,6 +40,7 @@ object ToastDialogHolder {
     }
 
     const val MAIN_ACTIVITY_NOTIFY = "main_activity_notify"
+    const val CHAT_ACTIVITY_NOTIFY = "chat_activity_notify"
 }
 
 

@@ -28,7 +28,6 @@ import com.cyberflow.base.net.Api
 import com.cyberflow.base.resources.R
 import com.cyberflow.base.util.ConstantGlobal
 import com.cyberflow.base.util.PageConst
-import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.ViewExt.convertViewToBitmap
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
@@ -169,13 +168,13 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
     private fun setMsgCallBack(){
         LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java).observe(this) {
             LoadingDialogHolder.getLoadingDialog()?.hide()
-            ToastUtil.show(this@ShareAct, "Message Sent!")
+            LiveDataBus.get().with(ToastDialogHolder.CHAT_ACTIVITY_NOTIFY).postValue(NotificationDialog.ToastBody(NotificationDialog.TYPE_SUCCESS, getString(com.cyberflow.base.resources.R.string.message_sent)))
             finish()
         }
 
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR, String::class.java).observe(this) {
             LoadingDialogHolder.getLoadingDialog()?.hide()
-            ToastUtil.show(this@ShareAct, "Send Message error")
+            ToastDialogHolder.getDialog()?.show(this@ShareAct, NotificationDialog.TYPE_ERROR, getString(com.cyberflow.base.resources.R.string.send_message_error))
         }
     }
 
@@ -254,12 +253,12 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
             .addSpan(" !").setSpan(ColorSpan("#000000"))
             .replaceSpan("image"){
                 HighlightSpan("#8B82DB"){
-                    ToastUtil.show(this, "click img, go flutter page ")
+//                    ToastUtil.show(this, "click img, go flutter page ")
                 }
             }
             .replaceSpan(" Sparkle"){
                 HighlightSpan("#8B82DB"){
-                    ToastUtil.show(this, "click txt, go flutter page ")
+//                    ToastUtil.show(this, "click txt, go flutter page ")
                 }
             }
     }
@@ -316,7 +315,8 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
                     share()
                 }else{
                     withMain {
-                        ToastUtils.showToast(this@ShareAct, "fail to generate image")
+
+                        ToastUtils.showToast(this@ShareAct, getString(com.cyberflow.sparkle.R.string.fail_to_generate_image))
                     }
                 }
             }
@@ -343,7 +343,8 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
                 fileOutputStream.close()
                 if(!isSuccess){
                     withMain {
-                        ToastUtils.showToast(this@ShareAct, "fail to compress image")
+                        ToastUtils.showToast(this@ShareAct,
+                            getString(com.cyberflow.sparkle.R.string.fail_to_compress_image))
                         LoadingDialogHolder.getLoadingDialog()?.hide()
                     }
                     return@launch
@@ -420,8 +421,9 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
         var title = ""
         var content  = ""
         if(requestCode == REQUEST_DOWNLOAD){
-            title = "Unable to save files"
-            content  = "You have turned off storage  permissions"
+            title = getString(com.cyberflow.sparkle.R.string.unable_to_save_files)
+            content  =
+                getString(com.cyberflow.sparkle.R.string.you_have_turned_off_storage_permissions)
         }
         showPermissionDialog(title, content, requestCode)
     }

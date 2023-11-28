@@ -150,16 +150,17 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     private fun initFlutter() {
         editMethodChannel = prepareFlutterEngine(this, FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE, FlutterProxyActivity.ROUTE_EDIT_PROFILE, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_EDIT){
             scene, method, call, result ->
-            handleFlutterEvent( method, call, result)
+            handleFlutterEvent(scene, method, call, result)
         }
 
         privacyMethodChannel = prepareFlutterEngine(this, FlutterProxyActivity.ENGINE_ID_ACCOUNT_PRIVACY, FlutterProxyActivity.ROUTE_ACCOUNT_PRIVACY, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_PRIVACY){
-                engineName, method, call, result ->
-            handleFlutterEvent( method, call, result)
+                scene, method, call, result ->
+            handleFlutterEvent(scene, method, call, result)
         }
     }
 
     private fun handleFlutterEvent(
+        scene: Int,
         method: MethodChannel,
         call: MethodCall,
         result: MethodChannel.Result
@@ -177,7 +178,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
             }
             result.success("success")
         }else{
-            handleFlutterCommonEvent(0, method, call, result)
+            handleFlutterCommonEvent(scene, method, call, result)
         }
     }
 

@@ -145,10 +145,27 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                             signature = new.signature
                             profile_permission = new.profile_permission
                             gender = new.gender
+                            label_list = new.label_list
 
                             CacheUtil.setUserInfo(it)
                             LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED)
                                 .postValue("time:${System.currentTimeMillis()}")
+                        }
+                    }
+                }
+            }
+
+            if (call.method == "flutterSaveLabelList") {
+                val userStr = call.argument<List<String>>("label_list")
+                result.success("success")
+                Log.e("flutter", "android receive form:${userStr.toJson()} ")
+
+                CacheUtil.getUserInfo()?.also {
+                    it.user?.apply {
+                        userStr?.also { new ->
+                            this.label_list = new
+                            CacheUtil.setUserInfo(it)
+                            LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED).postValue("time:${System.currentTimeMillis()}")
                         }
                     }
                 }
@@ -176,6 +193,9 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                 if(scene == SCENE_PROFILE_EDIT){
                     map["editBio"] = 1
                 }
+
+//                Log.e(TAG, "initParams: scene=$scene" )
+
                 if(scene == SCENE_PROFILE_EDIT || scene == SCENE_SETTING_EDIT || scene == SCENE_SETTING_PRIVACY){
                     map["user"] = userMap
                 }

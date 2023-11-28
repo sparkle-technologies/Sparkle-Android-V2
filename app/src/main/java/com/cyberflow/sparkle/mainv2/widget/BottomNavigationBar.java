@@ -150,7 +150,7 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         a2.x = c.x;
         a2.y = c.y;
         b2.x = width / 2;
-        b2.y = 20;   // 往大了调  可无限贴近那个猫头鹰
+        b2.y = 18;   // 往大了调  可无限贴近那个猫头鹰
         c2.x = width - x3;
         c2.y = dip2px(marginTop - borderHigh);
 

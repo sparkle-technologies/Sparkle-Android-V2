@@ -10,7 +10,6 @@ import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.util.KeyboardUtil
 import com.cyberflow.base.util.PageConst
-import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.DBComponent.loadAvatar
 import com.cyberflow.sparkle.R
@@ -30,6 +29,8 @@ import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.im.viewmodel.RecentContactList
 import com.cyberflow.sparkle.im.viewmodel.SearchContactList
 import com.cyberflow.sparkle.im.widget.ForwardDialog
+import com.cyberflow.sparkle.widget.NotificationDialog
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
@@ -54,13 +55,13 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
     private fun setMsgCallBack(){
         LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java).observe(this) {
             LoadingDialogHolder.getLoadingDialog()?.hide()
-            ToastUtil.show(this@IMForwardListAct, getString(com.cyberflow.base.resources.R.string.message_sent))
+            LiveDataBus.get().with(ToastDialogHolder.CHAT_ACTIVITY_NOTIFY).postValue(NotificationDialog.ToastBody(NotificationDialog.TYPE_SUCCESS, getString(com.cyberflow.base.resources.R.string.message_sent)))
             finish()
         }
 
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR, String::class.java).observe(this) {
             LoadingDialogHolder.getLoadingDialog()?.hide()
-            ToastUtil.show(this@IMForwardListAct, getString(com.cyberflow.base.resources.R.string.send_message_error))
+            ToastDialogHolder.getDialog()?.show(this@IMForwardListAct, NotificationDialog.TYPE_ERROR, getString(com.cyberflow.base.resources.R.string.send_message_error))
         }
     }
 

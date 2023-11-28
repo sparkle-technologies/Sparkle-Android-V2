@@ -29,4 +29,9 @@
     <string name="friend_successfully_removed">Friend successfully removed.</string>
     <string name="oops_failed_to_remove_friend">Oops! Failed to remove friend.</string>
     <string name="link_copied">Link Copied!</string>
+    <string name="oops">Oops!</string>
+    <string name="unable_to_save_files">Unable to save files</string>
+    <string name="you_have_turned_off_storage_permissions">You have turned off storage permissions</string>
+    <string name="fail_to_generate_image">fail to generate image</string>
+    <string name="fail_to_compress_image">fail to compress image</string>
 </resources>

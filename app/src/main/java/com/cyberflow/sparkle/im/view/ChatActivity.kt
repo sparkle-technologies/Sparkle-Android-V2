@@ -11,6 +11,7 @@ import androidx.activity.viewModels
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.click
 import com.cyberflow.sparkle.DBComponent.loadImage
 import com.cyberflow.sparkle.chat.DemoHelper
@@ -23,6 +24,8 @@ import com.cyberflow.sparkle.chat.ui.goPreview
 import com.cyberflow.sparkle.chat.viewmodel.ChatViewModel
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel
 import com.cyberflow.sparkle.chat.viewmodel.parseResource
+import com.cyberflow.sparkle.widget.NotificationDialog
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.chat.EMClient
 import com.hyphenate.easeui.constants.EaseConstant
@@ -136,6 +139,11 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                     finish()
                 }
             }
+
+        LiveDataBus.get().with(ToastDialogHolder.CHAT_ACTIVITY_NOTIFY, NotificationDialog.ToastBody::class.java).observe(this){
+            ToastDialogHolder.getDialog()?.show(this@ChatActivity, it.type, it.content)
+        }
+
         setDefaultTitle()
     }
 

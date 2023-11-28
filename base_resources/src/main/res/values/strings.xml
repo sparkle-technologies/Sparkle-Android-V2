@@ -143,8 +143,8 @@
 
 
     <string name="recent">Recent</string>
-    <string name="message_sent">Message Sent!</string>
-    <string name="send_message_error">Send Message error</string>
+    <string name="message_sent">Message Sent</string>
+    <string name="send_message_error">Message failed to send</string>
 
 
     <string name="name">Name</string>

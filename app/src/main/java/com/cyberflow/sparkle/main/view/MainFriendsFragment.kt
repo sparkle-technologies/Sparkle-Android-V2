@@ -187,6 +187,14 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         mDatabind.page.onRefresh {
             freshIMData()
         }
+        mDatabind.page?.onError {
+            findViewById<ShadowTxtButton>(R.id.btn).setClickListener(object :
+                ShadowTxtButton.ShadowClickListener {
+                override fun clicked(disable: Boolean) {
+                    freshIMData()
+                }
+            })
+        }
 //        refresh()
     }
 
