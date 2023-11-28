@@ -1,10 +1,12 @@
 package com.cyberflow.sparkle.main.viewmodel
 
 import android.text.TextUtils
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cyberflow.base.BaseApp
 import com.cyberflow.base.model.DailyHoroScopeData
+import com.cyberflow.base.model.IMUserInfoList
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.bus.SingleSourceLiveData
 import com.cyberflow.base.viewmodel.BaseViewModel
@@ -18,7 +20,6 @@ import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCal
 import com.cyberflow.sparkle.chat.common.net.Resource
 import com.cyberflow.sparkle.chat.common.repositories.EMChatManagerRepository
 import com.cyberflow.sparkle.chat.common.repositories.EMContactManagerRepository
-import com.cyberflow.base.model.IMUserInfoList
 import com.drake.net.Post
 import com.drake.net.utils.scopeNet
 import com.hyphenate.chat.EMClient
@@ -71,7 +72,7 @@ class MainViewModel : BaseViewModel() {
         } else {
             getConversationFromCache()
         }
-        checkUnreadMsg()
+//        checkUnreadMsg()
     }
 
 
@@ -139,8 +140,15 @@ class MainViewModel : BaseViewModel() {
             inviteMessageDao?.also {
                 unreadCount = it.queryUnreadCount()
             }
+
             val unreadMessageCount = DemoHelper.getInstance().chatManager.unreadMessageCount
-            val count = getUnreadCount(unreadCount + unreadMessageCount)
+            Log.e(TAG, "checkUnreadMsg: unreadCount=$unreadCount   unreadMessageCount=$unreadMessageCount")
+
+            /* val count = getUnreadCount(unreadCount + unreadMessageCount)
+             homeUnReadObservable.postValue(count.orEmpty())*/
+
+            val count = getUnreadCount(DemoHelper.getInstance().chatManager.unreadMessageCount)
+
             homeUnReadObservable.postValue(count.orEmpty())
         }
     }
@@ -150,7 +158,7 @@ class MainViewModel : BaseViewModel() {
             return null
         }
         return if (count > 99) {
-            "99+"
+            "···"
         } else count.toString()
     }
 

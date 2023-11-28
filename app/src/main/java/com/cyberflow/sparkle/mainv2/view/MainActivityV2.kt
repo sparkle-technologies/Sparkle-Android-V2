@@ -159,12 +159,9 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
             saveToLocalDB(infoList.user_info_list, true)
         }
 
-        viewModel.homeUnReadObservable.observe(this) {
-            if (it.isNotEmpty()) {
-                Log.e("MainActivityV2", "UnRead Count: $it")   // todo :  PM not decide yet
-            }
-        }
-
+//        viewModel.homeUnReadObservable.observe(this) {
+//            mDataBinding.bottomNarBar.setNum(it)
+//        }
         viewModel.freshContactData()
     }
 

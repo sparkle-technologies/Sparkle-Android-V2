@@ -144,16 +144,16 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
         var title = ""
         var content  = ""
         if(requestCode == ChatFragment.REQUEST_CODE_STORAGE_FILE){
-              title = "Unable to save files"
-              content  = "You have turned off storage  permissions"
+              title = getString(R.string.unable_to_save_files)
+              content  = getString(R.string.you_have_turned_off_storage_permissions)
         }
         if(requestCode == ChatFragment.REQUEST_CODE_CAMERA){
-            title = "Unable to take photos"
-            content  = "You have turned off camera  permissions."
+            title = getString(R.string.unable_to_take_photos)
+            content  = getString(R.string.you_have_turned_off_camera_permissions)
         }
         if(requestCode == ChatFragment.REQUEST_CODE_STORAGE_PICTURE){
-            title = "Unable to access the gallery"
-            content  = "You have turned off gallery  permissions."
+            title = getString(R.string.unable_to_access_the_gallery)
+            content  = getString(R.string.you_have_turned_off_gallery_permissions)
         }
         showPermissionDialog(title, content, requestCode)
     }

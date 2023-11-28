@@ -1079,12 +1079,12 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
         switch (requestCode) {
             case REQUEST_CODE_CAMERA:
-                title = "Unable to take photos";
-                content  = "You have turned off camera  permissions.";
+                title = getString(R.string.unable_to_take_photos);
+                content  = getString(R.string.you_have_turned_off_camera_permissions);
                 break;
             case REQUEST_CODE_STORAGE_PICTURE:
-                title = "Unable to access the gallery";
-                content  = "You have turned off gallery  permissions.";
+                title = getString(R.string.unable_to_access_the_gallery);
+                content  = getString(R.string.you_have_turned_off_gallery_permissions);
                 break;
         }
 

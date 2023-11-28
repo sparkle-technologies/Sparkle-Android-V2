@@ -340,10 +340,14 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
     }
 
     public void setNum(int num) {
-        if (num > 0) {
+        if(num > 0){
             layUnread.setVisibility(View.VISIBLE);
-            tvUnread.setText(String.valueOf(num));
-        } else {
+            if(num > 99){
+                tvUnread.setText("···");
+            }else{
+                tvUnread.setText(String.valueOf(num));
+            }
+        }else{
             layUnread.setVisibility(View.INVISIBLE);
         }
     }

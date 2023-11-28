@@ -132,10 +132,22 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                                 when (itemViewType) {
                                     R.layout.item_friends_feed -> {
                                         val model = getModel<FriendMessageInfo>()
-                                        getBinding<ItemFriendsFeedBinding>().bgBottomColor.apply {
-                                            (background as? GradientDrawable)?.also {
+                                        getBinding<ItemFriendsFeedBinding>().apply {
+                                            (bgBottomColor.background as? GradientDrawable)?.also {
                                                 it.setColor(Color.parseColor(model.bgColor))
-                                                background = it
+                                                bgBottomColor.background = it
+                                            }
+                                            val gotMsg = model.num > 0
+                                            contactLine.isVisible = gotMsg
+                                            bgContactMsg.isVisible = gotMsg
+                                            tvUnread.isVisible = gotMsg
+
+                                            if(gotMsg){
+                                                var txt = "${model.num}"
+                                                if(model.num > 99){
+                                                    txt = "···"
+                                                }
+                                                tvUnread.text = txt
                                             }
                                         }
                                     }
@@ -287,6 +299,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                     }?.mapNotNull {
                         val username = (it.info as? EMConversation)?.conversationId() ?: ""
                         val count = (it.info as? EMConversation)?.unreadMsgCount
+//                        Log.e(TAG, "fetchUserInfoFromLocalDB: username=$username  count=$count" )
                         unRead[username] = count ?: 0
                         allContactMap[username]
                     }.orEmpty()
@@ -339,7 +352,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
             var friendMessageList = arrayListOf<Any>()
             data?.also { list ->
 
-                var unreadTotalCount = 0
+                var totalUnreadCount = 0
                 list.forEach { item ->
 
                     var avatar = item.avatar
@@ -347,9 +360,12 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                     var nickname = item.nick
                     var openUid = item.open_uid.replace("-", "_")
                     var bgColor = item.feed_card_color
-                    var num: Int = unRead[item.open_uid] ?: 0
 
-                    unreadTotalCount += num
+
+                    var num: Int = unRead[openUid] ?: 0
+//                    Log.e(TAG, "showConversationList: openUid=${item.open_uid}  num=${num}", )
+
+                    totalUnreadCount += num
 
                     friendMessageList.add(
                         FriendMessageInfo(
@@ -362,7 +378,9 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                         )
                     )
                 }
-                (requireActivity() as? MainActivityV2)?.setUnRead(unreadTotalCount)
+
+                (requireActivity() as? MainActivityV2)?.setUnRead(totalUnreadCount)
+
 
                 if (friendMessageList.size <= 6) {
                     friendMessageList.add(FriendsAddModel())
