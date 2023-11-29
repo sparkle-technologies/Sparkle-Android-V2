@@ -80,8 +80,12 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         const val ENGINE_ID_NOTIFICATION_LIST = "notification_list"
         const val ROUTE_NOTIFICATION_LIST = "/notification/list"
 
+        const val ENGINE_ID_HOROSCOPE = "profile_horoscope"
+        const val ROUTE_HOROSCOPE = "/profile/astrolabe"
+
         const val CHANNEL_SETTING = "settingChannel"
         const val CHANNEL_NOTIFICATION = "notificationChannel"
+        const val CHANNEL_HOROSCOPE = "horoscopeChannel"
 
         const val EVENT_BUS_DESTROY = "event_bus_destroy_flutter_proxy"
 
@@ -89,6 +93,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         const val SCENE_SETTING_PRIVACY = 1002
         const val SCENE_PROFILE_EDIT = 1003
         const val SCENE_NOTIFICATION_LIST = 1004
+        const val SCENE_HOROSCOPE = 1005
 
         fun go(context: Context, engineName: String) {
             val intent = Intent(context, FlutterProxyActivity::class.java)
@@ -145,7 +150,6 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                             signature = new.signature
                             profile_permission = new.profile_permission
                             gender = new.gender
-                            label_list = new.label_list
 
                             CacheUtil.setUserInfo(it)
                             LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED)
@@ -156,19 +160,16 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
             }
 
             if (call.method == "flutterSaveLabelList") {
-                val userStr = call.argument<List<String>>("label_list")
+                val newList = call.argument<List<String>>("label_list")
                 result.success("success")
-                Log.e("flutter", "android receive form:${userStr.toJson()} ")
-
-                CacheUtil.getUserInfo()?.also {
-                    it.user?.apply {
-                        userStr?.also { new ->
-                            this.label_list = new
-                            CacheUtil.setUserInfo(it)
-                            LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED).postValue("time:${System.currentTimeMillis()}")
-                        }
-                    }
-                }
+//                Log.e("flutter", "android receive form:${newList.toJson()} ")
+                val cache = CacheUtil.getUserInfo()
+//                Log.e(TAG, "handleFlutterCommonEvent:-  before edit: ${GsonConverter.gson.toJson(cache)}"  )
+                cache?.user?.label_list = newList
+                CacheUtil.setUserInfo(cache)
+//                val cache2 = CacheUtil.getUserInfo()
+//                Log.e(TAG, "handleFlutterCommonEvent:- after edit: ${GsonConverter.gson.toJson(cache2)}"  )
+                LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED).postValue("time:${System.currentTimeMillis()}")
             }
         }
         

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+
+        <variable
+            name="m"
+            type="java.lang.String" />
+    </data>
+
+
+    <LinearLayout
+        android:id="@+id/lay_label_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/profile_bg_label"
+        android:gravity="center"
+        android:layout_marginEnd="@dimen/dp_5"
+        android:layout_marginBottom="@dimen/dp_5"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingTop="@dimen/dp_3"
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_4"
+            android:fontFamily="@font/poppins_regular"
+            android:text="@{m}"
+            android:maxLines="1"
+            tools:text="Describe yourself"
+            android:textColor="@color/color_2A2A2B"
+            android:textSize="@dimen/sp_11" />
+
+    </LinearLayout>
+</layout>

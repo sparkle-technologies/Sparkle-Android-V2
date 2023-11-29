@@ -42,7 +42,7 @@ import kotlinx.coroutines.launch
 class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBinding>() {
 
 
-    private val TAG = "MainRightFragment"
+    private val TAG = "MainFriendsFragment"
 
     private var actVm: MainViewModel? = null
     override fun onAttach(activity: Activity) {
@@ -51,10 +51,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        Log.e(TAG, "initView: ")
-
         initAddFriend()
-
         initListView()
     }
 
@@ -212,24 +209,21 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
     // called by activity
     fun pullToRefreshUI() {
-        Log.e(TAG, "pullToRefreshUI: ")
         mDatabind.page.autoRefresh()
     }
 
     // no friends contact list
     fun showEmpty() {
-        Log.e(TAG, "showEmpty: ")
         showConversationList(null)
         mDatabind.page.finishRefresh()
     }
 
     private fun freshIMData() {
-        Log.e(TAG, "freshIMData: ")
         actVm?.freshContactData()
     }
 
     override fun initData() {
-        Log.e(TAG, "initData: ")
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -240,7 +234,6 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
     /************************* IM *******************************/
     private fun initIMListener() {
-        Log.e(TAG, "initIMListener: ")
         // from server
         actVm?.conversationInfoObservable?.observe(requireActivity()) { response ->
             mDatabind.page.finishRefresh()
@@ -267,7 +260,6 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     var headData = arrayListOf<Any>()
 
     private fun initHeadData() {
-        Log.e(TAG, "initHeadData: ")
 //        headData.add(HeaderModel(title = "Official"))
 //        headData.add(OfficialModel(arrayListOf("Cora-Official", "King-Official")))
 
@@ -280,7 +272,6 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     private val unRead = HashMap<String, Int>()
 
     private fun fetchUserInfoFromLocalDB(data: List<EaseConversationInfo>?) {
-        Log.e(TAG, "fetchUserInfoFromLocalDB: ")
         lifecycleScope.launch {
             val allContactList = DBManager.instance.db?.imUserInfoDao()?.getAll()
             if (data.isNullOrEmpty() && allContactList.isNullOrEmpty()) {
@@ -306,11 +297,11 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
                     val mark = conversaction.map { it.open_uid.replace("-", "_") }.toSet()
 
-                    Log.e(TAG, "mark: ${mark.toString()}")
+                   /* Log.e(TAG, "mark: ${mark.toString()}")
 
                     allContactMap.forEach {
                         Log.e(TAG, "allContactMap.forEach: key=${it.key}   value=${it.value}")
-                    }
+                    }*/
 
                     val contactData = contactOpenUidList.filter {
                         !mark.contains(it)
@@ -318,14 +309,13 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                         allContactMap[it]
                     }.sortedBy { it.nick }.orEmpty()
 
-                    conversaction.forEach {
+                    /*conversaction.forEach {
                         Log.e(TAG, "conversaction: ${it.nick}")
                     }
 
                     contactData.forEach {
                         Log.e(TAG, "contactData: ${it.nick}")
-                    }
-
+                    }*/
 
                     allData.addAll(conversaction)
                     allData.addAll(contactData)
@@ -343,7 +333,6 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     }
 
     private fun showConversationList(data: List<IMUserInfo>?) {
-        Log.e(TAG, "showConversationList: ")
         var modelData = arrayListOf<Any>()
 //        modelData.add(HeaderModel(title = "Friends Feed"))
         if (data.isNullOrEmpty()) {
@@ -406,7 +395,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     var totalUnread = 0
 
     fun showFriendRequestNum() {
-        Log.e(TAG, "showFriendRequestNum: isVisible=$isVisible" )
+//        Log.e(TAG, "showFriendRequestNum: isVisible=$isVisible" )
         if(isVisible){
             if(totalUnread > 0){
                 mDatabind.tvNum.isVisible = true
