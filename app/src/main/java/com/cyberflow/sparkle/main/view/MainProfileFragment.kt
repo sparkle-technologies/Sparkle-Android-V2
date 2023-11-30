@@ -36,6 +36,8 @@ import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.widget.ToastDialogHolder
+import com.drake.brv.annotaion.DividerOrientation
+import com.drake.brv.utils.divider
 import com.drake.brv.utils.setup
 import com.drake.net.Post
 import com.drake.net.utils.scopeNetLife
@@ -414,7 +416,10 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
 
                 if(!isMySelf){
                     layRecommand.isVisible = true
-                    rvRecommand.setup {
+                    rvRecommand.divider {
+                        orientation = DividerOrientation.HORIZONTAL
+                        setDivider(10, true)
+                    }.setup {
                         addType<FriendMessageInfo>(com.cyberflow.sparkle.R.layout.item_profile_friend_recommand)
                     }.models = arrayListOf(FriendMessageInfo(), FriendMessageInfo(),FriendMessageInfo(), FriendMessageInfo(),FriendMessageInfo(), FriendMessageInfo())
                 }

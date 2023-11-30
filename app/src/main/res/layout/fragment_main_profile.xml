@@ -261,9 +261,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_40"
-                android:orientation="vertical"
-                android:visibility="gone"
-                android:paddingStart="@dimen/dp_20">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -284,11 +282,12 @@
 
             </LinearLayout>
 
-        <!--758dp-->
+            <!--758dp-->
 
             <FrameLayout
                 android:id="@+id/fragment_horoscope_container"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="950dp"/>
 
         </LinearLayout>
