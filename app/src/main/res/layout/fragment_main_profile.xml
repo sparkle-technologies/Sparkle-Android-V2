@@ -221,9 +221,9 @@
                 android:id="@+id/layTwitter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/dp_16"
                 android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_16"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -237,9 +237,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_4"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="\@ charing"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/sp_11" />
+                    android:textSize="@dimen/sp_11"
+                    tools:text="\@ charing" />
 
             </LinearLayout>
 
@@ -256,18 +256,73 @@
                 android:textSize="@dimen/sp_13"
                 tools:text="Fashion enthusiast. Traveler. Dreame. Always pushing boundaries and chasing after new experience" />
 
+
+            <LinearLayout
+                android:id="@+id/flutter_astro_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_28"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Astro code"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16" />
+
+                <FrameLayout
+                    android:id="@+id/fragment_astro_code_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="487dp"
+                    android:layout_marginTop="@dimen/dp_11" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/flutter_synastry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_28"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="You &amp; Cici"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16" />
+
+                <FrameLayout
+                    android:id="@+id/fragment_synastry_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="487dp"
+                    android:layout_marginTop="@dimen/dp_11" />
+
+            </LinearLayout>
+
+
             <LinearLayout
                 android:id="@+id/lay_recommand"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_40"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
                     android:text="People you may know"
+                    android:layout_marginStart="@dimen/dp_20"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_16" />
 
@@ -282,13 +337,6 @@
 
             </LinearLayout>
 
-            <!--758dp-->
-
-            <FrameLayout
-                android:id="@+id/fragment_horoscope_container"
-                android:layout_width="match_parent"
-                android:visibility="gone"
-                android:layout_height="950dp"/>
 
         </LinearLayout>
     </ScrollView>

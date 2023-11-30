@@ -1,6 +1,5 @@
 package com.cyberflow.sparkle.login.view
 
-import android.animation.Animator
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
@@ -28,6 +27,9 @@ import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.Post
 import com.drake.net.utils.TipUtils
 import com.drake.net.utils.scopeDialog
+import com.drake.net.utils.withMain
+import com.github.penfeizhou.animation.apng.APNGDrawable
+import com.github.penfeizhou.animation.loader.AssetStreamLoader
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
@@ -45,8 +47,6 @@ import org.json.JSONObject
 import org.torusresearch.fetchnodedetails.types.TorusNetwork
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutionException
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
@@ -77,6 +77,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             })
         }
     }
+
 
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()
@@ -251,13 +252,24 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     /********************* anim ******************************/
 
+
     private fun initAnim() {
         lifecycleScope.launch {
-            execLottieAnim()
+            val asset = AssetStreamLoader(this@LoginAct, "login.png")
+            APNGDrawable(asset).apply {
+                setLoopLimit(-1)
+                withMain {
+                    mViewBind.ivAnima.setImageDrawable(this@apply)
+                    start()
+                }
+            }
         }
+        /*lifecycleScope.launch {
+            execLottieAnim()
+        }*/
     }
 
-    private suspend fun execLottieAnim() {
+  /*  private suspend fun execLottieAnim() {
         suspendCoroutine {
             val lottieView = mViewBind.lavHomepage
             lottieView.addAnimatorListener(object : Animator.AnimatorListener {
@@ -279,7 +291,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                 }
             })
         }
-    }
+    }*/
 
 
     /************************************** 这个以后再弄  得搞个新接口刷新JWT ***********************************************/

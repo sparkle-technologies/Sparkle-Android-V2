@@ -1,5 +1,6 @@
 package com.cyberflow.sparkle.flutter
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +15,8 @@ import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityFlutterProxyBinding
+import com.cyberflow.sparkle.widget.NotificationDialog
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.hjq.language.LocaleContract
 import com.hjq.language.MultiLanguages
 import dev.pinkroom.walletconnectkit.core.chains.toJson
@@ -80,12 +83,16 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         const val ENGINE_ID_NOTIFICATION_LIST = "notification_list"
         const val ROUTE_NOTIFICATION_LIST = "/notification/list"
 
-        const val ENGINE_ID_HOROSCOPE = "profile_horoscope"
-        const val ROUTE_HOROSCOPE = "/profile/astrolabe"
+        const val ENGINE_ID_ASTRO_CODE = "profile_astro_code"
+        const val ROUTE_ASTRO_CODEE = "/profile/chart"
+
+        const val ENGINE_ID_SYNASTRY = "profile_synastry"
+        const val ROUTE_SYNASTRY = "/profile/astrolabe"
+
 
         const val CHANNEL_SETTING = "settingChannel"
         const val CHANNEL_NOTIFICATION = "notificationChannel"
-        const val CHANNEL_HOROSCOPE = "horoscopeChannel"
+        const val CHANNEL_START_SIGN = "starSignChannel"
 
         const val EVENT_BUS_DESTROY = "event_bus_destroy_flutter_proxy"
 
@@ -93,7 +100,8 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         const val SCENE_SETTING_PRIVACY = 1002
         const val SCENE_PROFILE_EDIT = 1003
         const val SCENE_NOTIFICATION_LIST = 1004
-        const val SCENE_HOROSCOPE = 1005
+        const val SCENE_ASTRO_CODE = 1005
+
 
         fun go(context: Context, engineName: String) {
             val intent = Intent(context, FlutterProxyActivity::class.java)
@@ -114,7 +122,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         }
 
 
-        fun handleFlutterCommonEvent(scene: Int, methodChannel: MethodChannel, call: MethodCall, result: MethodChannel.Result) {
+        fun handleFlutterCommonEvent(activity: Activity, scene: Int, methodChannel: MethodChannel, call: MethodCall, result: MethodChannel.Result) {
             // handle flutter caller
             Log.e(TAG, "handle flutter event   method: ${call.method}")
 
@@ -129,6 +137,25 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
             if (call.method == "flutterInitalized") {
                 result.success("success")
                 initParams(scene, methodChannel)
+            }
+
+            if(call.method == "flutterShowLoadingView"){
+                //todo
+                result.success("success")
+            }
+
+            if(call.method == "flutterHideLoadingView"){
+                //todo
+                result.success("success")
+            }
+
+            if (call.method == "flutterToast") {
+                val type = call.argument<Int>("type") ?: NotificationDialog.TYPE_SUCCESS
+                val content = call.argument<String>("content")
+                if (content?.isNotEmpty() == true) {
+                    ToastDialogHolder.getDialog()?.show(activity, type, content)
+                }
+                result.success("success")
             }
 
             if (call.method == "saveProfileSuccess") {
@@ -184,9 +211,6 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                 val token = token
                 var map = mutableMapOf<String, Any>()
 
-                val jsonString = GsonConverter.gson.toJson(user)
-                val userMap = Klaxon().parse<Map<String, String>>(jsonString).orEmpty()
-
                 map["token"] = token
                 map["openuid"] = openUid
                 map["localeLanguage"] = local
@@ -195,10 +219,18 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                     map["editBio"] = 1
                 }
 
-//                Log.e(TAG, "initParams: scene=$scene" )
+                Log.e(TAG, "initParams: scene=$scene" )
 
                 if(scene == SCENE_PROFILE_EDIT || scene == SCENE_SETTING_EDIT || scene == SCENE_SETTING_PRIVACY){
+                    val jsonString = GsonConverter.gson.toJson(user)
+                    val userMap = Klaxon().parse<Map<String, String>>(jsonString).orEmpty()
                     map["user"] = userMap
+                }
+
+                if(scene == SCENE_ASTRO_CODE){
+                    val jsonString = GsonConverter.gson.toJson(user?.star_sign)
+                    val strList = Klaxon().parseArray<Map<String, String>>(jsonString).orEmpty()
+                    map["star_sign"] = strList
                 }
 
                 val params = GsonConverter.gson.toJson(map)

@@ -1,13 +1,9 @@
 package com.cyberflow.sparkle.register.view
 
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.RotateDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.animation.LinearInterpolator
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -29,7 +25,7 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        initAnim()
+//        initAnim()
 
         var adapter = PageAdapter(supportFragmentManager, lifecycle)
         adapter.addFragment(SelectGenderFragment())
@@ -84,13 +80,13 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
     }
 
     private fun initAnim() {
-        val rotateDrawable = mViewBind.ivRotate.background as RotateDrawable
+        /*val rotateDrawable = mViewBind.ivRotate.background as RotateDrawable
         ObjectAnimator.ofInt(rotateDrawable, "level", 0, 10000).apply {
             duration = 9000
             repeatCount = ValueAnimator.INFINITE
             interpolator = LinearInterpolator()
             start()
-        }
+        }*/
     }
 
     override fun initData() {

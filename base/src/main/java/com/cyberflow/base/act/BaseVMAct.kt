@@ -35,6 +35,7 @@ abstract class BaseVMAct<VM : BaseViewModel> : AppCompatActivity() {
         viewModel = createViewModel(this)
         immersive(COLOR_TRANSPARENT, true)
         transparentNavigationBar(window)
+//        setNavigationBar(false)
         initView(savedInstanceState)
         initData()
     }

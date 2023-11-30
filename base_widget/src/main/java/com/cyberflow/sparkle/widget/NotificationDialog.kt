@@ -190,8 +190,8 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
 
     companion object {
         const val TYPE_SUCCESS = 0
-        const val TYPE_WARN = 1
-        const val TYPE_ERROR = 2
+        const val TYPE_ERROR = 1
+        const val TYPE_WARN = 2
     }
 
     private val queue = ConcurrentLinkedQueue<ToastBody>()
@@ -218,8 +218,8 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
             val toastBody = queue.remove()
             iv?.setImageResource(when (toastBody.type) {
                 TYPE_SUCCESS -> com.cyberflow.base.resources.R.drawable.toast_ic_success
-                TYPE_WARN -> com.cyberflow.base.resources.R.drawable.toast_ic_warn
                 TYPE_ERROR -> com.cyberflow.base.resources.R.drawable.toast_ic_error
+                TYPE_WARN -> com.cyberflow.base.resources.R.drawable.toast_ic_warn
                 else -> 0
             })
             tv?.text = toastBody.content

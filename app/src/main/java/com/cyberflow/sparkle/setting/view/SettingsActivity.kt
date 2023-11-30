@@ -166,19 +166,14 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         result: MethodChannel.Result
     ) {
         if (call.method == "flutterToast") {
-            val type = call.argument<String>("type")
+            val type = call.argument<Int>("type") ?: NotificationDialog.TYPE_SUCCESS
             val content = call.argument<String>("content")
             if (content?.isNotEmpty() == true) {
-                val t = when (type) {
-                    "success" -> NotificationDialog.TYPE_SUCCESS
-                    "error" -> NotificationDialog.TYPE_ERROR
-                    else -> NotificationDialog.TYPE_WARN
-                }
-                ToastDialogHolder.getDialog()?.show(this@SettingsActivity, t, content)
+                ToastDialogHolder.getDialog()?.show(this@SettingsActivity, type, content)
             }
             result.success("success")
         }else{
-            handleFlutterCommonEvent(scene, method, call, result)
+            handleFlutterCommonEvent(this, scene, method, call, result)
         }
     }
 

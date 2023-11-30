@@ -1,6 +1,5 @@
 package com.cyberflow.sparkle.main.view
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
@@ -194,8 +193,6 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
     override fun initData() {
         Log.e(TAG, "initData: ")
 
-        initHoroscopeFlutter()
-
         if (open_uid.isNullOrEmpty()) {  // 加载自己的主页
             open_uid = CacheUtil.getUserInfo()?.user?.open_uid.orEmpty()
         }
@@ -327,19 +324,14 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
         scene: Int, method: MethodChannel, call: MethodCall, result: MethodChannel.Result
     ) {
         if (call.method == "flutterToast") {
-            val type = call.argument<String>("type")
+            val type = call.argument<Int>("type") ?: NotificationDialog.TYPE_SUCCESS
             val content = call.argument<String>("content")
             if (content?.isNotEmpty() == true) {
-                val t = when (type) {
-                    "success" -> NotificationDialog.TYPE_SUCCESS
-                    "error" -> NotificationDialog.TYPE_ERROR
-                    else -> NotificationDialog.TYPE_WARN
-                }
-                ToastDialogHolder.getDialog()?.show(mActivity, t, content)
+                ToastDialogHolder.getDialog()?.show(mActivity, type, content)
             }
             result.success("success")
         } else {
-            FlutterProxyActivity.handleFlutterCommonEvent(scene, method, call, result)
+            FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
         }
     }
 
@@ -385,10 +377,10 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                 layTwitter.isVisible = true
                 if(isMySelf){
                     if(twitter!=null){
-                        tvTwitter.text = twitter.nick
+                        tvTwitter.text = "@ ${twitter.nick}"
                     }else{
-                        tvTwitter.paint.flags = Paint.ANTI_ALIAS_FLAG
-                        tvTwitter.paint.isAntiAlias = true
+//                        tvTwitter.paint.flags = Paint.ANTI_ALIAS_FLAG
+//                        tvTwitter.paint.isAntiAlias = true
                         tvTwitter.text = Html.fromHtml("<u>Add Twitter</u>", Html.FROM_HTML_MODE_COMPACT)
                         layTwitter.setOnClickListener {
                             // todo   go twitter
@@ -397,7 +389,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                     }
                 }else{
                     if(twitter!=null){
-                        tvTwitter.text = twitter.nick
+                        tvTwitter.text = "@ ${twitter.nick}"
                     }else{
                         layTwitter.isVisible = false
                     }
@@ -425,31 +417,28 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                 }
 
                 if(user?.star_sign.isNullOrEmpty()){
-                    fragmentHoroscopeContainer.isVisible = false
+//                    fragmentHoroscopeContainer.isVisible = false
                 }else{
-
+                    flutterAstroCode.isVisible = true
+                    initHoroscopeFlutter()
                 }
             }
         }
     }
 
-
     private var methodChannel : MethodChannel? = null
 
     private fun initHoroscopeFlutter() {
-        methodChannel = FlutterProxyActivity.prepareFlutterEngine(requireActivity(), FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE, FlutterProxyActivity.ROUTE_EDIT_PROFILE, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_EDIT) { scene, method, call, result ->
-            FlutterProxyActivity.handleFlutterCommonEvent(scene, method, call, result)
+        methodChannel = FlutterProxyActivity.prepareFlutterEngine(requireActivity(), FlutterProxyActivity.ENGINE_ID_ASTRO_CODE, FlutterProxyActivity.ROUTE_ASTRO_CODEE, FlutterProxyActivity.CHANNEL_START_SIGN, FlutterProxyActivity.SCENE_ASTRO_CODE) { scene, method, call, result ->
+            FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
         }
-        /*methodChannel = FlutterProxyActivity.prepareFlutterEngine(requireActivity(), FlutterProxyActivity.ENGINE_ID_HOROSCOPE, FlutterProxyActivity.ROUTE_HOROSCOPE, FlutterProxyActivity.CHANNEL_HOROSCOPE, FlutterProxyActivity.SCENE_HOROSCOPE) { scene, method, call, result ->
-            FlutterProxyActivity.handleFlutterCommonEvent(scene, method, call, result)
-        }*/
-        val fragment = FlutterFragment.withCachedEngine(FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE)
+        val fragment = FlutterFragment.withCachedEngine(FlutterProxyActivity.ENGINE_ID_ASTRO_CODE)
             .renderMode(RenderMode.texture)
             .transparencyMode(TransparencyMode.transparent)
             .build<FlutterFragment>()
         requireActivity()
             .supportFragmentManager.beginTransaction()
-            .add(com.cyberflow.sparkle.R.id.fragment_horoscope_container, fragment)
+            .add(com.cyberflow.sparkle.R.id.fragment_astro_code_container, fragment)
             .commit()
     }
 }
