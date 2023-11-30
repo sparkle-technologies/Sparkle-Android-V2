@@ -17,4 +17,9 @@ object Api {
     const val GET_IMAGE_URLS = "stars-cipher/get_user_image_url"
     const val USER_DETAIL = "stars-cipher/user/detail"
 
+    const val BOND_LIST = "ticket/user/bond_list"
+    const val BOND = "ticket/user/synastry"
+    const val BOND_DETAIL = "ticket/user/synastry_detail"
+    const val RECOMMAND_FRIEND = "ticket/user/friends_recommend"
+
 }

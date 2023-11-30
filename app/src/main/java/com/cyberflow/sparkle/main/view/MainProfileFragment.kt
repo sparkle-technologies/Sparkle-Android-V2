@@ -10,6 +10,7 @@ import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.DetailResponseData
 import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.base.model.ManyImageData
+import com.cyberflow.base.model.RecommandFriendList
 import com.cyberflow.base.model.User
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.resources.R
@@ -24,6 +25,7 @@ import com.cyberflow.sparkle.databinding.FragmentMainProfileBinding
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity
 import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMAddFriendAct
+import com.cyberflow.sparkle.main.widget.SynastryDialog
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.profile.view.ProfileAct.Companion.ACCEPT_FRIEND
 import com.cyberflow.sparkle.profile.view.ProfileAct.Companion.ADD_FRIEND
@@ -37,9 +39,11 @@ import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.divider
+import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.drake.net.Post
 import com.drake.net.utils.scopeNetLife
+import com.drake.net.utils.withMain
 import com.drake.spannable.addSpan
 import com.drake.spannable.movement.ClickableMovementMethod
 import com.drake.spannable.replaceSpan
@@ -78,11 +82,11 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                     }
                     ADD_FRIEND -> {
                         btnLeft.setViewTxt(getString(R.string.add_friend))
-                        btnRight.setViewTxt("You&Harry...")
+                        btnRight.setViewTxt("You&${user?.nick}")
                     }
                     ACCEPT_FRIEND -> {
                         btnLeft.setViewTxt(getString(R.string.accept_friend))
-                        btnRight.setViewTxt("You&Harry...")
+                        btnRight.setViewTxt("You&${user?.nick}")
                     }
                 }
             }
@@ -128,13 +132,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                     when (action) {
                         CHAT -> {   // go chatActivity   avatar nickName
                             user?.also {
-                                ChatActivity.launch(
-                                    mActivity,
-                                    open_uid.replace("-", "_"),
-                                    it.avatar,
-                                    it.nick,
-                                    1
-                                )
+                                ChatActivity.launch(mActivity, open_uid.replace("-", "_"), it.avatar, it.nick, 1)
                             }
                         }
 
@@ -166,7 +164,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                 if(isMySelf){
                     goShare()
                 }else{
-                    ToastUtil.show(mActivity, "显示么子动画")
+                    reavelRelation()
                 }
             }
         })
@@ -407,29 +405,39 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                 }
 
                 if(!isMySelf){
-                    layRecommand.isVisible = true
                     rvRecommand.divider {
                         orientation = DividerOrientation.HORIZONTAL
                         setDivider(10, true)
                     }.setup {
-                        addType<FriendMessageInfo>(com.cyberflow.sparkle.R.layout.item_profile_friend_recommand)
-                    }.models = arrayListOf(FriendMessageInfo(), FriendMessageInfo(),FriendMessageInfo(), FriendMessageInfo(),FriendMessageInfo(), FriendMessageInfo())
+                        addType<com.cyberflow.base.model.RecommandFriend>(com.cyberflow.sparkle.R.layout.item_profile_friend_recommand)
+                    }
+                    requestRecommandFriend()
                 }
 
                 if(user?.star_sign.isNullOrEmpty()){
 //                    fragmentHoroscopeContainer.isVisible = false
                 }else{
                     flutterAstroCode.isVisible = true
-                    initHoroscopeFlutter()
+                    initAstroCodeFlutter()
                 }
+
+                if(!isMySelf){
+                    flutterSynastry.isVisible = true
+                    tvFlutterSynastryTitle.text = "You & ${data.nick}"
+                    initSyNastryFlutter()
+                }
+
+                Log.e(TAG, "cache open_uid: ${CacheUtil.getUserInfo()?.user?.open_uid}" )
+                Log.e(TAG, "data open_uid: ${data.open_uid}" )
+                Log.e(TAG, "open_uid: ${open_uid}" )
+
             }
         }
     }
 
-    private var methodChannel : MethodChannel? = null
 
-    private fun initHoroscopeFlutter() {
-        methodChannel = FlutterProxyActivity.prepareFlutterEngine(requireActivity(), FlutterProxyActivity.ENGINE_ID_ASTRO_CODE, FlutterProxyActivity.ROUTE_ASTRO_CODEE, FlutterProxyActivity.CHANNEL_START_SIGN, FlutterProxyActivity.SCENE_ASTRO_CODE) { scene, method, call, result ->
+    private fun initAstroCodeFlutter() {
+       val methodChannel = FlutterProxyActivity.prepareFlutterEngine(requireActivity(), FlutterProxyActivity.ENGINE_ID_ASTRO_CODE, FlutterProxyActivity.ROUTE_ASTRO_CODEE, FlutterProxyActivity.CHANNEL_START_SIGN, FlutterProxyActivity.SCENE_ASTRO_CODE) { scene, method, call, result ->
             FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
         }
         val fragment = FlutterFragment.withCachedEngine(FlutterProxyActivity.ENGINE_ID_ASTRO_CODE)
@@ -440,5 +448,47 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
             .supportFragmentManager.beginTransaction()
             .add(com.cyberflow.sparkle.R.id.fragment_astro_code_container, fragment)
             .commit()
+    }
+
+    private fun initSyNastryFlutter() {
+        Log.e(TAG, "initSyNastryFlutter: " )
+       val methodChannel = FlutterProxyActivity.prepareFlutterEngine(requireActivity(), FlutterProxyActivity.ENGINE_ID_SYNASTRY, FlutterProxyActivity.ROUTE_SYNASTRY, FlutterProxyActivity.CHANNEL_SYNASTRY, FlutterProxyActivity.SCENE_SYNASTRY) { scene, method, call, result ->
+           if (call.method == "flutterInitalized") {
+               result.success("success")
+               FlutterProxyActivity.initParams(open_uid, method)
+           }else{
+               FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
+           }
+        }
+        val fragment = FlutterFragment.withCachedEngine(FlutterProxyActivity.ENGINE_ID_SYNASTRY)
+            .renderMode(RenderMode.texture)
+            .transparencyMode(TransparencyMode.transparent)
+            .build<FlutterFragment>()
+        requireActivity()
+            .supportFragmentManager.beginTransaction()
+            .add(com.cyberflow.sparkle.R.id.fragment_synastry_container, fragment)
+            .commit()
+    }
+
+    private fun requestRecommandFriend() {
+        scopeNetLife {
+            val data = Post<RecommandFriendList>(Api.RECOMMAND_FRIEND) {}.await()
+            data?.let {
+                it.friends?.forEach {
+                    Log.e(TAG, "RecommandFriend: $it" )
+                }
+                withMain {
+                    mDatabind.layRecommand.isVisible = true
+                    mDatabind.rvRecommand.models = it.friends
+                }
+            }
+        }
+    }
+
+    private var dialog : SynastryDialog? = null
+
+    private fun reavelRelation(){
+        dialog = SynastryDialog(this, user)
+        dialog?.show()
     }
 }

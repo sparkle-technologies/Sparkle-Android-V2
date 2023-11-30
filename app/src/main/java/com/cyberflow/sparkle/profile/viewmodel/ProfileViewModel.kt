@@ -37,5 +37,4 @@ class ProfileViewModel : BaseViewModel() {
             LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent())
         }
     }
-
 }

@@ -93,6 +93,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         const val CHANNEL_SETTING = "settingChannel"
         const val CHANNEL_NOTIFICATION = "notificationChannel"
         const val CHANNEL_START_SIGN = "starSignChannel"
+        const val CHANNEL_SYNASTRY = "synastryChannel"
 
         const val EVENT_BUS_DESTROY = "event_bus_destroy_flutter_proxy"
 
@@ -101,6 +102,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         const val SCENE_PROFILE_EDIT = 1003
         const val SCENE_NOTIFICATION_LIST = 1004
         const val SCENE_ASTRO_CODE = 1005
+        const val SCENE_SYNASTRY = 1006
 
 
         fun go(context: Context, engineName: String) {
@@ -253,6 +255,44 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                             Log.e(TAG, "initParams notImplemented: ")
                         }
                     })
+                }
+            }
+        }
+
+        fun initParams(openUid: String, methodChannel: MethodChannel) {
+            var local = "zh-Hans-CN"
+            val current = MultiLanguages.getAppLanguage()
+            if (current.language.equals(LocaleContract.getEnglishLocale().language)) {
+                local = "en_US"
+            }
+            CacheUtil.getUserInfo()?.apply {
+                val token = token
+                var map = mutableMapOf<String, Any>()
+//                map["token"] = token
+//                map["openuid"] = openUid
+                map["token"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVaWQiOjMxNCwiT3BlblVpZCI6IjE2OTMyMjI0LTcxNjEtNDY3My04MjEwLTQ2NTk4NmRmMDA5MiIsIk9wZW5JZCI6IjB4NTc4YzY3MDg4MDU4MjYyZGVmNjUyMTBiYzkzM2E3MjcxMTZiMTUyOSIsIkF1dGhUeXBlIjoyLCJCdWZmZXJUaW1lIjoyNTkyMDAsImV4cCI6MTcwMTk1MDE4MCwiaXNzIjoic3BhcmtsZSIsIm5iZiI6MTcwMTM0NDM4MH0.nLgje_92Gbyp9co3Y3yb1S08xvijGRrCXgAtNgx1u2c"
+                map["open_uid"] = "eebe94a3-fb8d-403f-9696-6be1a9e43eb3"
+                map["localeLanguage"] = local
+                val params = GsonConverter.gson.toJson(map)
+                Log.e(TAG, "initParams:  params: $params")
+
+                methodChannel?.apply { this.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
+                    override fun success(result: Any?) {
+                        Log.e(TAG, "initParams success: ")
+                    }
+
+                    override fun error(
+                        errorCode: String,
+                        errorMessage: String?,
+                        errorDetails: Any?
+                    ) {
+                        Log.e(TAG, "initParams errorCode: ")
+                    }
+
+                    override fun notImplemented() {
+                        Log.e(TAG, "initParams notImplemented: ")
+                    }
+                })
                 }
             }
         }

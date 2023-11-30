@@ -260,7 +260,7 @@
             <LinearLayout
                 android:id="@+id/flutter_astro_code"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
                 android:layout_marginTop="@dimen/dp_28"
                 android:orientation="vertical"
                 android:visibility="gone">
@@ -286,12 +286,13 @@
             <LinearLayout
                 android:id="@+id/flutter_synastry"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="500dp"
                 android:layout_marginTop="@dimen/dp_28"
                 android:orientation="vertical"
                 android:visibility="gone">
 
                 <TextView
+                    android:id="@+id/tv_flutter_synastry_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_20"
@@ -314,6 +315,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_40"
+                android:layout_marginBottom="@dimen/dp_20"
                 android:orientation="vertical"
                 android:visibility="gone">
 

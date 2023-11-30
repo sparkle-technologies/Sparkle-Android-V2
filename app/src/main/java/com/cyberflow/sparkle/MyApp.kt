@@ -17,6 +17,7 @@ import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
 import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
+import io.flutter.embedding.engine.FlutterEngine
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -50,6 +51,7 @@ class MyApp : BaseApp() {
         runOnBackgroundThread()
         Log.e(TAG, "onCreate:  time cost: ${System.currentTimeMillis() - st}")
     }
+
 
     // for necessary library, high priority, must be init at Main Thread
     private fun runOnMainThread() {
