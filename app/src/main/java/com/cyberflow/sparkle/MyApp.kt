@@ -17,11 +17,13 @@ import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
 import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
-import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.embedding.engine.FlutterEngineGroup
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class MyApp : BaseApp() {
+
+    lateinit var engines: FlutterEngineGroup
 
     companion object {
 
@@ -55,6 +57,7 @@ class MyApp : BaseApp() {
 
     // for necessary library, high priority, must be init at Main Thread
     private fun runOnMainThread() {
+        engines = FlutterEngineGroup(this)
         initNetSpark(cacheDir)
         CacheUtil.init(this)
         FirebaseApp.initializeApp(this)

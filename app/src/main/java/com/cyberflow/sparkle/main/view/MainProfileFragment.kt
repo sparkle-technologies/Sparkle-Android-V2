@@ -225,7 +225,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
 
         Log.e(TAG, "loadProfile: isMySelf=$isMySelf")
 
-        hideOrShowAllIcons()
+
         mDatabind.llBack.isVisible = !isMySelf
 
         if (isMySelf) {  // if user is me  - img logic
@@ -353,6 +353,9 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
     private fun showUserInfo(_user: User?) {
         _user?.also { data ->
             this.user = data
+
+            hideOrShowAllIcons()
+
             mDatabind.apply {
                 btnName.text= data.nick
 
@@ -435,15 +438,16 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
         }
     }
 
-
     private fun initAstroCodeFlutter() {
        val methodChannel = FlutterProxyActivity.prepareFlutterEngine(requireActivity(), FlutterProxyActivity.ENGINE_ID_ASTRO_CODE, FlutterProxyActivity.ROUTE_ASTRO_CODEE, FlutterProxyActivity.CHANNEL_START_SIGN, FlutterProxyActivity.SCENE_ASTRO_CODE) { scene, method, call, result ->
-            FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
+           FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
         }
+
         val fragment = FlutterFragment.withCachedEngine(FlutterProxyActivity.ENGINE_ID_ASTRO_CODE)
             .renderMode(RenderMode.texture)
             .transparencyMode(TransparencyMode.transparent)
             .build<FlutterFragment>()
+
         requireActivity()
             .supportFragmentManager.beginTransaction()
             .add(com.cyberflow.sparkle.R.id.fragment_astro_code_container, fragment)
@@ -451,7 +455,6 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
     }
 
     private fun initSyNastryFlutter() {
-        Log.e(TAG, "initSyNastryFlutter: " )
        val methodChannel = FlutterProxyActivity.prepareFlutterEngine(requireActivity(), FlutterProxyActivity.ENGINE_ID_SYNASTRY, FlutterProxyActivity.ROUTE_SYNASTRY, FlutterProxyActivity.CHANNEL_SYNASTRY, FlutterProxyActivity.SCENE_SYNASTRY) { scene, method, call, result ->
            if (call.method == "flutterInitalized") {
                result.success("success")
@@ -460,10 +463,12 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
            }
         }
+
         val fragment = FlutterFragment.withCachedEngine(FlutterProxyActivity.ENGINE_ID_SYNASTRY)
             .renderMode(RenderMode.texture)
             .transparencyMode(TransparencyMode.transparent)
             .build<FlutterFragment>()
+
         requireActivity()
             .supportFragmentManager.beginTransaction()
             .add(com.cyberflow.sparkle.R.id.fragment_synastry_container, fragment)

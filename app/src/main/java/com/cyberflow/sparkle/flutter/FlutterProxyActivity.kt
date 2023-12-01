@@ -13,6 +13,7 @@ import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.viewmodel.BaseViewModel
+import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityFlutterProxyBinding
 import com.cyberflow.sparkle.widget.NotificationDialog
@@ -23,7 +24,6 @@ import dev.pinkroom.walletconnectkit.core.chains.toJson
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.android.TransparencyMode
-import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
 import io.flutter.plugin.common.MethodCall
@@ -112,9 +112,10 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         }
 
         fun prepareFlutterEngine(context: Context, engineName: String, routeName: String, channelName: String, scene: Int, handleFlutterEvent: (scene:Int, methodChannel: MethodChannel, call: MethodCall, result: MethodChannel.Result) -> Unit) : MethodChannel? {
-            val flutterEngine = FlutterEngine(context)
-            flutterEngine.navigationChannel.setInitialRoute(routeName)
-            flutterEngine.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
+//            val flutterEngine = FlutterEngine(context)
+//            flutterEngine.navigationChannel.setInitialRoute(routeName)
+//            flutterEngine.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
+            val flutterEngine = MyApp.instance.engines.createAndRunEngine(context, DartExecutor.DartEntrypoint.createDefault(), routeName)
             FlutterEngineCache.getInstance().put(engineName, flutterEngine)
             val methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, channelName)
             methodChannel?.setMethodCallHandler { call, result ->
@@ -130,6 +131,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
 
             if (call.method == "flutterDestroy") {
                 result.success("success")
+//                methodChannel.setMethodCallHandler(null)
                 LiveDataBus.get().with(EVENT_BUS_DESTROY).postValue(System.currentTimeMillis())
 //                FlutterActivity.withCachedEngine(ENGINE_ID_EDIT_PROFILE).destroyEngineWithActivity(false)
 //            go(this) // singleTask
