@@ -172,7 +172,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/dp_4"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Describe yourself"
+                        android:text="@string/describe_yourself"
                         android:textColor="@color/color_2A2A2B"
                         android:textSize="@dimen/sp_11" />
 
@@ -183,6 +183,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_40"
                     android:layout_marginStart="@dimen/dp_20"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/dp_24"
                     android:layout_marginEnd="@dimen/dp_20"
                     android:orientation="horizontal"
@@ -224,6 +225,7 @@
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_16"
                 android:gravity="center"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -323,7 +325,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="People you may know"
+                    android:text="@string/people_you_may_know"
                     android:layout_marginStart="@dimen/dp_20"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_16" />

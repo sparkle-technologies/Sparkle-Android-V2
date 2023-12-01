@@ -29,8 +29,13 @@
     <string name="oops_failed_to_remove_friend">删除失败</string>
     <string name="link_copied">链接复制成功</string>
     <string name="oops">欧吼</string>
-    <string name="unable_to_save_files">Unable to save files</string>
-    <string name="you_have_turned_off_storage_permissions">You have turned off storage permissions</string>
-    <string name="fail_to_generate_image">fail to generate image</string>
-    <string name="fail_to_compress_image">fail to compress image</string>
+    <string name="unable_to_save_files">无法保存文件</string>
+    <string name="you_have_turned_off_storage_permissions">未授予文件管理权限</string>
+    <string name="fail_to_generate_image">生成图片失败</string>
+    <string name="fail_to_compress_image">压缩图片失败</string>
+    <string name="go_to_closet">去换装</string>
+    <string name="share">分享</string>
+    <string name="you">你</string>
+    <string name="describe_yourself">描述自己</string>
+    <string name="people_you_may_know">可能认识的人</string>
 </resources>

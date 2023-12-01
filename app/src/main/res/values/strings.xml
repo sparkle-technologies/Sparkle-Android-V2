@@ -34,4 +34,9 @@
     <string name="you_have_turned_off_storage_permissions">You have turned off storage permissions</string>
     <string name="fail_to_generate_image">fail to generate image</string>
     <string name="fail_to_compress_image">fail to compress image</string>
+    <string name="go_to_closet">Go To Closet</string>
+    <string name="share">Share</string>
+    <string name="you">You</string>
+    <string name="describe_yourself">Describe yourself</string>
+    <string name="people_you_may_know">People you may know</string>
 </resources>

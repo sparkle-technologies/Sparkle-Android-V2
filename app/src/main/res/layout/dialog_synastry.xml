@@ -30,7 +30,7 @@
         android:layout_height="@dimen/dp_48"
         android:layout_marginStart="@dimen/dp_11"
         android:layout_marginTop="@dimen/dp_85"
-        app:cardCornerRadius="@dimen/dp_31"
+        app:cardCornerRadius="@dimen/dp_19"
         app:cardElevation="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"

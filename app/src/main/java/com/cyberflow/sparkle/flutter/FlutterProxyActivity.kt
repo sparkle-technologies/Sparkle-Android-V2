@@ -89,14 +89,19 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         const val ENGINE_ID_SYNASTRY = "profile_synastry"
         const val ROUTE_SYNASTRY = "/profile/astrolabe"
 
+        const val ENGINE_ID_COMMON = "common_engin"
+        const val ROUTE_COMMON = "/"
+
 
         const val CHANNEL_SETTING = "settingChannel"
         const val CHANNEL_NOTIFICATION = "notificationChannel"
         const val CHANNEL_START_SIGN = "starSignChannel"
         const val CHANNEL_SYNASTRY = "synastryChannel"
+        const val CHANNEL_COMMON = "commonChannel"
 
         const val EVENT_BUS_DESTROY = "event_bus_destroy_flutter_proxy"
 
+        const val SCENE_COMMON = 1000
         const val SCENE_SETTING_EDIT = 1001
         const val SCENE_SETTING_PRIVACY = 1002
         const val SCENE_PROFILE_EDIT = 1003
@@ -270,10 +275,59 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
             CacheUtil.getUserInfo()?.apply {
                 val token = token
                 var map = mutableMapOf<String, Any>()
-//                map["token"] = token
-//                map["openuid"] = openUid
-                map["token"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVaWQiOjMxNCwiT3BlblVpZCI6IjE2OTMyMjI0LTcxNjEtNDY3My04MjEwLTQ2NTk4NmRmMDA5MiIsIk9wZW5JZCI6IjB4NTc4YzY3MDg4MDU4MjYyZGVmNjUyMTBiYzkzM2E3MjcxMTZiMTUyOSIsIkF1dGhUeXBlIjoyLCJCdWZmZXJUaW1lIjoyNTkyMDAsImV4cCI6MTcwMTk1MDE4MCwiaXNzIjoic3BhcmtsZSIsIm5iZiI6MTcwMTM0NDM4MH0.nLgje_92Gbyp9co3Y3yb1S08xvijGRrCXgAtNgx1u2c"
-                map["open_uid"] = "eebe94a3-fb8d-403f-9696-6be1a9e43eb3"
+                map["token"] = token
+                map["open_uid"] = openUid
+//                map["token"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVaWQiOjMxNCwiT3BlblVpZCI6IjE2OTMyMjI0LTcxNjEtNDY3My04MjEwLTQ2NTk4NmRmMDA5MiIsIk9wZW5JZCI6IjB4NTc4YzY3MDg4MDU4MjYyZGVmNjUyMTBiYzkzM2E3MjcxMTZiMTUyOSIsIkF1dGhUeXBlIjoyLCJCdWZmZXJUaW1lIjoyNTkyMDAsImV4cCI6MTcwMTk1MDE4MCwiaXNzIjoic3BhcmtsZSIsIm5iZiI6MTcwMTM0NDM4MH0.nLgje_92Gbyp9co3Y3yb1S08xvijGRrCXgAtNgx1u2c"
+//                map["open_uid"] = "eebe94a3-fb8d-403f-9696-6be1a9e43eb3"
+                map["localeLanguage"] = local
+                val params = GsonConverter.gson.toJson(map)
+                Log.e(TAG, "initParams:  params: $params")
+
+                methodChannel?.apply { this.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
+                    override fun success(result: Any?) {
+                        Log.e(TAG, "initParams success: ")
+                    }
+
+                    override fun error(
+                        errorCode: String,
+                        errorMessage: String?,
+                        errorDetails: Any?
+                    ) {
+                        Log.e(TAG, "initParams errorCode: ")
+                    }
+
+                    override fun notImplemented() {
+                        Log.e(TAG, "initParams notImplemented: ")
+                    }
+                })
+                }
+            }
+        }
+
+        /**
+
+        channel.invokeMethod('flutterOpenFlutterVC', {
+            'route': '/profile/chart/details',
+            'params': {'index': index, 'star_sign': starSign}, //map
+        });
+
+        starSign.value = result['params']['star_sign'] ?? [];
+        starSignIndex = result['params']['index'] ?? 0;
+
+         */
+        fun initParams(params: Any?, methodChannel: MethodChannel) {
+            var local = "zh-Hans-CN"
+            val current = MultiLanguages.getAppLanguage()
+            if (current.language.equals(LocaleContract.getEnglishLocale().language)) {
+                local = "en_US"
+            }
+            CacheUtil.getUserInfo()?.apply {
+                val token = token
+                var map = mutableMapOf<String, Any>()
+                map["token"] = token
+                map["params"] = params ?: ""
+//                map["token"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVaWQiOjMxNCwiT3BlblVpZCI6IjE2OTMyMjI0LTcxNjEtNDY3My04MjEwLTQ2NTk4NmRmMDA5MiIsIk9wZW5JZCI6IjB4NTc4YzY3MDg4MDU4MjYyZGVmNjUyMTBiYzkzM2E3MjcxMTZiMTUyOSIsIkF1dGhUeXBlIjoyLCJCdWZmZXJUaW1lIjoyNTkyMDAsImV4cCI6MTcwMTk1MDE4MCwiaXNzIjoic3BhcmtsZSIsIm5iZiI6MTcwMTM0NDM4MH0.nLgje_92Gbyp9co3Y3yb1S08xvijGRrCXgAtNgx1u2c"
+//                map["open_uid"] = "eebe94a3-fb8d-403f-9696-6be1a9e43eb3"
                 map["localeLanguage"] = local
                 val params = GsonConverter.gson.toJson(map)
                 Log.e(TAG, "initParams:  params: $params")

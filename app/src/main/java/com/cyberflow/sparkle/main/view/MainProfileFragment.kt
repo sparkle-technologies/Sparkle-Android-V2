@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.cyberflow.base.fragment.BaseDBFragment
+import com.cyberflow.base.model.BondDetail
 import com.cyberflow.base.model.DetailResponseData
 import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.base.model.ManyImageData
@@ -69,27 +70,26 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
             btnWallet.isVisible = isMySelf
             btnSharePurple.isVisible = !isMySelf
 
-            btnRight.isVisible = true
+            btnRight.isVisible = false
 
             if(isMySelf){
-                btnLeft.setViewTxt("Go To Closet")
-                btnRight.setViewTxt("Share")
+                btnLeft.setViewTxt(getString(com.cyberflow.sparkle.R.string.go_to_closet))
+                btnRight.isVisible = true
+                btnRight.setViewTxt(getString(com.cyberflow.sparkle.R.string.share))
             }else{
                 when(action){
                     CHAT -> {
                         btnLeft.setViewTxt(getString(R.string.chat))
-                        btnRight.isVisible = false
                     }
                     ADD_FRIEND -> {
                         btnLeft.setViewTxt(getString(R.string.add_friend))
-                        btnRight.setViewTxt("You&${user?.nick}")
                     }
                     ACCEPT_FRIEND -> {
                         btnLeft.setViewTxt(getString(R.string.accept_friend))
-                        btnRight.setViewTxt("You&${user?.nick}")
                     }
                 }
             }
+            layBtn.isVisible = true
         }
     }
 
@@ -219,12 +219,11 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
     private var isMySelf = false
 
     private fun loadProfile() {
-        val user = CacheUtil.getUserInfo()?.user
+        val cacheUser = CacheUtil.getUserInfo()?.user
 
-        isMySelf = open_uid == user?.open_uid && open_uid.isNotEmpty()
+        isMySelf = open_uid == cacheUser?.open_uid && open_uid.isNotEmpty()
 
         Log.e(TAG, "loadProfile: isMySelf=$isMySelf")
-
 
         mDatabind.llBack.isVisible = !isMySelf
 
@@ -237,9 +236,10 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                 loadBigImg(cache)
                 requestImg()
             }
-            showUserInfo(user)
+            showUserInfo(cacheUser)
         }else{
             requestDetail()  // first, load data, then load img, cause default holder is up to gender
+            requestSynastryDetail()
         }
     }
 
@@ -307,13 +307,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
     private var editMethodChannel: MethodChannel? = null
 
     private fun initFlutter() {
-        editMethodChannel = FlutterProxyActivity.prepareFlutterEngine(
-            mActivity,
-            FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE,
-            FlutterProxyActivity.ROUTE_EDIT_PROFILE,
-            FlutterProxyActivity.CHANNEL_SETTING,
-            FlutterProxyActivity.SCENE_PROFILE_EDIT
-        ) { scene, method, call, result ->
+        editMethodChannel = FlutterProxyActivity.prepareFlutterEngine(mActivity, FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE, FlutterProxyActivity.ROUTE_EDIT_PROFILE, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_PROFILE_EDIT) { scene, method, call, result ->
             handleFlutterEvent(scene, method, call, result)
         }
     }
@@ -353,7 +347,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
     private fun showUserInfo(_user: User?) {
         _user?.also { data ->
             this.user = data
-
+            shouldRequestRecommand()
             hideOrShowAllIcons()
 
             mDatabind.apply {
@@ -375,9 +369,9 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                     it.type == "Twitter"   // Discord
                 }?.getOrNull(0)
 
-                layTwitter.isVisible = true
+                layTwitter.isVisible = false
                 if(isMySelf){
-                    if(twitter!=null){
+                    if(twitter != null){
                         tvTwitter.text = "@ ${twitter.nick}"
                     }else{
 //                        tvTwitter.paint.flags = Paint.ANTI_ALIAS_FLAG
@@ -388,11 +382,11 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                             ToastUtil.show(mActivity, "跳转绑定推特 还没做")
                         }
                     }
+                    layTwitter.isVisible = true
                 }else{
                     if(twitter!=null){
                         tvTwitter.text = "@ ${twitter.nick}"
-                    }else{
-                        layTwitter.isVisible = false
+                        layTwitter.isVisible = true
                     }
                 }
 
@@ -413,8 +407,9 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                         setDivider(10, true)
                     }.setup {
                         addType<com.cyberflow.base.model.RecommandFriend>(com.cyberflow.sparkle.R.layout.item_profile_friend_recommand)
+                    }.onClick(com.cyberflow.sparkle.R.id.lay_go_chat){
+                        ToastUtil.show(requireContext(), "跳转profile页")
                     }
-                    requestRecommandFriend()
                 }
 
                 if(user?.star_sign.isNullOrEmpty()){
@@ -423,24 +418,20 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                     flutterAstroCode.isVisible = true
                     initAstroCodeFlutter()
                 }
-
-                if(!isMySelf){
-                    flutterSynastry.isVisible = true
-                    tvFlutterSynastryTitle.text = "You & ${data.nick}"
-                    initSyNastryFlutter()
-                }
-
-                Log.e(TAG, "cache open_uid: ${CacheUtil.getUserInfo()?.user?.open_uid}" )
-                Log.e(TAG, "data open_uid: ${data.open_uid}" )
-                Log.e(TAG, "open_uid: ${open_uid}" )
-
             }
         }
     }
 
     private fun initAstroCodeFlutter() {
        val methodChannel = FlutterProxyActivity.prepareFlutterEngine(requireActivity(), FlutterProxyActivity.ENGINE_ID_ASTRO_CODE, FlutterProxyActivity.ROUTE_ASTRO_CODEE, FlutterProxyActivity.CHANNEL_START_SIGN, FlutterProxyActivity.SCENE_ASTRO_CODE) { scene, method, call, result ->
-           FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
+           if (call.method == "flutterOpenFlutterVC") {
+               result.success("success")
+               val route = call.argument<String>("route")
+               val params = call.argument<Map<String, Any>>("params")
+               openFlutterVC(route, params)
+           }else{
+               FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
+           }
         }
 
         val fragment = FlutterFragment.withCachedEngine(FlutterProxyActivity.ENGINE_ID_ASTRO_CODE)
@@ -459,7 +450,12 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
            if (call.method == "flutterInitalized") {
                result.success("success")
                FlutterProxyActivity.initParams(open_uid, method)
-           }else{
+           }else if (call.method == "flutterOpenFlutterVC") {
+               result.success("success")
+               val route = call.argument<String>("route")
+               val params = call.argument<Any>("params")
+               openFlutterVC(route, params)
+           } else{
                FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
            }
         }
@@ -475,19 +471,25 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
             .commit()
     }
 
-    private fun requestRecommandFriend() {
-        scopeNetLife {
-            val data = Post<RecommandFriendList>(Api.RECOMMAND_FRIEND) {}.await()
-            data?.let {
-                it.friends?.forEach {
-                    Log.e(TAG, "RecommandFriend: $it" )
-                }
-                withMain {
-                    mDatabind.layRecommand.isVisible = true
-                    mDatabind.rvRecommand.models = it.friends
-                }
+    private fun openFlutterVC(route: String?, params: Any?) {
+        if(route.isNullOrEmpty() || params == null){
+            return
+        }
+        val editMethodChannel = FlutterProxyActivity.prepareFlutterEngine(
+            requireContext(),
+            FlutterProxyActivity.ENGINE_ID_COMMON,
+            route.orEmpty(),
+            FlutterProxyActivity.CHANNEL_COMMON,
+            FlutterProxyActivity.SCENE_COMMON
+        ) { scene, method, call, result ->
+            if (call.method == "flutterInitalized") {
+                result.success("success")
+                FlutterProxyActivity.initParams(params, method)
+            }else{
+                FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
             }
         }
+        FlutterProxyActivity.go(requireActivity(), FlutterProxyActivity.ENGINE_ID_COMMON)
     }
 
     private var dialog : SynastryDialog? = null
@@ -495,5 +497,58 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
     private fun reavelRelation(){
         dialog = SynastryDialog(this, user)
         dialog?.show()
+    }
+
+
+    private fun requestSynastryDetail() {
+        scopeNetLife {
+            val data = Post<BondDetail>(Api.BOND_DETAIL) {
+                json("open_uid" to open_uid)
+            }.await()
+            data?.let {
+                withMain {
+                    showBondDetailInfo(it)
+                }
+            }
+        }
+    }
+
+    private var bondDetail: BondDetail? = null
+
+    private fun showBondDetailInfo(detail: BondDetail) {
+        bondDetail = detail
+        val txt  = "${getString(com.cyberflow.sparkle.R.string.you)} & ${detail.to_nick}"
+        if(detail!=null && detail.from_open_uid!!.isNotEmpty()){
+            mDatabind.btnRight.isVisible = false
+            mDatabind.flutterSynastry.isVisible = true
+            mDatabind.tvFlutterSynastryTitle.text = txt
+            initSyNastryFlutter()
+        }else{
+            mDatabind.btnRight.isVisible = true
+            mDatabind.btnRight.setViewTxt(txt)
+            mDatabind.flutterSynastry.isVisible = false
+        }
+        shouldRequestRecommand()
+    }
+
+    // no astro code && no bond detail
+    private fun shouldRequestRecommand() {
+        if(user == null) return
+        if(bondDetail == null) return
+        if(user!!.star_sign.isNullOrEmpty() && bondDetail!!.total_score == 0){
+            requestRecommandFriend()
+        }
+    }
+
+    private fun requestRecommandFriend() {
+        scopeNetLife {
+            val data = Post<RecommandFriendList>(Api.RECOMMAND_FRIEND) {}.await()
+            data?.let {
+                withMain {
+                    mDatabind.layRecommand.isVisible = true
+                    mDatabind.rvRecommand.models = it.friends
+                }
+            }
+        }
     }
 }

@@ -45,8 +45,12 @@ data class NftItem(
 
 @Serializable
 data class StartSignItem(
+    var PlanetId: Int = 0,
     var PlanetEnglish: String = "",
+    var PlanetName: String = "",
     var SignEnglish: String = "",
+    var SignName: String = "",
+    var InSignIndex: Int = 0,
     var Desc: String = "",
     var Labels: List<String>,
 )

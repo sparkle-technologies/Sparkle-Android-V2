@@ -11,6 +11,8 @@ import com.drake.net.okhttp.setDebug
 import com.drake.net.okhttp.setDialogFactory
 import com.drake.net.okhttp.setErrorHandler
 import com.drake.tooltip.dialog.BubbleDialog
+import com.hjq.language.LocaleContract
+import com.hjq.language.MultiLanguages
 import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -44,10 +46,19 @@ class HeaderInterceptor : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val original: Request = chain.request()
+
+        // todo optimization
         val token = CacheUtil.getUserInfo()?.token.orEmpty()
+        var local = "zh-Hans-CN"
+        val current = MultiLanguages.getAppLanguage()
+        if (current.language.equals(LocaleContract.getEnglishLocale().language)) {
+            local = "en_US"
+        }
+
         Log.e(TAG, "intercept: x-token=$token" )
         val requestBuilder: Request.Builder = original.newBuilder()
             .addHeader("x-token", token)
+            .addHeader("Accept-Language", local)
         val request: Request = requestBuilder.build()
         return chain.proceed(request)
     }
