@@ -91,31 +91,24 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/lay_unread"
+    <TextView
+        android:id="@+id/tv_unread"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_14"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_48"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@drawable/main_bg_unread_dot_yellow"
-        android:orientation="horizontal"
+        android:fontFamily="@font/poppins_regular"
+        android:minHeight="@dimen/dp_12"
+        android:minWidth="@dimen/dp_12"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingEnd="@dimen/dp_5"
+        android:gravity="center"
+        android:textSize="@dimen/sp_10"
         android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="@+id/lay1"
-        app:layout_constraintTop_toTopOf="@+id/lay1">
-
-        <TextView
-            android:id="@+id/tv_unread"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginStart="@dimen/dp_3"
-            android:layout_marginTop="@dimen/dp_1"
-            android:layout_marginEnd="@dimen/dp_3"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="@dimen/sp_10"
-            tool:text="2" />
-
-    </RelativeLayout>
+        app:layout_constraintTop_toTopOf="@+id/lay1"
+        tool:text="2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

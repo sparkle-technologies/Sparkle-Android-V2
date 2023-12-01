@@ -21,6 +21,7 @@ import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.DBComponent
+import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.FragmentMainProfileBinding
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity
@@ -28,6 +29,7 @@ import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMAddFriendAct
 import com.cyberflow.sparkle.main.widget.SynastryDialog
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
+import com.cyberflow.sparkle.profile.view.ProfileAct
 import com.cyberflow.sparkle.profile.view.ProfileAct.Companion.ACCEPT_FRIEND
 import com.cyberflow.sparkle.profile.view.ProfileAct.Companion.ADD_FRIEND
 import com.cyberflow.sparkle.profile.view.ProfileAct.Companion.CHAT
@@ -70,7 +72,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
             btnWallet.isVisible = isMySelf
             btnSharePurple.isVisible = !isMySelf
 
-            btnRight.isVisible = false
+            btnLeft.isVisible = true
 
             if(isMySelf){
                 btnLeft.setViewTxt(getString(com.cyberflow.sparkle.R.string.go_to_closet))
@@ -89,7 +91,6 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                     }
                 }
             }
-            layBtn.isVisible = true
         }
     }
 
@@ -238,7 +239,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
             }
             showUserInfo(cacheUser)
         }else{
-            requestDetail()  // first, load data, then load img, cause default holder is up to gender
+            requestDetail()
             requestSynastryDetail()
         }
     }
@@ -350,6 +351,9 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
             shouldRequestRecommand()
             hideOrShowAllIcons()
 
+            val txt  = "${getString(com.cyberflow.sparkle.R.string.you)} & ${user?.nick}"
+            mDatabind.btnRight.setViewTxt(txt)
+
             mDatabind.apply {
                 btnName.text= data.nick
 
@@ -408,7 +412,24 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                     }.setup {
                         addType<com.cyberflow.base.model.RecommandFriend>(com.cyberflow.sparkle.R.layout.item_profile_friend_recommand)
                     }.onClick(com.cyberflow.sparkle.R.id.lay_go_chat){
-                        ToastUtil.show(requireContext(), "跳转profile页")
+//                        ToastUtil.show(requireContext(), "跳转profile页")
+                        val model = getModel<com.cyberflow.base.model.RecommandFriend>()
+
+                        var action = CHAT
+                        if(IMDataManager.instance.getInviteData().filter {
+                            val name = it.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM).replace("_", "-")
+                            name == model.open_uid
+                            }.isNotEmpty()){
+                            action = ACCEPT_FRIEND
+                        }
+
+                        (requireActivity() as? ProfileAct)?.apply {
+                            refresh(model.open_uid, action)
+                        }
+
+                        (requireActivity() as? MainActivityV2)?.apply {
+                            ProfileAct.go(requireActivity(), model.open_uid.orEmpty(), action)
+                        }
                     }
                 }
 
@@ -495,7 +516,14 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
     private var dialog : SynastryDialog? = null
 
     private fun reavelRelation(){
-        dialog = SynastryDialog(this, user)
+        dialog = SynastryDialog(this, user, object : SynastryDialog.Callback{
+            override fun onSelected(select: Boolean) {
+                if(select){
+                    loadProfile()
+                }
+                dialog?.onDestroy()
+            }
+        })
         dialog?.show()
     }
 
@@ -517,16 +545,17 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
 
     private fun showBondDetailInfo(detail: BondDetail) {
         bondDetail = detail
-        val txt  = "${getString(com.cyberflow.sparkle.R.string.you)} & ${detail.to_nick}"
-        if(detail!=null && detail.from_open_uid!!.isNotEmpty()){
+//        Log.e(TAG, "showBondDetailInfo: $detail", )
+        if(detail != null || detail.from_open_uid.isNullOrEmpty()){
+
+            mDatabind.btnRight.isVisible = true
+            mDatabind.flutterSynastry.isVisible = false
+        }else{
             mDatabind.btnRight.isVisible = false
             mDatabind.flutterSynastry.isVisible = true
+            val txt  = "${getString(com.cyberflow.sparkle.R.string.you)} & ${detail.to_nick}"
             mDatabind.tvFlutterSynastryTitle.text = txt
             initSyNastryFlutter()
-        }else{
-            mDatabind.btnRight.isVisible = true
-            mDatabind.btnRight.setViewTxt(txt)
-            mDatabind.flutterSynastry.isVisible = false
         }
         shouldRequestRecommand()
     }
@@ -535,7 +564,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
     private fun shouldRequestRecommand() {
         if(user == null) return
         if(bondDetail == null) return
-        if(user!!.star_sign.isNullOrEmpty() && bondDetail!!.total_score == 0){
+        if(user!!.star_sign.isNullOrEmpty() && bondDetail!!.from_open_uid.isNullOrEmpty()){
             requestRecommandFriend()
         }
     }

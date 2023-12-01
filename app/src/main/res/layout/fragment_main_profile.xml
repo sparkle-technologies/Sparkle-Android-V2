@@ -183,7 +183,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_40"
                     android:layout_marginStart="@dimen/dp_20"
-                    android:visibility="gone"
                     android:layout_marginTop="@dimen/dp_24"
                     android:layout_marginEnd="@dimen/dp_20"
                     android:orientation="horizontal"
@@ -192,6 +191,7 @@
                     <com.cyberflow.sparkle.widget.ShadowTxtButton
                         android:id="@+id/btn_left"
                         android:layout_width="0dp"
+                        android:visibility="gone"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="@dimen/dp_5"
                         android:layout_weight="1"
@@ -204,6 +204,7 @@
                     <com.cyberflow.sparkle.widget.ShadowTxtButton
                         android:id="@+id/btn_right"
                         android:layout_width="0dp"
+                        android:visibility="gone"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/dp_5"
                         android:layout_weight="1"
@@ -288,7 +289,7 @@
             <LinearLayout
                 android:id="@+id/flutter_synastry"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="520dp"
                 android:layout_marginTop="@dimen/dp_28"
                 android:orientation="vertical"
                 android:visibility="gone">

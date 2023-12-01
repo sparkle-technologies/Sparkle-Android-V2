@@ -28,14 +28,14 @@ class SynastryDialog {
     private var mDialog: Dialog? = null
     private var friend: User? = null
 
-    constructor(c: Fragment, user: User?) {
-        if (c == null) {
+    constructor(c: Fragment, user: User?, callback: Callback) {
+        if (c == null || callback == null) {
             return
         }
 
         mFragment = c
         friend = user
-
+        mCallback = callback
         initView()
         initData()
     }
@@ -83,11 +83,17 @@ class SynastryDialog {
 
                             return
                         }
-                        onDestroy()
+                        mCallback?.onSelected(true)
                     }
                 })
         }
     }
+
+    interface Callback {
+        fun onSelected(select: Boolean)
+    }
+
+    private var mCallback: Callback? = null
 
     private fun initAnim() {
         val asset = AssetStreamLoader(mFragment?.requireActivity(), "synastry.png")
