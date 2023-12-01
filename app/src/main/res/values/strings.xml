@@ -39,4 +39,5 @@
     <string name="you">You</string>
     <string name="describe_yourself">Describe yourself</string>
     <string name="people_you_may_know">People you may know</string>
+    <string name="reveal_the_relationship">Reveal the relationship</string>
 </resources>

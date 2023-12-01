@@ -28,7 +28,7 @@ class SynastryDialog {
     private var mDialog: Dialog? = null
     private var friend: User? = null
 
-    constructor(c: Fragment, user: User?, callback: Callback) {
+    constructor(c: Fragment, user: User?,   callback: Callback) {
         if (c == null || callback == null) {
             return
         }
@@ -83,14 +83,14 @@ class SynastryDialog {
 
                             return
                         }
-                        mCallback?.onSelected(true)
+                        mCallback?.onSelected(detail)
                     }
                 })
         }
     }
 
     interface Callback {
-        fun onSelected(select: Boolean)
+        fun onSelected(select: BondDetail?)
     }
 
     private var mCallback: Callback? = null
@@ -118,6 +118,7 @@ class SynastryDialog {
     }
 
     private fun showData(){
+
         CacheUtil.getUserInfo()?.user?.apply {
             ivLeft?.let { DBComponent.loadAvatar(it, avatar, gender) }
         }
@@ -125,7 +126,6 @@ class SynastryDialog {
         friend?.apply {
             ivRight?.let { DBComponent.loadAvatar(it, avatar, gender) }
         }
-        tvTitle?.text = "Starry fate unfolding..."
 
         requestBond()
     }
@@ -162,9 +162,12 @@ class SynastryDialog {
         }
     }
 
+    private var detail: BondDetail? = null
+
     private fun showBondDetailInfo(bondDetail: BondDetail) {
+        detail = bondDetail
         btnReveal?.disableBg(false)
-        tvTitle?.text = "Love at first sight"
+        tvTitle?.text = bondDetail.title
         val dd = bondDetail.total_score
         ValueAnimator.ofInt(0, dd).apply {
             duration = (12 * dd).toLong()

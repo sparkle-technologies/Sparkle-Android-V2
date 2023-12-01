@@ -38,4 +38,5 @@
     <string name="you">你</string>
     <string name="describe_yourself">描述自己</string>
     <string name="people_you_may_know">可能认识的人</string>
+    <string name="reveal_the_relationship">展示关系</string>
 </resources>

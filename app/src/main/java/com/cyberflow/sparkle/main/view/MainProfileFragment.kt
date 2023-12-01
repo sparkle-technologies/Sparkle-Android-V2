@@ -228,6 +228,14 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
 
         mDatabind.llBack.isVisible = !isMySelf
 
+        mDatabind.apply {
+//            flutterSynastry.isVisible = false
+//            flutterAstroCode.isVisible = false
+//            btnLeft.isVisible = false
+            btnRight.isVisible = false
+            layRecommand.isVisible = false
+        }
+
         if (isMySelf) {  // if user is me  - img logic
             val cache = CacheUtil.getString(CacheUtil.AVATAR_BIG)
             Log.e(TAG, "loadProfile: cache img: $cache")
@@ -351,8 +359,11 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
             shouldRequestRecommand()
             hideOrShowAllIcons()
 
-            val txt  = "${getString(com.cyberflow.sparkle.R.string.you)} & ${user?.nick}"
-            mDatabind.btnRight.setViewTxt(txt)
+            if(!isMySelf){
+                val txt  = "${getString(com.cyberflow.sparkle.R.string.you)} & ${user?.nick}"
+                mDatabind.btnRight.setViewTxt(txt)
+            }
+
 
             mDatabind.apply {
                 btnName.text= data.nick
@@ -517,16 +528,16 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
 
     private fun reavelRelation(){
         dialog = SynastryDialog(this, user, object : SynastryDialog.Callback{
-            override fun onSelected(select: Boolean) {
-                if(select){
-                    loadProfile()
+            override fun onSelected(select: BondDetail?) {
+                if(select!=null){
+                    mDatabind.btnRight.isVisible = false
+                    showBondDetailInfo(select)
                 }
                 dialog?.onDestroy()
             }
         })
         dialog?.show()
     }
-
 
     private fun requestSynastryDetail() {
         scopeNetLife {
@@ -545,17 +556,18 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
 
     private fun showBondDetailInfo(detail: BondDetail) {
         bondDetail = detail
-//        Log.e(TAG, "showBondDetailInfo: $detail", )
-        if(detail != null || detail.from_open_uid.isNullOrEmpty()){
-
-            mDatabind.btnRight.isVisible = true
-            mDatabind.flutterSynastry.isVisible = false
-        }else{
+        Log.e(TAG, "showBondDetailInfo: $detail", )
+        if(detail != null && detail.from_open_uid?.isNotEmpty() == true){
+            Log.e(TAG, "showBondDetailInfo: --1--", )
             mDatabind.btnRight.isVisible = false
             mDatabind.flutterSynastry.isVisible = true
             val txt  = "${getString(com.cyberflow.sparkle.R.string.you)} & ${detail.to_nick}"
             mDatabind.tvFlutterSynastryTitle.text = txt
             initSyNastryFlutter()
+        }else{
+            Log.e(TAG, "showBondDetailInfo: --2--", )
+            mDatabind.btnRight.isVisible = true
+            mDatabind.flutterSynastry.isVisible = false
         }
         shouldRequestRecommand()
     }

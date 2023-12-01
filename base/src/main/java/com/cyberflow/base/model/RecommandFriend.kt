@@ -31,6 +31,7 @@ data class BondDetail(
     val aspect_info_list: List<AspectInfo>? = null,
     val bond_score:  Int = 0,
     val commitment_score:  Int = 0,
+    val title: String? = "",
     val from_avatar: String? = "",
     val from_ca: String? = "",
     val from_nick: String? = "",

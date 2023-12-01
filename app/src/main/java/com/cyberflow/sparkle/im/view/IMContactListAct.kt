@@ -224,7 +224,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
     private fun goProfile(model: FriendRequest){
         val friendStatus = when(model.status){
-            STATUS_NORMAL-> ProfileAct.ADD_FRIEND
+            STATUS_NORMAL-> ProfileAct.ACCEPT_FRIEND
             STATUS_ADDED-> ProfileAct.CHAT
             STATUS_REJECTED-> ProfileAct.ADD_FRIEND
             else -> ProfileAct.ADD_FRIEND

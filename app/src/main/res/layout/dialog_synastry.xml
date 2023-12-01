@@ -108,7 +108,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:view_bg="@drawable/register_btn_next"
         app:view_shadow_distance="1dp"
-        app:view_text="Reveal the relationship"
+        app:view_text="@string/reveal_the_relationship"
         app:view_disable="true"
         app:view_disable_bg="@drawable/register_btn_next_disable"
         app:view_text_bold="true"
