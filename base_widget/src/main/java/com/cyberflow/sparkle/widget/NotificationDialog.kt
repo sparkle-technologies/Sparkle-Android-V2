@@ -237,6 +237,7 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
                 time = 1000L
             }
             Handler(Looper.getMainLooper()).postDelayed({
+                assertInMainThread()
                 if (isShowing) {
                     dismiss()
                 }

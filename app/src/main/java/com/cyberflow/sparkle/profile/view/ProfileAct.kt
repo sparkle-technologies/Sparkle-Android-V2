@@ -58,7 +58,7 @@ class ProfileAct : BaseDBAct<BaseViewModel, ActivityProfileBinding>() {
             val fragment = MainProfileFragment()
             fragment.setOpenUid(action, it)
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
+                .replace(R.id.fragment_container, fragment)
                 .commit()
         }
     }

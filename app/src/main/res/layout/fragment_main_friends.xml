@@ -41,29 +41,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_add_friends"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_add_friends"
             android:gravity="center|left"
             android:text="@string/friends"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_16"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_add_friends"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_add_friends" />
 
-        <com.cyberflow.sparkle.main.widget.NumView
+        <TextView
             android:id="@+id/tv_num"
-            android:layout_width="@dimen/dp_15"
-            android:layout_height="@dimen/dp_15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_4"
             android:layout_marginBottom="@dimen/dp_8"
+            android:background="@drawable/main_bg_unread_dot_yellow"
+            android:fontFamily="@font/poppins_regular"
+            android:gravity="center"
+            android:maxLines="1"
+            android:minWidth="@dimen/dp_15"
+            android:minHeight="@dimen/dp_15"
+            android:paddingStart="@dimen/dp_3"
+            android:paddingEnd="@dimen/dp_3"
+            android:textSize="@dimen/sp_10"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/btn_add_friends"
-            app:layout_constraintRight_toRightOf="@+id/btn_add_friends"
-            app:num_text_color="@color/black"
-            app:num_text_size="@dimen/sp_4"
-            app:num_view_color="@color/color_FFDD5B"
-            app:num_view_strokeColor="@color/black"
-            app:num_view_strokeWidth="@dimen/dp_1" />
+            app:layout_constraintRight_toRightOf="@+id/btn_add_friends" />
 
         <FrameLayout
             android:id="@+id/lay_dialog_add"

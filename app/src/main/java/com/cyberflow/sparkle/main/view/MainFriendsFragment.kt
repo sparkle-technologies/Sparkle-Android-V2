@@ -6,6 +6,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -56,7 +57,6 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     }
 
     private fun initAddFriend() {
-
         mDatabind.btnAddFriends.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 mDatabind.layDialogAdd.apply {
@@ -70,6 +70,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         })
 
         mDatabind.layDialogAdd.apply {
+            tvNumSecLayer = findViewById<TextView>(R.id.tv_num)
             findViewById<View>(R.id.lay_add_friends).setOnClickListener {
                 IMSearchFriendAct.go(requireActivity())
                 mDatabind.layDialogAdd.visibility = View.GONE
@@ -393,15 +394,26 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     }
 
     var totalUnread = 0
+    var tvNumSecLayer :TextView? = null  // in layout/include_main_top_right_add
 
     fun showFriendRequestNum() {
 //        Log.e(TAG, "showFriendRequestNum: isVisible=$isVisible" )
+        totalUnread = 222
         if(isVisible){
             if(totalUnread > 0){
+                tvNumSecLayer?.isVisible = true
                 mDatabind.tvNum.isVisible = true
-                mDatabind.tvNum.setNum(totalUnread)
+
+                if(totalUnread > 99){
+                    tvNumSecLayer?.text = "···"
+                    mDatabind.tvNum.text = "···"
+                }else{
+                    tvNumSecLayer?.text = "$totalUnread"
+                    mDatabind.tvNum.text = "$totalUnread"
+                }
             }else{
                 mDatabind.tvNum?.isVisible = false
+                tvNumSecLayer?.isVisible = false
             }
         }
     }

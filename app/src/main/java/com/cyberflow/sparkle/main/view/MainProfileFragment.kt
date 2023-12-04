@@ -169,6 +169,34 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                 }
             }
         })
+
+        mDatabind.rvRecommand.divider {
+            orientation = DividerOrientation.HORIZONTAL
+            setDivider(10, true)
+        }.setup {
+            addType<com.cyberflow.base.model.RecommandFriend>(com.cyberflow.sparkle.R.layout.item_profile_friend_recommand)
+            addType<String>(com.cyberflow.sparkle.R.layout.item_profile_friend_recommand_empty)
+        }.onClick(com.cyberflow.sparkle.R.id.lay_go_chat){
+//                        ToastUtil.show(requireContext(), "跳转profile页")
+            val model = getModel<com.cyberflow.base.model.RecommandFriend>()
+
+            var action = CHAT
+            if(IMDataManager.instance.getInviteData().filter {
+                    val name = it.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM).replace("_", "-")
+                    name == model.open_uid
+                }.isNotEmpty()){
+                action = ACCEPT_FRIEND
+            }
+
+            (requireActivity() as? ProfileAct)?.apply {
+                destroyFlutter()
+                refresh(model.open_uid, action)
+            }
+
+            (requireActivity() as? MainActivityV2)?.apply {
+                ProfileAct.go(requireActivity(), model.open_uid.orEmpty(), action)
+            }
+        }
     }
 
     private fun goShare() {
@@ -416,34 +444,6 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                     }
                 }
 
-                if(!isMySelf){
-                    rvRecommand.divider {
-                        orientation = DividerOrientation.HORIZONTAL
-                        setDivider(10, true)
-                    }.setup {
-                        addType<com.cyberflow.base.model.RecommandFriend>(com.cyberflow.sparkle.R.layout.item_profile_friend_recommand)
-                    }.onClick(com.cyberflow.sparkle.R.id.lay_go_chat){
-//                        ToastUtil.show(requireContext(), "跳转profile页")
-                        val model = getModel<com.cyberflow.base.model.RecommandFriend>()
-
-                        var action = CHAT
-                        if(IMDataManager.instance.getInviteData().filter {
-                            val name = it.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM).replace("_", "-")
-                            name == model.open_uid
-                            }.isNotEmpty()){
-                            action = ACCEPT_FRIEND
-                        }
-
-                        (requireActivity() as? ProfileAct)?.apply {
-                            refresh(model.open_uid, action)
-                        }
-
-                        (requireActivity() as? MainActivityV2)?.apply {
-                            ProfileAct.go(requireActivity(), model.open_uid.orEmpty(), action)
-                        }
-                    }
-                }
-
                 if(user?.star_sign.isNullOrEmpty()){
 //                    fragmentHoroscopeContainer.isVisible = false
                 }else{
@@ -452,6 +452,17 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                 }
             }
         }
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        destroyFlutter()
+    }
+
+    private fun destroyFlutter(){
+        FlutterFragment.withCachedEngine(FlutterProxyActivity.ENGINE_ID_ASTRO_CODE).destroyEngineWithFragment(true)
+        FlutterFragment.withCachedEngine(FlutterProxyActivity.ENGINE_ID_SYNASTRY).destroyEngineWithFragment(true)
     }
 
     private fun initAstroCodeFlutter() {
@@ -587,7 +598,11 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
             data?.let {
                 withMain {
                     mDatabind.layRecommand.isVisible = true
-                    mDatabind.rvRecommand.models = it.friends
+                    val data = arrayListOf<Any>()
+                    data.add("start")
+                    data.addAll(it.friends.orEmpty())
+                    data.add("end")
+                    mDatabind.rvRecommand.models = data
                 }
             }
         }

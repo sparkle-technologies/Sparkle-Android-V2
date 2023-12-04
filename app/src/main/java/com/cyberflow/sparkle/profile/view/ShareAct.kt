@@ -89,7 +89,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
 
     override fun initView(savedInstanceState: Bundle?) {
         mDataBinding.bgRoot.setOnClickListener {
-            finish()
+            dialog?.hideOrShow()
         }
         mDataBinding.btnDelete.setClickListener(object : ShadowImgButton.ShadowClickListener{
             override fun clicked() {

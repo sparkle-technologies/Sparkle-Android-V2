@@ -156,6 +156,15 @@ class ShareDialog {
         }
     }
 
+    fun hideOrShow() {
+        mDialog?.apply {
+            if(isShowing)
+                dismiss()
+            else
+                show()
+        }
+    }
+
     fun show() {
         mDialog!!.show()
     }
