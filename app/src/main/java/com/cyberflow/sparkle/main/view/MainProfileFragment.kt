@@ -35,6 +35,7 @@ import com.cyberflow.sparkle.profile.view.ProfileAct.Companion.ADD_FRIEND
 import com.cyberflow.sparkle.profile.view.ProfileAct.Companion.CHAT
 import com.cyberflow.sparkle.profile.view.ShareAct
 import com.cyberflow.sparkle.profile.viewmodel.ProfileViewModel
+import com.cyberflow.sparkle.setting.view.ConnectedAccountActivity
 import com.cyberflow.sparkle.setting.view.SettingsActivity
 import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowImgButton
@@ -324,8 +325,8 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
         val measurePaint = tv.paint
         val pWidth = measurePaint.measureText("There‘s no signature yet, please go to image edit")
         val screenWidth = ScreenUtils.getScreenSize(mActivity)[0]
-        val marLeft = dp2px(38f)
-        val marRight = dp2px(33f)
+        val marLeft = dp2px(20f)
+        val marRight = dp2px(20f)
 //        Log.e(TAG, " pWidth=$pWidth  screenWidth=$screenWidth  marLeft=$marLeft  marRight=$marRight" )
         val breakLine = if (pWidth < (screenWidth - marLeft - marRight)) "" else "\n"
         tv.text = ("There‘s no signature yet, please go to $breakLine").setSpan(ColorSpan("#000000"))
@@ -421,8 +422,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
 //                        tvTwitter.paint.isAntiAlias = true
                         tvTwitter.text = Html.fromHtml("<u>Add Twitter</u>", Html.FROM_HTML_MODE_COMPACT)
                         layTwitter.setOnClickListener {
-                            // todo   go twitter
-                            ToastUtil.show(mActivity, "跳转绑定推特 还没做")
+                            ConnectedAccountActivity.go(requireActivity())
                         }
                     }
                     layTwitter.isVisible = true
