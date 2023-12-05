@@ -74,8 +74,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation(project(mapOf("path" to ":base")))
-    implementation(project(mapOf("path" to ":base_resources")))
-    implementation(project(mapOf("path" to ":base_widget")))
     api(project(mapOf("path" to ":ease-im-kit")))
 
     api("io.hyphenate:hyphenate-chat:4.0.3")

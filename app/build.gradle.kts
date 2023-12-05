@@ -72,8 +72,6 @@ dependencies {
     implementation("androidx.compose.runtime:runtime:1.5.0")  // for compose
 
     implementation(project(mapOf("path" to ":base")))
-    implementation(project(mapOf("path" to ":base_resources")))
-    implementation(project(mapOf("path" to ":base_widget")))
 
     // auth for twitter/google social login
     implementation(platform("com.google.firebase:firebase-bom:32.2.2"))

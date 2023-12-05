@@ -61,3 +61,9 @@ data class LabelV2(
     var planet: String = "",
     var sign: String = "",
 )
+
+@Serializable
+data class BindingResult(
+    var bind_list: List<BindBean>? = null
+)
+

@@ -83,6 +83,7 @@
         <activity android:name=".flutter.FlutterProxyActivity" />
 
         <activity android:name=".setting.view.LanguageActivity" />
+        <activity android:name=".setting.view.ConnectedAccountActivity" />
 
         <activity android:name=".profile.view.ProfileAct"
             android:launchMode="singleTask"/>

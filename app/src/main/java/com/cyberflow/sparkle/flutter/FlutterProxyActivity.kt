@@ -186,26 +186,13 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                             signature = new.signature
                             profile_permission = new.profile_permission
                             gender = new.gender
+                            label_list = new.label_list
 
                             CacheUtil.setUserInfo(it)
-                            LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED)
-                                .postValue("time:${System.currentTimeMillis()}")
+                            LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED).postValue("time:${System.currentTimeMillis()}")
                         }
                     }
                 }
-            }
-
-            if (call.method == "flutterSaveLabelList") {
-                val newList = call.argument<List<String>>("label_list")
-                result.success("success")
-//                Log.e("flutter", "android receive form:${newList.toJson()} ")
-                val cache = CacheUtil.getUserInfo()
-//                Log.e(TAG, "handleFlutterCommonEvent:-  before edit: ${GsonConverter.gson.toJson(cache)}"  )
-                cache?.user?.label_list = newList
-                CacheUtil.setUserInfo(cache)
-//                val cache2 = CacheUtil.getUserInfo()
-//                Log.e(TAG, "handleFlutterCommonEvent:- after edit: ${GsonConverter.gson.toJson(cache2)}"  )
-                LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED).postValue("time:${System.currentTimeMillis()}")
             }
         }
         

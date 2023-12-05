@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.cyberflow.base.util.dp2px
 
 class ShadowImgButton : ConstraintLayout {
 
@@ -39,7 +38,7 @@ class ShadowImgButton : ConstraintLayout {
             attrs,
             com.cyberflow.base.resources.R.styleable.shadowImgButton
         )
-        distance = dp2px(
+        distance = dp2px(context,
             mTypedArray.getDimension(
                 com.cyberflow.base.resources.R.styleable.shadowImgButton_view_img_shadow_distance,
                 2.0f

@@ -54,11 +54,11 @@ class HeaderInterceptor : Interceptor {
         if (current.language.equals(LocaleContract.getEnglishLocale().language)) {
             local = "en_US"
         }
-
         Log.e(TAG, "intercept: x-token=$token" )
         val requestBuilder: Request.Builder = original.newBuilder()
             .addHeader("x-token", token)
             .addHeader("Accept-Language", local)
+            .addHeader("User-Agent", "Sparkle/1.0 (iPhone; iOS 16.4; Scale/3.00)")
         val request: Request = requestBuilder.build()
         return chain.proceed(request)
     }

@@ -398,7 +398,6 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
     fun showFriendRequestNum() {
 //        Log.e(TAG, "showFriendRequestNum: isVisible=$isVisible" )
-        totalUnread = 222
         if(isVisible){
             if(totalUnread > 0){
                 tvNumSecLayer?.isVisible = true

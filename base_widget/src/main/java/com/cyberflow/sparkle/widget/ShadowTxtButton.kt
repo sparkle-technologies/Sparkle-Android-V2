@@ -13,7 +13,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
-import com.cyberflow.base.util.dp2px
 
 class ShadowTxtButton : ConstraintLayout {
 
@@ -53,6 +52,7 @@ class ShadowTxtButton : ConstraintLayout {
             com.cyberflow.base.resources.R.styleable.shadowButton
         )
         distance = dp2px(
+            context,
             mTypedArray.getDimension(
                 com.cyberflow.base.resources.R.styleable.shadowButton_view_shadow_distance,
                 2.0f
@@ -207,4 +207,9 @@ class ShadowTxtButton : ConstraintLayout {
             }
         }
     }
+}
+
+fun dp2px(context: Context, dpValue: Float): Int {
+    val scale = context.resources.displayMetrics.density
+    return (dpValue * scale + 0.5f).toInt()
 }

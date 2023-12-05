@@ -38,6 +38,7 @@ abstract class BaseVMAct<VM : BaseViewModel> : AppCompatActivity() {
 //        setNavigationBar(false)
         initView(savedInstanceState)
         initData()
+        addNetworkErrorHandle()
     }
 
     private fun createViewModel(viewModelStoreOwner: ViewModelStoreOwner): VM {
@@ -65,5 +66,9 @@ abstract class BaseVMAct<VM : BaseViewModel> : AppCompatActivity() {
 
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(MultiLanguages.attach(newBase))
+    }
+
+    private fun addNetworkErrorHandle() {
+
     }
 }

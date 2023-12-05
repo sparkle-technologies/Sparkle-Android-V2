@@ -107,4 +107,6 @@ dependencies {
     // for multi languages
     api("com.github.getActivity:MultiLanguages:9.0")
     api("com.beust:klaxon:5.5")
+
+    api(project(mapOf("path" to ":base_widget")))
 }

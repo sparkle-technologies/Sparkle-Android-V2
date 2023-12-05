@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.CacheUtil
-import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
@@ -78,9 +77,6 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         })
     }
 
-    private fun goLanguage() {
-        LanguageActivity.go(this)
-    }
 
     // 0. clear cache
     // 1. walletConnect
@@ -148,14 +144,16 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     private var privacyMethodChannel : MethodChannel? = null
 
     private fun initFlutter() {
-        editMethodChannel = prepareFlutterEngine(this, FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE, FlutterProxyActivity.ROUTE_EDIT_PROFILE, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_EDIT){
-            scene, method, call, result ->
-            handleFlutterEvent(scene, method, call, result)
-        }
+        lifecycleScope.launch {
+            editMethodChannel = prepareFlutterEngine(this@SettingsActivity, FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE, FlutterProxyActivity.ROUTE_EDIT_PROFILE, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_EDIT){
+                    scene, method, call, result ->
+                handleFlutterEvent(scene, method, call, result)
+            }
 
-        privacyMethodChannel = prepareFlutterEngine(this, FlutterProxyActivity.ENGINE_ID_ACCOUNT_PRIVACY, FlutterProxyActivity.ROUTE_ACCOUNT_PRIVACY, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_PRIVACY){
-                scene, method, call, result ->
-            handleFlutterEvent(scene, method, call, result)
+            privacyMethodChannel = prepareFlutterEngine(this@SettingsActivity, FlutterProxyActivity.ENGINE_ID_ACCOUNT_PRIVACY, FlutterProxyActivity.ROUTE_ACCOUNT_PRIVACY, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_PRIVACY){
+                    scene, method, call, result ->
+                handleFlutterEvent(scene, method, call, result)
+            }
         }
     }
 
@@ -200,6 +198,10 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     }
 
     private fun goConnetedAccount() {
-        ToastUtil.show(this, "coming soon ")
+        ConnectedAccountActivity.go(this)
+    }
+
+    private fun goLanguage() {
+        LanguageActivity.go(this)
     }
 }
