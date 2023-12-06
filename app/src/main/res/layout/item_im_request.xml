@@ -117,6 +117,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:fontFamily="@font/poppins_semibold"
                     android:text="@{m.name}"
                     android:textColor="@color/color_2A2A2B"

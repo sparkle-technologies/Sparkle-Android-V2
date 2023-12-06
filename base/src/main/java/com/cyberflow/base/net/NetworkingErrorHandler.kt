@@ -1,6 +1,7 @@
 package com.cyberflow.base.net
 
 import android.util.Log
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.drake.net.Net
 import com.drake.net.exception.ConvertException
 import com.drake.net.exception.DownloadFileException
@@ -14,10 +15,15 @@ import com.drake.net.exception.ResponseException
 import com.drake.net.exception.ServerResponseException
 import com.drake.net.exception.URLParseException
 import com.drake.net.interfaces.NetErrorHandler
-import com.drake.net.utils.TipUtils
 import java.net.UnknownHostException
 
 class NetworkingErrorHandler : NetErrorHandler {
+
+    companion object{
+        const val EVENT_REQUEST_ERROR = "EVENT_BUS_NetworkingErrorHandler"
+        const val EVENT_TOKEN_EXPIRED = "EVENT_BUS_TOKEN_EXPIRED"
+    }
+
     override fun onError(e: Throwable) {
 
         Log.e("NetworkingErrorHandler", "onError: $e" )
@@ -35,13 +41,9 @@ class NetworkingErrorHandler : NetErrorHandler {
             is NoCacheException -> "NoCacheException"
             is ResponseException -> {
                 if (e.tag == HttpResponseErrorCode.ErrTokenExpired) {
-                    /* CacheUtil.logout()
-                    ARouter.getInstance().build(PageConst.Login.PAGE_LOGIN_BY_WALLET)
-                        .withFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY)
-                        .navigation()*/
+                    LiveDataBus.get().with(EVENT_TOKEN_EXPIRED).postValue("TokenExpired")
                 }
                 Log.e("NetworkingErrorHandler", "onError: e.tag=${e.tag}" )
-
                 HttpResponseErrorCode.handleErrorCode(e.tag.toString().toInt())
             }
             is HttpFailureException -> "HttpFailureException"
@@ -50,6 +52,7 @@ class NetworkingErrorHandler : NetErrorHandler {
         }
         Net.debug(e)
         Log.e("TAG", "onError: message= $message" )
-        TipUtils.toast(message)
+        LiveDataBus.get().with(EVENT_REQUEST_ERROR).postValue(message)
+//        TipUtils.toast(message)
     }
 }

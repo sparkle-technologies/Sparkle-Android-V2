@@ -264,15 +264,15 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
         val data = IMDataManager.instance.getContactData()
 
         data?.forEach {
-            Log.e(TAG, "  userName=${it.username}  initialLetter=${it.initialLetter}" )
+            Log.e(TAG, "  userName=${it.nick}" )
         }
 
         val markArray = BooleanArray(array.size)  // handle letter missing problem
         val letter = EaseUser.GetInitialLetter()
         data?.filter {
-            map.contains( it.username )
+            map.contains( it.nick )
         }?.mapNotNull {
-            map[it.username]
+            map[it.nick]
         }?.sortedBy {
             it.nick
         }?.forEach {

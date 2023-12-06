@@ -15,7 +15,6 @@ import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.common.utils.ChatPresenter
-import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityMainVersionTwoBinding
 import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.main.view.MainFeedsFragment
@@ -117,7 +116,7 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
 
         viewModel.inviteMsgObservable.observe(this) { list ->
             list?.also {
-                IMDataManager.instance.setInviteData(list)
+//                IMDataManager.instance.setInviteData(list)  todo  改成db形式
                 val res = it.filter { msg ->
                     val statusParam = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS)
                     val status = InviteMessageStatus.valueOf(statusParam)
@@ -144,7 +143,7 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
         viewModel.contactObservable?.observe(this) { response ->
             parseResource(response, object : OnResourceParseCallback<List<EaseUser>>() {
                 override fun onSuccess(data: List<EaseUser>?) {
-                    IMDataManager.instance.setContactData(data)
+//                    IMDataManager.instance.setContactData(data)  todo
                     Log.e("MainActivityV2", "contact from server size: ${data?.size}")
                     contactsBatchRequestInfo(data)
                 }

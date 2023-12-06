@@ -21,7 +21,6 @@ import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.DBComponent
-import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.FragmentMainProfileBinding
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity
@@ -154,7 +153,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
                         }
 
                         ACCEPT_FRIEND -> {  // EMMessage
-                            viewModel.acceptFriend(IMDataManager.instance.getEmMessage())
+                            viewModel.acceptFriend(IMDataManager.instance.getOpenUidProfile())
                         }
                     }
                 }
@@ -182,12 +181,12 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
             val model = getModel<com.cyberflow.base.model.RecommandFriend>()
 
             var action = CHAT
-            if(IMDataManager.instance.getInviteData().filter {
+           /* if(IMDataManager.instance.getInviteData().filter {
                     val name = it.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM).replace("_", "-")
                     name == model.open_uid
                 }.isNotEmpty()){
                 action = ACCEPT_FRIEND
-            }
+            }*/
 
             (requireActivity() as? ProfileAct)?.apply {
                 destroyFlutter()
@@ -231,6 +230,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
             if (!it.isNullOrEmpty()) {
                 action = CHAT
             }
+            loadProfile()
         }
 
         LiveDataBus.get().apply {

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.cyberflow.sparkle.im.db.IMUserInfoDatabase
 
+
 class DBManager private constructor(){
 
     companion object {

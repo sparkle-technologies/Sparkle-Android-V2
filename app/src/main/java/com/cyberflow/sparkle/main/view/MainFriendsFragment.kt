@@ -239,9 +239,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         actVm?.conversationInfoObservable?.observe(requireActivity()) { response ->
             mDatabind.page.finishRefresh()
             Log.e("MainRightFragment", "conversation from server ")
-            parseResource(
-                response,
-                object : OnResourceParseCallback<List<EaseConversationInfo>>(true) {
+            parseResource(response, object : OnResourceParseCallback<List<EaseConversationInfo>>(true) {
                     override fun onSuccess(data: List<EaseConversationInfo>?) {
                         fetchUserInfoFromLocalDB(data)
                     }
@@ -285,7 +283,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                 }?.also { allContactMap ->
                     val allData = arrayListOf<IMUserInfo>()
                     val contactOpenUidList =
-                        IMDataManager.instance.getContactData().map { it.username }
+                        IMDataManager.instance.getContactData().map { it.nick }
                     val conversaction = data?.filter {
                         contactOpenUidList.contains((it.info as? EMConversation)?.conversationId())
                     }?.mapNotNull {

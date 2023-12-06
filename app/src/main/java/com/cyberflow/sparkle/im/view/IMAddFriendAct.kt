@@ -5,20 +5,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.BindingResult
 import com.cyberflow.base.model.IMSearchData
+import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.DemoHelper
-import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.databinding.ActivityImAddFriendBinding
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
-import com.cyberflow.sparkle.main.viewmodel.parseResource
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.widget.ToastDialogHolder
+import com.drake.net.Post
 import com.drake.net.utils.TipUtils
+import com.drake.net.utils.scopeDialog
 import com.vanniktech.ui.hideKeyboard
 
 class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
@@ -59,20 +61,6 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
                 mDataBinding.tvAddress.text = "${address.substring(0, 5)}...${address.substring(address.length - 5, address.length)}"
             }*/
         }
-
-        viewModel.friendObservable.observe(this) { response ->
-            parseResource(response, object : OnResourceParseCallback<Boolean>() {
-                override fun onSuccess(data: Boolean?) {
-                    if (data == true) {
-                        LiveDataBus.get().with(ToastDialogHolder.MAIN_ACTIVITY_NOTIFY).postValue(NotificationDialog.ToastBody(NotificationDialog.TYPE_SUCCESS, getString(R.string.request_sent)))
-                        MainActivityV2.go(this@IMAddFriendAct)
-                        finish()
-                    } else {
-                        ToastDialogHolder.getDialog()?.show(this@IMAddFriendAct, NotificationDialog.TYPE_ERROR, getString(R.string.oops_request_failed))
-                    }
-                }
-            })
-        }
     }
 
     private fun submit() {
@@ -82,9 +70,22 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
             return
         }
         hideKeyboard()
+        scopeDialog {
+            Log.e(TAG, "submit: currentUsername=${DemoHelper.getInstance().model.currentUsername}" )
+            try{
+                //        imAccount="c32c8b8b_04ee_439c_a65b_0d46304bdaf7"
+                val data = Post<BindingResult>(Api.RELATIONSHIP_FRIEND_REQUEST) {
+                    json("open_uid" to imAccount.replace("_", "-"), "req_msg" to msg)
+                }.await()
 
-        Log.e(TAG, "submit: currentUsername=${DemoHelper.getInstance().model.currentUsername}" )
-//        imAccount="c32c8b8b_04ee_439c_a65b_0d46304bdaf7"
-        viewModel.addFriend(imAccount, msg)
+                data?.let {
+                    LiveDataBus.get().with(ToastDialogHolder.MAIN_ACTIVITY_NOTIFY).postValue(NotificationDialog.ToastBody(NotificationDialog.TYPE_SUCCESS, getString(R.string.request_sent)))
+                    MainActivityV2.go(this@IMAddFriendAct)
+                    finish()
+                }
+            }catch (e: Exception){
+                ToastDialogHolder.getDialog()?.show(this@IMAddFriendAct, NotificationDialog.TYPE_ERROR, getString(R.string.oops_request_failed))
+            }
+        }
     }
 }

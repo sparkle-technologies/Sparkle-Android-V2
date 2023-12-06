@@ -9,16 +9,15 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.IMFriendInfo
+import com.cyberflow.base.model.IMFriendRequest
 import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.util.KeyboardUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
-import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
-import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
-import com.cyberflow.sparkle.chat.viewmodel.parseResource
 import com.cyberflow.sparkle.databinding.ActivityImContactListBinding
 import com.cyberflow.sparkle.databinding.ItemImContactBinding
 import com.cyberflow.sparkle.databinding.ItemImContactBodyBinding
@@ -49,13 +48,15 @@ import com.drake.brv.utils.setup
 import com.drake.net.utils.withMain
 import com.drake.spannable.replaceSpanFirst
 import com.drake.spannable.span.ColorSpan
-import com.hyphenate.chat.EMMessage
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.model.EaseEvent
 import com.vanniktech.ui.hideKeyboard
 import kotlinx.coroutines.launch
 
 
+/**
+ *
+ */
 class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() {
 
     companion object {
@@ -135,11 +136,11 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                     }
                                     btnAccept.setClickListener(object : ShadowTxtButton.ShadowClickListener{
                                         override fun clicked(disable: Boolean) {
-                                            viewModel.acceptFriend(model.emMessage)
+                                            viewModel.acceptFriend(model.openUid)
                                         }
                                     })
                                     layDelete.setOnClickListener {
-                                        viewModel.deleteMessage(model.emMessage?.msgId)
+                                        viewModel.deleteMessage(model.openUid)
                                     }
                                 }
                             }
@@ -198,7 +199,6 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                 }
             }
         }
-
         mDataBinding.rvCache.linear().setup {
             addType<FriendRequest>(R.layout.item_im_request)
             onBind {
@@ -209,12 +209,12 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                         goProfile(model)
                     }
                     layDelete.setOnClickListener {
-                        viewModel.deleteMessage(model.emMessage?.msgId)
+                        viewModel.deleteMessage(model.openUid)
                     }
                     btnAccept.setClickListener(object : ShadowTxtButton.ShadowClickListener{
                         override fun clicked(disable: Boolean) {
                             val model = getModel<FriendRequest>(layoutPosition)
-                            viewModel.acceptFriend(model.emMessage)
+                            viewModel.acceptFriend(model.openUid)
                         }
                     })
                 }
@@ -229,7 +229,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
             STATUS_REJECTED-> ProfileAct.ADD_FRIEND
             else -> ProfileAct.ADD_FRIEND
         }
-        IMDataManager.instance.setEmMessage(model.emMessage)
+        IMDataManager.instance.setOpenUidProfile(model.openUid)
         hideKeyboard(mDataBinding.edtSearchContact)
         ProfileAct.go(this@IMContactListAct, model.openUid, friendStatus)
     }
@@ -260,6 +260,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
     }
 
     private var isFirst = true
+
     private fun freshData() {
         if(isFirst){
             IMDataManager.instance.apply {
@@ -275,7 +276,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
             }
         }else{
             viewModel.loadFriendRequestMessages()    // load system message
-            viewModel.loadContactList(true)   // load contact data from local db
+            viewModel.loadContactList()   // load contact data from local db
         }
     }
 
@@ -283,8 +284,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
     private fun loadLocalDBData(easeEvent: EaseEvent?) {
         lifecycleScope.launch {
             DBManager.instance.db?.imUserInfoDao()?.getAll()?.forEach {
-                it.open_uid = it.open_uid.replace("-", "_")
-                map[it.open_uid] = it
+                it.open_uid = it.open_uid.replace("-", "_")  // 从数据库里面拿
             }
             withMain {
                 freshData()
@@ -294,17 +294,10 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
     private fun initListener(){
         viewModel.deleteMsgObservable.observe(this){
-            if(it){
-                ToastDialogHolder.getDialog()?.show(this@IMContactListAct, NotificationDialog.TYPE_SUCCESS, getString(R.string.friend_successfully_removed))
-            }else{
-                ToastDialogHolder.getDialog()?.show(this@IMContactListAct, NotificationDialog.TYPE_ERROR, getString(R.string.oops_failed_to_remove_friend))
-            }
+            ToastDialogHolder.getDialog()?.show(this@IMContactListAct, NotificationDialog.TYPE_SUCCESS, getString(R.string.friend_successfully_removed))
             freshData()
         }
         viewModel.acceptFriendObservable.observe(this){
-            if(!it.isNullOrEmpty()){
-//                ChatActivity.launch(this@IMContactListAct, it, 1)
-            }
             freshData()
         }
 
@@ -315,15 +308,15 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         }
 
         viewModel.inviteMsgObservable.observe(this) { inviteList->
-            handleInviteMsg(inviteList)
+            inviteList.friend_req_list?.forEach {
+                Log.e(TAG, "initListener: ${it}" )
+            }
+
+            handleInviteMsg(inviteList.friend_req_list.orEmpty())
         }
 
-        viewModel.contactObservable.observe(this) { response ->
-            parseResource(response, object : OnResourceParseCallback<List<EaseUser>>() {
-                override fun onSuccess(data: List<EaseUser>?) {
-                    showContactListData(data)
-                }
-            })
+        viewModel.contactObservable.observe(this) {
+            showContactListData(it.friend_list)
         }
 
         viewModel.imNewFriendListData.observe(this){
@@ -331,7 +324,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         }
     }
 
-    private fun handleInviteMsg(inviteList: List<EMMessage>) {
+    private fun handleInviteMsg(inviteList: List<IMFriendRequest>) {
         requestData.clear()
         allRequestData.clear()
 
@@ -343,54 +336,11 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
             return
         }
 
-        var list = arrayListOf<FriendRequest>()
-        var newUser = arrayListOf<String>()
-        inviteList.forEach { msg ->
-            try {
-                val name = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM)
-                var reason = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_REASON)
-
-                val statusParam = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS)
-                val status = InviteMessageStatus.valueOf(statusParam)
-
-//                    Log.e(TAG, "getContactData: name: $name reason: $reason status: $status")  // name: lover2 reason: 加个好友呗 status: BEINVITEED
-
-                if(map.contains(name)){
-                    map[name]?.also {
-                        val friend = FriendRequest(name = it.nick, msg = reason, status = STATUS_NORMAL, gender=it.gender,  url= it.avatar, openUid= it.open_uid, emMessage = msg)
-                        val cacheFriend = FriendRequest(name = it.nick, msg = reason, status = STATUS_NORMAL, gender=it.gender, url= it.avatar, openUid= it.open_uid, emMessage = msg)
-
-                        if (status == InviteMessageStatus.BEINVITEED) {  // only show friend request
-                            list.add(friend)
-                        } else {
-                            if (status == InviteMessageStatus.AGREED) {
-                                cacheFriend.status = STATUS_ADDED
-                            }
-                            if (status == InviteMessageStatus.BEREFUSED || status == InviteMessageStatus.REFUSED) {
-                                cacheFriend.status = STATUS_REJECTED
-                            }
-                        }
-                        allRequestData.add(cacheFriend)
-                    }
-                }else{
-                    newUser.add(name)
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        val list = inviteList.map {
+            FriendRequest(name = it.nick, msg = it.req_msg, status = STATUS_NORMAL, gender=0,  url= it.avatar, openUid= it.from_open_uid)
         }
 
-      /*  list.forEach {
-            Log.e(TAG, "freshData: $it" )
-        }
-        newUser.forEach {
-            Log.e(TAG, "freshData: $it" )
-        }*/
-
-        if(newUser.isNotEmpty()){
-            viewModel.getIMNewFriendInfoList(newUser)
-            return
-        }
+        allRequestData.addAll(list)
 
         if(list.isNotEmpty()){
             requestData.add(FriendRequestHeader(list.size))
@@ -420,26 +370,22 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
     private val allRequestData = arrayListOf<FriendRequest>()
 
-    private val map = HashMap<String, IMUserInfo>()
 
     private val allContactData = arrayListOf<Contact>()
     // show contact list
-    private fun showContactListData(data: List<EaseUser>?) {
+    private fun showContactListData(data: List<IMFriendInfo>?) {
         contactData.clear()
         allContactData.clear()
         val list = arrayListOf<Any>()
 
-//        data?.forEach {
-//            Log.e(TAG, "  userName=${it.username}  initialLetter=${it.initialLetter}" )
-//        }
+        data?.forEach {
+            Log.e(TAG, "  userName=${it.nick}  " )
+        }
 
         val markArray = BooleanArray(array.size)  // handle letter missing problem
         val letter = EaseUser.GetInitialLetter()
-        data?.filter {
-            map.contains( it.username )
-        }?.mapNotNull {
-            map[it.username]
-        }?.sortedBy {
+
+        data?.sortedBy {
             it.nick
         }?.forEach {
             val initialLetter = letter.getLetter(it.nick)
@@ -455,7 +401,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
 //            Log.e(TAG, "showContactListData: ${it.nick}  ${it}" )
 
-            Contact(name = it.nick, avatar = it.avatar, gender = it.gender, openUid = it.open_uid).apply {
+            Contact(name = it.nick, avatar = it.avatar, gender = 0, openUid = it.open_uid).apply {
                 list.add(this)
                 allContactData.add(this)
             }

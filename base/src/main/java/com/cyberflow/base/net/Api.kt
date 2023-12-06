@@ -24,6 +24,11 @@ object Api {
     const val BOND_DETAIL = "ticket/user/synastry_detail"
     const val RECOMMAND_FRIEND = "ticket/user/friends_recommend"
 
-
+    // for IM friends relationship
+    const val RELATIONSHIP_FRIEND_REQUEST = "relationship/user/send_friend_request"
+    const val RELATIONSHIP_FRIEND_REJECT = "relationship/user/reject_friend_request"
+    const val RELATIONSHIP_FRIEND_ACCEPT = "relationship/user/accept_friend_request"
+    const val RELATIONSHIP_FRIEND_REQUEST_LIST = "relationship/user/get_friend_request_list"
+    const val RELATIONSHIP_FRIEND_LIST = "relationship/user/get_friend_list"
 
 }

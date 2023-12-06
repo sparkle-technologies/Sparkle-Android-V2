@@ -43,3 +43,34 @@ data class IMSearchData(
     var open_uid: String = "",
     var wallet_address: String = ""
 ) : java.io.Serializable
+
+
+@Serializable
+data class IMFriendRequestList(
+    var friend_req_list: List<IMFriendRequest>? = null
+)
+
+@Serializable
+@Entity(tableName = "im_friend_request")
+data class IMFriendRequest(
+    var from_open_uid: String = "",
+//    var gender: Int = 0, // 1=man  2=women
+    var avatar: String = "",
+    var nick: String = "",
+    var req_msg: String = ""
+)
+
+
+@Serializable
+data class IMFriendList(
+    var friend_list: List<IMFriendInfo>? = null
+)
+
+@Serializable
+@Entity(tableName = "im_friend_info")
+data class IMFriendInfo(
+    var open_uid: String = "",
+//    var gender: Int = 0, // 1=man  2=women
+    var avatar: String = "",
+    var nick: String = "",
+)

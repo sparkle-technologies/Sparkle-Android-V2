@@ -12,12 +12,15 @@ import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.callback.IMLoginResponse
 import com.cyberflow.base.util.callback.IMV2Callback
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.chat.IMManager
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
+import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.register.view.RegisterAct
@@ -35,6 +38,7 @@ import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
 import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import com.hyphenate.easeui.ui.dialog.ThreadUtil
+import com.therouter.router.Route
 import com.web3auth.singlefactorauth.SingleFactorAuth
 import com.web3auth.singlefactorauth.types.LoginParams
 import com.web3auth.singlefactorauth.types.SingleFactorAuthArgs
@@ -48,7 +52,7 @@ import org.torusresearch.fetchnodedetails.types.TorusNetwork
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutionException
 
-
+@Route(path = PageConst.App.PAGE_LOGIN)
 class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     companion object {
@@ -79,6 +83,20 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
     }
 
 
+    // 1.
+    // 2. twitter
+    // 3. web3Auth
+    // 4. unipass
+    //  walletConnect  im twitter database
+    private fun logout(){
+        FirebaseAuth.getInstance().signOut()
+        lifecycleScope.launch {
+            IMManager.instance.keepLogout()   //  make sure no login in IM
+            DBManager.instance.db?.imUserInfoDao()?.deleteAll()
+            IMDataManager.instance.clearCache()
+        }
+    }
+
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()
 
@@ -86,12 +104,12 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             imLogin(this)
             return
         }else{
-            IMManager.instance.keepLogout()   // make sure no login in IM
+            logout()
         }
 
         initWalletConnect()
 
-        initWeb3Auth()
+//        initWeb3Auth()
 
         mViewBind.btnGoogleLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {

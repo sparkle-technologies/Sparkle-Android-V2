@@ -103,7 +103,7 @@ dependencies {
     implementation(project(mapOf("path" to ":chat")))
 
     kapt("cn.therouter:apt:1.2.0-rc1")
-    implementation("cn.therouter:router:1.2.0-rc1")
+//    implementation("cn.therouter:router:1.2.0-rc1")
 
     val room_version = "2.5.1"
     annotationProcessor("androidx.room:room-compiler:$room_version")

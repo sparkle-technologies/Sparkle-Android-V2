@@ -8,20 +8,15 @@ import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
-import com.cyberflow.sparkle.MyApp
-import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivitySettingBinding
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity.Companion.handleFlutterCommonEvent
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity.Companion.initParams
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity.Companion.prepareFlutterEngine
-import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.view.LoginAct
 import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.widget.ToastDialogHolder
-import com.drake.net.utils.withMain
-import com.google.firebase.auth.FirebaseAuth
 import com.hjq.language.MultiLanguages
 import com.hjq.language.OnLanguageListener
 import io.flutter.plugin.common.MethodCall
@@ -42,22 +37,6 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         mDataBinding.llBack.setOnClickListener {
             onBackPressed()
         }
-        CacheUtil.apply {
-            getUserInfo()?.let {
-                it.user?.let {
-
-                }
-            }
-            getString(LOGIN_METHOD)?.let {
-                loginMethod = it
-            }
-            getString(UNIPASS_PUBK)?.let {
-                publicKey = it
-            }
-            getString(UNIPASS_PRIK)?.let {
-                privateKey = it
-            }
-        }
         mDataBinding.layEditProfile.setOnClickListener {
             goEditProfile()
         }
@@ -77,49 +56,16 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         })
     }
 
-
-    // 0. clear cache
-    // 1. walletConnect
-    // 2. twitter
-    // 3. web3Auth
-    // 4. unipass
+    // 0. clear cache   . just clear cache, then at login act  well do anything for logout, more clear I think
     private fun logout() {
-        if (loginMethod == "Twitter") {
-            twitter()
-        } else {
-            walletConnect()
-        }
 
         CacheUtil.setUserInfo(null)
         CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "")
         CacheUtil.savaString(CacheUtil.UNIPASS_PUBK, "")
         CacheUtil.savaString(CacheUtil.UNIPASS_PRIK, "")
 
-        lifecycleScope.launch {
-            DBManager.instance.db?.imUserInfoDao()?.deleteAll()
-            IMDataManager.instance.clearCache()
-
-            withMain {
-                LoginAct.go(this@SettingsActivity)
-                finish()
-            }
-        }
-    }
-
-
-    var loginMethod = ""
-    var publicKey = ""
-    var privateKey = ""
-
-    private fun walletConnect() {
-        MyApp.instance.checkWalletConnect()
-        MyApp.instance.walletConnectKit?.disconnect {
-            it.printStackTrace()
-        }
-    }
-
-    private fun twitter() {
-        FirebaseAuth.getInstance().signOut()
+        LoginAct.go(this@SettingsActivity)
+        finish()
     }
 
     override fun initData() {

@@ -14,6 +14,13 @@
     "params": {}
   },
   {
+    "path": "/app/LoginAct",
+    "className": "com.cyberflow.sparkle.login.view.LoginAct",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
     "path": "/im/IMForwardListAct",
     "className": "com.cyberflow.sparkle.im.view.IMForwardListAct",
     "action": "",

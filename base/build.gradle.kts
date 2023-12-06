@@ -109,4 +109,7 @@ dependencies {
     api("com.beust:klaxon:5.5")
 
     api(project(mapOf("path" to ":base_widget")))
+    
+    api("cn.therouter:router:1.2.0-rc1")
+
 }

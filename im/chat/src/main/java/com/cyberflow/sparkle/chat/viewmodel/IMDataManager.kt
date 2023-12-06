@@ -1,10 +1,11 @@
 package com.cyberflow.sparkle.chat.viewmodel
 
 import android.net.Uri
+import com.cyberflow.base.model.IMFriendInfo
+import com.cyberflow.base.model.IMFriendRequest
 import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.model.User
 import com.hyphenate.chat.EMMessage
-import com.hyphenate.easeui.domain.EaseUser
 
 
 class IMDataManager private constructor() {
@@ -14,23 +15,23 @@ class IMDataManager private constructor() {
         const val TAG = "IMDataManager"
     }
 
-    private var inviteCacheData : List<EMMessage>?  =  null
-    private var contactCacheData : List<EaseUser>?  =  null
+    private var inviteCacheData : List<IMFriendRequest>?  =  null
+    private var contactCacheData : List<IMFriendInfo>?  =  null
     private var conversationCacheData : List<IMUserInfo>?  =  null   // for share page & forwrd page
 
-    fun getInviteData(): List<EMMessage> {
+    fun getInviteData(): List<IMFriendRequest> {
         return inviteCacheData.orEmpty()
     }
 
-    fun getContactData(): List<EaseUser> {
-        return contactCacheData.orEmpty()
-    }
-
-    fun setInviteData(list: List<EMMessage>?) {
+    fun setInviteData(list: List<IMFriendRequest>?) {
         inviteCacheData = list
     }
 
-    fun setContactData(data: List<EaseUser>?) {
+    fun getContactData(): List<IMFriendInfo> {
+        return contactCacheData.orEmpty()
+    }
+
+    fun setContactData(data: List<IMFriendInfo>?) {
         contactCacheData = data
     }
 
@@ -43,12 +44,12 @@ class IMDataManager private constructor() {
     }
 
     // for profile page
-    private var emMessage: EMMessage? = null
-    fun getEmMessage(): EMMessage? {
-        return emMessage
+    private var openUidProfile: String? = null
+    fun getOpenUidProfile(): String? {
+        return openUidProfile
     }
-    fun setEmMessage(emMessage: EMMessage?) {
-        this.emMessage = emMessage
+    fun setOpenUidProfile(openUidProfile: String?) {
+        this.openUidProfile = openUidProfile
     }
 
     private var forwardMsg: EMMessage? = null   // for forward page
@@ -79,7 +80,7 @@ class IMDataManager private constructor() {
         inviteCacheData = null
         contactCacheData = null
         conversationCacheData = null
-        emMessage = null
+        openUidProfile = null
         forwardMsg = null
         forwardImageUri = null
         user = null

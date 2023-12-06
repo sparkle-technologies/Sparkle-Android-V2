@@ -11,8 +11,15 @@ import com.cyberflow.base.ext.COLOR_TRANSPARENT
 import com.cyberflow.base.ext.immersive
 import com.cyberflow.base.ext.notNull
 import com.cyberflow.base.ext.transparentNavigationBar
+import com.cyberflow.base.net.NetworkingErrorHandler
+import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.PageConst
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.viewmodel.BaseViewModel
+import com.cyberflow.sparkle.widget.NotificationDialog
+import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.hjq.language.MultiLanguages
+import com.therouter.TheRouter
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
@@ -69,6 +76,19 @@ abstract class BaseVMAct<VM : BaseViewModel> : AppCompatActivity() {
     }
 
     private fun addNetworkErrorHandle() {
+        LiveDataBus.get().with(NetworkingErrorHandler.EVENT_TOKEN_EXPIRED, String::class.java).observe(this) {
 
+            CacheUtil.setUserInfo(null)
+            CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "")
+            CacheUtil.savaString(CacheUtil.UNIPASS_PUBK, "")
+            CacheUtil.savaString(CacheUtil.UNIPASS_PRIK, "")
+
+            TheRouter.build(PageConst.App.PAGE_LOGIN).navigation()
+            finish()
+        }
+
+        LiveDataBus.get().with(NetworkingErrorHandler.EVENT_REQUEST_ERROR, String::class.java).observe(this) {
+            ToastDialogHolder.getDialog()?.show(this, NotificationDialog.TYPE_ERROR, it)
+        }
     }
 }
