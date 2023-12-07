@@ -92,7 +92,9 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         FirebaseAuth.getInstance().signOut()
         lifecycleScope.launch {
             IMManager.instance.keepLogout()   //  make sure no login in IM
-            DBManager.instance.db?.imUserInfoDao()?.deleteAll()
+            DBManager.instance.db?.imFriendRequestDao()?.deleteAll()
+            DBManager.instance.db?.imFriendInfoDao()?.deleteAll()
+            DBManager.instance.db?.imConversationCacheDao()?.deleteAll()
             IMDataManager.instance.clearCache()
         }
     }

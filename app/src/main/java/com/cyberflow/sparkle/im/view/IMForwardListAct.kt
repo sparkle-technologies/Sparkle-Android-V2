@@ -7,7 +7,6 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
-import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.util.KeyboardUtil
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.bus.LiveDataBus
@@ -37,7 +36,6 @@ import com.drake.brv.utils.setup
 import com.drake.net.utils.withMain
 import com.drake.spannable.replaceSpanFirst
 import com.drake.spannable.span.ColorSpan
-import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.model.EaseEvent
 import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import com.therouter.TheRouter
@@ -221,90 +219,29 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
         mForwardMsgId = intent.extras?.getString("forward_msg_id").toString()
         Log.e(TAG, "initData: mForwardMsgId=$mForwardMsgId" )
         setMsgCallBack()
-        showCacheData()
-    }
-
-    private fun showCacheData() {
-        lifecycleScope.launch {
-            DBManager.instance.db?.imUserInfoDao()?.getAll()?.forEach {
-                it.open_uid = it.open_uid.replace("-", "_")
-                map[it.open_uid] = it
-            }
-            withMain {
-                showConversationList()
-                showContactListData()
-            }
-        }
+        showConversationList()
     }
 
     private fun showConversationList() {
-        recentData.clear()
-        val data = IMDataManager.instance.getConversationData()
-        if (data.isNullOrEmpty()) {
-             return
-        }else{
-            recentData.addAll(data.map {
-                Contact(name = it.nick, avatar = it.avatar, gender = it.gender, openUid = it.open_uid)
-            })
-            freshNormalUI()
+        lifecycleScope.launch {
+            recentData.clear()
+            DBManager.instance.db?.imConversationCacheDao()?.getAll()?.also {
+                recentData.addAll(it.map {
+                    Contact(name = it.nick, avatar = it.avatar, gender = it.gender, openUid = it.open_uid)
+                })
+                withMain {
+                    freshNormalUI()
+                }
+            }
         }
     }
 
     private val allContactData = arrayListOf<Contact>()
     private val recentData = arrayListOf<Contact>()
-    private val contactData = arrayListOf<Any>()
-
-    private val map = HashMap<String, IMUserInfo>()
-
-    // show contact list
-    private fun showContactListData() {
-        allContactData.clear()
-        contactData.clear()
-        val list = arrayListOf<Any>()
-        val data = IMDataManager.instance.getContactData()
-
-        data?.forEach {
-            Log.e(TAG, "  userName=${it.nick}" )
-        }
-
-        val markArray = BooleanArray(array.size)  // handle letter missing problem
-        val letter = EaseUser.GetInitialLetter()
-        data?.filter {
-            map.contains( it.nick )
-        }?.mapNotNull {
-            map[it.nick]
-        }?.sortedBy {
-            it.nick
-        }?.forEach {
-            val initialLetter = letter.getLetter(it.nick)
-            if (!markArray[array.indexOf(initialLetter)]) {
-                // if last name of a letter, change it to true
-                (list.lastOrNull() as? Contact)?.also {c->
-                    c.last = true
-                }
-
-                list.add(ContactLetter(initialLetter))
-                markArray[array.indexOf(initialLetter)] = true
-            }
-
-//            Log.e(TAG, "showContactListData: ${it.nick}  ${it}" )
-
-            Contact(name = it.nick, avatar = it.avatar, gender = it.gender, openUid = it.open_uid).apply {
-                list.add(this)
-                allContactData.add(this)
-            }
-        }
-
-        if(list.isNotEmpty()){
-            contactData.addAll(list)
-            freshNormalUI()
-        }
-    }
 
     private fun freshNormalUI(){
         val allData = arrayListOf<Any>()
         allData.add(RecentContactList(recentData))
-        allData.add(ContactList(contactData))
         mDataBinding.rv.models = allData
     }
 

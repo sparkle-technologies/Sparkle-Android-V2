@@ -11,23 +11,21 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.fragment.BaseDBFragment
-import com.cyberflow.base.model.IMUserInfo
+import com.cyberflow.base.model.IMConversationCache
+import com.cyberflow.base.model.IMFriendInfo
+import com.cyberflow.base.model.IMFriendRequest
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
-import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
-import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.FragmentMainFriendsBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedEmptyBinding
 import com.cyberflow.sparkle.databinding.MainFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.MainOfficialBinding
-import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMContactListAct
 import com.cyberflow.sparkle.im.view.IMScanAct
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
-import com.cyberflow.sparkle.main.viewmodel.parseResource
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
@@ -35,7 +33,6 @@ import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
-import com.drake.net.utils.withMain
 import com.hyphenate.chat.EMConversation
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import kotlinx.coroutines.launch
@@ -220,7 +217,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     }
 
     private fun freshIMData() {
-        actVm?.freshContactData()
+        actVm?.loadContactAndRequestListData()
     }
 
     override fun initData() {
@@ -229,29 +226,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        initIMListener()
         initHeadData()
-    }
-
-    /************************* IM *******************************/
-    private fun initIMListener() {
-        // from server
-        actVm?.conversationInfoObservable?.observe(requireActivity()) { response ->
-            mDatabind.page.finishRefresh()
-            Log.e("MainRightFragment", "conversation from server ")
-            parseResource(response, object : OnResourceParseCallback<List<EaseConversationInfo>>(true) {
-                    override fun onSuccess(data: List<EaseConversationInfo>?) {
-                        fetchUserInfoFromLocalDB(data)
-                    }
-                })
-        }
-
-        // from db cache
-        actVm?.conversationCacheObservable?.observe(requireActivity()) {
-            mDatabind.page.finishRefresh()
-            Log.e("MainRightFragment", "conversation from db cache ")
-            fetchUserInfoFromLocalDB(it)
-        }
     }
 
 
@@ -261,129 +236,10 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     private fun initHeadData() {
 //        headData.add(HeaderModel(title = "Official"))
 //        headData.add(OfficialModel(arrayListOf("Cora-Official", "King-Official")))
-
         headData.add(OfficialCoraModel( "Cora"))
         allData.clear()
         allData.addAll(headData)
         mDatabind.rv.models = allData
-    }
-
-    private val unRead = HashMap<String, Int>()
-
-    private fun fetchUserInfoFromLocalDB(data: List<EaseConversationInfo>?) {
-        lifecycleScope.launch {
-            val allContactList = DBManager.instance.db?.imUserInfoDao()?.getAll()
-            if (data.isNullOrEmpty() && allContactList.isNullOrEmpty()) {
-                withMain { showConversationList(null) }
-                return@launch
-            } else {
-
-                allContactList?.associate {
-                    it.open_uid.replace("-", "_") to it
-                }?.also { allContactMap ->
-                    val allData = arrayListOf<IMUserInfo>()
-                    val contactOpenUidList =
-                        IMDataManager.instance.getContactData().map { it.nick }
-                    val conversaction = data?.filter {
-                        contactOpenUidList.contains((it.info as? EMConversation)?.conversationId())
-                    }?.mapNotNull {
-                        val username = (it.info as? EMConversation)?.conversationId() ?: ""
-                        val count = (it.info as? EMConversation)?.unreadMsgCount
-//                        Log.e(TAG, "fetchUserInfoFromLocalDB: username=$username  count=$count" )
-                        unRead[username] = count ?: 0
-                        allContactMap[username]
-                    }.orEmpty()
-
-                    val mark = conversaction.map { it.open_uid.replace("-", "_") }.toSet()
-
-                   /* Log.e(TAG, "mark: ${mark.toString()}")
-
-                    allContactMap.forEach {
-                        Log.e(TAG, "allContactMap.forEach: key=${it.key}   value=${it.value}")
-                    }*/
-
-                    val contactData = contactOpenUidList.filter {
-                        !mark.contains(it)
-                    }.mapNotNull {
-                        allContactMap[it]
-                    }.sortedBy { it.nick }.orEmpty()
-
-                    /*conversaction.forEach {
-                        Log.e(TAG, "conversaction: ${it.nick}")
-                    }
-
-                    contactData.forEach {
-                        Log.e(TAG, "contactData: ${it.nick}")
-                    }*/
-
-                    allData.addAll(conversaction)
-                    allData.addAll(contactData)
-
-                    IMDataManager.instance.setConversationData(allData)   // save conversation data for share page
-
-                    if (allData.isNotEmpty()) {
-                        showConversationList(allData)
-                    } else {
-                        showConversationList(null)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun showConversationList(data: List<IMUserInfo>?) {
-        var modelData = arrayListOf<Any>()
-//        modelData.add(HeaderModel(title = "Friends Feed"))
-        if (data.isNullOrEmpty()) {
-            modelData.add(FriendsEmptyModel())
-        } else {
-            var friendMessageList = arrayListOf<Any>()
-            data?.also { list ->
-
-                var totalUnreadCount = 0
-                list.forEach { item ->
-
-                    var avatar = item.avatar
-                    var imageUrl = item.feed_avatar
-                    var nickname = item.nick
-                    var openUid = item.open_uid.replace("-", "_")
-                    var bgColor = item.feed_card_color
-
-
-                    var num: Int = unRead[openUid] ?: 0
-//                    Log.e(TAG, "showConversationList: openUid=${item.open_uid}  num=${num}", )
-
-                    totalUnreadCount += num
-
-                    friendMessageList.add(
-                        FriendMessageInfo(
-                            avatar = avatar,
-                            imageUrl = imageUrl,
-                            nickname = nickname,
-                            open_uid = openUid,
-                            bgColor = bgColor,
-                            num = num
-                        )
-                    )
-                }
-
-                (requireActivity() as? MainActivityV2)?.setUnRead(totalUnreadCount)
-
-
-                if (friendMessageList.size <= 6) {
-                    friendMessageList.add(FriendsAddModel())
-                }
-            }
-            modelData.add(FriendsModel(friendMessageList))
-        }
-        allData.clear()
-        allData.addAll(headData)
-        allData.addAll(modelData)
-        if (allData.isNotEmpty()) {
-            mDatabind.rv.models = allData
-        }
-
-        showFriendRequestNum()
     }
 
     override fun onResume() {
@@ -394,7 +250,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     var totalUnread = 0
     var tvNumSecLayer :TextView? = null  // in layout/include_main_top_right_add
 
-    fun showFriendRequestNum() {
+    private fun showFriendRequestNum() {
 //        Log.e(TAG, "showFriendRequestNum: isVisible=$isVisible" )
         if(isVisible){
             if(totalUnread > 0){
@@ -413,5 +269,178 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                 tvNumSecLayer?.isVisible = false
             }
         }
+    }
+
+    fun freshFriendRequest(friendReqList: List<IMFriendRequest>?) {
+        totalUnread = friendReqList?.size ?: 0
+        showFriendRequestNum()
+    }
+
+    fun mergeContactAndConversation() {
+        Log.e(TAG, "mergeContactAndConversation: " )
+        actVm?.apply {
+            if(contactList == null || contactList == null){
+                return
+            }
+            if(conversationList.isNullOrEmpty() && contactList.isNullOrEmpty()){
+                showEmpty()
+            }else{
+                merge(contactList, conversationList)
+            }
+        }
+    }
+
+    private val unRead = HashMap<String, Int>()
+
+    private fun merge(contactList: List<IMFriendInfo>?, imConversationList: List<EaseConversationInfo>?) {
+
+        Log.e(TAG, "merge: allContactList.size=${contactList?.size}  data.size=${imConversationList?.size}" )
+
+        contactList?.forEach {
+            Log.e(TAG, "merge:IMFriendInfo: $it", )
+        }
+        imConversationList?.forEach {
+            Log.e(TAG, "merge:EaseConversationInfo: $it", )
+        }
+
+        if(contactList.isNullOrEmpty()){
+            showConversationList(null)
+            return
+        }
+
+        lifecycleScope.launch {
+            contactList?.associate {
+                it.open_uid.replace("-", "_") to it
+            }?.also { allContactMap ->
+                val allData = arrayListOf<IMFriendInfo>()
+                val contactOpenUidList = contactList.map { it.open_uid }.map { it.replace("-", "_") }
+                val conversaction = imConversationList?.filter {
+                    contactOpenUidList.contains((it.info as? EMConversation)?.conversationId())
+                }?.mapNotNull {
+                    val username = (it.info as? EMConversation)?.conversationId() ?: ""
+                    val count = (it.info as? EMConversation)?.unreadMsgCount
+//                        Log.e(TAG, "fetchUserInfoFromLocalDB: username=$username  count=$count" )
+                    unRead[username] = count ?: 0
+                    allContactMap[username]
+                }.orEmpty()
+
+                val mark = conversaction.map { it.open_uid.replace("-", "_") }.toSet()
+
+//                Log.e(TAG, "merge:mark= $mark", )
+
+                val contactData = contactOpenUidList.filter {
+                    !mark.contains(it)
+                }.mapNotNull {
+                    allContactMap[it]
+                }.sortedBy { it.nick }.orEmpty()
+
+
+                allData.addAll(conversaction)
+                allData.addAll(contactData)
+
+                actVm?.saveConversationData2DB(unRead, allData)
+
+                if (allData.isNotEmpty()) {
+                    showConversationList(allData)
+                } else {
+                    showConversationList(null)
+                }
+            }
+        }
+    }
+
+    fun showConversationListFromCache(data: List<IMConversationCache>?) {
+        var modelData = arrayListOf<Any>()
+//        modelData.add(HeaderModel(title = "Friends Feed"))
+        if (!data.isNullOrEmpty()) {
+            var friendMessageList = arrayListOf<Any>()
+            data?.also { list ->
+
+                var totalUnreadCount = 0
+                list.forEach { item ->
+
+                    var avatar = item.avatar
+                    var imageUrl = item.avatar
+                    var nickname = item.nick
+                    var openUid = item.open_uid.replace("-", "_")
+                    var bgColor = "#A8A0F9"
+                    var num: Int = item.num
+                    totalUnreadCount += num
+
+                    friendMessageList.add(
+                        FriendMessageInfo(
+                            avatar = avatar,
+                            imageUrl = imageUrl,
+                            nickname = nickname,
+                            open_uid = openUid,
+                            bgColor = bgColor,
+                            num = num
+                        )
+                    )
+                }
+
+                (requireActivity() as? MainActivityV2)?.setUnRead(totalUnreadCount)
+
+                if (friendMessageList.size <= 6) {
+                    friendMessageList.add(FriendsAddModel())
+                }
+            }
+            modelData.add(FriendsModel(friendMessageList))
+            allData.clear()
+            allData.addAll(headData)
+            allData.addAll(modelData)
+            if (allData.isNotEmpty()) {
+                mDatabind.rv.models = allData
+            }
+        }
+    }
+
+    private fun showConversationList(data: List<IMFriendInfo>?) {
+        var modelData = arrayListOf<Any>()
+//        modelData.add(HeaderModel(title = "Friends Feed"))
+        if (data.isNullOrEmpty()) {
+            modelData.add(FriendsEmptyModel())
+        } else {
+            var friendMessageList = arrayListOf<Any>()
+            data?.also { list ->
+
+                var totalUnreadCount = 0
+                list.forEach { item ->
+
+                    var avatar = item.avatar
+                    var imageUrl = item.avatar
+                    var nickname = item.nick
+                    var openUid = item.open_uid.replace("-", "_")
+                    var bgColor = "#A8A0F9"
+                    var num: Int = unRead[openUid] ?: 0
+                    totalUnreadCount += num
+
+                    friendMessageList.add(
+                        FriendMessageInfo(
+                            avatar = avatar,
+                            imageUrl = imageUrl,
+                            nickname = nickname,
+                            open_uid = openUid,
+                            bgColor = bgColor,
+                            num = num
+                        )
+                    )
+                }
+
+                (requireActivity() as? MainActivityV2)?.setUnRead(totalUnreadCount)
+
+                if (friendMessageList.size <= 6) {
+                    friendMessageList.add(FriendsAddModel())
+                }
+            }
+            modelData.add(FriendsModel(friendMessageList))
+        }
+        allData.clear()
+        allData.addAll(headData)
+        allData.addAll(modelData)
+        if (allData.isNotEmpty()) {
+            mDatabind.rv.models = allData
+        }
+        mDatabind.page.finishRefresh()
     }
 }

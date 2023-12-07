@@ -8,4 +8,10 @@
     <string name="unable_to_access_the_gallery">无法访问资源</string>
     <string name="you_have_turned_off_gallery_permissions">未授权访问权限</string>
 
+
+    <string name="demo_contact_listener_onContactAdded">您已添加一个好友</string>
+    <string name="demo_contact_listener_onContactInvited">有人给您发来好友请求</string>
+    <string name="demo_contact_listener_onFriendRequestAccepted">好友请求已通过</string>
+    <string name="demo_contact_listener_onFriendRequestDeclined">好友请求被拒绝</string>
+
 </resources>

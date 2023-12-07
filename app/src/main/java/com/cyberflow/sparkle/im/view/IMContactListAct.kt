@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.model.IMFriendInfo
 import com.cyberflow.base.model.IMFriendRequest
-import com.cyberflow.base.model.IMUserInfo
 import com.cyberflow.base.util.KeyboardUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.DBComponent
@@ -35,9 +34,7 @@ import com.cyberflow.sparkle.im.viewmodel.FriendRequestEmpty
 import com.cyberflow.sparkle.im.viewmodel.FriendRequestHeader
 import com.cyberflow.sparkle.im.viewmodel.FriendRequestList
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
-import com.cyberflow.sparkle.im.viewmodel.STATUS_ADDED
 import com.cyberflow.sparkle.im.viewmodel.STATUS_NORMAL
-import com.cyberflow.sparkle.im.viewmodel.STATUS_REJECTED
 import com.cyberflow.sparkle.profile.view.ProfileAct
 import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
@@ -162,7 +159,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 //                                            ProfileAct.go(this@IMContactListAct, model.openUid, ProfileAct.CHAT)
 //                                        }
                                         item.setOnClickListener {
-                                            ProfileAct.go(this@IMContactListAct, model.openUid, ProfileAct.CHAT)
+                                            ProfileAct.go(this@IMContactListAct, model.openUid)
 //                                            ChatActivity.launch(this@IMContactListAct, model.openUid, model.avatar, model.name, 1)  // go chat activity
                                         }
                                     }
@@ -223,15 +220,9 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
     }
 
     private fun goProfile(model: FriendRequest){
-        val friendStatus = when(model.status){
-            STATUS_NORMAL-> ProfileAct.ACCEPT_FRIEND
-            STATUS_ADDED-> ProfileAct.CHAT
-            STATUS_REJECTED-> ProfileAct.ADD_FRIEND
-            else -> ProfileAct.ADD_FRIEND
-        }
         IMDataManager.instance.setOpenUidProfile(model.openUid)
         hideKeyboard(mDataBinding.edtSearchContact)
-        ProfileAct.go(this@IMContactListAct, model.openUid, friendStatus)
+        ProfileAct.go(this@IMContactListAct, model.openUid)
     }
 
     private var inputTxt = ""
@@ -256,7 +247,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
     override fun initData() {
         initListener()
-        loadLocalDBData(null)
+        loadLocalDBData()
     }
 
     private var isFirst = true
@@ -265,13 +256,16 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         if(isFirst){
             IMDataManager.instance.apply {
                 isFirst = false
-                val invite = getInviteData()
-                val contact = getContactData()
-                if(invite.isNullOrEmpty() && contact.isNullOrEmpty()){
-                    freshData()
-                }else{
-                    handleInviteMsg(invite)
-                    showContactListData(contact)
+                lifecycleScope.launch {
+                    val contact = DBManager.instance.db?.imFriendInfoDao()?.getAll()
+                    val invite = DBManager.instance.db?.imFriendRequestDao()?.getAll()
+                    if(invite.isNullOrEmpty() && contact.isNullOrEmpty()){
+                        freshData()
+                    }else{
+                        handleInviteMsg(invite.orEmpty())
+                        showContactListData(contact)
+                    }
+
                 }
             }
         }else{
@@ -280,12 +274,19 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         }
     }
 
+
     // for event listener
-    private fun loadLocalDBData(easeEvent: EaseEvent?) {
+    private fun receiveNewFriendRequestEvent(easeEvent: EaseEvent?) {
         lifecycleScope.launch {
-            DBManager.instance.db?.imUserInfoDao()?.getAll()?.forEach {
-                it.open_uid = it.open_uid.replace("-", "_")  // 从数据库里面拿
+            withMain {
+                LiveDataBus.get().with(DemoConstant.FRESH_MAIN_IM_DATA).postValue(EaseEvent())
+                freshData()
             }
+        }
+    }
+
+    private fun loadLocalDBData() {
+        lifecycleScope.launch {
             withMain {
                 freshData()
             }
@@ -295,32 +296,28 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
     private fun initListener(){
         viewModel.deleteMsgObservable.observe(this){
             ToastDialogHolder.getDialog()?.show(this@IMContactListAct, NotificationDialog.TYPE_SUCCESS, getString(R.string.friend_successfully_removed))
+            LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent())
             freshData()
         }
         viewModel.acceptFriendObservable.observe(this){
+            viewModel.IM_acceptFriend(it)
             freshData()
         }
 
         LiveDataBus.get().apply {
-            with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::loadLocalDBData)
-            with(DemoConstant.CONTACT_ADD, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::loadLocalDBData)
-            with(DemoConstant.CONTACT_UPDATE, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::loadLocalDBData)
+            with(DemoConstant.CONTACT_CHANGE, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::receiveNewFriendRequestEvent)
+            with(DemoConstant.CONTACT_ADD, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::receiveNewFriendRequestEvent)
+            with(DemoConstant.CONTACT_UPDATE, EaseEvent::class.java).observe(this@IMContactListAct, this@IMContactListAct::receiveNewFriendRequestEvent)
         }
 
         viewModel.inviteMsgObservable.observe(this) { inviteList->
-            inviteList.friend_req_list?.forEach {
-                Log.e(TAG, "initListener: ${it}" )
-            }
-
+            viewModel.saveInviteData2DB(inviteList.friend_req_list)
             handleInviteMsg(inviteList.friend_req_list.orEmpty())
         }
 
         viewModel.contactObservable.observe(this) {
+            viewModel.saveContactData2DB(it.friend_list)
             showContactListData(it.friend_list)
-        }
-
-        viewModel.imNewFriendListData.observe(this){
-            saveToLocalDB(it.user_info_list, false)
         }
     }
 
@@ -353,20 +350,6 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         freshMoreUI()
     }
 
-    private fun saveToLocalDB(userInfoList: List<IMUserInfo>?, isContactData: Boolean = false) {
-        Log.e(TAG, "saveToLocalDB: ", )
-        if(userInfoList.isNullOrEmpty()){
-            return
-        }
-        lifecycleScope.launch {
-            DBManager.instance.db?.imUserInfoDao()?.insert(*userInfoList.toTypedArray())
-            if(isContactData){
-                withMain {
-                    freshData()
-                }
-            }
-        }
-    }
 
     private val allRequestData = arrayListOf<FriendRequest>()
 

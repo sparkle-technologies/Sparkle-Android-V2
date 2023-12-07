@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.BondDetail
 import com.cyberflow.base.model.DetailResponseData
@@ -24,8 +25,10 @@ import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.FragmentMainProfileBinding
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity
+import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMAddFriendAct
+import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.main.widget.SynastryDialog
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.profile.view.ProfileAct
@@ -33,7 +36,6 @@ import com.cyberflow.sparkle.profile.view.ProfileAct.Companion.ACCEPT_FRIEND
 import com.cyberflow.sparkle.profile.view.ProfileAct.Companion.ADD_FRIEND
 import com.cyberflow.sparkle.profile.view.ProfileAct.Companion.CHAT
 import com.cyberflow.sparkle.profile.view.ShareAct
-import com.cyberflow.sparkle.profile.viewmodel.ProfileViewModel
 import com.cyberflow.sparkle.setting.view.ConnectedAccountActivity
 import com.cyberflow.sparkle.setting.view.SettingsActivity
 import com.cyberflow.sparkle.widget.NotificationDialog
@@ -60,9 +62,10 @@ import io.flutter.embedding.android.RenderMode
 import io.flutter.embedding.android.TransparencyMode
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.launch
 import me.jessyan.autosize.utils.ScreenUtils
 
-class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfileBinding>() {
+class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBinding>() {
 
     private val TAG = "MainProfileFragment"
 
@@ -180,21 +183,30 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
 //                        ToastUtil.show(requireContext(), "跳转profile页")
             val model = getModel<com.cyberflow.base.model.RecommandFriend>()
 
-            var action = CHAT
-           /* if(IMDataManager.instance.getInviteData().filter {
-                    val name = it.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM).replace("_", "-")
-                    name == model.open_uid
-                }.isNotEmpty()){
-                action = ACCEPT_FRIEND
-            }*/
-
             (requireActivity() as? ProfileAct)?.apply {
                 destroyFlutter()
-                refresh(model.open_uid, action)
+                lifecycleScope.launch {
+                    val conversationCache = DBManager.instance.db?.imConversationCacheDao()?.getAll()
+                    val friendRequestCache = DBManager.instance.db?.imFriendRequestDao()?.getAll()
+                    var ac = ADD_FRIEND
+                    val conversation = conversationCache?.filter {
+                        it.open_uid == open_uid
+                    }
+                    val request = friendRequestCache?.filter {
+                        it.from_open_uid == open_uid
+                    }
+                    if(conversation?.isNotEmpty() == true){
+                        ac = CHAT
+                    }
+                    if(request?.isNotEmpty() == true){
+                        ac = ACCEPT_FRIEND
+                    }
+                    refresh(model.open_uid, ac)
+                }
             }
 
             (requireActivity() as? MainActivityV2)?.apply {
-                ProfileAct.go(requireActivity(), model.open_uid.orEmpty(), action)
+                ProfileAct.go(requireActivity(), model.open_uid.orEmpty())
             }
         }
     }
@@ -229,6 +241,7 @@ class MainProfileFragment : BaseDBFragment<ProfileViewModel, FragmentMainProfile
         viewModel.acceptFriendObservable.observe(this) {
             if (!it.isNullOrEmpty()) {
                 action = CHAT
+                viewModel.IM_acceptFriend(it)
             }
             loadProfile()
         }

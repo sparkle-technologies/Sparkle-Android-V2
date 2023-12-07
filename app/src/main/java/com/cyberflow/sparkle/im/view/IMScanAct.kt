@@ -15,7 +15,6 @@ import android.widget.LinearLayout
 import androidx.core.view.isVisible
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.sparkle.chat.ui.handleQRCode
-import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityImScanBinding
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.profile.view.ProfileAct
@@ -189,13 +188,7 @@ class IMScanAct : BaseDBAct<IMViewModel, ActivityImScanBinding>() {
                         Log.e(TAG, "onActivityResult: url=$url")
                         val openUid = url.substring(url.lastIndexOf("/") + 1)
 
-                        if (IMDataManager.instance.getConversationData().filter {
-                                it.open_uid == openUid
-                            }.isNotEmpty()) {
-                            ProfileAct.go(this@IMScanAct, openUid, ProfileAct.CHAT)
-                        } else {
-                            ProfileAct.go(this@IMScanAct, openUid, ProfileAct.ADD_FRIEND)
-                        }
+                        ProfileAct.go(this@IMScanAct, openUid)
                     }
                 }
             } catch (e: IOException) {

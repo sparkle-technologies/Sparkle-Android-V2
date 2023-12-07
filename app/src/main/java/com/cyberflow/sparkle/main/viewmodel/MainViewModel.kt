@@ -1,32 +1,27 @@
 package com.cyberflow.sparkle.main.viewmodel
 
 import android.text.TextUtils
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cyberflow.base.BaseApp
-import com.cyberflow.base.model.DailyHoroScopeData
-import com.cyberflow.base.model.IMUserInfoList
+import com.cyberflow.base.model.IMConversationCache
+import com.cyberflow.base.model.IMFriendInfo
+import com.cyberflow.base.model.IMFriendList
+import com.cyberflow.base.model.IMFriendRequest
+import com.cyberflow.base.model.IMFriendRequestList
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.bus.SingleSourceLiveData
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.chat.DemoHelper
-import com.cyberflow.sparkle.chat.common.constant.DemoConstant
-import com.cyberflow.sparkle.chat.common.db.DemoDbHelper
-import com.cyberflow.sparkle.chat.common.db.dao.InviteMessageDao
-import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.enums.Status
 import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCallback
 import com.cyberflow.sparkle.chat.common.net.Resource
 import com.cyberflow.sparkle.chat.common.repositories.EMChatManagerRepository
-import com.cyberflow.sparkle.chat.common.repositories.EMContactManagerRepository
+import com.cyberflow.sparkle.im.DBManager
 import com.drake.net.Post
 import com.drake.net.utils.scopeNet
 import com.hyphenate.chat.EMClient
-import com.hyphenate.chat.EMConversation
-import com.hyphenate.chat.EMMessage
 import com.hyphenate.easeui.constants.EaseConstant
-import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import com.hyphenate.easeui.utils.EaseCommonUtils
 import com.luck.picture.lib.utils.ToastUtils.showToast
@@ -34,35 +29,24 @@ import kotlinx.coroutines.launch
 
 class MainViewModel : BaseViewModel() {
 
-    var horoScopeData: MutableLiveData<DailyHoroScopeData> = MutableLiveData()
 
-    var imContactListData: MutableLiveData<IMUserInfoList> = MutableLiveData()
-    var imNewFriendListData: MutableLiveData<IMUserInfoList> = MutableLiveData()
-
-    fun getContactList() : List<String>{
-        return imContactListData.value?.user_info_list?.map {
-            it.open_uid
-        }.orEmpty()
+    var inviteMsgObservable: MutableLiveData<IMFriendRequestList> = MutableLiveData()
+    fun loadFriendRequestMessages() = scopeNet {
+        inviteMsgObservable.value = Post<IMFriendRequestList>(Api.RELATIONSHIP_FRIEND_REQUEST_LIST) {}.await()
     }
 
-    fun getIMContactInfoList(openUidList: List<String>?) = scopeNet {
-        imContactListData.value = Post<IMUserInfoList>(Api.IM_BATCH_USER_INFO) {
-            json("scene" to "0", "open_uid_list" to openUidList)
-        }.await()
+    var contactObservable: MutableLiveData<IMFriendList> = MutableLiveData()
+    fun loadContactList()  = scopeNet {
+        contactObservable.value = Post<IMFriendList>(Api.RELATIONSHIP_FRIEND_LIST) {}.await()
     }
 
-    fun getIMNewFriendInfoList(openUidList: List<String>?) = scopeNet {
-        imNewFriendListData.value = Post<IMUserInfoList>(Api.IM_BATCH_USER_INFO) {
-            json("scene" to "0", "open_uid_list" to openUidList)
-        }.await()
-    }
 
     // ------------------------------------------- IM -------------------------------------------
 
     // 会先刷新 新朋友消息 或 联系人   然后会继续拿会话信息
-    fun freshContactData(){
+    fun loadContactAndRequestListData(){
         loadFriendRequestMessages()
-        loadContactList(true)
+        loadContactList()
     }
 
     fun freshConversationData(){
@@ -72,14 +56,6 @@ class MainViewModel : BaseViewModel() {
         } else {
             getConversationFromCache()
         }
-//        checkUnreadMsg()
-    }
-
-
-    val contactObservable = SingleSourceLiveData<Resource<List<EaseUser>>>()
-    val mRepository = EMContactManagerRepository()
-    fun loadContactList(server: Boolean) {
-        contactObservable.setSource(mRepository.getContactList(server))
     }
 
     val conversationInfoObservable = SingleSourceLiveData<Resource<List<EaseConversationInfo>>>()
@@ -128,60 +104,50 @@ class MainViewModel : BaseViewModel() {
         }
     }
 
-    val homeUnReadObservable = MutableLiveData<String>()
-
-    val inviteMessageDao: InviteMessageDao? by lazy {
-        DemoDbHelper.getInstance(BaseApp.instance).inviteMessageDao
-    }
-
-    fun checkUnreadMsg() {
+    fun saveInviteData2DB(data: List<IMFriendRequest>?) {
         viewModelScope.launch {
-            var unreadCount = 0
-            inviteMessageDao?.also {
-                unreadCount = it.queryUnreadCount()
+            DBManager.instance.db?.imFriendRequestDao()?.deleteAll()
+            if(data.isNullOrEmpty()){
+
+            }else{
+                DBManager.instance.db?.imFriendRequestDao()?.insert(*data.toTypedArray())
             }
-
-            val unreadMessageCount = DemoHelper.getInstance().chatManager.unreadMessageCount
-            Log.e(TAG, "checkUnreadMsg: unreadCount=$unreadCount   unreadMessageCount=$unreadMessageCount")
-
-            /* val count = getUnreadCount(unreadCount + unreadMessageCount)
-             homeUnReadObservable.postValue(count.orEmpty())*/
-
-            val count = getUnreadCount(DemoHelper.getInstance().chatManager.unreadMessageCount)
-
-            homeUnReadObservable.postValue(count.orEmpty())
         }
     }
 
-    private fun getUnreadCount(count: Int): String? {
-        if (count <= 0) {
-            return null
-        }
-        return if (count > 99) {
-            "···"
-        } else count.toString()
-    }
-
-    val inviteMsgObservable = SingleSourceLiveData<List<EMMessage>>()
-
-    private fun loadFriendRequestMessages() {
+    fun saveContactData2DB(data: List<IMFriendInfo>?) {
         viewModelScope.launch {
-            val emMessages = EMClient.getInstance().chatManager().searchMsgFromDB(
-                EMMessage.Type.TXT,
-                System.currentTimeMillis(),
-                1000,
-                EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID,
-                EMConversation.EMSearchDirection.UP
-            ).sortedBy {
-                it.msgTime
-            }.filter {
-                val statusParam = it.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS)
-                val status = InviteMessageStatus.valueOf(statusParam)
-                status == InviteMessageStatus.BEINVITEED
-            }.orEmpty()
-            inviteMsgObservable.setSource(MutableLiveData(emMessages))
+            DBManager.instance.db?.imFriendInfoDao()?.deleteAll()
+            if(data.isNullOrEmpty()){
+            }else{
+                DBManager.instance.db?.imFriendInfoDao()?.insert(*data.toTypedArray())
+            }
         }
     }
+
+    fun saveConversationData2DB(unRead: HashMap<String, Int>, data: ArrayList<IMFriendInfo>) {
+        viewModelScope.launch {
+            DBManager.instance.db?.imConversationCacheDao()?.deleteAll()
+            if(data.isNullOrEmpty()){
+            }else{
+                val cache = data.map {
+                    IMConversationCache(
+                        open_uid = it.open_uid,
+                        nick = it.nick,
+                        gender = 1,
+                        avatar = it.avatar,
+                        num = unRead[it.open_uid.replace("-", "_")] ?: 0,
+                        bgColor = "#ffffff",
+                        )
+                }
+                DBManager.instance.db?.imConversationCacheDao()?.insert(*cache.toTypedArray())
+            }
+        }
+    }
+
+    var contactList: List<IMFriendInfo>? = null
+    var conversationList: List<EaseConversationInfo>? = null
+
 }
 
 fun <T> parseResource(response: Resource<T>?, callback: OnResourceParseCallback<T>) {

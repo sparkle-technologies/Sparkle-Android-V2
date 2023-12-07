@@ -6,6 +6,7 @@ import com.cyberflow.base.BaseApp
 import com.cyberflow.base.net.initNetSpark
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.sparkle.chat.IMManager
+import com.cyberflow.sparkle.im.DBManager
 import com.drake.brv.utils.BRV
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.FirebaseApp
@@ -57,6 +58,7 @@ class MyApp : BaseApp() {
 
     // for necessary library, high priority, must be init at Main Thread
     private fun runOnMainThread() {
+        DBManager.instance.initDB(this)
         engines = FlutterEngineGroup(this)
         initNetSpark(cacheDir)
         CacheUtil.init(this)
@@ -92,5 +94,10 @@ class MyApp : BaseApp() {
 
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(MultiLanguages.attach(base))
+    }
+
+    override fun onTerminate() {
+        DBManager.instance.closeDB()
+        super.onTerminate()
     }
 }

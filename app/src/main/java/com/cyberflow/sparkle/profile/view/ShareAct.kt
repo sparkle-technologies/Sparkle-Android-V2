@@ -21,7 +21,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
-import com.cyberflow.base.model.IMUserInfo
+import com.cyberflow.base.model.IMConversationCache
 import com.cyberflow.base.model.ManyImageData
 import com.cyberflow.base.model.User
 import com.cyberflow.base.net.Api
@@ -97,8 +97,8 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
             }
         })
 
-        dialog = ShareDialog(this, object : ShareDialog.Callback {
-            override fun onSelected(user: IMUserInfo?, type: Int) {
+        dialog = ShareDialog(this@ShareAct, object : ShareDialog.Callback {
+            override fun onSelected(user: IMConversationCache?, type: Int) {
 //                Log.e(TAG, "onSelected: type=$type  user=$user" )
                 when(type){
                     ShareDialog.TYPE_SHARE -> {
@@ -123,7 +123,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
     }
 
     private var isMore = false
-    private var shareUser: IMUserInfo? = null
+    private var shareUser: IMConversationCache? = null
 
     /**
      * more: jump to IMForwardListAct   or  just show the ForwardDialog

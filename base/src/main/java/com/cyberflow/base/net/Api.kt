@@ -10,8 +10,6 @@ object Api {
     const val MONTHLY_HOROSCOPE = "stars-cipher/user/monthly_horoscope"
     const val YEARLY_HOROSCOPE = "stars-cipher/user/yearly_horoscope"
 
-
-    const val IM_BATCH_USER_INFO = "stars-cipher/user/get_simple_info_batch"
     const val IM_USER_SEARCH = "stars-cipher/search"
 
     const val GET_IMAGE_URLS = "stars-cipher/get_user_image_url"

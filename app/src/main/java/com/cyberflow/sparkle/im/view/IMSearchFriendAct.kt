@@ -67,7 +67,7 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
                     cardview.setOnClickListener {
                         hideKeyboard(mDataBinding.edtSearchFriend)
-                        ProfileAct.go(this@IMSearchFriendAct, data.open_uid, ProfileAct.ADD_FRIEND)
+                        ProfileAct.go(this@IMSearchFriendAct, data.open_uid)
                     }
                     tvAdd.setClickListener(object : ShadowTxtButton.ShadowClickListener{
                         override fun clicked(disable: Boolean) {

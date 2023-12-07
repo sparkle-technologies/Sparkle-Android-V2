@@ -29,7 +29,6 @@ import com.cyberflow.sparkle.chat.R
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.databinding.ActivityPreivewBinding
 import com.cyberflow.sparkle.chat.ui.fragment.PreviewFragment
-import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.drake.net.utils.withMain
 import com.huawei.hms.hmsscankit.ScanUtil
@@ -327,26 +326,10 @@ fun handleQRCode(result: Array<HmsScan>, failed: () -> Unit  ) {
             failed()
             return@apply
         }
-        if (IMDataManager.instance.getConversationData().any { it.open_uid == openUid }) {
-            TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid)
-                .withInt("friend_status", 0).navigation()
-//            ProfileAct.go(act, openUid, ProfileAct.CHAT)
-        } else {
-            TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid)
-                .withInt("friend_status", 1).navigation()
-//            ProfileAct.go(act, openUid, ProfileAct.ADD_FRIEND)
-        }
+        TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid).navigation()
     }
 }
 
 fun goPreview(openUid: String) {
-    if (IMDataManager.instance.getConversationData().any { it.open_uid == openUid }) {
-        TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid)
-            .withInt("friend_status", 0).navigation()
-//            ProfileAct.go(act, openUid, ProfileAct.CHAT)
-    } else {
-        TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid)
-            .withInt("friend_status", 1).navigation()
-//            ProfileAct.go(act, openUid, ProfileAct.ADD_FRIEND)
-    }
+    TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid).navigation()
 }

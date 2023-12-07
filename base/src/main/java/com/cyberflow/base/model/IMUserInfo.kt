@@ -5,34 +5,11 @@ import androidx.room.PrimaryKey
 import kotlinx.serialization.Serializable
 
 
-// for interact with IM
-@Serializable
-data class IMUserInfoList(
-    var user_info_list: List<IMUserInfo>? = null
-)
-
 @Serializable
 data class IMUserSearchList(var total: Int = 0, var list: List<IMSearchData>? = null)
 
 data class IMMyFriendsList(var total: Int = 0, var list: List<IMSearchData>? = null)
 data class IMSearchFriendHead(var name: String = "", var type: Int = 0, var showMore: Boolean = false)
-
-const val TYPE_MY_FRIENDS = 0
-const val TYPE_ADD_FRIENDS = 1
-
-@Serializable
-@Entity(tableName = "im_user_info_cache")
-data class IMUserInfo(
-    @PrimaryKey var open_uid: String,
-    var gender: Int = 0, // 1=man  2=women
-    var nick: String = "",
-    var avatar: String = "",
-    var wallet_address: String = "",
-    var ca_wallet: String = "",
-    var signature: String = "",
-    var feed_avatar: String = "",
-    var feed_card_color: String = "",
-)
 
 @Serializable
 data class IMSearchData(
@@ -53,6 +30,7 @@ data class IMFriendRequestList(
 @Serializable
 @Entity(tableName = "im_friend_request")
 data class IMFriendRequest(
+    @PrimaryKey
     var from_open_uid: String = "",
 //    var gender: Int = 0, // 1=man  2=women
     var avatar: String = "",
@@ -69,8 +47,21 @@ data class IMFriendList(
 @Serializable
 @Entity(tableName = "im_friend_info")
 data class IMFriendInfo(
+    @PrimaryKey
     var open_uid: String = "",
 //    var gender: Int = 0, // 1=man  2=women
     var avatar: String = "",
     var nick: String = "",
+)
+
+@Serializable
+@Entity(tableName = "im_conversation_cache")
+data class IMConversationCache(
+    @PrimaryKey
+    var open_uid: String,
+    var nick: String = "",
+    var gender: Int = 0,
+    var avatar: String = "",
+    var num: Int = 1,
+    var bgColor: String = ""
 )

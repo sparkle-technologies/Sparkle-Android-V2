@@ -6,17 +6,21 @@ import android.view.Gravity
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import com.cyberflow.base.model.IMUserInfo
+import com.cyberflow.base.model.IMConversationCache
 import com.cyberflow.base.resources.R
 import com.cyberflow.sparkle.DBComponent
-import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ItemShareActionHorizontalBinding
 import com.cyberflow.sparkle.databinding.ItemShareRecentHorizontalBinding
+import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.drake.net.utils.withMain
+import kotlinx.coroutines.launch
 
 class ShareDialog {
 
@@ -26,7 +30,7 @@ class ShareDialog {
     private var mDialog: Dialog? = null
 
     interface Callback {
-        fun onSelected(user: IMUserInfo?, type: Int)
+        fun onSelected(user: IMConversationCache?, type: Int)
     }
 
     companion object {
@@ -58,18 +62,24 @@ class ShareDialog {
     }
 
     private fun initData() {
-        val conversationCache = IMDataManager.instance.getConversationData()
-        val recentListData = arrayListOf<Any>()
-        if (conversationCache.isNotEmpty()) {
-            rv?.isVisible = true
-            line?.isVisible = true
-            recentListData.addAll(conversationCache.take(3))
-            recentListData.add(TYPE_MORE)
-            rv?.models = recentListData
-        }
+        (mContext as? AppCompatActivity)?.apply {
+            lifecycleScope.launch {
+                val conversationCache = DBManager.instance.db?.imConversationCacheDao()?.getAll().orEmpty()
+                withMain {
+                    val recentListData = arrayListOf<Any>()
+                    if (conversationCache.isNotEmpty()) {
+                        rv?.isVisible = true
+                        line?.isVisible = true
+                        recentListData.addAll(conversationCache.take(3))
+                        recentListData.add(TYPE_MORE)
+                        rv?.models = recentListData
+                    }
 
-        val actionListData = arrayListOf(TYPE_COPY_LINK, TYPE_DOWNLOAD )
-        rvAction?.models = actionListData
+                    val actionListData = arrayListOf(TYPE_COPY_LINK, TYPE_DOWNLOAD )
+                    rvAction?.models = actionListData
+                }
+            }
+        }
     }
 
 
@@ -106,12 +116,12 @@ class ShareDialog {
             line = findViewById<RecyclerView>(com.cyberflow.sparkle.R.id.line_horizon)
 
             rv?.setup {
-                addType<IMUserInfo>(com.cyberflow.sparkle.R.layout.item_share_recent_horizontal)
+                addType<IMConversationCache>(com.cyberflow.sparkle.R.layout.item_share_recent_horizontal)
                 addType<Int>(com.cyberflow.sparkle.R.layout.item_share_action_horizontal)
                 onBind {
                     when (itemViewType) {
                         com.cyberflow.sparkle.R.layout.item_share_recent_horizontal->{
-                            val model = getModel<IMUserInfo>()
+                            val model = getModel<IMConversationCache>()
                             getBinding<ItemShareRecentHorizontalBinding>().apply {
                                 DBComponent.loadAvatar(ivHead, model.avatar, model.gender)
                                 tvName.text = model.nick
