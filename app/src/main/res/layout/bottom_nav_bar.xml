@@ -110,6 +110,25 @@
         app:layout_constraintTop_toTopOf="@+id/lay1"
         tool:text="2" />
 
+    <TextView
+        android:id="@+id/tv_site_unread"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/main_bg_unread_dot_yellow"
+        android:fontFamily="@font/poppins_regular"
+        android:minHeight="@dimen/dp_12"
+        android:minWidth="@dimen/dp_12"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingEnd="@dimen/dp_5"
+        android:gravity="center"
+        android:textSize="@dimen/sp_10"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="@+id/lay4"
+        app:layout_constraintTop_toTopOf="@+id/lay4"
+        tool:text="2" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

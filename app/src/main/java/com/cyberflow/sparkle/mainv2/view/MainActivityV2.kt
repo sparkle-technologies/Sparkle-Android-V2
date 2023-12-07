@@ -176,6 +176,7 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
     }
 
     private fun receiveFreshEvent(event: EaseEvent?) {
+        notify.freshData()
         viewModel.loadContactAndRequestListData()
     }
 
@@ -192,5 +193,9 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
 
     fun setUnRead(unreadTotalCount: Int) {
          mDataBinding.bottomNarBar.setNum(unreadTotalCount)
+    }
+
+    fun setSiteUnRead(unreadTotalCount: Int){
+        mDataBinding.bottomNarBar.setSiteMsgNum(unreadTotalCount)
     }
 }

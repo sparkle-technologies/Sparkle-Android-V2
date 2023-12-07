@@ -40,11 +40,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
+            android:fontFamily="@font/poppins_bold"
             android:gravity="center|left"
             android:text="@string/friends"
             android:textColor="@color/black"
-            android:textSize="@dimen/sp_16"
+            android:textSize="@dimen/sp_18"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/btn_add_friends"
             app:layout_constraintLeft_toLeftOf="parent"

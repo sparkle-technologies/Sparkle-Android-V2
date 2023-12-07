@@ -39,4 +39,9 @@
     <string name="describe_yourself">描述自己</string>
     <string name="people_you_may_know">可能认识的人</string>
     <string name="reveal_the_relationship">展示关系</string>
+    <string name="notification">通知</string>
+    <string name="stoday">今天</string>
+    <string name="yesterday">昨天</string>
+    <string name="earlier">更早些时候</string>
+    <string name="ding_ding_ding">叮、叮、叮... 等待新消息出现</string>
 </resources>

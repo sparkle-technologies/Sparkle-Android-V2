@@ -8,10 +8,42 @@
         android:layout_height="match_parent"
         android:background="@color/white_2nd">
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
+        <TextView
+            android:id="@+id/tv_title"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/height_top_bar"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/notification"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_18"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.drake.brv.PageRefreshLayout
+            android:id="@+id/page"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/dp_20"
+            android:paddingTop="@dimen/dp_16"
+            android:paddingEnd="@dimen/dp_20"
+            app:stateEnabled="true"
+            app:loading_layout="@layout/layout_loading_top"
+            app:error_layout="@layout/layout_error_top"
+            app:empty_layout="@layout/layout_site_message_empty"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_site_message_body" />
+
+        </com.drake.brv.PageRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

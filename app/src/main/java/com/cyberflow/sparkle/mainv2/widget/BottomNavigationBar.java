@@ -36,6 +36,7 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
     private ImageView imgCenter;
 
     private TextView tvUnread;
+    private TextView tvSiteUnread;
 
     public void setViewPager(ViewPager2 viewPager) {
         this.viewPager = viewPager;
@@ -93,6 +94,7 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
         img4 = view.findViewById(R.id.iv5);
 
         tvUnread = view.findViewById(R.id.tv_unread);
+        tvSiteUnread = view.findViewById(R.id.tv_site_unread);
 
         setWillNotDraw(false);
 
@@ -347,6 +349,19 @@ public class BottomNavigationBar extends LinearLayout implements View.OnClickLis
             }
         }else{
             tvUnread.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void setSiteMsgNum(int num) {
+        if(num > 0){
+            tvSiteUnread.setVisibility(View.VISIBLE);
+            if(num > 99){
+                tvSiteUnread.setText("···");
+            }else{
+                tvSiteUnread.setText(String.valueOf(num));
+            }
+        }else{
+            tvSiteUnread.setVisibility(View.INVISIBLE);
         }
     }
 }

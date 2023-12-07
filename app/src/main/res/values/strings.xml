@@ -40,4 +40,9 @@
     <string name="describe_yourself">Describe yourself</string>
     <string name="people_you_may_know">People you may know</string>
     <string name="reveal_the_relationship">Reveal the relationship</string>
+    <string name="notification">Notification</string>
+    <string name="stoday">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="earlier">Earlier</string>
+    <string name="ding_ding_ding">Ding, ding, ding... new info will pop up here</string>
 </resources>

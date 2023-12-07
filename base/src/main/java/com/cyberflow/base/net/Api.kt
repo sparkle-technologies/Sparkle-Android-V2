@@ -29,4 +29,7 @@ object Api {
     const val RELATIONSHIP_FRIEND_REQUEST_LIST = "relationship/user/get_friend_request_list"
     const val RELATIONSHIP_FRIEND_LIST = "relationship/user/get_friend_list"
 
+
+    const val SITE_MESSAGE = "sparkle-msg-notify/site_message"
+
 }
