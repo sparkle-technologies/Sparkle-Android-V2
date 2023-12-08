@@ -77,16 +77,13 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
     }
 
 
-    /********************* IM ***********************/
-
     /**
-     *  优先本地数据库   好友请求 + 回话列表   UI快速显示缓存数据
-     *
-     *  其次是 异步请求
-     *      1.好友请求列表  显示红点  存数据库
-     *      2.好友列表   IM会话列表
-     *              好友列表 存数据库
-     *              混合后 触发更新   存数据库
+     *  first:  load cache conversation & friend request data from db  -> show cache data at UI, the first time
+     *  second: load remote data from server
+     *              1. friend request remote data    -> save to local db
+     *              2. friend list remote data       -> save to local db
+     *              3. IM conversations remote data  -> save to local db
+     *           merge 2 and 3, show remote updated data at UI, the second time
      */
     private fun loadCacheOrRemote() {
         initDataObserver()

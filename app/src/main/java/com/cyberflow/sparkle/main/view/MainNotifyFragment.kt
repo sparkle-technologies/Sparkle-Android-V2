@@ -118,10 +118,10 @@ class MainNotifyFragment : BaseDBFragment<BaseViewModel, FragmentMainNotifyBindi
         val today = arrayListOf<SiteMessage>()
         val yesterday = arrayListOf<SiteMessage>()
         val earlier = arrayListOf<SiteMessage>()
-        val calendarNow = System.currentTimeMillis() / 1000
+        val calendarNow = System.currentTimeMillis()
         var unRead = 0
         data.list?.forEach {
-            val diff = DateUtils.dayDiff(calendarNow, it.timestamp)
+            val diff = DateUtils.dayDiff(calendarNow, it.timestamp * 1000)  // cause timestamp is second, need multi 1000
             Log.e("TAG", "handleData: diff=$diff", )
 
             when(diff){
