@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_30"
         android:fontFamily="@font/poppins_bold"
-        android:text="Cannot disconnect"
+        android:text="@string/cannot_disconnect"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_18"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -37,7 +37,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Please keep at least one account connected." />
+        android:text="@string/please_keep_at_least_one_account_connected" />
 
     <com.cyberflow.sparkle.widget.ShadowTxtButton
         android:id="@+id/btn"
@@ -50,7 +50,7 @@
         app:view_bg="@drawable/register_btn_next_white"
         app:view_disable="false"
         app:view_shadow_distance="1dp"
-        app:view_text="Okay"
+        app:view_text="@string/okay"
         app:view_text_bold="true"
         app:view_text_color="@color/black"
         app:view_text_size="@dimen/sp_17" />

@@ -45,4 +45,20 @@
     <string name="yesterday">Yesterday</string>
     <string name="earlier">Earlier</string>
     <string name="ding_ding_ding">Ding, ding, ding... new info will pop up here</string>
+    <string name="connecting">Connecting</string>
+    <string name="the_account_is_connecting_please_wait_a_moment">The account is connecting, please wait a moment...</string>
+    <string name="disconnecting">Disconnecting</string>
+    <string name="the_account_is_disconnecting_please_wait_a_moment">The account is disconnecting, please wait a moment...</string>
+    <string name="connect">Connect</string>
+    <string name="connected_accounts">Connected accounts</string>
+    <string name="web3_wallet">Web3 wallet</string>
+    <string name="sconnect">connect</string>
+    <string name="cannot_disconnect">Cannot disconnect</string>
+    <string name="please_keep_at_least_one_account_connected">Please keep at least one account connected.</string>
+    <string name="okay">Okay</string>
+    <string name="disconnect_account">Disconnect account</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="dis_1">Are you sure you want to Disconnect the </string>
+    <string name="dis_2">wallet</string>
+    <string name="dis_3"> account: </string>
 </resources>

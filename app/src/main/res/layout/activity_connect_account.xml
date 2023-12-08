@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/status_bar_height"
             android:fontFamily="@font/poppins_semibold"
-            android:text="Connected accounts"
+            android:text="@string/connected_accounts"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_16"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -120,7 +120,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:view_bg="@drawable/register_btn_next"
                     app:view_shadow_distance="1dp"
-                    app:view_text="Connect"
+                    app:view_text="@string/connect"
                     app:view_text_bold="true"
                     app:view_text_size="@dimen/sp_14" />
 
@@ -205,7 +205,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:view_bg="@drawable/register_btn_next"
                     app:view_shadow_distance="1dp"
-                    app:view_text="Connect"
+                    app:view_text="@string/sconnect"
                     app:view_text_bold="true"
                     app:view_text_size="@dimen/sp_14" />
 
@@ -240,7 +240,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_52"
                     android:fontFamily="@font/poppins_regular"
-                    android:text="Web3 wallet"
+                    android:text="@string/web3_wallet"
                     android:textColor="@color/color_000000"
                     android:textSize="@dimen/sp_14"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -290,7 +290,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:view_bg="@drawable/register_btn_next"
                     app:view_shadow_distance="1dp"
-                    app:view_text="Connect"
+                    app:view_text="@string/sconnect"
                     app:view_text_bold="true"
                     app:view_text_size="@dimen/sp_14" />
 

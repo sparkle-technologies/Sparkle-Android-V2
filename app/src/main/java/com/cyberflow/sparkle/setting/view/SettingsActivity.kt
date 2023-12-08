@@ -19,6 +19,7 @@ import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.hjq.language.MultiLanguages
 import com.hjq.language.OnLanguageListener
+import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
@@ -149,5 +150,11 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
     private fun goLanguage() {
         LanguageActivity.go(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE)?.destroy()
+        FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_ACCOUNT_PRIVACY)?.destroy()
     }
 }

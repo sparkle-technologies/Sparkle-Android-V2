@@ -4,7 +4,6 @@ import android.content.Context
 import android.text.TextUtils
 import android.util.Log
 import com.cyberflow.base.model.LoginResponseData
-import com.cyberflow.base.model.UserInfo
 import com.cyberflow.base.net.GsonConverter
 import com.tencent.mmkv.MMKV
 
@@ -35,23 +34,6 @@ object CacheUtil {
         }
     }
 
-    fun getSimpleUserInfo(): UserInfo? {
-        val result = UserInfo()
-        getUserInfo()?.apply {
-            if (user == null) {
-                return null
-            }
-            result.gender = user.gender
-            result.birthdate = user.birthdate
-            result.birth_time = user.birth_time
-            result.nick = user.nick
-            result.signature = user.signature
-            result.birthplace_info = user.birthplace_info
-            result.location_info = user.location_info
-            return result
-        }
-        return result
-    }
 
     fun setUserInfo(obj: LoginResponseData?) {
         val kv = getMMKV()
@@ -86,23 +68,6 @@ object CacheUtil {
             GsonConverter.gson.fromJson<DailyHoroScopeData>(str, DailyHoroScopeData::class.java)
         }
     }*/
-
-
-    fun isLoggedInAndHasUserInfoCompleted(): Boolean {
-        getUserInfo()?.apply {
-            if (user == null) {
-                return false
-            }
-            val necessary1 = token?.isNotEmpty()
-            val necessary2 = user.open_uid?.isNotEmpty()
-            val necessary3 = user.nft_list?.any { it.url.isNotEmpty() }
-            return necessary1 == true && necessary2 == true && necessary3 == true
-        }
-        return false
-    }
-
-
-
 
     fun init(context: Context) {
         MMKV.initialize(context)

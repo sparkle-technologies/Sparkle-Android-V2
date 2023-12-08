@@ -16,6 +16,7 @@ import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
+import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityConnectAccountBinding
 import com.cyberflow.sparkle.setting.widget.ConnectLoadingDialog
 import com.cyberflow.sparkle.setting.widget.DisconnectDialog
@@ -46,6 +47,7 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        initRes()
         mDataBinding.llBack.setOnClickListener {
             onBackPressed()
         }
@@ -101,11 +103,17 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
 
     private var loadingDialog: ConnectLoadingDialog? = null
 
-    private val titleConnect = "Connecting"
-    private val txtConnect = "The account is connecting, please wait a moment..."
+    private var titleConnect = ""
+    private var txtConnect = ""
+    private var titleDisConnect = ""
+    private var txtDisConnect = ""
 
-    private val titleDisConnect = "Disconnecting"
-    private val txtDisConnect = "The account is disconnecting, please wait a moment..."
+    private fun initRes(){
+        titleConnect = getString(R.string.connecting)
+        txtConnect = getString(R.string.the_account_is_connecting_please_wait_a_moment)
+        titleDisConnect = getString(R.string.disconnecting)
+        txtDisConnect = getString(R.string.the_account_is_disconnecting_please_wait_a_moment)
+    }
 
     private fun showLoadingDialog(conn: Boolean) {
         val title = if(conn) titleConnect else titleDisConnect
@@ -198,6 +206,7 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
 
             Log.e(TAG, "bind_list: type=${it.type}    nick=${it.nick}" )
 
+
             if(it.type == "Twitter"){
                 x = it
                 mDataBinding.tvX.text = "@${it.nick}"
@@ -219,6 +228,10 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
                 mDataBinding.btnDisconnectWallet.isVisible = true
             }
         }
+
+        mDataBinding.btnConnectX.isVisible = false
+        mDataBinding.btnConnectDiscord.isVisible = false
+        mDataBinding.btnConnectWallet.isVisible = false
 
         if(mDataBinding.btnDisconnectX.isGone){
             mDataBinding.btnConnectX.isVisible = true

@@ -44,4 +44,20 @@
     <string name="yesterday">昨天</string>
     <string name="earlier">更早些时候</string>
     <string name="ding_ding_ding">叮、叮、叮... 等待新消息出现</string>
+    <string name="connecting">正在连接</string>
+    <string name="the_account_is_connecting_please_wait_a_moment">账户正在连接，请稍等</string>
+    <string name="disconnecting">断连账户</string>
+    <string name="the_account_is_disconnecting_please_wait_a_moment">账户正在解绑，请稍等</string>
+    <string name="connect">连接</string>
+    <string name="connected_accounts">已连接账户</string>
+    <string name="web3_wallet">Web3 钱包</string>
+    <string name="sconnect">连接</string>
+    <string name="cannot_disconnect">无法断开连接</string>
+    <string name="please_keep_at_least_one_account_connected">请保留至少一个连接账户</string>
+    <string name="okay">好的</string>
+    <string name="disconnect_account">断连账户</string>
+    <string name="disconnect">断开连接</string>
+    <string name="dis_1">你确定要解除绑定</string>
+    <string name="dis_2">钱包</string>
+    <string name="dis_3">账户: </string>
 </resources>

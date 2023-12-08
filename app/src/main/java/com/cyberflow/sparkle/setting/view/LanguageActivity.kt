@@ -7,8 +7,14 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.LoginResponseData
+import com.cyberflow.base.net.Api
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.databinding.ActivityLanguageBinding
+import com.drake.net.Post
+import com.drake.net.utils.scopeDialog
+import com.drake.net.utils.withMain
 import com.hjq.language.LocaleContract
 import com.hjq.language.MultiLanguages
 
@@ -43,11 +49,19 @@ class LanguageActivity : BaseDBAct<BaseViewModel, ActivityLanguageBinding>() {
 
     private fun restartApp(restart: Boolean) {
         Log.e(TAG, "restartApp: restart=$restart")
-        if (restart) {
-           /* startActivity(Intent(this, SettingsActivity::class.java))
-            overridePendingTransition(com.cyberflow.base.resources.R.anim.activity_alpha_in, com.cyberflow.base.resources.R.anim.activity_alpha_out)
-            finish()*/
-            restartApp(this)
+
+        scopeDialog {
+            val data = Post<LoginResponseData>(Api.USER_DETAIL) {
+                json("open_uid" to CacheUtil.getUserInfo()?.user?.open_uid)
+            }.await()
+            data?.let {
+                val cache = CacheUtil.getUserInfo()
+                cache?.user = data.user
+                CacheUtil.setUserInfo(cache)
+                withMain {
+                    restartApp(this@LanguageActivity)
+                }
+            }
         }
     }
 

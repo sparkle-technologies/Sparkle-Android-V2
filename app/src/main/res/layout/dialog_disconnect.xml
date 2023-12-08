@@ -15,7 +15,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_30"
         android:fontFamily="@font/poppins_bold"
-        android:text="Disconnect account"
+        android:text="@string/disconnect_account"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_18"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -50,7 +50,7 @@
         app:view_bg="@drawable/register_btn_next_white"
         app:view_disable="false"
         app:view_shadow_distance="1dp"
-        app:view_text="Disconnect"
+        app:view_text="@string/disconnect"
         app:view_text_bold="true"
         app:view_text_color="@color/color_D93333"
         app:view_text_size="@dimen/sp_17" />

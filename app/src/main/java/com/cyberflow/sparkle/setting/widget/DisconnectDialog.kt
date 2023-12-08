@@ -102,7 +102,12 @@ class DisconnectDialog {
     private fun prepare() {
         Log.e(TAG, "prepare: $bindBean" )
         bindBean?.let {
-            tvHint?.text = "Are you sure you want to Disconnect the ${it.type} account: ${it.nick}."
+            val first = context?.getString(com.cyberflow.sparkle.R.string.dis_1)
+            val typeName = if(it.type == "MetaMask") context?.getString(com.cyberflow.sparkle.R.string.dis_2) else it.type
+            val account = context?.getString(com.cyberflow.sparkle.R.string.dis_3)
+            val full = "$first$typeName$account${it.nick}"
+
+            tvHint?.text = full
                 .replaceSpanFirst(it.nick, ignoreCase = true){
                     HighlightSpan("#737373", Typeface.defaultFromStyle(Typeface.BOLD))
                 }
