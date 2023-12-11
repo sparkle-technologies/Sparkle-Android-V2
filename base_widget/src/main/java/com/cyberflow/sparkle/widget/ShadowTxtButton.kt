@@ -3,7 +3,6 @@ package com.cyberflow.sparkle.widget
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -120,7 +119,7 @@ class ShadowTxtButton : ConstraintLayout {
         }
 
         if(txt_size > 0){
-            Log.e("TAG", "============================= txt_size=$txt_size"  )
+//            Log.e("TAG", "============================= txt_size=$txt_size"  )
             tvNormal?.setTextSize(TypedValue.COMPLEX_UNIT_PX, txt_size)
             tvClicking?.setTextSize(TypedValue.COMPLEX_UNIT_PX, txt_size)
         }
@@ -152,7 +151,7 @@ class ShadowTxtButton : ConstraintLayout {
     }
 
     fun disableBg(disable: Boolean){
-        Log.e("TAG", "disableBg: disable=$disable", )
+//        Log.e("TAG", "disableBg: disable=$disable", )
         this.disable = disable
         if(disable){
             ResourcesCompat.getColor(resources, txt_disable_color, null).apply {

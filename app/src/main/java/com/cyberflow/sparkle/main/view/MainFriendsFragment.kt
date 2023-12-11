@@ -293,15 +293,13 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     private val unRead = HashMap<String, Int>()
 
     private fun merge(contactList: List<IMFriendInfo>?, imConversationList: List<EaseConversationInfo>?) {
-
         Log.e(TAG, "merge: allContactList.size=${contactList?.size}  data.size=${imConversationList?.size}" )
-
-        contactList?.forEach {
+        /*contactList?.forEach {
             Log.e(TAG, "merge:IMFriendInfo: $it", )
         }
         imConversationList?.forEach {
             Log.e(TAG, "merge:EaseConversationInfo: $it", )
-        }
+        }*/
 
         if(contactList.isNullOrEmpty()){
             showConversationList(null)

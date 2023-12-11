@@ -61,4 +61,9 @@
     <string name="dis_1">Are you sure you want to Disconnect the </string>
     <string name="dis_2">wallet</string>
     <string name="dis_3"> account: </string>
+    <string name="weeks">weeks</string>
+    <string name="days">days</string>
+    <string name="hours">hours</string>
+    <string name="minutes">minutes</string>
+    <string name="just_now">just now</string>
 </resources>

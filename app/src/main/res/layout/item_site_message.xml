@@ -129,13 +129,10 @@
                     android:id="@+id/tv_msg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
                     android:fontFamily="@font/poppins_light"
-                    android:maxLines="2"
-                    android:text="@{m.text}"
-                    android:textColor="@color/color_7d7d80"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/sp_12"
-                    tools:text="Hi, glad to see you...Hi, glad to see you..." />
+                    tools:text="Hi, glad to s  see you,glad to see you, glad to see youglad to see you, glad to see you" />
 
             </LinearLayout>
 

@@ -98,8 +98,6 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        Log.e(TAG, "initView: ")
-
         mDatabind.llBack.setOnClickListener {
             if(mActivity is MainActivityV2){
 
@@ -230,8 +228,6 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
     private var action = CHAT
 
     override fun initData() {
-        Log.e(TAG, "initData: ")
-
         if (open_uid.isNullOrEmpty()) {  // 加载自己的主页
             open_uid = CacheUtil.getUserInfo()?.user?.open_uid.orEmpty()
         }

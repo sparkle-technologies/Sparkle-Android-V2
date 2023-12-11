@@ -146,7 +146,7 @@ public class DateUtils {
 
     public static int dayDiff(long timestampNow, long timestampToCheck) {
         // 获取当前日期和时间戳
-        Log.e("TAG", "dayDiff: timestampNow="+ timestampNow+ "\t timestampToCheck="+timestampToCheck );
+//        Log.e("TAG", "dayDiff: timestampNow="+ timestampNow+ "\t timestampToCheck="+timestampToCheck );
         Calendar calendarNow = Calendar.getInstance();
         calendarNow.setTimeInMillis(timestampNow);
         Date now = calendarNow.getTime();
