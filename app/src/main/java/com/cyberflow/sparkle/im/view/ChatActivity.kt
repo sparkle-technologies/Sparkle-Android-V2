@@ -32,6 +32,25 @@ import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.model.EaseEvent
 import com.therouter.TheRouter
 
+/**
+ * UI
+ *  跑马灯  30个问题  跑马灯效果  1.点击问题  2.点击未读消息  3.普通点击   三种方式
+ *  聊天界面  问题列表  5个一页  可刷新换问题显示  单个点击直接发送  只要发完就彻底隐藏  悬浮在 EaseChatInputMenu 上面
+ *  发送消息后不能继续发送  需要等待IM回复才解锁  显示 typing
+ *  结果分享   一条消息拆成俩份  第一个是图片  第二个是内容  右下角带一个分享按钮  点击出弹窗
+ *
+ * 数据逻辑
+ *  每次发送消息  先调用IM接口  再调用后端接口  tarot/chat  期间不能继续发送消息了
+ *  普通消息  校验消息   结果消息
+ *      普通消息 直接显示
+ *      校验消息 如果校验通过  跑 塔罗牌
+ *      结果消息 显示到聊天界面上
+ *
+ * 要做到事情
+ *  UI 画好  跑马灯  聊天界面的问题列表  typing  结果内容分享-最后面再做
+ *  聊天界面改造   尤其是正常聊天界面和cora的不同之处
+ *
+ */
 class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     ChatFragment.OnFragmentInfoListener {
 

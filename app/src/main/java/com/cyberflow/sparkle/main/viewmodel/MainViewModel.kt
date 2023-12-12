@@ -9,6 +9,7 @@ import com.cyberflow.base.model.IMFriendInfo
 import com.cyberflow.base.model.IMFriendList
 import com.cyberflow.base.model.IMFriendRequest
 import com.cyberflow.base.model.IMFriendRequestList
+import com.cyberflow.base.model.IMQuestionList
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.bus.SingleSourceLiveData
 import com.cyberflow.base.viewmodel.BaseViewModel
@@ -37,9 +38,13 @@ class MainViewModel : BaseViewModel() {
 
     var contactObservable: MutableLiveData<IMFriendList> = MutableLiveData()
     fun loadContactList()  = scopeNet {
-        contactObservable.value = Post<IMFriendList>(Api.RELATIONSHIP_FRIEND_LIST) {}.await()
+        contactObservable.value = Post<IMFriendList>(Api.IM_QUESTIONS) {}.await()
     }
 
+    var imQuestionsObservable: MutableLiveData<IMQuestionList> = MutableLiveData()
+    fun loadIMQuestions() = scopeNet {
+        imQuestionsObservable.value = Post<IMQuestionList>(Api.RELATIONSHIP_FRIEND_LIST) {}.await()
+    }
 
     // ------------------------------------------- IM -------------------------------------------
 

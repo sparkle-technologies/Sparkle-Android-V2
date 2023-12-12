@@ -65,3 +65,21 @@ data class IMConversationCache(
     var num: Int = 1,
     var bgColor: String = ""
 )
+
+@Serializable
+data class IMQuestionList(
+    var questions: List<String>? = null
+)
+
+@Serializable
+data class AIOResult(
+    val result: String,
+    val tarotCards: List<TarotCard>
+)
+
+@Serializable
+data class TarotCard(
+    val imgUrl: String,
+    val name: String,
+    val uprightOrReversed: String
+)

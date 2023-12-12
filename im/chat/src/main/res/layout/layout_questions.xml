@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="139dp"
+        android:background="@drawable/aio_bg_question">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/dp_15"
+            android:paddingTop="@dimen/dp_11"
+            android:paddingBottom="@dimen/dp_11">
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/color_8B82DB"
+                android:textSize="@dimen/sp_14"
+                tools:text="When can I become rich ?" />
+
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/color_8B82DB"
+                android:textSize="@dimen/sp_14"
+                tools:text="When can I meet my Mr. Right ?" />
+
+            <TextView
+                android:id="@+id/tv3"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/color_8B82DB"
+                android:textSize="@dimen/sp_14"
+                tools:text="When can I meet my Mr. Right ?" />
+
+            <TextView
+                android:id="@+id/tv4"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/color_8B82DB"
+                android:textSize="@dimen/sp_14"
+                tools:text="When can I meet my Mr. Right ?" />
+
+            <TextView
+                android:id="@+id/tv5"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/color_8B82DB"
+                android:textSize="@dimen/sp_14"
+                tools:text="When can I meet my Mr. Right ?" />
+
+        </LinearLayout>
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/aio_ic_questions_fresh" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -301,7 +301,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
             freshData()
         }
         viewModel.acceptFriendObservable.observe(this){
-            viewModel.IM_acceptFriend(it)
+//            viewModel.IM_acceptFriend(it)
             freshData()
         }
 

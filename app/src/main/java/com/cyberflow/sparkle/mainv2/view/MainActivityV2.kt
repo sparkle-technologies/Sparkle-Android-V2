@@ -7,6 +7,7 @@ import android.view.KeyEvent
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
@@ -91,6 +92,7 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
         loadFriendRequest()
         loadFriendList()
         loadIMConversations()
+        loadIMQuestions()
     }
 
     private fun initDataObserver() {
@@ -134,6 +136,12 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
             viewModel.conversationList = it.orEmpty()
             showMergedData()
         }
+
+        // IM questions for AIO
+        viewModel.imQuestionsObservable?.observe(this) {
+            CacheUtil.setAIOQuestions(it)
+            friends.showQuestions()
+        }
     }
 
     private fun showMergedData() {
@@ -154,6 +162,10 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
                 friends.showConversationListFromCache(conversationCache)
             }
         }
+    }
+
+    private fun loadIMQuestions() {
+        viewModel.loadIMQuestions()
     }
 
     private fun loadFriendRequest() {
@@ -189,7 +201,7 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
     }
 
     fun setUnRead(unreadTotalCount: Int) {
-         mDataBinding.bottomNarBar.setNum(unreadTotalCount)
+        mDataBinding.bottomNarBar.setNum(unreadTotalCount)
     }
 
     fun setSiteUnRead(unreadTotalCount: Int){

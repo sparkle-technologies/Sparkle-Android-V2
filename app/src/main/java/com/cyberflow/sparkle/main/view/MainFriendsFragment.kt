@@ -14,17 +14,20 @@ import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.IMConversationCache
 import com.cyberflow.base.model.IMFriendInfo
 import com.cyberflow.base.model.IMFriendRequest
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainFriendsBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.ItemFriendsFeedEmptyBinding
+import com.cyberflow.sparkle.databinding.ItemOfficialCoraBinding
 import com.cyberflow.sparkle.databinding.MainFriendsFeedBinding
 import com.cyberflow.sparkle.databinding.MainOfficialBinding
 import com.cyberflow.sparkle.im.view.ChatActivity
 import com.cyberflow.sparkle.im.view.IMContactListAct
 import com.cyberflow.sparkle.im.view.IMScanAct
 import com.cyberflow.sparkle.im.view.IMSearchFriendAct
+import com.cyberflow.sparkle.main.adapter.QuestionsAdapter
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.widget.ShadowImgButton
@@ -35,6 +38,7 @@ import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.hyphenate.chat.EMConversation
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
+import com.youth.banner.Banner
 import kotlinx.coroutines.launch
 
 class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBinding>() {
@@ -92,6 +96,11 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
             addType<FriendsEmptyModel>(R.layout.item_friends_feed_empty)
             onCreate {
                 when (itemViewType) {
+                    R.layout.item_official_cora -> {
+                        banner = getBinding<ItemOfficialCoraBinding>().banner  as? Banner<HoroscopeReq, HoroscopeAdapter>
+                        coraUnread = getBinding<ItemOfficialCoraBinding>().coraUnread
+                        showQuestions()
+                    }
                     R.layout.main_official -> {
                         getBinding<MainOfficialBinding>().rv.divider {
                             orientation = DividerOrientation.VERTICAL
@@ -347,6 +356,8 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         }
     }
 
+    var coraUnreadCount = 0
+
     fun showConversationListFromCache(data: List<IMConversationCache>?) {
         var modelData = arrayListOf<Any>()
 //        modelData.add(HeaderModel(title = "Friends Feed"))
@@ -378,6 +389,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                 }
 
                 (requireActivity() as? MainActivityV2)?.setUnRead(totalUnreadCount)
+                showQuestions()
 
                 if (friendMessageList.size <= 6) {
                     friendMessageList.add(FriendsAddModel())
@@ -440,5 +452,32 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
             mDatabind.rv.models = allData
         }
         mDatabind.page.finishRefresh()
+    }
+
+    private var banner : Banner<HoroscopeReq, HoroscopeAdapter>? = null
+    private var coraUnread : TextView? = null
+
+    fun showQuestions() {
+        val questions = CacheUtil.getAIOQuestions()
+        if(coraUnreadCount > 0) {
+            // hide banner, show cora unread msg
+            banner?.isVisible = false
+            coraUnread?.isVisible = true
+            coraUnread?.text = "You have $coraUnreadCount new messages"
+        }else{
+            if(questions?.questions.isNullOrEmpty() || banner == null) {
+                return
+            }
+            banner?.isVisible = true
+            coraUnread?.isVisible = false
+            banner?.also {
+                it.addBannerLifecycleObserver(this)
+                    .setAdapter(QuestionsAdapter(questions?.questions.orEmpty()))
+                    .setOnBannerListener { data, position ->
+                        // todo
+                        Log.e(TAG, "onBannerClick: data=$data   position=$position")
+                    }
+            }
+        }
     }
 }

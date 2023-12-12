@@ -3,6 +3,7 @@ package com.cyberflow.base.util
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
+import com.cyberflow.base.model.IMQuestionList
 import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.net.GsonConverter
 import com.tencent.mmkv.MMKV
@@ -15,6 +16,7 @@ object CacheUtil {
     private const val NATIVE_MIX_IMGS = "sparkle_native_mix_imgs"
     const val WALLET_NAME = "sparkle_wallet_name"
     private const val DAILY_HOROSCOPE_INFO = "sparkle_daily_horoscope_info"
+    private const val AIO_QUESTIONS = "sparkle_aio_questions"
 
     const val UNIPASS_PUBK = "sparkle_unipass_pubk"
     const val UNIPASS_PRIK = "sparkle_unipass_prik"
@@ -44,6 +46,28 @@ object CacheUtil {
             val json = GsonConverter.gson.toJson(obj)
             Log.e("TAG", "setUserInfo: $obj")
             kv.encode(USERINFO, json)
+        }
+    }
+
+    fun setAIOQuestions(obj: IMQuestionList?) {
+        val kv = getMMKV()
+        if (obj == null) {
+            Log.e("TAG", "setUserInfo:obj is null")
+            kv.encode(AIO_QUESTIONS, "")
+        } else {
+            val json = GsonConverter.gson.toJson(obj)
+            Log.e("TAG", "setUserInfo: $obj")
+            kv.encode(AIO_QUESTIONS, json)
+        }
+    }
+
+    fun getAIOQuestions(): IMQuestionList? {
+        val kv = getMMKV()
+        val str = kv.decodeString(AIO_QUESTIONS)
+        return if (TextUtils.isEmpty(str)) {
+            null
+        } else {
+            GsonConverter.gson.fromJson<IMQuestionList>(str, IMQuestionList::class.java)
         }
     }
 

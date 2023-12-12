@@ -11,6 +11,9 @@ object Api {
     const val YEARLY_HOROSCOPE = "stars-cipher/user/yearly_horoscope"
 
     const val IM_USER_SEARCH = "stars-cipher/search"
+    const val IM_QUESTIONS = "sparkle-llm/tarot/get-question-list"
+    const val IM_CHAT = "sparkle-llm/tarot/chat"
+
 
     const val GET_IMAGE_URLS = "stars-cipher/get_user_image_url"
     const val USER_DETAIL = "stars-cipher/user/detail"
@@ -31,5 +34,7 @@ object Api {
 
 
     const val SITE_MESSAGE = "sparkle-msg-notify/site_message"
+
+
 
 }
