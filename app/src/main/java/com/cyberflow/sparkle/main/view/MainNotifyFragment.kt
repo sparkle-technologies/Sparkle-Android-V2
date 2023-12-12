@@ -17,6 +17,7 @@ import com.cyberflow.sparkle.databinding.ItemSiteMessageBodyBinding
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.profile.view.ProfileAct
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.PageRefreshLayout
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
@@ -119,6 +120,14 @@ class MainNotifyFragment : BaseDBFragment<BaseViewModel, FragmentMainNotifyBindi
             }else{
                 mDatabind.page.finishLoadMore()
             }
+        }
+        mDatabind?.page?.onError {
+            findViewById<ShadowTxtButton>(R.id.btn).setClickListener(object : ShadowTxtButton.ShadowClickListener {
+                override fun clicked(disable: Boolean) {
+                    mDatabind?.page?.index = 1
+                    mDatabind?.page?.request()
+                }
+            })
         }
         mDatabind.page.autoRefresh()
     }
