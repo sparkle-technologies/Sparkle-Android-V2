@@ -201,6 +201,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
             onBind {
                 getBinding<ItemImRequestBinding>().apply {
                     val model = getModel<FriendRequest>()
+
                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
                     cardview.setOnClickListener {
                         goProfile(model)

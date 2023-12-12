@@ -1,11 +1,6 @@
 package com.cyberflow.sparkle.main.view
 
-import android.graphics.Color
 import android.os.Bundle
-import android.text.Layout
-import android.text.StaticLayout
-import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.cyberflow.base.fragment.BaseDBFragment
@@ -20,7 +15,6 @@ import com.cyberflow.sparkle.databinding.FragmentMainNotifyBinding
 import com.cyberflow.sparkle.databinding.ItemSiteMessageBinding
 import com.cyberflow.sparkle.databinding.ItemSiteMessageBodyBinding
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity
-import com.cyberflow.sparkle.main.widget.ExpandTextView
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.profile.view.ProfileAct
 import com.drake.brv.PageRefreshLayout
@@ -30,8 +24,6 @@ import com.drake.brv.utils.setup
 import com.drake.net.Post
 import com.drake.net.utils.scope
 import com.drake.net.utils.withMain
-import com.drake.spannable.replaceSpanFirst
-import com.drake.spannable.span.ColorSpan
 import com.luck.picture.lib.utils.DateUtils
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
@@ -40,7 +32,7 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainNotifyFragment : BaseDBFragment<BaseViewModel, FragmentMainNotifyBinding>() {
 
-    private fun setSpan(tv: TextView ,txt: String, timeStamp: Long) {
+    private fun setSpan(tv: TextView, txt: String, timeStamp: Long) {
         if(txt.isNullOrEmpty()) return
         val min =  (System.currentTimeMillis()/1000 - timeStamp) / 60f
         var timeTxt = ""

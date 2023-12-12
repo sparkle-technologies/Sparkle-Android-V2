@@ -21,7 +21,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_56">
+            android:minHeight="@dimen/dp_56"
+            android:layout_height="wrap_content">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardview"
@@ -100,7 +101,6 @@
 
             </FrameLayout>
 
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -125,17 +125,22 @@
                     android:textSize="@dimen/sp_17"
                     tools:text="Arc Chan" />
 
-                <TextView
+                <io.github.glailton.expandabletextview.ExpandableTextView
                     android:id="@+id/tv_msg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_light"
+                    app:collapsedLines="2"
+                    app:animDuration="500"
+                    app:readMoreText="More"
+                    app:readLessText="Less"
+                    app:ellipsizeTextColor="@color/color_8B82DB"
+                    app:textMode="line"
+                    app:isUnderlined="true"
+                    app:isExpanded="false"
+                    app:expandType="layout"
                     android:text="@{m.msg}"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/color_7d7d80"
-                    android:textSize="@dimen/sp_12"
-                    tools:text="Hi, glad to see you..." />
+                    tools:text="hi, glad to see you..."
+                    app:layout_constraintVertical_bias="0.0" />
 
             </LinearLayout>
 

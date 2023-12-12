@@ -3,7 +3,6 @@ package com.cyberflow.base.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
@@ -48,7 +47,7 @@ fun View.safeClick(debounceInterval: Long = 1000L, onClickListener: (view: View)
     }
 }
 
-
+//https://cloud.tencent.com/developer/article/1734017
 /**
  * 设置textView结尾...后面显示的文字和颜色
  * @param context 上下文
@@ -91,11 +90,8 @@ fun toggleEllipsize(
                 ssb.setSpan(ForegroundColorSpan(context.resources.getColor(endColorID)), temp.length - endText.length, temp.length, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
                 textView.text = ssb
             }
-            if (Build.VERSION.SDK_INT > 16) {
-                textView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            } else {
-                textView.viewTreeObserver.removeGlobalOnLayoutListener(this)
-            }
+            textView.viewTreeObserver.removeOnGlobalLayoutListener(this)
         }
     })
 }
+

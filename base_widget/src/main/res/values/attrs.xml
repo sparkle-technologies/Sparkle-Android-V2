@@ -224,4 +224,37 @@
         <!-- 圆角矩形宽高相等,取较宽高中大值-->
         <attr name="mv_isWidthHeightEqual" format="boolean"/>
     </declare-styleable>
+
+    <declare-styleable name="ExpandableTextView">
+        <attr name="collapsedLines" format="integer"/>
+        <attr name="animDuration" format="integer"/>
+        <attr name="readMoreText" format="string"/>
+        <attr name="readLessText" format="string"/>
+        <attr name="anchorTextColor" format="color"/>
+        <attr name="anchorPoint" format="integer"/>
+        <attr name="isExpanded" format="boolean"/>
+        <attr name="textMode" format="enum">
+            <enum name="length" value="0"/>
+            <enum name="line" value="1"/>
+        </attr>
+        <attr name="foregroundColor" format="color" />
+        <attr name="ellipsizeText" format="string" />
+        <attr name="isUnderlined" format="boolean" />
+        <attr name="ellipsizeTextColor" format="color" />
+        <attr name="expandType" format="enum">
+            <enum name="layout" value="0"/>
+            <enum name="popup" value="1"/>
+        </attr>
+
+        <!--        <attr name="expandToggleType" format="enum">-->
+        <!--            <enum name="ImageButton" value="0"/>-->
+        <!--            <enum name="TextView" value="1"/>-->
+        <!--        </attr>-->
+        <!--        <attr name="expandableTextId" format="reference"/>-->
+        <!--        <attr name="expandCollapseToggleId" format="reference"/>-->
+        <!--        <attr name="expandToggleOnTextClick" format="boolean"/>-->
+    </declare-styleable>
+
+    <attr name="expandableTextView" format="reference"/>
+
 </resources>
