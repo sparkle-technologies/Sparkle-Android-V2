@@ -38,6 +38,7 @@ public interface EaseConstant {
     String EXTRA_CONVERSATION_ID = "conversationId";
     String EXTRA_CONVERSATION_AVATAR = "conversationAvatar";
     String EXTRA_CONVERSATION_NICK_NAME = "conversationNickName";
+    String EXTRA_CONVERSATION_CORA_QUESTION = "conversationCoraQuestion";
     String EXTRA_IS_ROAM = "isRoaming";
 
     String MESSAGE_TYPE_TXT = "txt";

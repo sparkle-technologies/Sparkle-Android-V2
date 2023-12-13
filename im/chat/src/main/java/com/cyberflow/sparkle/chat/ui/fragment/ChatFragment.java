@@ -58,6 +58,7 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -165,8 +166,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
         initAnima();
         initCustomView();
+        infoListener.onReady();
     }
-
 
     private void setSwindleLayoutInChatFragemntHead() {
         EaseChatMessageListLayout messageListLayout = chatLayout.getChatMessageListLayout();
@@ -723,6 +724,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         return new MeOnCameraInterceptListener();
     }
 
+
     /**
      * 自定义拍照
      */
@@ -1012,6 +1014,12 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         void onChatError(int code, String errorMsg);
 
         void onOtherTyping(String action);
+
+        void onReady();   // fragment 初始化完成  显示 coar ui
+
+        void sendChatInfoToServer(String msgId, String msg);  // 每次发送消息  需要将消息透传给后段
+
+        void handleAIOMessage(EMMessage message);   // 接收到自定义消息
     }
 
     @Override
@@ -1100,5 +1108,61 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             }
         });
         dialog.show();
+    }
+
+    private boolean isCore = false;
+
+    // 初始化 将cora数据传进来
+    public void initCora(boolean cora, String question) {
+        if(cora){
+            isCore = true;
+            if(question.isEmpty()){
+                chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();  // 展示 Hi Cora面板
+            }else{  // 直接发送问题
+                chatLayout.clickQuestion(question);
+            }
+        }
+    }
+
+    // 每次发送消息给环信IM后的回调
+    @Override
+    public void onChatSuccess(EMMessage message) {
+        Log.e(TAG, "onChatSuccess  after send message : " + message.getMsgId() );
+        if(isCore){
+            EMTextMessageBody body = (EMTextMessageBody) message.getBody();
+            String msgId = message.getMsgId();
+            String msg = body.getMessage();
+            infoListener.sendChatInfoToServer(msgId, msg);
+        }
+    }
+
+    // 收到 特殊消息 考虑打开 flutter 塔罗
+    @Override
+    public void onReceiveAIOMessage(EMMessage message) {
+        infoListener.handleAIOMessage(message);
+    }
+
+
+    // 无法编辑或发送
+    public void cannotEditOrSend() {
+        chatLayout.inputMenu.getPrimaryMenu().startWaitingStatus();
+    }
+
+    // 可以编辑或发送  恢复正常
+    public void canEditOrSend() {
+        chatLayout.inputMenu.getPrimaryMenu().endWaitingStatus();
+    }
+
+    // 隐藏 Hi Cora 按钮 因为已经发送出去了
+    public void hideHiCoraBtn() {
+        chatLayout.inputMenu.getPrimaryMenu().hideHiCoraBtn();
+    }
+
+    public void showQuestions() {
+        chatLayout.initQuestionsList();
+    }
+
+    public void hideQuestions() {
+        chatLayout.dismissQuestion();
     }
 }

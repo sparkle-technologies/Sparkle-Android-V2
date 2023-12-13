@@ -69,6 +69,13 @@ public interface OnChatLayoutListener {
     }
 
     /**
+     * 接收到AIO消息的回调
+     *
+     * @param message
+     */
+    default void onReceiveAIOMessage(EMMessage message) {}
+
+    /**
      * 聊天中错误信息
      *
      * @param code

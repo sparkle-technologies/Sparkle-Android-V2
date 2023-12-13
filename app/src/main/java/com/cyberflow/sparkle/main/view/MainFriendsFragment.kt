@@ -15,6 +15,7 @@ import com.cyberflow.base.model.IMConversationCache
 import com.cyberflow.base.model.IMFriendInfo
 import com.cyberflow.base.model.IMFriendRequest
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.ConstantGlobal
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainFriendsBinding
@@ -49,6 +50,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     private var actVm: MainViewModel? = null
     override fun onAttach(activity: Activity) {
         super.onAttach(activity)
+        CacheUtil.setCoraInfo(null)   // every time app launched, clear cora info cache, so it well be updated at ChatActivity
         actVm = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
     }
 
@@ -98,7 +100,8 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                 when (itemViewType) {
                     R.layout.item_official_cora -> {
                         banner = getBinding<ItemOfficialCoraBinding>().banner  as? Banner<HoroscopeReq, HoroscopeAdapter>
-                        coraUnread = getBinding<ItemOfficialCoraBinding>().coraUnread
+                        tvCoraUnread = getBinding<ItemOfficialCoraBinding>().coraUnread
+                        Log.e(TAG, "initListView: showQuestions", )
                         showQuestions()
                     }
                     R.layout.main_official -> {
@@ -163,8 +166,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                                     context,
                                     conversationId = model.open_uid,
                                     avatar = model.avatar,
-                                    nickName = model.nickname,
-                                    chatType = 1
+                                    nickName = model.nickname
                                 )
                             }
                             onClick(R.id.bg_new_friend) {
@@ -186,6 +188,12 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
             onBind {
                 when (itemViewType) {
+                    R.layout.item_official_cora -> {
+                        getBinding<ItemOfficialCoraBinding>().root.setOnClickListener {
+                            chatWithCora(null)
+                        }
+                    }
+
                     R.layout.main_official -> {
                         val model = getModel<OfficialModel>()
                         getBinding<MainOfficialBinding>().rv.models = model.names
@@ -309,12 +317,10 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         imConversationList?.forEach {
             Log.e(TAG, "merge:EaseConversationInfo: $it", )
         }*/
-
         if(contactList.isNullOrEmpty()){
             showConversationList(null)
             return
         }
-
         lifecycleScope.launch {
             contactList?.associate {
                 it.open_uid.replace("-", "_") to it
@@ -332,9 +338,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                 }.orEmpty()
 
                 val mark = conversaction.map { it.open_uid.replace("-", "_") }.toSet()
-
 //                Log.e(TAG, "merge:mark= $mark", )
-
                 val contactData = contactOpenUidList.filter {
                     !mark.contains(it)
                 }.mapNotNull {
@@ -455,29 +459,51 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     }
 
     private var banner : Banner<HoroscopeReq, HoroscopeAdapter>? = null
-    private var coraUnread : TextView? = null
+    private var tvCoraUnread : TextView? = null
 
     fun showQuestions() {
         val questions = CacheUtil.getAIOQuestions()
+        Log.e(TAG, "showQuestions: question.list=${questions?.questions?.size}  coraUnreadCount=$coraUnreadCount   banner=$banner   coraUnread=$tvCoraUnread" )
         if(coraUnreadCount > 0) {
             // hide banner, show cora unread msg
             banner?.isVisible = false
-            coraUnread?.isVisible = true
-            coraUnread?.text = "You have $coraUnreadCount new messages"
+            tvCoraUnread?.isVisible = true
+            if(coraUnreadCount == 1) {
+                tvCoraUnread?.text = "You have $coraUnreadCount new message"
+            }else{
+                tvCoraUnread?.text = "You have $coraUnreadCount new messages"
+            }
+            tvCoraUnread?.setOnClickListener {
+                chatWithCora(null)
+            }
         }else{
             if(questions?.questions.isNullOrEmpty() || banner == null) {
                 return
             }
             banner?.isVisible = true
-            coraUnread?.isVisible = false
+            tvCoraUnread?.isVisible = false
             banner?.also {
                 it.addBannerLifecycleObserver(this)
                     .setAdapter(QuestionsAdapter(questions?.questions.orEmpty()))
                     .setOnBannerListener { data, position ->
-                        // todo
                         Log.e(TAG, "onBannerClick: data=$data   position=$position")
+                        chatWithCora(data?.toString())
                     }
             }
         }
+    }
+
+    // go chat with cora
+    // if question is null,
+    //      just open chat page,
+    //      otherwise send a question to cora, no more hi cora greeting button
+    private fun chatWithCora(question: String?) {
+        var url = ""
+        var name = "Cora"
+        CacheUtil.getCoraInfo()?.apply {
+            url = user?.avatar.orEmpty()
+            name = user?.nick ?: "Cora"
+        }
+        ChatActivity.launch(requireActivity(), conversationId = ConstantGlobal.CORA_OPEN_UID_DEV, avatar = url, nickName = name, question = question)
     }
 }

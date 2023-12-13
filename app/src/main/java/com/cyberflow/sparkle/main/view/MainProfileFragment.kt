@@ -134,7 +134,7 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
                     when (action) {
                         CHAT -> {   // go chatActivity   avatar nickName
                             user?.also {
-                                ChatActivity.launch(mActivity, open_uid.replace("-", "_"), it.avatar, it.nick, 1)
+                                ChatActivity.launch(mActivity, open_uid.replace("-", "_"), it.avatar, it.nick)
                             }
                         }
 

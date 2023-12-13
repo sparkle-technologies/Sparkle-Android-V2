@@ -38,12 +38,12 @@ class MainViewModel : BaseViewModel() {
 
     var contactObservable: MutableLiveData<IMFriendList> = MutableLiveData()
     fun loadContactList()  = scopeNet {
-        contactObservable.value = Post<IMFriendList>(Api.IM_QUESTIONS) {}.await()
+        contactObservable.value = Post<IMFriendList>(Api.RELATIONSHIP_FRIEND_LIST) {}.await()
     }
 
     var imQuestionsObservable: MutableLiveData<IMQuestionList> = MutableLiveData()
     fun loadIMQuestions() = scopeNet {
-        imQuestionsObservable.value = Post<IMQuestionList>(Api.RELATIONSHIP_FRIEND_LIST) {}.await()
+        imQuestionsObservable.value = Post<IMQuestionList>(Api.IM_QUESTIONS) {}.await()
     }
 
     // ------------------------------------------- IM -------------------------------------------

@@ -1,9 +1,12 @@
 package com.cyberflow.sparkle.main.adapter;
 
+
+import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.youth.banner.adapter.BannerAdapter;
@@ -18,9 +21,12 @@ public class QuestionsAdapter extends BannerAdapter<String, QuestionsAdapter.Ban
 
     @Override
     public BannerViewHolder onCreateHolder(ViewGroup parent, int viewType) {
-        TextView imageView = new TextView(parent.getContext());
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        return new BannerViewHolder(imageView);
+        TextView tv = new TextView(parent.getContext());
+        tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        tv.setTextColor(ResourcesCompat.getColor(parent.getContext().getResources(), com.cyberflow.base.resources.R.color.color_8B82DB, null));
+        tv.setMaxLines(1);
+        tv.setEllipsize(TextUtils.TruncateAt.END);
+        return new BannerViewHolder(tv);
     }
 
     @Override

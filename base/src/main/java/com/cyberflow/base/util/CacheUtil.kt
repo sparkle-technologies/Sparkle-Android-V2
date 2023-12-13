@@ -3,6 +3,7 @@ package com.cyberflow.base.util
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
+import com.cyberflow.base.model.DetailResponseData
 import com.cyberflow.base.model.IMQuestionList
 import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.net.GsonConverter
@@ -17,6 +18,7 @@ object CacheUtil {
     const val WALLET_NAME = "sparkle_wallet_name"
     private const val DAILY_HOROSCOPE_INFO = "sparkle_daily_horoscope_info"
     private const val AIO_QUESTIONS = "sparkle_aio_questions"
+    private const val CORA_INFO = "sparkle_cora_info"
 
     const val UNIPASS_PUBK = "sparkle_unipass_pubk"
     const val UNIPASS_PRIK = "sparkle_unipass_prik"
@@ -68,6 +70,26 @@ object CacheUtil {
             null
         } else {
             GsonConverter.gson.fromJson<IMQuestionList>(str, IMQuestionList::class.java)
+        }
+    }
+
+    fun setCoraInfo(obj: DetailResponseData?) {
+        val kv = getMMKV()
+        if (obj == null) {
+            kv.encode(CORA_INFO, "")
+        } else {
+            val json = GsonConverter.gson.toJson(obj)
+            kv.encode(CORA_INFO, json)
+        }
+    }
+
+    fun getCoraInfo(): DetailResponseData? {
+        val kv = getMMKV()
+        val str = kv.decodeString(CORA_INFO)
+        return if (TextUtils.isEmpty(str)) {
+            null
+        } else {
+            GsonConverter.gson.fromJson<DetailResponseData>(str, DetailResponseData::class.java)
         }
     }
 

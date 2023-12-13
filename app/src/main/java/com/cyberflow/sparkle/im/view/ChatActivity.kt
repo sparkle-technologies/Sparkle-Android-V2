@@ -8,7 +8,13 @@ import android.view.MotionEvent
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.DetailResponseData
+import com.cyberflow.base.net.Api
+import com.cyberflow.base.net.GsonConverter
+import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.ConstantGlobal
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.bus.LiveDataBus
@@ -24,13 +30,22 @@ import com.cyberflow.sparkle.chat.ui.goPreview
 import com.cyberflow.sparkle.chat.viewmodel.ChatViewModel
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel
 import com.cyberflow.sparkle.chat.viewmodel.parseResource
+import com.cyberflow.sparkle.flutter.FlutterProxyActivity
 import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ToastDialogHolder
+import com.drake.net.Post
+import com.drake.net.utils.scopeNetLife
+import com.drake.net.utils.withMain
 import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.chat.EMClient
+import com.hyphenate.chat.EMCustomMessageBody
+import com.hyphenate.chat.EMMessage
 import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.model.EaseEvent
 import com.therouter.TheRouter
+import io.flutter.embedding.engine.FlutterEngineCache
+import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.launch
 
 /**
  * UI
@@ -54,20 +69,26 @@ import com.therouter.TheRouter
 class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     ChatFragment.OnFragmentInfoListener {
 
-    var conversationId: String = ""
-    var avatar: String = ""
-    var nickName: String = ""
-    var chatType: Int = 0
+    private var isCora: Boolean = false
+    private var conversationId: String = ""
+    private var avatar: String = ""
+    private var nickName: String = ""
+    private var question: String = ""
+    private val chatType: Int = 1
 
     private val msgViewModel: MessageViewModel by viewModels()
 
     companion object {
-        fun launch(context: Context, conversationId: String, avatar: String, nickName:String,  chatType: Int) {
+
+        private val NONE = "NONE"
+        private val TYPING = "TYPING"
+
+        fun launch(context: Context, conversationId: String, avatar: String, nickName:String, question: String?="") {
             val intent = Intent(context, ChatActivity::class.java)
             intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
             intent.putExtra(EaseConstant.EXTRA_CONVERSATION_AVATAR, avatar)
             intent.putExtra(EaseConstant.EXTRA_CONVERSATION_NICK_NAME, nickName)
-            intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType)
+            intent.putExtra(EaseConstant.EXTRA_CONVERSATION_CORA_QUESTION, question)
             context.startActivity(intent)
         }
     }
@@ -79,6 +100,19 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     override fun initView(savedInstanceState: Bundle?) {
         intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_ID)?.apply {
             conversationId = this.replace("-", "_")
+            isCora = conversationId == ConstantGlobal.CORA_OPEN_UID_DEV.replace("-", "_")
+            if(isCora){
+                intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_CORA_QUESTION)?.apply {
+                    question = this
+                }
+                if(question.isNullOrEmpty()){
+                    showQuestionsList() // say hi cora, show question list
+                }else{
+                    // todo send , no "hi cora"
+                }
+                loadCoraInfo(conversationId)
+                initFlutter()
+            }
         }
         intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_AVATAR)?.apply {
             avatar = this
@@ -86,9 +120,8 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_NICK_NAME)?.apply {
             nickName = this
         }
-        chatType = intent.getIntExtra(EaseConstant.EXTRA_CHAT_TYPE, 0)
 
-        if (conversationId.isNullOrEmpty() || chatType == 0) {
+        if (conversationId.isNullOrEmpty()) {
             ToastUtil.show(this, "Invalid params")
             finish()
             return
@@ -112,19 +145,16 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     var fragment: ChatFragment? = null
 
     private fun initChatFragment() {
-        chatType?.also {
-            Bundle().apply {
-                fragment = ChatFragment()
-                putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
-                putInt(EaseConstant.EXTRA_CHAT_TYPE, it)
-                putString(DemoConstant.HISTORY_MSG_ID, "")
-                putBoolean(EaseConstant.EXTRA_IS_ROAM, DemoHelper.getInstance().model.isMsgRoaming)
-                fragment?.arguments = this
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.fl_fragment, fragment!!, "chat").commit()
-
-                fragment?.setOnFragmentInfoListener(this@ChatActivity)
-            }
+        Bundle().apply {
+            fragment = ChatFragment()
+            putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
+            putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType)
+            putString(DemoConstant.HISTORY_MSG_ID, "")
+            putBoolean(EaseConstant.EXTRA_IS_ROAM, DemoHelper.getInstance().model.isMsgRoaming)
+            fragment?.arguments = this
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fl_fragment, fragment!!, "chat").commit()
+            fragment?.setOnFragmentInfoListener(this@ChatActivity)
         }
     }
 
@@ -178,10 +208,10 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
 
     override fun onOtherTyping(action: String?) {
         action?.also {
-            if (it == "TypingBegin") {
+            if (it == TYPING) {
                 mDataBinding.tvTitle.text = getString(R.string.alert_during_typing)
             }
-            if (it == "TypingEnd") {
+            if (it == NONE) {
                 setDefaultTitle()
             }
         }
@@ -213,5 +243,124 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         } else {
             goMain()
         }
+    }
+
+    private fun loadCoraInfo(coraOpenUid: String) {
+        val info = CacheUtil.getCoraInfo()
+        if(info == null){   // update cora info here
+            scopeNetLife {
+                val data = Post<DetailResponseData>(Api.USER_DETAIL) {
+                    json("open_uid" to coraOpenUid.replace("_", "-"))
+                }.await()
+                data?.let {
+                    withMain {
+                        CacheUtil.setCoraInfo(it)
+                        avatar = it.user?.avatar.orEmpty()
+                        loadImage(mDataBinding.ivAvatar, avatar)
+                    }
+                }
+            }
+        }else{   // use cache multi times
+            avatar = info.user?.avatar.orEmpty()
+            loadImage(mDataBinding.ivAvatar, avatar)
+        }
+    }
+
+
+    private fun showQuestionsList(){
+        // todo
+    }
+
+    override fun onReady() {
+        fragment?.initCora(isCora, question)
+    }
+
+    override fun sendChatInfoToServer(msgId: String?, msg: String?) {
+        onOtherTyping(TYPING)
+        // cannot edit or send
+        fragment?.cannotEditOrSend()
+        scopeNetLife {
+            Post<String>(Api.IM_CHAT) {
+                json("msgId" to msgId, "msg" to msg)
+            }.await()
+            withMain {
+                if(msg.equals(getString(com.cyberflow.base.resources.R.string.hi_cora))){
+                    fragment?.showQuestions()
+                    fragment?.hideHiCoraBtn()
+                }else{
+                    questionStr = msg.orEmpty()
+                    fragment?.hideQuestions()
+                }
+                onOtherTyping(NONE)
+                fragment?.canEditOrSend()
+            }
+         }
+    }
+
+    private var questionStr = ""
+
+    // 这里逻辑和 com.hyphenate.easeui.widget.chatrow.EaseChatRowCustom.onSetUpView 一样
+    // 只做 flutter 相关操作  不做UI显示
+    override fun handleAIOMessage(message: EMMessage?) {
+        Log.e(TAG, "handleAIOMessage: flutterReady=$flutterReady" )
+        if(!flutterReady) return
+        val txtBody = message?.body as? EMCustomMessageBody
+        if (txtBody != null) {
+            val event = txtBody.event()
+            val customExt = txtBody.params
+            val msgId = customExt["msgId"] // 透传客户端问题消息 i
+            val msgType = customExt["msgType"] // 0-普通消息，1-校验消息，2-结果消息
+            val isValid = customExt["isValid"] // 可选字段（只有校验消息才有这个字段），是否有效，1-有效，0-无效
+            val content = customExt["content"] // 消息内容，结果消息且有结果的情况，是结构化消息；否则，是 aio 显示的消息
+            val hasResult = customExt["hasResult"] // 可选字段（只有结果消息才有这个字段），是否有结果，1-有结果，0-无结果
+
+            Log.e(TAG, "handleAIOMessage: ${GsonConverter.gson.toJson(customExt)}" )
+
+            lifecycleScope.launch {
+                if(msgType == "1" && isValid == "1"){
+                    FlutterProxyActivity.initTarotParams(msgId, questionStr, methodChannel)
+                    withMain {
+                        FlutterProxyActivity.go(this@ChatActivity, FlutterProxyActivity.ENGINE_ID_TAROT)
+                    }
+                }
+                if(msgType == "2" && hasResult == "1" && content?.isNotEmpty() == true){
+                    FlutterProxyActivity.nativeTarotResult(msgId, content, methodChannel)
+                }
+            }
+        }
+    }
+
+    private var methodChannel : MethodChannel? = null
+    private var flutterReady = false
+    private fun initFlutter() {
+        lifecycleScope.launch {
+            methodChannel = FlutterProxyActivity.prepareFlutterEngine(this@ChatActivity, FlutterProxyActivity.ENGINE_ID_TAROT, FlutterProxyActivity.ROUTE_TAROT, FlutterProxyActivity.CHANNEL_TAROT, FlutterProxyActivity.SCENE_TAROT) { scene, method, call, result ->
+
+                Log.e(TAG, "initFlutter: call.method=$call.method" )
+
+                if (call.method == "flutterInitalized") {  // 通知 native 已初始化
+                    Log.e(TAG, "initFlutter: flutterReady=$flutterReady")
+                    flutterReady = true
+                }
+                if (call.method == "flutterDestroy") {  // flutter 完成使命  通知 native 销毁
+                    FlutterProxyActivity.handleFlutterCommonEvent(this@ChatActivity, scene, method, call, result)
+                }
+                if (call.method == "flutterDrawCards") {  // flutter 抽卡完成，通知 native   如果没有这个 则表示被中途打断的  需要插入一条消息
+                    // 插入一条消息  告诉 抽卡未完成
+//                    val stopStr = "It seems you haven't finished drawing the cards. Is there anything I can assist you with? Or, would you like to try again with a different question?"
+//                    val message = EMMessage.createTxtSendMessage(stopStr, toChatUsername)
+//                    message.chatType = EMMessage.ChatType.Chat
+//                    EMClient.getInstance().chatManager().sendMessage(message)
+
+//                    EMChatManager.
+//                    DemoHelper.getInstance().chatManager.
+                }
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_TAROT)?.destroy()
     }
 }

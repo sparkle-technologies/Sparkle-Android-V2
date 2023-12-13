@@ -89,6 +89,10 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         const val ENGINE_ID_SYNASTRY = "profile_synastry"
         const val ROUTE_SYNASTRY = "/profile/astrolabe"
 
+        const val ENGINE_ID_TAROT = "chat_tarot"
+        const val ROUTE_TAROT = "/tarot"
+
+
         const val ENGINE_ID_COMMON = "common_engin"
         const val ROUTE_COMMON = "/"
 
@@ -97,6 +101,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         const val CHANNEL_NOTIFICATION = "notificationChannel"
         const val CHANNEL_START_SIGN = "starSignChannel"
         const val CHANNEL_SYNASTRY = "synastryChannel"
+        const val CHANNEL_TAROT = "tarotChannel"
         const val CHANNEL_COMMON = "commonChannel"
 
         const val EVENT_BUS_DESTROY = "event_bus_destroy_flutter_proxy"
@@ -108,6 +113,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
         const val SCENE_NOTIFICATION_LIST = 1004
         const val SCENE_ASTRO_CODE = 1005
         const val SCENE_SYNASTRY = 1006
+        const val SCENE_TAROT = 1007
 
 
         fun go(context: Context, engineName: String) {
@@ -232,24 +238,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                 val params = GsonConverter.gson.toJson(map)
                 Log.e(TAG, "initParams:  params: $params")
 
-                methodChannel?.apply { this.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
-                        override fun success(result: Any?) {
-                            Log.e(TAG, "initParams success: ")
-                        }
-
-                        override fun error(
-                            errorCode: String,
-                            errorMessage: String?,
-                            errorDetails: Any?
-                        ) {
-                            Log.e(TAG, "initParams errorCode: ")
-                        }
-
-                        override fun notImplemented() {
-                            Log.e(TAG, "initParams notImplemented: ")
-                        }
-                    })
-                }
+                invoke(methodChannel, "nativeShareParams", map)
             }
         }
 
@@ -269,26 +258,32 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                 map["localeLanguage"] = local
                 val params = GsonConverter.gson.toJson(map)
                 Log.e(TAG, "initParams:  params: $params")
-
-                methodChannel?.apply { this.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
-                    override fun success(result: Any?) {
-                        Log.e(TAG, "initParams success: ")
-                    }
-
-                    override fun error(
-                        errorCode: String,
-                        errorMessage: String?,
-                        errorDetails: Any?
-                    ) {
-                        Log.e(TAG, "initParams errorCode: ")
-                    }
-
-                    override fun notImplemented() {
-                        Log.e(TAG, "initParams notImplemented: ")
-                    }
-                })
-                }
+                invoke(methodChannel, "nativeShareParams", map)
             }
+        }
+
+        fun initTarotParams(msgId: String?, questionStr: String?,  methodChannel: MethodChannel?) {
+            var local = "zh-Hans-CN"
+            val current = MultiLanguages.getAppLanguage()
+            if (current.language.equals(LocaleContract.getEnglishLocale().language)) {
+                local = "en_US"
+            }
+            CacheUtil.getUserInfo()?.apply {
+                val token = token
+                var map = mutableMapOf<String, Any>()
+                map["token"] = token
+                map["localeLanguage"] = local
+                map["msgId"] = msgId.orEmpty()
+                map["question"] = questionStr.orEmpty()
+                invoke(methodChannel, "nativeShareParams", map)
+            }
+        }
+
+        fun nativeTarotResult(msgId: String?, result: String, methodChannel: MethodChannel?) {
+            var map = mutableMapOf<String, Any>()
+            map["msgId"] = msgId.orEmpty()
+            map["result"] = result
+            invoke(methodChannel, "nativeNotifyTarotResult", map)
         }
 
         /**
@@ -318,28 +313,33 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                 map["localeLanguage"] = local
                 val params = GsonConverter.gson.toJson(map)
                 Log.e(TAG, "initParams:  params: $params")
+                invoke(methodChannel, "nativeShareParams", map)
+            }
+        }
 
-                methodChannel?.apply { this.invokeMethod("nativeShareParams", map, object : MethodChannel.Result {
-                    override fun success(result: Any?) {
-                        Log.e(TAG, "initParams success: ")
-                    }
-
-                    override fun error(
-                        errorCode: String,
-                        errorMessage: String?,
-                        errorDetails: Any?
-                    ) {
-                        Log.e(TAG, "initParams errorCode: ")
-                    }
-
-                    override fun notImplemented() {
-                        Log.e(TAG, "initParams notImplemented: ")
-                    }
-                })
+        private fun invoke(methodChannel: MethodChannel?, method: String, map: MutableMap<String, Any>) {
+            methodChannel?.apply { this.invokeMethod(method, map, object : MethodChannel.Result {
+                override fun success(result: Any?) {
+                    Log.e(TAG, "initParams success: ")
                 }
+
+                override fun error(
+                    errorCode: String,
+                    errorMessage: String?,
+                    errorDetails: Any?
+                ) {
+                    Log.e(TAG, "initParams errorCode: ")
+                }
+
+                override fun notImplemented() {
+                    Log.e(TAG, "initParams notImplemented: ")
+                }
+            })
             }
         }
     }
+
+
 
     override fun initView(savedInstanceState: Bundle?) {
         intent.getStringExtra("engineName")?.let {

@@ -13,5 +13,4 @@ open class BaseApp : Application() {
         super.onCreate()
         instance = this
     }
-
 }
