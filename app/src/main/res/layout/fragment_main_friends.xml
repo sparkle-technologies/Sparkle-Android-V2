@@ -59,6 +59,7 @@
             android:background="@drawable/main_bg_unread_dot_yellow"
             android:fontFamily="@font/poppins_regular"
             android:gravity="center"
+            android:textColor="@color/black"
             android:maxLines="1"
             android:minWidth="@dimen/dp_15"
             android:minHeight="@dimen/dp_15"

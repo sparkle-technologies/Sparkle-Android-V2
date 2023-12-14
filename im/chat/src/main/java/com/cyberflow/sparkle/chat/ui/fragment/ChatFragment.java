@@ -1116,10 +1116,14 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     public void initCora(boolean cora, String question) {
         if(cora){
             isCore = true;
+            chatLayout.showItemDefaultMenu(false);
             if(question.isEmpty()){
                 chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();  // 展示 Hi Cora面板
             }else{  // 直接发送问题
                 chatLayout.clickQuestion(question);
+                chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();
+                hideQuestions();
+                hideHiCoraBtn();
             }
         }
     }
@@ -1141,7 +1145,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     public void onReceiveAIOMessage(EMMessage message) {
         infoListener.handleAIOMessage(message);
     }
-
 
     // 无法编辑或发送
     public void cannotEditOrSend() {

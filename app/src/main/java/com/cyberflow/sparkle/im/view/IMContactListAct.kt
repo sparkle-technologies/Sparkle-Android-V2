@@ -335,7 +335,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
         }
 
         val list = inviteList.map {
-            FriendRequest(name = it.nick, msg = it.req_msg, status = STATUS_NORMAL, gender=0,  url= it.avatar, openUid= it.from_open_uid)
+            FriendRequest(name = it.nick, msg = it.req_msg, status = STATUS_NORMAL, gender=it.avatar_style,  url= it.avatar, openUid= it.from_open_uid)
         }
 
         allRequestData.addAll(list)
@@ -385,7 +385,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
 //            Log.e(TAG, "showContactListData: ${it.nick}  ${it}" )
 
-            Contact(name = it.nick, avatar = it.avatar, gender = 0, openUid = it.open_uid).apply {
+            Contact(name = it.nick, avatar = it.feed_avatar, gender = it.avatar_style, openUid = it.open_uid).apply {
                 list.add(this)
                 allContactData.add(this)
             }

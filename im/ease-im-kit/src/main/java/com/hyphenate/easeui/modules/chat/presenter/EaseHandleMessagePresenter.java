@@ -16,7 +16,7 @@ public abstract class EaseHandleMessagePresenter extends EaseBasePresenter {
     protected IHandleMessageView mView;
     protected int chatType;
     protected String toChatUsername;
-    protected EMConversation conversation;
+    public EMConversation conversation;
 
     @Override
     public void attachView(ILoadDataView view) {

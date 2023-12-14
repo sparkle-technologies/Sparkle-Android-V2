@@ -262,6 +262,10 @@ public class EaseChatLayout extends RelativeLayout implements
             EMClient.getInstance().groupManager().addGroupChangeListener(groupListener);
         }
         initTypingHandler();
+
+        if(!coraQuestion.isEmpty()){
+            clickQuestion(coraQuestion);
+        }
     }
 
     /**
@@ -1295,16 +1299,21 @@ public class EaseChatLayout extends RelativeLayout implements
         }
     }
 
-
-    public void clickQuestion(TextView tv) {  // 最外面点击问题   直接发送
+    public void clickQuestion(TextView tv) {  // 内部点击问题
         String question = tv.getText().toString();
         Log.e(TAG, "clickQuestion: " + question);
         inputMenu.onSendBtnClicked(question);
     }
 
-    public void clickQuestion(String question) {  // 最外面点击问题   直接发送
+    private String coraQuestion = "";
+
+    public void clickQuestion(String question) {  // 最外面点击问题   带进来直接发送
         Log.e(TAG, "clickQuestion: " + question);
-        inputMenu.onSendBtnClicked(question);
+        coraQuestion = question;
+        if(presenter.conversation != null){
+            inputMenu.onSendBtnClicked(question);
+            coraQuestion = "";
+        }
     }
 }
 

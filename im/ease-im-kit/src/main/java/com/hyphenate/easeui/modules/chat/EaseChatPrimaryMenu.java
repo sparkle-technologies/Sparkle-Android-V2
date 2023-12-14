@@ -79,10 +79,16 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         initListener();
     }
 
+    private boolean isCora = false;
     @Override
     public void showHiCoraStatus() {
         Log.e(TAG, "showHiCoraStatus: " );
+        isCora = true;
         btnSayHi.setVisibility(VISIBLE);
+        buttonSend.setVisibility(View.VISIBLE);
+        buttonMore.setVisibility(View.GONE);
+        faceNormal.setVisibility(View.GONE);
+        faceChecked.setVisibility(View.GONE);
     }
 
     private void initListener() {
@@ -209,19 +215,39 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
 
     private void checkSendButton() {
         if (TextUtils.isEmpty(editText.getText().toString().trim())) {
-            buttonMore.setVisibility(VISIBLE);
-            buttonSend.setVisibility(GONE);
+            if(isCora){
+                faceNormal.setVisibility(GONE);
+                faceChecked.setVisibility(GONE);
+                buttonMore.setVisibility(GONE);
+                buttonSend.setVisibility(GONE);
+            }else{
+                buttonMore.setVisibility(VISIBLE);
+                buttonSend.setVisibility(GONE);
+            }
         } else {
-            buttonMore.setVisibility(GONE);
-            buttonSend.setVisibility(VISIBLE);
+            if(isCora){
+                faceNormal.setVisibility(GONE);
+                faceChecked.setVisibility(GONE);
+                buttonMore.setVisibility(GONE);
+                buttonMore.setVisibility(GONE);
+                buttonSend.setVisibility(VISIBLE);
+            }else{
+                buttonMore.setVisibility(GONE);
+                buttonSend.setVisibility(VISIBLE);
+            }
         }
     }
 
     @Override
     public void showEmojOrKeyboard(boolean showEmoj) {
 //        Log.e(TAG, "showEmojOrKeyboard: showEmoj=" + showEmoj );
-        faceNormal.setVisibility(showEmoj ? View.VISIBLE : View.INVISIBLE);
-        faceChecked.setVisibility(!showEmoj ? View.VISIBLE : View.INVISIBLE);
+        if(isCora){
+            faceNormal.setVisibility(View.INVISIBLE);
+            faceChecked.setVisibility(View.INVISIBLE);
+        }else{
+            faceNormal.setVisibility(showEmoj ? View.VISIBLE : View.INVISIBLE);
+            faceChecked.setVisibility(!showEmoj ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 
 

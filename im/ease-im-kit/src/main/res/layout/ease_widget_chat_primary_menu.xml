@@ -118,11 +118,11 @@
     <com.cyberflow.sparkle.widget.ShadowTxtButton
         android:id="@+id/btn_say_hi"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_43"
+        android:layout_height="@dimen/dp_45"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:visibility="visible"
-        android:layout_marginBottom="@dimen/dp_4"
+        android:layout_marginBottom="@dimen/dp_6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:view_bg="@drawable/register_btn_next"

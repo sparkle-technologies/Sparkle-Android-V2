@@ -139,10 +139,10 @@ class MainViewModel : BaseViewModel() {
                     IMConversationCache(
                         open_uid = it.open_uid,
                         nick = it.nick,
-                        gender = 1,
-                        avatar = it.avatar,
+                        gender = it.avatar_style,
+                        avatar = it.feed_avatar,
                         num = unRead[it.open_uid.replace("-", "_")] ?: 0,
-                        bgColor = "#ffffff",
+                        bgColor =  it.feed_card_color,
                         )
                 }
                 DBManager.instance.db?.imConversationCacheDao()?.insert(*cache.toTypedArray())

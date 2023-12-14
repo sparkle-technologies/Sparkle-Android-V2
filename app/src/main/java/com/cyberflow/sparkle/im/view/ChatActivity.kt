@@ -107,11 +107,8 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                 }
                 if(question.isNullOrEmpty()){
                     showQuestionsList() // say hi cora, show question list
-                }else{
-                    // todo send , no "hi cora"
                 }
                 loadCoraInfo(conversationId)
-                initFlutter()
             }
         }
         intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_AVATAR)?.apply {
@@ -323,10 +320,19 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                         FlutterProxyActivity.go(this@ChatActivity, FlutterProxyActivity.ENGINE_ID_TAROT)
                     }
                 }
-                if(msgType == "2" && hasResult == "1" && content?.isNotEmpty() == true){
-                    FlutterProxyActivity.nativeTarotResult(msgId, content, methodChannel)
+                if(msgType == "2" ){
+                    if(hasResult == "1" && content?.isNotEmpty() == true){
+                        FlutterProxyActivity.nativeTarotResult(msgId, content, methodChannel)
+                    }
                 }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(isCora){
+            freshFlutter()
         }
     }
 
@@ -335,9 +341,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     private fun initFlutter() {
         lifecycleScope.launch {
             methodChannel = FlutterProxyActivity.prepareFlutterEngine(this@ChatActivity, FlutterProxyActivity.ENGINE_ID_TAROT, FlutterProxyActivity.ROUTE_TAROT, FlutterProxyActivity.CHANNEL_TAROT, FlutterProxyActivity.SCENE_TAROT) { scene, method, call, result ->
-
                 Log.e(TAG, "initFlutter: call.method=$call.method" )
-
                 if (call.method == "flutterInitalized") {  // 通知 native 已初始化
                     Log.e(TAG, "initFlutter: flutterReady=$flutterReady")
                     flutterReady = true
@@ -346,7 +350,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                     FlutterProxyActivity.handleFlutterCommonEvent(this@ChatActivity, scene, method, call, result)
                 }
                 if (call.method == "flutterDrawCards") {  // flutter 抽卡完成，通知 native   如果没有这个 则表示被中途打断的  需要插入一条消息
-                    // 插入一条消息  告诉 抽卡未完成
+                // 插入一条消息  告诉 抽卡未完成
 //                    val stopStr = "It seems you haven't finished drawing the cards. Is there anything I can assist you with? Or, would you like to try again with a different question?"
 //                    val message = EMMessage.createTxtSendMessage(stopStr, toChatUsername)
 //                    message.chatType = EMMessage.ChatType.Chat
@@ -357,6 +361,14 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                 }
             }
         }
+    }
+
+    private fun freshFlutter(){
+        methodChannel?.setMethodCallHandler(null)
+        methodChannel = null
+//        FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_TAROT)?.destroy()
+        flutterReady = false
+        initFlutter()
     }
 
     override fun onDestroy() {

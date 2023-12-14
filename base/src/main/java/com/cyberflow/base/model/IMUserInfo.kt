@@ -32,7 +32,7 @@ data class IMFriendRequestList(
 data class IMFriendRequest(
     @PrimaryKey
     var from_open_uid: String = "",
-//    var gender: Int = 0, // 1=man  2=women
+    var avatar_style: Int = 0, // 1=man  2=women
     var avatar: String = "",
     var nick: String = "",
     var req_msg: String = ""
@@ -49,9 +49,10 @@ data class IMFriendList(
 data class IMFriendInfo(
     @PrimaryKey
     var open_uid: String = "",
-//    var gender: Int = 0, // 1=man  2=women
-    var avatar: String = "",
     var nick: String = "",
+    var avatar_style: Int = 1, // 1=man  2=women
+    var feed_avatar: String = "",
+    var feed_card_color: String = "#ffffff",
 )
 
 @Serializable

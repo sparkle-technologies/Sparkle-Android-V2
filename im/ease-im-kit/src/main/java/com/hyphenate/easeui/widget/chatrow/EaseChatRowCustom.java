@@ -83,25 +83,21 @@ public class EaseChatRowCustom extends EaseChatRow {
 //            String str = GsonConverter.Companion.getGson().toJson(customExt);
 //            Log.e(TAG, "EMCustomMessageBody: " + str );
 
-            if(msgType.equals("0")){
-                layResult.setVisibility(View.GONE);
-                btnShare.setVisibility(View.GONE);
-                Spannable span = EaseSmileUtils.getSmiledText(context, content);
-                contentView.setText(span, TextView.BufferType.SPANNABLE);
-            }
-
-            if(msgType.equals("1")){
-                layResult.setVisibility(View.GONE);
-                btnShare.setVisibility(View.GONE);
-                Spannable span = EaseSmileUtils.getSmiledText(context, content);
-                contentView.setText(span, TextView.BufferType.SPANNABLE);
-            }
-
             if(msgType.equals("2")){
+                AIOResult result = GsonConverter.Companion.getGson().fromJson(content, AIOResult.class);
                 if(hasResult.equals("1")){
-                    AIOResult result = GsonConverter.Companion.getGson().fromJson(content, AIOResult.class);
                     showAIOResult(result);
+                }else{
+                    layResult.setVisibility(View.GONE);
+                    btnShare.setVisibility(View.GONE);
+                    Spannable span = EaseSmileUtils.getSmiledText(context, result.getResult());
+                    contentView.setText(span, TextView.BufferType.SPANNABLE);
                 }
+            }else{
+                layResult.setVisibility(View.GONE);
+                btnShare.setVisibility(View.GONE);
+                Spannable span = EaseSmileUtils.getSmiledText(context, content);
+                contentView.setText(span, TextView.BufferType.SPANNABLE);
             }
         }
     }
