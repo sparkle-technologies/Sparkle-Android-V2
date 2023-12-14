@@ -140,7 +140,8 @@ class MainViewModel : BaseViewModel() {
                         open_uid = it.open_uid,
                         nick = it.nick,
                         gender = it.avatar_style,
-                        avatar = it.feed_avatar,
+                        avatar = it.avatar,
+                        feed_avatar = it.feed_avatar,
                         num = unRead[it.open_uid.replace("-", "_")] ?: 0,
                         bgColor =  it.feed_card_color,
                         )

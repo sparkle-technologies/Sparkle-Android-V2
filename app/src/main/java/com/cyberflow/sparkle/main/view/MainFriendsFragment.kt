@@ -373,10 +373,10 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                 list.forEach { item ->
 
                     var avatar = item.avatar
-                    var imageUrl = item.avatar
+                    var imageUrl = item.feed_avatar
                     var nickname = item.nick
                     var openUid = item.open_uid.replace("-", "_")
-                    var bgColor = "#A8A0F9"
+                    var bgColor =  item.bgColor
                     var num: Int = item.num
                     totalUnreadCount += num
 
@@ -421,7 +421,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                 var totalUnreadCount = 0
                 list.forEach { item ->
 
-                    var avatar = item.feed_avatar
+                    var avatar = item.avatar
                     var imageUrl = item.feed_avatar
                     var nickname = item.nick
                     var openUid = item.open_uid.replace("-", "_")

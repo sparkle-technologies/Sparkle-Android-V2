@@ -18,6 +18,8 @@ public interface MessageListItemClickListener {
      */
     boolean onBubbleClick(EMMessage message);
 
+    void onAIOResultClick(EMMessage message);
+
     /**
      * click resend view
      *

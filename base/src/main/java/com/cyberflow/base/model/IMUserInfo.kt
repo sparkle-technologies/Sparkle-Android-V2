@@ -51,6 +51,7 @@ data class IMFriendInfo(
     var open_uid: String = "",
     var nick: String = "",
     var avatar_style: Int = 1, // 1=man  2=women
+    var avatar: String = "",
     var feed_avatar: String = "",
     var feed_card_color: String = "#ffffff",
 )
@@ -63,6 +64,7 @@ data class IMConversationCache(
     var nick: String = "",
     var gender: Int = 0,
     var avatar: String = "",
+    var feed_avatar: String = "",
     var num: Int = 1,
     var bgColor: String = ""
 )

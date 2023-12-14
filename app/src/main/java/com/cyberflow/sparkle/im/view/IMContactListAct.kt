@@ -385,7 +385,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
 //            Log.e(TAG, "showContactListData: ${it.nick}  ${it}" )
 
-            Contact(name = it.nick, avatar = it.feed_avatar, gender = it.avatar_style, openUid = it.open_uid).apply {
+            Contact(name = it.nick, avatar = it.avatar, gender = it.avatar_style, openUid = it.open_uid).apply {
                 list.add(this)
                 allContactData.add(this)
             }

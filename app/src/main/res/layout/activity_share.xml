@@ -21,7 +21,6 @@
             app:view_img_shadow_distance="1dp"
             app:view_img_src="@drawable/share_ic_delete" />
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bg_im"
             android:layout_width="300dp"

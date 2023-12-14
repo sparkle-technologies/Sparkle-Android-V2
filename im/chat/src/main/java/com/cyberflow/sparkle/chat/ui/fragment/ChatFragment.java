@@ -91,6 +91,8 @@ import com.luck.picture.lib.permissions.PermissionUtil;
 import com.luck.picture.lib.utils.ToastUtils;
 import com.therouter.TheRouter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -340,6 +342,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     private void showSelectDialog() {
 
     }
+
 
     @Override
     public void onUserAvatarClick(String username) {
@@ -724,7 +727,6 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         return new MeOnCameraInterceptListener();
     }
 
-
     /**
      * 自定义拍照
      */
@@ -1020,6 +1022,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         void sendChatInfoToServer(String msgId, String msg);  // 每次发送消息  需要将消息透传给后段
 
         void handleAIOMessage(EMMessage message);   // 接收到自定义消息
+
+        void handleAIOShareAction(EMMessage message);   // 分享
     }
 
     @Override
@@ -1167,5 +1171,14 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     public void hideQuestions() {
         chatLayout.dismissQuestion();
+    }
+
+    public void insertMsg(@NotNull String s, @NotNull String from, @NotNull String to) {
+        chatLayout.insertMsg(s, from, to);
+    }
+
+    @Override
+    public void onAIOResultClick(EMMessage message) {
+        infoListener.handleAIOShareAction(message);
     }
 }

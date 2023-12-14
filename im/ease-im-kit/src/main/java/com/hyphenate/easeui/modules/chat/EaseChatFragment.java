@@ -455,5 +455,10 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
             mContext.finish();
         }
     }
+
+    @Override
+    public void onAIOResultClick(EMMessage message) {
+
+    }
 }
 

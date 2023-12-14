@@ -44,7 +44,7 @@ public class EaseChatRowCustom extends EaseChatRow {
 
     @Override
     protected void onInflateView() {
-        inflater.inflate(!showSenderType ? R.layout.ease_row_received_message : R.layout.ease_row_sent_message, this);
+        inflater.inflate(R.layout.ease_row_received_message_custom, this);
     }
 
     @Override
@@ -117,12 +117,7 @@ public class EaseChatRowCustom extends EaseChatRow {
 
         Spannable span = EaseSmileUtils.getSmiledText(context, result.getResult());
         contentView.setText(span, TextView.BufferType.SPANNABLE);
-        btnShare.setClickListener(new ShadowImgButton.ShadowClickListener() {
-            @Override
-            public void clicked() {
-                //todo  share logic
-            }
-        });
+        btnShare.setClickListener(() -> itemClickListener.onAIOResultClick(message));
     }
 
     private void showItem(TarotCard tarotCard, TextView tv, ImageView iv, TextView tvBottom) {

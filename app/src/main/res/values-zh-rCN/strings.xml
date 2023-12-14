@@ -65,5 +65,6 @@
     <string name="hours">小时前</string>
     <string name="minutes">分钟前</string>
     <string name="just_now">刚刚</string>
+    <string name="aio_break">抱歉，你没有完成抽牌。有什么我可以帮助的吗？或者，你想换个问题再试试看？</string>
 
 </resources>

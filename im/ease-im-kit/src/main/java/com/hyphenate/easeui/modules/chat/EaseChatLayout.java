@@ -1139,7 +1139,6 @@ public class EaseChatLayout extends RelativeLayout implements
     }
 
 
-
     private class ChatRoomListener extends EaseChatRoomListener {
 
         @Override
@@ -1314,6 +1313,29 @@ public class EaseChatLayout extends RelativeLayout implements
             inputMenu.onSendBtnClicked(question);
             coraQuestion = "";
         }
+    }
+
+    public void insertMsg(String content, String from, String to) {
+        EMMessage msg = EMMessage.createSendMessage(EMMessage.Type.TXT);
+        EMTextMessageBody txtBody = new EMTextMessageBody(content);
+        msg.addBody(txtBody);
+        msg.setFrom(from);
+        msg.setTo(to);
+        msg.setUnread(false);
+        msg.setChatType(EMMessage.ChatType.Chat);
+        msg.setDirection(EMMessage.Direct.RECEIVE);
+        long currentTimeMillis = System.currentTimeMillis();
+        msg.setLocalTime(currentTimeMillis);
+        msg.setMsgTime(currentTimeMillis);
+//        presenter.conversation.insertMessage(msg);
+        presenter.conversation.appendMessage(msg);
+
+        messageListLayout.refreshToLatest();
+    }
+
+    @Override
+    public void onAIOResultClick(EMMessage message) {
+        listener.onAIOResultClick(message);
     }
 }
 

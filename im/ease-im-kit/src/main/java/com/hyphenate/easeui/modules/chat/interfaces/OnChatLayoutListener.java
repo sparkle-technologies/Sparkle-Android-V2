@@ -19,6 +19,9 @@ public interface OnChatLayoutListener {
      */
     boolean onBubbleClick(EMMessage message);
 
+
+    void onAIOResultClick(EMMessage message);
+
     /**
      * 长按消息bubble区域
      *

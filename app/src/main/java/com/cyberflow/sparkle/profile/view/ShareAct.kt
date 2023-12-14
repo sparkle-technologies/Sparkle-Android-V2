@@ -80,7 +80,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
         const val REQUEST_DOWNLOAD = 233
         const val REQUEST_SHARE = 234
 
-        fun go(context: Context,  serverImageUrl: String?) {
+        fun go(context: Context, serverImageUrl: String?) {
             val intent = Intent(context, ShareAct::class.java)
             intent.putExtra(USER_AVATAR_URL, serverImageUrl)
             context.startActivity(intent)
@@ -343,8 +343,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(), EasyPermissi
                 fileOutputStream.close()
                 if(!isSuccess){
                     withMain {
-                        ToastUtils.showToast(this@ShareAct,
-                            getString(com.cyberflow.sparkle.R.string.fail_to_compress_image))
+                        ToastUtils.showToast(this@ShareAct, getString(com.cyberflow.sparkle.R.string.fail_to_compress_image))
                         LoadingDialogHolder.getLoadingDialog()?.hide()
                     }
                     return@launch

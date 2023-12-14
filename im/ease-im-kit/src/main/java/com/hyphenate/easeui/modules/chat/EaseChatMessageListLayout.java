@@ -390,6 +390,13 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
             }
 
             @Override
+            public void onAIOResultClick(EMMessage message) {
+                if (messageListItemClickListener != null) {
+                    messageListItemClickListener.onAIOResultClick(message);
+                }
+            }
+
+            @Override
             public boolean onResendClick(EMMessage message) {
                 if (messageListItemClickListener != null) {
                     return messageListItemClickListener.onResendClick(message);

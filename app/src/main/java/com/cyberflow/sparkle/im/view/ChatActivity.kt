@@ -109,6 +109,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                     showQuestionsList() // say hi cora, show question list
                 }
                 loadCoraInfo(conversationId)
+                freshFlutter()
             }
         }
         intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_AVATAR)?.apply {
@@ -329,11 +330,9 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if(isCora){
-            freshFlutter()
-        }
+    // 弹出分享弹窗
+    override fun handleAIOShareAction(message: EMMessage?) {
+
     }
 
     private var methodChannel : MethodChannel? = null
@@ -347,17 +346,20 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                     flutterReady = true
                 }
                 if (call.method == "flutterDestroy") {  // flutter 完成使命  通知 native 销毁
+                    val isDrawCards = call.argument<Int>("isDrawCards")  // isDrawCards: 1-已抽卡，0-未抽卡（抽牌未完成中途退出）
+                    Log.e(TAG, "initFlutter: isDrawCards=$isDrawCards"  )
+                    if(isDrawCards == 0){
+                        // 插入一条消息  告诉 抽卡未完成
+                        val msgStr = getString(com.cyberflow.sparkle.R.string.aio_break)
+                        val from = conversationId
+                        val to = CacheUtil.getUserInfo()?.user?.open_uid.orEmpty().replace("-", "_")
+                        fragment?.insertMsg(msgStr, from, to)
+                    }
                     FlutterProxyActivity.handleFlutterCommonEvent(this@ChatActivity, scene, method, call, result)
+                    freshFlutter()
                 }
                 if (call.method == "flutterDrawCards") {  // flutter 抽卡完成，通知 native   如果没有这个 则表示被中途打断的  需要插入一条消息
-                // 插入一条消息  告诉 抽卡未完成
-//                    val stopStr = "It seems you haven't finished drawing the cards. Is there anything I can assist you with? Or, would you like to try again with a different question?"
-//                    val message = EMMessage.createTxtSendMessage(stopStr, toChatUsername)
-//                    message.chatType = EMMessage.ChatType.Chat
-//                    EMClient.getInstance().chatManager().sendMessage(message)
-
-//                    EMChatManager.
-//                    DemoHelper.getInstance().chatManager.
+//                    freshFlutter()
                 }
             }
         }
@@ -366,13 +368,14 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     private fun freshFlutter(){
         methodChannel?.setMethodCallHandler(null)
         methodChannel = null
-//        FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_TAROT)?.destroy()
         flutterReady = false
         initFlutter()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_TAROT)?.destroy()
+        if(methodChannel!=null){
+            FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_TAROT)?.destroy()
+        }
     }
 }
