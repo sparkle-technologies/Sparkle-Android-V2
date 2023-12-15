@@ -60,6 +60,10 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     }
 
     private fun initAddFriend() {
+        mDatabind.root.setOnClickListener {
+            hideAddDialog()
+        }
+
         mDatabind.btnAddFriends.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 mDatabind.layDialogAdd.apply {
@@ -85,6 +89,17 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
             findViewById<View>(R.id.lay_scan).setOnClickListener {
                 IMScanAct.go(requireActivity())
                 mDatabind.layDialogAdd.visibility = View.GONE
+            }
+        }
+    }
+
+
+    private fun hideAddDialog(){
+        mDatabind.layDialogAdd.apply {
+            visibility = if (this.visibility == View.VISIBLE) {
+                View.GONE
+            } else {
+                View.VISIBLE
             }
         }
     }

@@ -120,16 +120,16 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
 
         mDatabind.btnWallet.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                ToastUtil.show(mActivity, "钱包还没做")
+                ToastUtil.show(mActivity, "Coming soon...")
             }
         })
 
         mDatabind.btnLeft.setClickListener(object : ShadowTxtButton.ShadowClickListener{
             override fun clicked(disable: Boolean) {
-                Log.e(TAG, "clicked: action=$action   user=$user  ")
-                Log.e(TAG, "clicked: openUid=${user?.open_uid}   user.name=${user?.nick}  ")
+//                Log.e(TAG, "clicked: action=$action   user=$user  ")
+//                Log.e(TAG, "clicked: openUid=${user?.open_uid}   user.name=${user?.nick}  ")
                 if(isMySelf){
-                    ToastUtil.show(mActivity, "跳橱窗 还没做")
+                    ToastUtil.show(mActivity, "Coming soon...")
                 }else{
                     when (action) {
                         CHAT -> {   // go chatActivity   avatar nickName
@@ -218,7 +218,7 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
 
     private var open_uid = ""
     fun setOpenUid(_action: Int = CHAT, _openUid: String) {
-        Log.e(TAG, "setOpenUid: ")
+//        Log.e(TAG, "setOpenUid: ")
         action = _action
         open_uid = _openUid
     }

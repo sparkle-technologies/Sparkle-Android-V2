@@ -82,7 +82,6 @@ class ShareDialog {
         }
     }
 
-
     var rv: RecyclerView? = null
     var rvAction: RecyclerView? = null
     var line: View? = null

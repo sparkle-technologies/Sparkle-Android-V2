@@ -78,7 +78,7 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
                     json("open_uid" to imAccount.replace("_", "-"), "req_msg" to msg)
                 }.await()
 
-//                viewModel.IM_addFriend(imAccount.replace("-", "_"), msg) // todo our server do not ready for that, so wait
+                viewModel.IM_addFriend(imAccount.replace("-", "_"), msg) // todo our server do not ready for that, so wait
 
                 data?.let {
                     LiveDataBus.get().with(ToastDialogHolder.MAIN_ACTIVITY_NOTIFY).postValue(NotificationDialog.ToastBody(NotificationDialog.TYPE_SUCCESS, getString(R.string.request_sent)))
