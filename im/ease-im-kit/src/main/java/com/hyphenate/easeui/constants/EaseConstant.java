@@ -14,6 +14,8 @@
 package com.hyphenate.easeui.constants;
 
 public interface EaseConstant {
+    String MESSAGE_PREF_SHARE = "profileMsg://";
+
     String MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call";
     String MESSAGE_ATTR_IS_VIDEO_CALL = "is_video_call";
 

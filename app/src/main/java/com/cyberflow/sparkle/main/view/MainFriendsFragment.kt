@@ -262,6 +262,14 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
     override fun onResume() {
         super.onResume()
         showFriendRequestNum()
+        if(banner?.isVisible == true){
+            banner?.start()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        banner?.stop()
     }
 
     var totalUnread = 0

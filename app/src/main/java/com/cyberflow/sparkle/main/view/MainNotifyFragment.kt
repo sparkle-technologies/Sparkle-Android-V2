@@ -7,7 +7,6 @@ import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.SiteMessage
 import com.cyberflow.base.model.SiteMessageList
 import com.cyberflow.base.net.Api
-import com.cyberflow.base.util.toggleEllipsize
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.R
@@ -25,6 +24,8 @@ import com.drake.brv.utils.setup
 import com.drake.net.Post
 import com.drake.net.utils.scope
 import com.drake.net.utils.withMain
+import com.drake.spannable.replaceSpanFirst
+import com.drake.spannable.span.ColorSpan
 import com.luck.picture.lib.utils.DateUtils
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
@@ -55,7 +56,11 @@ class MainNotifyFragment : BaseDBFragment<BaseViewModel, FragmentMainNotifyBindi
                 }
             }
         }
-        toggleEllipsize(requireContext(), tv, 2, txt, timeTxt, com.cyberflow.base.resources.R.color.color_7D7D80)
+//        toggleEllipsize(requireContext(), tv, 2, txt, timeTxt, com.cyberflow.base.resources.R.color.color_7D7D80)
+//        Log.e("TAG", "setSpan: $txt $timeTxt" )
+        tv.text = "$txt $timeTxt".replaceSpanFirst(timeTxt, ignoreCase = true){
+            ColorSpan("#7D7D80")
+        }
     }
 
     override fun initView(savedInstanceState: Bundle?) {

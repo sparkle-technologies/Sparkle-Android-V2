@@ -349,6 +349,22 @@ public class PushAndMessageHelper {
         sendMessage(message);
     }
 
+    public static void sendProfileShareImageMessage(String from, String toChatUsername, Uri imageUri) {
+        boolean sendOriginalImg = true;
+        if(EMFileHelper.getInstance().isFileExist(imageUri)) {
+            if(EMFileHelper.getInstance().getFileLength(imageUri) > MAX_IMAGE_SIZE) {
+                sendOriginalImg = false;
+            }
+        }
+        final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
+        message.setTo(toChatUsername);
+        EMImageMessageBody body = new EMImageMessageBody(imageUri);
+        body.setSendOriginalImage(sendOriginalImg);
+        body.setFileName(EaseConstant.MESSAGE_PREF_SHARE + from);
+        message.addBody(body);
+        sendMessage(message);
+    }
+
     /**
      * send image message
      *

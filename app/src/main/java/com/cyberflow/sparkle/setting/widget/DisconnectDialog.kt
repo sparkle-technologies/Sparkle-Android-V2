@@ -10,8 +10,12 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.cyberflow.base.model.BindBean
+import com.cyberflow.base.model.BindingResult
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.resources.R
+import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.bus.LiveDataBus
+import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.Post
 import com.drake.net.utils.scopeDialog
@@ -120,12 +124,21 @@ class DisconnectDialog {
     private fun request() {
         context?.apply {
            scopeDialog {
-               val data = Post<String>(Api.LOGIN_UNBIND) {
+               val data = Post<BindingResult>(Api.LOGIN_UNBIND) {
                    json("auth_type" to bindBean?.type.orEmpty())
                }.await()
                data?.let {
-                   Log.e(TAG, "  ---- $it ", )
-                   mCallback?.onSelected(true)
+//                   Log.e(TAG, "  ---- $it ", )
+                   CacheUtil.getUserInfo()?.also {
+                       it.user?.apply {
+                           data?.also { new ->
+                               bind_list = new.bind_list
+                               CacheUtil.setUserInfo(it)
+                               LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED).postValue("time:${System.currentTimeMillis()}")
+                               mCallback?.onSelected(true)
+                           }
+                       }
+                   }
                }
             }
         }

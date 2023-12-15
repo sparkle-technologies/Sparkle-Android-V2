@@ -35,6 +35,11 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+
+        mDataBinding.tv.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua " +
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua" +
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
+
         mDataBinding.llBack.setOnClickListener {
             onBackPressed()
         }

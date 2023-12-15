@@ -229,19 +229,21 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
    fun showDialogAutoDismiss() {
        Log.e(TAG, "showDialogAutoDismiss: ", )
         if (!isShowing && queue.isNotEmpty()) {
-            show()
-            initData()
-            setDialogSize()
-            var time = 3000L
-            if(queue.size > 1){
-                time = 1000L
-            }
-            Handler(Looper.getMainLooper()).postDelayed({
-                assertInMainThread()
-                if (isShowing) {
-                    dismiss()
+            if(isMainThread()){
+                show()
+                initData()
+                setDialogSize()
+                var time = 3000L
+                if(queue.size > 1){
+                    time = 1000L
                 }
-            }, time)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    assertInMainThread()
+                    if (isShowing) {
+                        dismiss()
+                    }
+                }, time)
+            }
         }
     }
 

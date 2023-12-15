@@ -45,10 +45,19 @@ class IMDataManager private constructor() {
         this.user = user
     }
 
+    private var shareMsg: EMMessage? = null
+    fun getShareMsg(): EMMessage? {
+        return shareMsg
+    }
+    fun setShareMsg(shareMsg: EMMessage?) {
+        this.shareMsg = shareMsg
+    }
+
     fun clearCache(){
         openUidProfile = null
         forwardMsg = null
         forwardImageUri = null
         user = null
+        shareMsg = null
     }
 }

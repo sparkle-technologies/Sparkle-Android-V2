@@ -27,6 +27,7 @@
             android:layout_height="430dp"
             android:layout_marginTop="@dimen/dp_13"
             android:background="@drawable/share_bg_white"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_delete">
@@ -155,6 +156,7 @@
             android:layout_height="430dp"
             android:layout_marginTop="@dimen/dp_13"
             android:background="@drawable/share_bg_white"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_delete">
@@ -271,6 +273,316 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_name" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_13"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:scrollbars="none"
+            android:layout_marginBottom="@dimen/dp_10"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_delete">
+
+            <LinearLayout
+                android:id="@+id/lay_chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/share_bg_white"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/chat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_delete">
+
+                    <View
+                        android:layout_width="@dimen/dp_65"
+                        android:layout_height="@dimen/dp_16"
+                        android:background="@drawable/share_bg_half_right_16_radius"
+                        app:layout_constraintRight_toRightOf="@+id/chat"
+                        app:layout_constraintTop_toTopOf="@+id/chat" />
+
+                    <View
+                        android:id="@+id/line_chat"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp_1"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:background="@color/black"
+                        app:layout_constraintLeft_toLeftOf="@+id/chat"
+                        app:layout_constraintTop_toTopOf="@+id/chat" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_18"
+                        android:src="@drawable/main_ic_three_dots"
+                        app:layout_constraintBottom_toBottomOf="@+id/line_chat"
+                        app:layout_constraintRight_toRightOf="@+id/chat"
+                        app:layout_constraintTop_toTopOf="@+id/chat" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_15"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Q: "
+                        android:textColor="@color/color_8B82DB"
+                        android:textSize="@dimen/sp_16" />
+
+                    <TextView
+                        android:id="@+id/tv_question"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="when can I meet my Mr.right? "
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp_16" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_chat_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_40"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_regular"
+                    android:maxLines="1"
+                    android:text="23:11  11/06/2023"
+                    android:textColor="@color/color_B0B0B0"
+                    android:textSize="@dimen/sp_11" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="162dp"
+                    android:layout_marginStart="@dimen/dp_40"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginEnd="@dimen/dp_40"
+                    android:background="@drawable/aio_bg_result">
+
+                    <com.hyphenate.easeui.widget.EaseImageView
+                        android:id="@+id/iv2"
+                        android:layout_width="55dp"
+                        android:layout_height="101dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.hyphenate.easeui.widget.EaseImageView
+                        android:id="@+id/iv1"
+                        android:layout_width="55dp"
+                        android:layout_height="101dp"
+                        android:layout_marginStart="14dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/iv2" />
+
+                    <com.hyphenate.easeui.widget.EaseImageView
+                        android:id="@+id/iv3"
+                        android:layout_width="55dp"
+                        android:layout_height="101dp"
+                        android:layout_marginEnd="14dp"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/iv2" />
+
+                    <TextView
+                        android:id="@+id/tv2"
+                        android:layout_width="55dp"
+                        android:layout_height="@dimen/dp_32"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:textColor="@color/black"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toLeftOf="@+id/iv2"
+                        app:layout_constraintRight_toRightOf="@+id/iv2"
+                        app:layout_constraintTop_toBottomOf="@+id/iv2"
+                        tools:text="The fool" />
+
+                    <TextView
+                        android:id="@+id/tv1"
+                        android:layout_width="55dp"
+                        android:layout_height="@dimen/dp_32"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:textColor="@color/black"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toLeftOf="@+id/iv1"
+                        app:layout_constraintRight_toRightOf="@+id/iv1"
+                        app:layout_constraintTop_toTopOf="@+id/tv2"
+                        tools:text="The fool" />
+
+                    <TextView
+                        android:id="@+id/tv3"
+                        android:layout_width="55dp"
+                        android:layout_height="@dimen/dp_32"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:textColor="@color/black"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toLeftOf="@+id/iv3"
+                        app:layout_constraintRight_toRightOf="@+id/iv3"
+                        app:layout_constraintTop_toTopOf="@+id/tv2"
+                        tools:text="The fool" />
+
+
+                    <TextView
+                        android:id="@+id/tv2_bottom"
+                        android:layout_width="47dp"
+                        android:layout_height="11dp"
+                        android:layout_marginBottom="7dp"
+                        android:background="@drawable/aio_bg_reserved"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="7sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv2"
+                        app:layout_constraintRight_toRightOf="@+id/tv2"
+                        tools:text="Reserved" />
+
+
+                    <TextView
+                        android:id="@+id/tv1_bottom"
+                        android:layout_width="47dp"
+                        android:layout_height="11dp"
+                        android:background="@drawable/aio_bg_reserved"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="7sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv2_bottom"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv1"
+                        app:layout_constraintRight_toRightOf="@+id/tv1"
+                        tools:text="Reserved" />
+
+
+                    <TextView
+                        android:id="@+id/tv3_bottom"
+                        android:layout_width="47dp"
+                        android:layout_height="11dp"
+                        android:background="@drawable/aio_bg_reserved"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="7sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv2_bottom"
+                        app:layout_constraintLeft_toLeftOf="@+id/tv3"
+                        app:layout_constraintRight_toRightOf="@+id/tv3"
+                        tools:text="Reserved" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginEnd="@dimen/dp_15"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="@dimen/dp_20"
+                        app:cardCornerRadius="@dimen/dp_8"
+                        app:cardElevation="0dp"
+                        app:strokeColor="@color/black"
+                        app:strokeWidth="@dimen/dp_1">
+
+                        <ImageView
+                            android:id="@+id/iv_chat_cora"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_3"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/poppins_regular"
+                        android:maxLines="1"
+                        android:text="Cora"
+                        android:textColor="@color/color_8B82DB"
+                        android:textSize="@dimen/sp_16" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_chat_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_37"
+                    android:layout_marginEnd="@dimen/dp_18"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Recently, you may feel more impatient and irritable. During this period, be extra cautious when going out, as accidents can easily happen now and potentially leave visible scars on your face. Try channeling any restless energy into safer physical activities to avoid harm.
+Recently, you may feel more impatient and irritable. "
+                    android:textColor="@color/color_7D7D80"
+                    android:textSize="@dimen/sp_16" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_2"
+                    android:layout_marginTop="@dimen/dp_27"
+                    android:background="@drawable/dash_line_divider_horizontal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="67dp"
+                    android:layout_marginBottom="@dimen/dp_20"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_chat_explore"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_16"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/poppins_regular"
+                        android:maxLines="1"
+                        android:text="Explore more in *** Sparkle！"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp_12" />
+
+                    <ImageView
+                        android:id="@+id/iv_chat_qr"
+                        android:layout_width="@dimen/dp_54"
+                        android:layout_height="@dimen/dp_54"
+                        android:layout_marginEnd="@dimen/dp_18" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

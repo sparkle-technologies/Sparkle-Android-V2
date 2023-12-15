@@ -3,6 +3,7 @@ package com.cyberflow.base.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.os.Build
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.TextUtils
@@ -13,14 +14,17 @@ import android.widget.TextView
 
 
 object ViewExt {
+
     fun convertViewToBitmap(view: View): Bitmap {
-        view.measure(
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        )
+//        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
 //        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
-        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888);
+        val bitmap = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            Bitmap.createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.RGBA_F16)
+        }else{
+            Bitmap.createBitmap(view.measuredWidth, view.measuredHeight, Bitmap.Config.ARGB_8888)
+        }
         val canvas = Canvas(bitmap)
+//        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
 //    canvas.drawColor(Color.WHITE)
         view.draw(canvas)
         return bitmap

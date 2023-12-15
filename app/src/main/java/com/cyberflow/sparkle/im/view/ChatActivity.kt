@@ -28,9 +28,11 @@ import com.cyberflow.sparkle.chat.databinding.ActivityImChatBinding
 import com.cyberflow.sparkle.chat.ui.fragment.ChatFragment
 import com.cyberflow.sparkle.chat.ui.goPreview
 import com.cyberflow.sparkle.chat.viewmodel.ChatViewModel
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel
 import com.cyberflow.sparkle.chat.viewmodel.parseResource
 import com.cyberflow.sparkle.flutter.FlutterProxyActivity
+import com.cyberflow.sparkle.profile.view.ShareAct
 import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.Post
@@ -40,6 +42,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMCustomMessageBody
 import com.hyphenate.chat.EMMessage
+import com.hyphenate.chat.EMTextMessageBody
 import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.model.EaseEvent
 import com.therouter.TheRouter
@@ -145,6 +148,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     private fun initChatFragment() {
         Bundle().apply {
             fragment = ChatFragment()
+            fragment?.setOnFragmentInfoListener(this@ChatActivity)
             putString(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
             putInt(EaseConstant.EXTRA_CHAT_TYPE, chatType)
             putString(DemoConstant.HISTORY_MSG_ID, "")
@@ -152,7 +156,6 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
             fragment?.arguments = this
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fl_fragment, fragment!!, "chat").commit()
-            fragment?.setOnFragmentInfoListener(this@ChatActivity)
         }
     }
 
@@ -286,7 +289,6 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                     fragment?.showQuestions()
                     fragment?.hideHiCoraBtn()
                 }else{
-                    questionStr = msg.orEmpty()
                     fragment?.hideQuestions()
                 }
                 onOtherTyping(NONE)
@@ -294,8 +296,6 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
             }
          }
     }
-
-    private var questionStr = ""
 
     // 这里逻辑和 com.hyphenate.easeui.widget.chatrow.EaseChatRowCustom.onSetUpView 一样
     // 只做 flutter 相关操作  不做UI显示
@@ -311,11 +311,11 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
             val isValid = customExt["isValid"] // 可选字段（只有校验消息才有这个字段），是否有效，1-有效，0-无效
             val content = customExt["content"] // 消息内容，结果消息且有结果的情况，是结构化消息；否则，是 aio 显示的消息
             val hasResult = customExt["hasResult"] // 可选字段（只有结果消息才有这个字段），是否有结果，1-有结果，0-无结果
-
             Log.e(TAG, "handleAIOMessage: ${GsonConverter.gson.toJson(customExt)}" )
-
             lifecycleScope.launch {
                 if(msgType == "1" && isValid == "1"){
+                    val questionMsg = DemoHelper.getInstance().chatManager.getMessage(msgId)
+                    val questionStr = (questionMsg?.body as? EMTextMessageBody)?.message
                     FlutterProxyActivity.initTarotParams(msgId, questionStr, methodChannel)
                     withMain {
                         FlutterProxyActivity.go(this@ChatActivity, FlutterProxyActivity.ENGINE_ID_TAROT)
@@ -332,7 +332,8 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
 
     // 弹出分享弹窗
     override fun handleAIOShareAction(message: EMMessage?) {
-
+        IMDataManager.instance.setShareMsg(message)
+        ShareAct.go(this,  ShareAct.SHARE_FROM_CHAT, "")
     }
 
     private var methodChannel : MethodChannel? = null

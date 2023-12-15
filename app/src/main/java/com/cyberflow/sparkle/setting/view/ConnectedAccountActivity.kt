@@ -140,6 +140,8 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
         if(disconnectDialog == null){
             disconnectDialog = DisconnectDialog(this, data ,object : DisconnectDialog.Callback{
                 override fun onSelected(select: Boolean) {
+                    Log.e(TAG, "onSelected:select=$select", )
+                    if(select) showUserInfo()
                     disconnectDialog?.dismiss()
                 }
             })
@@ -202,10 +204,21 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
 
     private fun showUserInfo(){
         val user  = CacheUtil.getUserInfo()?.user
+
+        mDataBinding.tvX.isVisible = false
+        mDataBinding.btnDisconnectX.isVisible = false
+
+        mDataBinding.tvDiscord.isVisible = false
+        mDataBinding.btnDisconnectDiscord.isVisible = false
+
+        mDataBinding.tvWallet.isVisible = false
+        mDataBinding.btnDisconnectWallet.isVisible = false
+
+        mDataBinding.composeView.isVisible = false
+
         user?.bind_list?.forEach {
 
-            Log.e(TAG, "bind_list: type=${it.type}    nick=${it.nick}" )
-
+//            Log.e(TAG, "bind_list: type=${it.type}    nick=${it.nick}" )
 
             if(it.type == "Twitter"){
                 x = it
@@ -250,6 +263,8 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
                 val data = Post<BindingResult>(Api.LOGIN_BIND) {
                     json("auth_type" to authType, "auth_msg" to authMsg)
                 }.await()
+
+//                Log.e(TAG, "request: data=$data", )
                 CacheUtil.getUserInfo()?.also {
                     it.user?.apply {
                         data?.also { new ->

@@ -250,6 +250,28 @@
             app:view_text_bold="true"
             app:view_text_color="@color/color_d93333" />
 
+        <io.github.glailton.expandabletextview.ExpandableTextView
+            android:id="@+id/tv"
+            android:layout_width="0dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="100dp"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:animDuration="500"
+            app:collapsedLines="1"
+            app:ellipsizeTextColor="@color/color_8B82DB"
+            app:expandType="layout"
+            app:isExpanded="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="200dp"
+            app:isUnderlined="true"
+            app:readLessText="Less"
+            app:readMoreText="More"
+            app:textMode="line"
+            tools:text="hi, glad to see you glad to seeto see you glad to see yoto see you glad to see yo you gee you glad to see ylad to see you" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -585,4 +585,8 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
     override fun translateMessageFail(message: EMMessage?, code: Int, error: String?) {
 
     }
+
+    override fun onAIOResultClick(message: EMMessage?) {
+
+    }
 }

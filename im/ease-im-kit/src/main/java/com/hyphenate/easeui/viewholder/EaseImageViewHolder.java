@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cyberflow.base.util.PageConst;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMFileMessageBody;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.EaseIM;
+import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.interfaces.MessageListItemClickListener;
 import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder;
 import com.hyphenate.easeui.utils.EaseFileUtils;
@@ -32,6 +34,7 @@ import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.interfaces.OnExternalPreviewEventListener;
 import com.luck.picture.lib.utils.BitmapUtils;
 import com.luck.picture.lib.utils.SdkVersionUtils;
+import com.therouter.TheRouter;
 
 import java.util.ArrayList;
 
@@ -50,7 +53,17 @@ public class EaseImageViewHolder extends EaseChatRowViewHolder {
     public void onBubbleClick(EMMessage message) {
         super.onBubbleClick(message);
 //        Log.e("TAG", " EaseChatRowViewHolder onBubbleClick: " );
+
         EMImageMessageBody imgBody = (EMImageMessageBody) message.getBody();
+        String fileName = ((EMImageMessageBody)message.getBody()).getFileName();
+        Log.e("TAG", "checkImgResource: fileName= "+ fileName );
+        if(fileName.startsWith(EaseConstant.MESSAGE_PREF_SHARE)){
+            String openUid = fileName.substring(EaseConstant.MESSAGE_PREF_SHARE.length());
+            Log.e("TAG", "checkImgResource: openUid=" + openUid );
+            TheRouter.build(PageConst.App.PAGE_PROFILE).withString("open_uid", openUid).navigation();
+            return;
+        }
+
         if (EMClient.getInstance().getOptions().getAutodownloadThumbnail()) {
             if (imgBody.thumbnailDownloadStatus() == EMFileMessageBody.EMDownloadStatus.FAILED) {
                 getChatRow().updateView(message);

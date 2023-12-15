@@ -212,7 +212,7 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
     private fun goShare() {
         user?.also {
             IMDataManager.instance.setUser(it)
-            ShareAct.go(mActivity, serverImageUrl)
+            ShareAct.go(mActivity, ShareAct.SHARE_FROM_PROFILE, serverImageUrl)
         }
     }
 

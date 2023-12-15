@@ -188,7 +188,7 @@
                 android:gravity="top"
                 android:hint="@string/hello_stellar_greetings_on_our_astrology_journey"
                 android:inputType="textMultiLine"
-                android:maxLength="120"
+                android:maxLength="80"
                 android:paddingLeft="@dimen/dp_11"
                 android:paddingTop="@dimen/dp_19"
                 android:paddingRight="@dimen/dp_11"
