@@ -124,20 +124,18 @@
                     android:textSize="@dimen/sp_17"
                     tools:text="Arc Chan" />
 
-                <io.github.glailton.expandabletextview.ExpandableTextView
+                <cn.carbs.android.expandabletextview.library.ExpandableTextView
                     android:id="@+id/tv_msg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:animDuration="500"
-                    app:collapsedLines="3"
-                    app:ellipsizeTextColor="@color/color_8B82DB"
-                    app:expandType="layout"
-                    app:isExpanded="false"
-                    app:isUnderlined="true"
-                    app:readLessText="Less"
-                    app:readMoreText="More"
-                    app:textMode="line"
-                    tools:text="hi, glad to see you glad to seeto see you glad to see yoto see you glad to see yo you gee you glad to see ylad to see you" />
+                    tools:text="hi, glad to see you glad to seeto see you glad to see yoto see you glad to see yo you gee you glad to see ylad to see you"
+                    app:etv_InitState="shrink"
+                    app:etv_MaxLinesOnShrink="1"
+                    android:text="@{m.msg}"
+                    app:etv_ToExpandHintColor="@color/color_8B82DB"
+                    app:etv_ToExpandHintColorBgPressed="@color/transparent"
+                    app:etv_ToShrinkHintColor="@color/color_8B82DB"
+                    app:etv_ToShrinkHintColorBgPressed="@color/transparent" />
 
             </LinearLayout>
 

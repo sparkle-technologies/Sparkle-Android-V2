@@ -153,4 +153,8 @@
 
     <string name="hi_cora">Hi, Cora</string>
 
+
+    <string name="to_expand_hint">More</string>
+    <string name="to_shrink_hint">Less</string>
+
 </resources>

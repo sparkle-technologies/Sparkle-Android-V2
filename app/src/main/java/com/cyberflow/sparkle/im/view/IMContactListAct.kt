@@ -122,7 +122,6 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
                                     DBComponent.loadAvatar(ivHead, model.url, model.gender)
                                     tvStatus.text = if (model.status == 1) getString(com.cyberflow.base.resources.R.string.accept) else getString(com.cyberflow.base.resources.R.string.refused)
                                     tvFriendName.text = model.name
-                                    tvMsg.text = model.msg
                                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
 
 //                                    cardview.setOnClickListener {
@@ -201,7 +200,6 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
             onBind {
                 getBinding<ItemImRequestBinding>().apply {
                     val model = getModel<FriendRequest>()
-                    tvMsg.text = model.msg
                     line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
                     cardview.setOnClickListener {
                         goProfile(model)
