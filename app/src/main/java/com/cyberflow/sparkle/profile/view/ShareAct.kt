@@ -219,7 +219,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
             LiveDataBus.get().with(ToastDialogHolder.CHAT_ACTIVITY_NOTIFY).postValue(
                 NotificationDialog.ToastBody(
                     NotificationDialog.TYPE_SUCCESS,
-                    getString(com.cyberflow.base.resources.R.string.message_sent)
+                    getString(R.string.message_sent)
                 )
             )
             finish()
@@ -228,11 +228,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR, String::class.java)
             .observe(this) {
                 LoadingDialogHolder.getLoadingDialog()?.hide()
-                ToastDialogHolder.getDialog()?.show(
-                    this@ShareAct,
-                    NotificationDialog.TYPE_ERROR,
-                    getString(com.cyberflow.base.resources.R.string.send_message_error)
-                )
+                toastError(getString(R.string.send_message_error))
             }
     }
 
@@ -432,11 +428,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         clipboardManager.setPrimaryClip(ClipData.newPlainText("", textCopied))
         // Only show a toast for Android 12 and lower.
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            ToastDialogHolder.getDialog()?.show(
-                this@ShareAct,
-                NotificationDialog.TYPE_SUCCESS,
-                getString(com.cyberflow.sparkle.R.string.link_copied)
-            )
+            toastSuccess(getString(com.cyberflow.sparkle.R.string.link_copied))
         }
     }
 
@@ -471,11 +463,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                     share()
                 } else {
                     withMain {
-                        ToastDialogHolder.getDialog()?.show(
-                            this@ShareAct,
-                            NotificationDialog.TYPE_ERROR,
-                            getString(com.cyberflow.sparkle.R.string.fail_to_generate_image)
-                        )
+                        toastError(getString(com.cyberflow.sparkle.R.string.fail_to_generate_image))
                     }
                 }
             }

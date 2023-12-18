@@ -1,12 +1,13 @@
 package com.cyberflow.sparkle.widget
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.content.ContextWrapper
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
@@ -17,6 +18,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import java.lang.Math.abs
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentLinkedQueue
@@ -32,14 +34,13 @@ object ToastDialogHolder {
     private var toastDialog: IToastDialog? = null
 
     fun setDialog(dialog: IToastDialog) {
-        ToastDialogHolder.toastDialog = dialog
+        toastDialog = dialog
     }
 
     fun getDialog(): IToastDialog? {
         return toastDialog
     }
 
-    const val MAIN_ACTIVITY_NOTIFY = "main_activity_notify"
     const val CHAT_ACTIVITY_NOTIFY = "chat_activity_notify"
 }
 
@@ -48,31 +49,34 @@ class ToastDialog {
 
     companion object : IToastDialog {
         private var cache: WeakReference<NotificationDialog>? = null
+        private var count = 1
 
         override fun show(context: Context, type: Int, content: String) {
-            assertInMainThread()
-            val a = context.getWrappedActivity() ?: return
-            val dialog = cache?.get()
-            if (dialog != null) {
-                val wrappedActivity = dialog.context.getWrappedActivity()
-                if (a == wrappedActivity) {
-                    Log.d(TAG, "use cache")
+            if(Settings.canDrawOverlays(context)){
+                assertInMainThread()
+                val dialog = cache?.get()
+                if (dialog != null) {
                     dialog.addMsg(type, content)
                     return
                 } else {
-                    Log.d(TAG, "lifecycle owner mismatch")
-                    try {
-                        dialog.dismiss()
-                    } catch (e: Exception) {
-                        Log.e(TAG, Log.getStackTraceString(e))
-                    }
+                    Log.d(TAG, "no cache")
                 }
-            } else {
-                Log.d(TAG, "no cache")
-            }
-            NotificationDialog(context).also {
-                cache = WeakReference(it)
-                it.addMsg(type, content)
+                NotificationDialog(context).also {
+                    cache = WeakReference(it)
+                    it.addMsg(type, content)
+                }
+            }else{
+                if(count <= 3){
+                    Toast.makeText(context, context.getString(R.string.permission_hint), Toast.LENGTH_SHORT).show()
+                    count++
+                    val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:${context.packageName}"))
+//                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+//                    intent.setAction(Settings.ACTION_SETTINGS)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(intent)
+                }else{
+                    Toast.makeText(context, content, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -94,19 +98,6 @@ fun isMainThread(): Boolean {
     return Looper.getMainLooper().thread == Thread.currentThread()
 }
 
-fun Context?.getWrappedActivity(): Activity? {
-    var cur = this
-    while (true) {
-        if (cur is Activity) {
-            return cur
-        }
-        cur = if (cur is ContextWrapper) {
-            cur.baseContext
-        } else {
-            return null
-        }
-    }
-}
 
 class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.resources.R.style.share_dialog) {
 
@@ -129,6 +120,7 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
         setContentView(mView!!)
         iv = mView?.findViewById(R.id.iv)
         tv = mView?.findViewById(R.id.tv)
+        window?.setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY)
         window?.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
         val layoutParams = window?.attributes
 
@@ -192,6 +184,10 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
         const val TYPE_SUCCESS = 0
         const val TYPE_ERROR = 1
         const val TYPE_WARN = 2
+
+        const val EVENT_SUCCESS = "event_toast_success"
+        const val EVENT_ERROR = "event_toast_error"
+        const val EVENT_WARN = "event_toast_warn"
     }
 
     private val queue = ConcurrentLinkedQueue<ToastBody>()

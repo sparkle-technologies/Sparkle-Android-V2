@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="sparkle_app_name">Starry Book</string>
 
     <string name="year_string">Year</string>
     <string name="month_string">Month</string>

@@ -191,7 +191,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
             }
 
         LiveDataBus.get().with(ToastDialogHolder.CHAT_ACTIVITY_NOTIFY, NotificationDialog.ToastBody::class.java).observe(this){
-            ToastDialogHolder.getDialog()?.show(this@ChatActivity, it.type, it.content)
+            myToast(it.type, it.content)
         }
 
         setDefaultTitle()

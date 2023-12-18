@@ -24,9 +24,7 @@ import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.register.view.RegisterAct
-import com.cyberflow.sparkle.widget.NotificationDialog.Companion.TYPE_WARN
 import com.cyberflow.sparkle.widget.ShadowImgButton
-import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.Post
 import com.drake.net.utils.TipUtils
 import com.drake.net.utils.scopeDialog
@@ -115,7 +113,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
         mViewBind.btnGoogleLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                ToastDialogHolder.getDialog()?.show(this@LoginAct, TYPE_WARN, "coming soon...")
+                toastWarn("coming soon...")
 //                CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "MetaMask")
 //                request("0x73cf3CB3dc0D6872878a316509aFb7510E7cd44d", "MetaMask")
             }
@@ -124,7 +122,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         mViewBind.btnIgLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 //viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")
-                ToastDialogHolder.getDialog()?.show(this@LoginAct, TYPE_WARN, "coming soon...")
+                toastWarn("coming soon...")
 
                 // for test
 //                val bundle = Bundle()

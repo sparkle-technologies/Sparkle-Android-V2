@@ -21,10 +21,8 @@ import com.cyberflow.sparkle.databinding.ActivityConnectAccountBinding
 import com.cyberflow.sparkle.setting.widget.ConnectLoadingDialog
 import com.cyberflow.sparkle.setting.widget.DisconnectDialog
 import com.cyberflow.sparkle.setting.widget.DisconnectHintDialog
-import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
-import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.Post
 import com.drake.net.utils.scopeNetLife
 import com.drake.net.utils.withMain
@@ -185,7 +183,7 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
     private fun connectDiscord() {
         Log.e(TAG, "connectDiscord: ", )
 //        showLoadingDialog(true)
-        ToastDialogHolder.getDialog()?.show(this, NotificationDialog.TYPE_WARN, "Coming soon...")
+        toastWarn("Coming soon...")
     }
 
     private fun connectX() {
@@ -310,7 +308,7 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
             }
             .addOnFailureListener {
                 it.printStackTrace()
-                ToastDialogHolder.getDialog()?.show(this, NotificationDialog.TYPE_ERROR, "Twitter login failed, please try again")
+                toastError("Twitter login failed, please try again")
                 hideLoadingDialog()
             }
     }

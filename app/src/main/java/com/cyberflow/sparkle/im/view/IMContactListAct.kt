@@ -36,9 +36,7 @@ import com.cyberflow.sparkle.im.viewmodel.FriendRequestList
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.im.viewmodel.STATUS_NORMAL
 import com.cyberflow.sparkle.profile.view.ProfileAct
-import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
-import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
@@ -294,7 +292,7 @@ class IMContactListAct : BaseDBAct<IMViewModel, ActivityImContactListBinding>() 
 
     private fun initListener(){
         viewModel.deleteMsgObservable.observe(this){
-            ToastDialogHolder.getDialog()?.show(this@IMContactListAct, NotificationDialog.TYPE_SUCCESS, getString(R.string.friend_successfully_removed))
+            toastSuccess(getString(R.string.friend_successfully_removed))
             LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent())
             freshData()
         }

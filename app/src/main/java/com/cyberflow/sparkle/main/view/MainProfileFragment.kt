@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.model.BondDetail
 import com.cyberflow.base.model.DetailResponseData
@@ -41,7 +42,6 @@ import com.cyberflow.sparkle.setting.view.SettingsActivity
 import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
-import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.models
@@ -366,7 +366,7 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
             val type = call.argument<Int>("type") ?: NotificationDialog.TYPE_SUCCESS
             val content = call.argument<String>("content")
             if (content?.isNotEmpty() == true) {
-                ToastDialogHolder.getDialog()?.show(mActivity, type, content)
+                (requireActivity() as? BaseDBAct<*, *>)?.myToast(type, content)
             }
             result.success("success")
         } else {

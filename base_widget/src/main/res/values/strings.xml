@@ -1,4 +1,5 @@
 <resources>
 
 
+    <string name="permission_hint">We need permission to provide you with a better experience</string>
 </resources>

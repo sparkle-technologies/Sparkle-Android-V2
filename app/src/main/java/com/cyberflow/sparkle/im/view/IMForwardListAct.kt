@@ -59,7 +59,7 @@ class IMForwardListAct : BaseDBAct<IMViewModel, ActivityImForwardListBinding>() 
 
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR, String::class.java).observe(this) {
             LoadingDialogHolder.getLoadingDialog()?.hide()
-            ToastDialogHolder.getDialog()?.show(this@IMForwardListAct, NotificationDialog.TYPE_ERROR, getString(com.cyberflow.base.resources.R.string.send_message_error))
+            toastError(getString(com.cyberflow.base.resources.R.string.send_message_error))
         }
     }
 

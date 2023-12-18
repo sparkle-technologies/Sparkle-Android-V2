@@ -16,7 +16,6 @@ import com.cyberflow.sparkle.flutter.FlutterProxyActivity.Companion.prepareFlutt
 import com.cyberflow.sparkle.login.view.LoginAct
 import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
-import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.hjq.language.MultiLanguages
 import com.hjq.language.OnLanguageListener
 import io.flutter.embedding.engine.FlutterEngineCache
@@ -114,7 +113,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
             val type = call.argument<Int>("type") ?: NotificationDialog.TYPE_SUCCESS
             val content = call.argument<String>("content")
             if (content?.isNotEmpty() == true) {
-                ToastDialogHolder.getDialog()?.show(this@SettingsActivity, type, content)
+                myToast(type, content)
             }
             result.success("success")
         }else{

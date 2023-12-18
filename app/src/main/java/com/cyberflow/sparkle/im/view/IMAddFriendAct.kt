@@ -8,16 +8,13 @@ import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.model.BindingResult
 import com.cyberflow.base.model.IMSearchData
 import com.cyberflow.base.net.Api
-import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.DemoHelper
 import com.cyberflow.sparkle.databinding.ActivityImAddFriendBinding
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
-import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
-import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.Post
 import com.drake.net.utils.TipUtils
 import com.drake.net.utils.scopeDialog
@@ -81,12 +78,12 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
                 viewModel.IM_addFriend(imAccount.replace("-", "_"), msg) // todo our server do not ready for that, so wait
 
                 data?.let {
-                    LiveDataBus.get().with(ToastDialogHolder.MAIN_ACTIVITY_NOTIFY).postValue(NotificationDialog.ToastBody(NotificationDialog.TYPE_SUCCESS, getString(R.string.request_sent)))
+                    toastSuccess(getString(R.string.request_sent))
                     MainActivityV2.go(this@IMAddFriendAct)
                     finish()
                 }
             }catch (e: Exception){
-                ToastDialogHolder.getDialog()?.show(this@IMAddFriendAct, NotificationDialog.TYPE_ERROR, getString(R.string.oops_request_failed))
+                toastError(getString(R.string.oops_request_failed))
             }
         }
     }

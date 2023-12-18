@@ -17,7 +17,6 @@ import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityFlutterProxyBinding
 import com.cyberflow.sparkle.widget.NotificationDialog
-import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.hjq.language.LocaleContract
 import com.hjq.language.MultiLanguages
 import dev.pinkroom.walletconnectkit.core.chains.toJson
@@ -168,7 +167,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                 val type = call.argument<Int>("type") ?: NotificationDialog.TYPE_SUCCESS
                 val content = call.argument<String>("content")
                 if (content?.isNotEmpty() == true) {
-                    ToastDialogHolder.getDialog()?.show(activity, type, content)
+                    (activity as? BaseDBAct<*, *>)?.myToast(type, content)
                 }
                 result.success("success")
             }
