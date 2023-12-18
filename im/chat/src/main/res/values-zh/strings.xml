@@ -13,5 +13,8 @@
     <string name="demo_contact_listener_onContactInvited">有人给您发来好友请求</string>
     <string name="demo_contact_listener_onFriendRequestAccepted">好友请求已通过</string>
     <string name="demo_contact_listener_onFriendRequestDeclined">好友请求被拒绝</string>
+    <string name="video_size_exceed">视频文件不能超过10MB</string>
+    <string name="compress_video_error">压缩视频异常</string>
+    <string name="video_size_too_large">视频文件太大, 请确保文件低于 </string>
 
 </resources>

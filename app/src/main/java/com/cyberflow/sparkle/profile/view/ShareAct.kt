@@ -76,7 +76,6 @@ import com.luck.picture.lib.basic.PictureMediaScannerConnection
 import com.luck.picture.lib.interfaces.OnCallbackListener
 import com.luck.picture.lib.permissions.PermissionUtil
 import com.luck.picture.lib.utils.DownloadFileUtils
-import com.luck.picture.lib.utils.ToastUtils
 import com.therouter.TheRouter
 import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.EasyPermissions
@@ -497,10 +496,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                 fileOutputStream.close()
                 if (!isSuccess) {
                     withMain {
-                        ToastUtils.showToast(
-                            this@ShareAct,
-                            getString(com.cyberflow.sparkle.R.string.fail_to_compress_image)
-                        )
+                        toastError(getString(com.cyberflow.sparkle.R.string.fail_to_compress_image))
                         LoadingDialogHolder.getLoadingDialog()?.hide()
                     }
                     return@launch
@@ -514,15 +510,11 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                             override fun onCall(realPath: String?) {
                                 LoadingDialogHolder.getLoadingDialog()?.hide()
                                 if (TextUtils.isEmpty(realPath)) {
-                                    val errorMsg: String =
-                                        getString(com.luck.picture.lib.R.string.ps_save_image_error)
-                                    ToastUtils.showToast(this@ShareAct, errorMsg)
+                                    val errorMsg: String = getString(com.luck.picture.lib.R.string.ps_save_image_error)
+                                    toastError(errorMsg)
                                 } else {
                                     PictureMediaScannerConnection(this@ShareAct, realPath)
-                                    ToastUtils.showToast(
-                                        this@ShareAct,
-                                        "${getString(com.luck.picture.lib.R.string.ps_save_success)}\n$realPath"
-                                    )
+                                    toastSuccess("${getString(com.luck.picture.lib.R.string.ps_save_success)}\n$realPath")
                                 }
                             }
                         })

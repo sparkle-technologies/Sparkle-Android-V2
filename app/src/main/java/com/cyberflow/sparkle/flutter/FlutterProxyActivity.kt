@@ -19,6 +19,7 @@ import com.cyberflow.sparkle.databinding.ActivityFlutterProxyBinding
 import com.cyberflow.sparkle.widget.NotificationDialog
 import com.hjq.language.LocaleContract
 import com.hjq.language.MultiLanguages
+import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import dev.pinkroom.walletconnectkit.core.chains.toJson
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.android.RenderMode
@@ -154,12 +155,12 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
             }
 
             if(call.method == "flutterShowLoadingView"){
-                //todo
+                LoadingDialogHolder.getLoadingDialog()?.hide()
                 result.success("success")
             }
 
             if(call.method == "flutterHideLoadingView"){
-                //todo
+                LoadingDialogHolder.getLoadingDialog()?.show(activity)
                 result.success("success")
             }
 

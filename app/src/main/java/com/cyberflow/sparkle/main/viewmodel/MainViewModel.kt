@@ -3,7 +3,6 @@ package com.cyberflow.sparkle.main.viewmodel
 import android.text.TextUtils
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.cyberflow.base.BaseApp
 import com.cyberflow.base.model.IMConversationCache
 import com.cyberflow.base.model.IMFriendInfo
 import com.cyberflow.base.model.IMFriendList
@@ -11,6 +10,7 @@ import com.cyberflow.base.model.IMFriendRequest
 import com.cyberflow.base.model.IMFriendRequestList
 import com.cyberflow.base.model.IMQuestionList
 import com.cyberflow.base.net.Api
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SingleSourceLiveData
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.chat.DemoHelper
@@ -19,13 +19,13 @@ import com.cyberflow.sparkle.chat.common.interfaceOrImplement.OnResourceParseCal
 import com.cyberflow.sparkle.chat.common.net.Resource
 import com.cyberflow.sparkle.chat.common.repositories.EMChatManagerRepository
 import com.cyberflow.sparkle.im.DBManager
+import com.cyberflow.sparkle.widget.NotificationDialog
 import com.drake.net.Post
 import com.drake.net.utils.scopeNet
 import com.hyphenate.chat.EMClient
 import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import com.hyphenate.easeui.utils.EaseCommonUtils
-import com.luck.picture.lib.utils.ToastUtils.showToast
 import kotlinx.coroutines.launch
 
 class MainViewModel : BaseViewModel() {
@@ -166,7 +166,7 @@ fun <T> parseResource(response: Resource<T>?, callback: OnResourceParseCallback<
     } else if (response.status === Status.ERROR) {
         callback.hideLoading()
         if (!callback.hideErrorMsg) {
-            showToast(BaseApp.instance, response.message)
+            LiveDataBus.get().with(NotificationDialog.EVENT_ERROR).postValue(response.message)
         }
         callback.onError(response.errorCode, response.message)
     } else if (response.status === Status.LOADING) {

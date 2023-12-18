@@ -818,5 +818,8 @@
     <string name="you_have_turned_off_camera_permissions">You have turned off camera permissions.</string>
     <string name="unable_to_access_the_gallery">Unable to access the gallery</string>
     <string name="you_have_turned_off_gallery_permissions">You have turned off gallery permissions.</string>
+    <string name="video_size_exceed">video size cannot more than 10MB</string>
+    <string name="compress_video_error">compress video error</string>
+    <string name="video_size_too_large">"video size too large, make sure it less than "</string>
 
 </resources>

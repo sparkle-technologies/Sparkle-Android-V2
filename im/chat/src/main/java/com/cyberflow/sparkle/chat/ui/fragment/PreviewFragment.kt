@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.sparkle.chat.R
 import com.cyberflow.sparkle.chat.common.model.EmojiconExampleGroupData
 import com.cyberflow.sparkle.chat.common.utils.CompressFileEngineImpl
@@ -51,7 +52,6 @@ import com.luck.picture.lib.interfaces.OnKeyValueResultCallbackListener
 import com.luck.picture.lib.interfaces.OnResultCallbackListener
 import com.luck.picture.lib.permissions.PermissionUtil
 import com.luck.picture.lib.utils.DownloadFileUtils
-import com.luck.picture.lib.utils.ToastUtils
 import pub.devrel.easypermissions.EasyPermissions
 import pub.devrel.easypermissions.PermissionRequest
 import java.io.File
@@ -190,10 +190,10 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
                         } else {
                             getString(com.luck.picture.lib.R.string.ps_save_image_error)
                         }
-                        ToastUtils.showToast(context, errorMsg)
+                        (requireActivity() as? BaseDBAct<*, *>)?.toastError(errorMsg)
                     } else {
                         PictureMediaScannerConnection(activity, realPath)
-                        ToastUtils.showToast(context, "${getString(com.luck.picture.lib.R.string.ps_save_success)}\n$realPath")
+                        (requireActivity() as? BaseDBAct<*, *>)?.toastSuccess("${getString(com.luck.picture.lib.R.string.ps_save_success)}\n$realPath")
                     }
                 }
             })
@@ -378,7 +378,7 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
                 presenter?.sendVideoMessage(mapped, duration)
             } else {
                 if (size > CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW) {
-                    ToastUtils.showToast(requireContext(), "video size too large, make sure it less than " + CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW + "MB")
+                    (requireActivity() as? BaseDBAct<*, *>)?.toastWarn(getString(R.string.video_size_too_large) + CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW + "MB")
                     return
                 }
                 showCompressDialog()
@@ -386,12 +386,9 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
                 list.add(mapped)
                 CompressFileEngineImpl.check(requireContext(), list, OnKeyValueResultCallbackListener { srcPath, resultPath ->
                     hideCompressDialog()
-                    Log.e(
-                        TAG,
-                        "onCallback: srcPath=$srcPath\t resultPath=$resultPath"
-                    )
+                    Log.e(TAG, "onCallback: srcPath=$srcPath\t resultPath=$resultPath")
                     if (srcPath == null || resultPath == null) {
-                        ToastUtils.showToast(requireContext(), "compress video error")
+                        (requireActivity() as? BaseDBAct<*, *>)?.toastWarn(getString(R.string.compress_video_error))
                         return@OnKeyValueResultCallbackListener
                     }
                     val oldF = File(srcPath)
@@ -409,7 +406,7 @@ open class PreviewFragment : Fragment(), EaseChatMessageListLayout.OnMessageTouc
                     // >10MB   不行
                     Log.e(TAG, "onCallback: size1=" + old_file_size + "MB  \t size2=" + new_file_size + "MB  \t  percent=" + percent)
                     if (new_file_size > CompressFileEngineImpl.ORIGIN_VIDEO_MAX_SIZE) {
-                        ToastUtils.showToast(requireContext(), "video size cannot more than 10MB")
+                        (requireActivity() as? BaseDBAct<*, *>)?.toastWarn(getString(R.string.video_size_exceed))
                         return@OnKeyValueResultCallbackListener
                     }
                     presenter?.sendVideoMessage(Uri.fromFile(File(resultPath)), duration)

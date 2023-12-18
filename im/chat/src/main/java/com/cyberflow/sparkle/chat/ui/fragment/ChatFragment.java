@@ -35,6 +35,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.cyberflow.base.BaseApp;
+import com.cyberflow.base.act.BaseDBAct;
 import com.cyberflow.base.act.BaseVBAct;
 import com.cyberflow.base.util.PageConst;
 import com.cyberflow.base.util.bus.LiveDataBus;
@@ -679,7 +680,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 chatLayout.sendVideoMessage(mapped, duration);
             } else {
                 if(size > CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW){
-                    ToastUtils.showToast(mContext, "video size too large, make sure it less than " + CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW + "MB");
+                    ((BaseDBAct)requireActivity()).toastWarn(getString(R.string.video_size_too_large)+ CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW + "MB");
                     return;
                 }
 
@@ -694,7 +695,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                         hideCompressDialog();
                         Log.e(TAG, "onCallback: srcPath=" + srcPath + "\t resultPath=" + resultPath);
                         if(srcPath == null || resultPath == null){
-                            ToastUtils.showToast(mContext, "compress video error");
+                            ((BaseDBAct)requireActivity()).toastWarn(getString(R.string.compress_video_error));
                             return;
                         }
                         File oldF = new File(srcPath);
@@ -712,7 +713,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                         // >10MB   不行
                         Log.e(TAG, "onCallback: size1=" + old_file_size + "MB  \t size2=" + new_file_size + "MB  \t  percent=" + percent);
                         if(new_file_size > CompressFileEngineImpl.ORIGIN_VIDEO_MAX_SIZE){
-                            ToastUtils.showToast(mContext, "video size cannot more than 10MB");
+                            ((BaseDBAct)requireActivity()).toastWarn(getString(R.string.video_size_exceed));
                             return;
                         }
                         chatLayout.sendVideoMessage(Uri.fromFile(new File(resultPath)), duration);
