@@ -154,7 +154,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
     override fun onDestroy() {
         super.onDestroy()
-        FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE)?.destroy()
+//        FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE)?.destroy()
         FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_ACCOUNT_PRIVACY)?.destroy()
     }
 }
