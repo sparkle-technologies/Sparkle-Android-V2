@@ -93,6 +93,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             DBManager.instance.db?.imFriendRequestDao()?.deleteAll()
             DBManager.instance.db?.imFriendInfoDao()?.deleteAll()
             DBManager.instance.db?.imConversationCacheDao()?.deleteAll()
+            DBManager.instance.db?.horoscopeCacheDao()?.deleteAll()
             IMDataManager.instance.clearCache()
         }
     }

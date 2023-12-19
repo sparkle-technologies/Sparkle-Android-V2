@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.safeClick
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.databinding.FragmentMainHoroscopeBinding
+import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.main.widget.SelectMonthDialog
 import com.cyberflow.sparkle.main.widget.SelectYearDialog
 import com.cyberflow.sparkle.main.widget.calendar.CalendarDialog
@@ -18,6 +20,7 @@ import com.flyco.tablayout.listener.OnTabSelectListener
 import com.youth.banner.Banner
 import com.youth.banner.listener.OnPageChangeListener
 import com.youth.banner.transformer.AlphaPageTransformer
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -138,12 +141,12 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             addPageTransformer(AlphaPageTransformer(0.2f))
             addOnPageChangeListener(object : OnPageChangeListener{
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                    Log.e(TAG, "onPageScrolled: position=$position positionOffset=$positionOffset   positionOffsetPixels=$positionOffsetPixels" )
+//                    Log.e(TAG, "onPageScrolled: position=$position positionOffset=$positionOffset   positionOffsetPixels=$positionOffsetPixels" )
                 }
 
                 // 初始化是0  左滑是2  右滑是1   201   012  120
                 override fun onPageSelected(position: Int) {
-                    Log.e(TAG, "onPageSelected: position=$position" )
+//                    Log.e(TAG, "onPageSelected: position=$position" )
                     if(position == 0){
                         if(previousPos == 2) realPos++
                         if(previousPos == 1) realPos--
@@ -184,7 +187,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 }
 
                 override fun onPageScrollStateChanged(state: Int) {
-                    Log.e(TAG, "onPageScrollStateChanged: state=$state" )
+//                    Log.e(TAG, "onPageScrollStateChanged: state=$state" )
 //                    viewPager2.isUserInputEnabled = !(state == ViewPager2.SCROLL_STATE_DRAGGING && viewPager2.currentItem == 2)
                 }
             })
@@ -322,6 +325,29 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 birthDate = DateBean(year = calendar[Calendar.YEAR], month = calendar[Calendar.MONTH] + 1, day = calendar[Calendar.DAY_OF_MONTH])
 //                birthDate = DateBean(year = 2000, month = 7, day = 26)
             }catch (e: Exception){}
+        }
+    }
+
+    // update data if a new day coming
+    private var lastMillis = System.currentTimeMillis()
+    private var lastDayTag = ""
+    override fun onResume() {
+        super.onResume()
+        if(System.currentTimeMillis() - lastMillis > 1000 * 60 * 30){  // every 30 minutes
+            val calendar = Calendar.getInstance()
+            val curMonth = calendar[Calendar.MONTH]
+            val curDay = calendar[Calendar.DAY_OF_MONTH]
+            if(lastDayTag.isEmpty()){
+                lastDayTag = "$curMonth-$curDay"
+            }else{
+                if(lastDayTag != "$curMonth-$curDay"){
+                    lastDayTag = "$curMonth-$curDay"
+                }
+            }
+            lastMillis = System.currentTimeMillis()
+            lifecycleScope.launch {
+                DBManager.instance.db?.horoscopeCacheDao()?.deleteAll()   // clear cache
+            }
         }
     }
 }

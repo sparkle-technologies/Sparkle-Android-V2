@@ -6,13 +6,16 @@ import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.recyclerview.widget.RecyclerView
+import com.cyberflow.base.model.DBHoroscope
 import com.cyberflow.base.model.DailyHoroScopeData
 import com.cyberflow.base.model.YearlyHoroScopeData
 import com.cyberflow.base.net.Api
+import com.cyberflow.base.net.GsonConverter
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ItemHoroscopeBannerBinding
 import com.cyberflow.sparkle.databinding.ItemHoroscopeBinding
+import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.main.view.EmptyItem
 import com.cyberflow.sparkle.main.view.HoroscopeHeadItem
 import com.cyberflow.sparkle.main.view.HoroscopeItem
@@ -27,6 +30,7 @@ import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
 import com.drake.net.Post
 import com.drake.net.utils.scope
+import com.drake.net.utils.withIO
 import com.drake.net.utils.withMain
 import java.lang.Math.abs
 import java.util.Calendar
@@ -172,36 +176,70 @@ class HoroscopeView : RecyclerView.ViewHolder {
         this.requestDay = day
         firstRequest = false
 
-        Log.e(TAG, "requestData: requestYear=$requestYear \t requestMonth=$requestMonth \t requestDay=$requestDay " )
+//        Log.e(TAG, "requestData: requestYear=$requestYear \t requestMonth=$requestMonth \t requestDay=$requestDay " )
 
         mDatabind?.state?.apply {
             showLoading()
             scope {
-                when (params?.selectMode) {
-                    DAILY -> {
-                        horoScopeData = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {
-                            json("date" to "${year}-${month}-${day}")  //YYYY-MM-DD
-                        }.await()
+
+                var requestKey = "${params?.selectMode}_${year}_${month}_${day}"
+                val cache = DBManager.instance.db?.horoscopeCacheDao()?.fetch(requestKey) // get cache from db
+//                Log.e(TAG, "---0--- requestKey=$requestKey  cache.requestKey=${cache?.requestKey}" )
+                if(cache == null){
+//                    Log.e(TAG, "---1--- we need request data from server " )
+                    when (params?.selectMode) {
+                        DAILY -> {
+                            horoScopeData = Post<DailyHoroScopeData>(Api.DAILY_HOROSCOPE) {
+                                json("date" to "${year}-${month}-${day}")  // YYYY-MM-DD
+                            }.await()
+                        }
+
+                        WEEKLY -> {
+                            horoScopeData = Post<DailyHoroScopeData>(Api.WEEKLY_HOROSCOPE) {
+                                json("date" to "${year}-${month}-${day}")  // "2023-11-11"
+                            }.await()
+                        }
+
+                        MONTH -> {
+                            horoScopeData = Post<DailyHoroScopeData>(Api.MONTHLY_HOROSCOPE) {
+                                json("year" to year, "month" to month)
+                            }.await()
+                        }
+
+                        YEAR -> {
+                            yearlyHoroScopeData = Post<YearlyHoroScopeData>(Api.YEARLY_HOROSCOPE) {
+                                json("year" to year)   //2023
+                            }.await()
+                        }
                     }
 
-                    WEEKLY -> {
-                        horoScopeData = Post<DailyHoroScopeData>(Api.WEEKLY_HOROSCOPE) {
-                            json("date" to "${year}-${month}-${day}")  // "2023-11-11"
-                        }.await()
+                    // update cache
+                    withIO {
+                        val data = when (params?.selectMode) {
+                            DAILY, WEEKLY , MONTH-> {
+                                GsonConverter.gson.toJson(horoScopeData)
+                            }
+                            YEAR -> {
+                                GsonConverter.gson.toJson(yearlyHoroScopeData)
+                            }
+                            else -> { null }
+                        }
+                        data?.also {
+                            DBManager.instance.db?.horoscopeCacheDao()?.insert(DBHoroscope(requestKey, it))
+                        }
                     }
-
-                    MONTH -> {
-                        horoScopeData = Post<DailyHoroScopeData>(Api.MONTHLY_HOROSCOPE) {
-                            json("year" to year, "month" to month)
-                        }.await()
-                    }
-
-                    YEAR -> {
-                        yearlyHoroScopeData = Post<YearlyHoroScopeData>(Api.YEARLY_HOROSCOPE) {
-                            json("year" to year)   //2023
-                        }.await()
+                }else{
+//                    Log.e(TAG, "---2--- we fetch data from local db " )
+                    when (params?.selectMode) {
+                        DAILY, WEEKLY , MONTH-> {
+                            horoScopeData = GsonConverter.gson.fromJson(cache.data, DailyHoroScopeData::class.java)
+                        }
+                        YEAR -> {
+                            yearlyHoroScopeData = GsonConverter.gson.fromJson(cache.data, YearlyHoroScopeData::class.java)
+                        }
                     }
                 }
+
                 withMain { showData() }
             }
         }
