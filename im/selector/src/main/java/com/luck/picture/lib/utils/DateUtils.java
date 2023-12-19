@@ -2,7 +2,6 @@ package com.luck.picture.lib.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 
 import com.luck.picture.lib.R;
 
@@ -157,24 +156,24 @@ public class DateUtils {
         calendarToCheck.setTimeInMillis(timestampToCheck);
         Date dateToCheck = calendarToCheck.getTime();
 
-        Log.e("TAG", "dayDiff: now="+ now );
-        Log.e("TAG", "dayDiff: dateToCheck="+ dateToCheck );
+//        Log.e("TAG", "dayDiff: now="+ now );
+//        Log.e("TAG", "dayDiff: dateToCheck="+ dateToCheck );
 
         //1701941396
 
         // 比较日期
         if (isSameDay(dateToCheck, now)) {
-            System.out.println("今天");
+//            System.out.println("今天");
             return 0;
         } else {
             // 将当前日期减去一天
             calendarNow.add(Calendar.DAY_OF_MONTH, -1);
             Date yesterday = calendarNow.getTime();
             if (isSameDay(dateToCheck, yesterday)) {
-                System.out.println("昨天");
+//                System.out.println("昨天");
                 return 1;
             } else {
-                System.out.println("既不是今天也不是昨天");
+//                System.out.println("既不是今天也不是昨天");
                 return 2;
             }
         }

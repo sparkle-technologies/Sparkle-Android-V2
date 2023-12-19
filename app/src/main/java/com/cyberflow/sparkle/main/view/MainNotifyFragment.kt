@@ -13,7 +13,6 @@ import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainNotifyBinding
 import com.cyberflow.sparkle.databinding.ItemSiteMessageBinding
 import com.cyberflow.sparkle.databinding.ItemSiteMessageBodyBinding
-import com.cyberflow.sparkle.flutter.FlutterProxyActivity
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.profile.view.ProfileAct
 import com.cyberflow.sparkle.widget.ShadowTxtButton
@@ -27,10 +26,6 @@ import com.drake.net.utils.withMain
 import com.drake.spannable.replaceSpanFirst
 import com.drake.spannable.span.ColorSpan
 import com.luck.picture.lib.utils.DateUtils
-import io.flutter.embedding.android.FlutterFragment
-import io.flutter.embedding.android.RenderMode
-import io.flutter.embedding.android.TransparencyMode
-import io.flutter.plugin.common.MethodChannel
 
 class MainNotifyFragment : BaseDBFragment<BaseViewModel, FragmentMainNotifyBinding>() {
 
@@ -192,22 +187,5 @@ class MainNotifyFragment : BaseDBFragment<BaseViewModel, FragmentMainNotifyBindi
         mDatabind.rv.models = rvData
         mDatabind.page.showContent()
         (requireActivity() as? MainActivityV2)?.setSiteUnRead(unRead)
-    }
-
-    /********************************************************************************/
-    private var methodChannel : MethodChannel? = null
-
-    private fun initFlutter() {
-        methodChannel = FlutterProxyActivity.prepareFlutterEngine(requireActivity(), FlutterProxyActivity.ENGINE_ID_NOTIFICATION_LIST, FlutterProxyActivity.ROUTE_NOTIFICATION_LIST, FlutterProxyActivity.CHANNEL_NOTIFICATION, FlutterProxyActivity.SCENE_NOTIFICATION_LIST) { scene, method, call, result ->
-            FlutterProxyActivity.handleFlutterCommonEvent(requireActivity(), scene, method, call, result)
-        }
-        val fragment = FlutterFragment.withCachedEngine(FlutterProxyActivity.ENGINE_ID_NOTIFICATION_LIST)
-            .renderMode(RenderMode.texture)
-            .transparencyMode(TransparencyMode.transparent)
-            .build<FlutterFragment>()
-        requireActivity()
-            .supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, fragment)
-            .commit()
     }
 }

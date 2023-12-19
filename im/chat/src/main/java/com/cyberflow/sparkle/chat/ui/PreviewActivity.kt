@@ -321,6 +321,7 @@ fun handleQRCode(result: Array<HmsScan>, failed: () -> Unit  ) {
     filterData.apply {
         val url = this[0]
         Log.e("handleQRCode", " url=$url")
+        // url = https://www.sparkle.fun/traveler/96d7c637-6c17-4a45-ae0f-5db669bdb056
         val openUid = url.substring(url.lastIndexOf("/") + 1)
         if(openUid.isNullOrEmpty()){
             failed()

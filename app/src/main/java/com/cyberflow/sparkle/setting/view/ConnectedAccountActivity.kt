@@ -174,14 +174,17 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
     }
 
     private fun connectWallet() {
-        Log.e(TAG, "connectWallet: ", )
-        mDataBinding.composeView.isVisible = true
-        mDataBinding.composeView.performClick()
-//        showLoadingDialog(true)
+//        Log.e(TAG, "connectWallet: ", )
+        if(mDataBinding.composeView.isVisible){
+
+        }else{
+            initWalletConnect()
+        }
     }
 
+
     private fun connectDiscord() {
-        Log.e(TAG, "connectDiscord: ", )
+//        Log.e(TAG, "connectDiscord: ", )
 //        showLoadingDialog(true)
         toastWarn("Coming soon...")
     }
@@ -283,16 +286,6 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
         }
     }
 
-
-    private var isFirst = true
-    override fun onResume() {
-        super.onResume()
-        if(isFirst){
-            isFirst = false
-            initWalletConnect()
-        }
-    }
-
     /********************* twitter ******************************/
     fun loginTwitter() {
         val firebaseAuth = FirebaseAuth.getInstance()
@@ -313,7 +306,6 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
             }
     }
 
-
     /********************* wallet connect ******************************/
 
     private fun initWalletConnect() {
@@ -324,6 +316,7 @@ class ConnectedAccountActivity : BaseDBAct<BaseViewModel, ActivityConnectAccount
                 mDataBinding.composeView.setContent {
                     MyApp.instance.walletConnectKit?.let { Content(it) }
                 }
+                mDataBinding.composeView.isVisible = true
                 lifecycleScope.launch {
                     MyApp.instance.walletConnectKit?.activeSessions?.collect {
                         if (it.isNotEmpty()) {

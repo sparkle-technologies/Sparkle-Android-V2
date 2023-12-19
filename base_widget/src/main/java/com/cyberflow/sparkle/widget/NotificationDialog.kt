@@ -115,7 +115,7 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
     var tv: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.e(TAG, "onCreate: ")
+//        Log.e(TAG, "onCreate: ")
         super.onCreate(savedInstanceState)
         setContentView(mView!!)
         iv = mView?.findViewById(R.id.iv)
@@ -135,7 +135,7 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
         setCanceledOnTouchOutside(false)
 
         setOnDismissListener {
-            Log.e(TAG, "onDismiss: ")
+//            Log.e(TAG, "onDismiss: ")
             afterDismiss()
         }
     }
@@ -193,7 +193,7 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
     private val queue = ConcurrentLinkedQueue<ToastBody>()
 
     fun addMsg(type: Int, content: String) {
-        Log.e(TAG, "addMsg: ", )
+//        Log.e(TAG, "addMsg: ", )
         queue.add(ToastBody(type, content))
         showDialogAutoDismiss()
     }
@@ -202,14 +202,14 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
         queue.add(ToastBody(0, content))
     }
     private fun afterDismiss() {
-        Log.e(TAG, "afterDismiss: ", )
+//        Log.e(TAG, "afterDismiss: ", )
         if(queue.isNotEmpty()){
             showDialogAutoDismiss()
         }
     }
 
     private fun initData() {
-        Log.e(TAG, "initData: ")
+//        Log.e(TAG, "initData: ")
         if(queue.isNotEmpty()){
             val toastBody = queue.remove()
             iv?.setImageResource(when (toastBody.type) {
@@ -223,7 +223,7 @@ class NotificationDialog(context: Context) : Dialog(context, com.cyberflow.base.
     }
 
    fun showDialogAutoDismiss() {
-       Log.e(TAG, "showDialogAutoDismiss: ", )
+//       Log.e(TAG, "showDialogAutoDismiss: ", )
         if (!isShowing && queue.isNotEmpty()) {
             if(isMainThread()){
                 show()

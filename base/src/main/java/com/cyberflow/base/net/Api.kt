@@ -1,6 +1,7 @@
 package com.cyberflow.base.net
 
 object Api {
+
 //    const val HOST = "https://rancher.sparkle.fun/"
     const val HOST = "https://api-test.sparkle.fun/"
     const val SIGN_IN = "stars-cipher/signIn"
@@ -34,7 +35,5 @@ object Api {
 
 
     const val SITE_MESSAGE = "sparkle-msg-notify/site_message"
-
-
 
 }

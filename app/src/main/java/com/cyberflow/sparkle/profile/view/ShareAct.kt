@@ -73,7 +73,6 @@ import com.hyphenate.chat.EMTextMessageBody
 import com.hyphenate.easeui.model.EaseEvent
 import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import com.luck.picture.lib.basic.PictureMediaScannerConnection
-import com.luck.picture.lib.interfaces.OnCallbackListener
 import com.luck.picture.lib.permissions.PermissionUtil
 import com.luck.picture.lib.utils.DownloadFileUtils
 import com.therouter.TheRouter
@@ -233,8 +232,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
 
     private var from: Int = SHARE_FROM_PROFILE
     private var serverImageUrl: String? = null
-    private var qrUrl: String =
-        "https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf"
+    private var qrUrl: String = "https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf"
 
     override fun initData() {
         from = intent.getIntExtra(FROM_ACTIVITY, SHARE_FROM_PROFILE)
@@ -308,7 +306,9 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                 mDataBinding.tvChatContent.text = result.result
             }
             setExploreSpan(mDataBinding.tvChatExplore)
-            generateQRcode("google play store search 'Sparkle'", mDataBinding.ivChatQr) // todo
+            val open_uid = message.to.replace("_", "-")
+            Log.e(TAG, "generateQRcode: open_uid=$open_uid" )
+            generateQRcode("${ConstantGlobal.SHARE_BODY}${open_uid}", mDataBinding.ivChatQr)
         }
     }
 
@@ -502,22 +502,17 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                     return@launch
                 }
                 withMain {
-                    DownloadFileUtils.saveLocalFile(
-                        this@ShareAct,
-                        file.absolutePath,
-                        "image/jpeg",
-                        object : OnCallbackListener<String?> {
-                            override fun onCall(realPath: String?) {
-                                LoadingDialogHolder.getLoadingDialog()?.hide()
-                                if (TextUtils.isEmpty(realPath)) {
-                                    val errorMsg: String = getString(com.luck.picture.lib.R.string.ps_save_image_error)
-                                    toastError(errorMsg)
-                                } else {
-                                    PictureMediaScannerConnection(this@ShareAct, realPath)
-                                    toastSuccess("${getString(com.luck.picture.lib.R.string.ps_save_success)}\n$realPath")
-                                }
-                            }
-                        })
+                    DownloadFileUtils.saveLocalFile(this@ShareAct, file.absolutePath, "image/jpeg") { realPath ->
+                        LoadingDialogHolder.getLoadingDialog()?.hide()
+                        if (TextUtils.isEmpty(realPath)) {
+                            val errorMsg: String =
+                                getString(com.luck.picture.lib.R.string.ps_save_image_error)
+                            toastError(errorMsg)
+                        } else {
+                            PictureMediaScannerConnection(this@ShareAct, realPath)
+                            toastSuccess("${getString(com.luck.picture.lib.R.string.ps_save_success)}\n$realPath")
+                        }
+                    }
                 }
             }
         }
@@ -527,31 +522,25 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         if (background == null) {
             return foreground
         }
-        val bgW = background.width
-        val bgH = background.height
         val fgW = foreground.width
         val fgH = foreground.height
 
-        Log.e("TAG", "combineBitmap: bgW=$bgW  bgH=$bgH")
-        Log.e("TAG", "combineBitmap: fgW=$fgW  fgH=$fgH")
+        val marginLeft = dp2px(20f).toFloat()
+        val marginTop = dp2px(70f).toFloat()
 
-        // 左右 20  上下70
-        val targetW = fgW + dp2px(40f).toFloat()
-        val targetH = fgH + dp2px(60f).toFloat()
+        // 左右 20  上下30
+        val targetW = fgW + marginLeft * 2
+        val targetH = fgH + marginTop * 2
 
         val zoomBitmap = zoomImg(background, targetW, targetH)
-        val canvas = Canvas(zoomBitmap)
-        val marginW = (zoomBitmap.width - foreground.width) / 2f + dp2px(5f)
-        val marginH = (zoomBitmap.height - foreground.height) / 2f
 
-        Log.e(TAG, "combineBitmap: zoomBitmap.width=${zoomBitmap.width}  zoomBitmap.height=${zoomBitmap.height}" )
-        Log.e(TAG, "combineBitmap: foreground.width=${foreground.width}  foreground.height=${foreground.height}" )
-        Log.e(TAG, "combineBitmap: (zoomBitmap.width - foreground.width)=${(zoomBitmap.width - foreground.width)}  (zoomBitmap.height - foreground.height)=${(zoomBitmap.height - foreground.height)}" )
-        Log.e(TAG, "combineBitmap: marginW=$marginW  marginH=$marginH" )
-        canvas.drawBitmap(foreground, marginW, marginH, null)
-        canvas.save()
-        canvas.restore()
-        return zoomBitmap
+        val bmOverlay = Bitmap.createBitmap(zoomBitmap.width, zoomBitmap.height, zoomBitmap.config)
+        val canvas = Canvas(bmOverlay)
+        canvas.drawBitmap(zoomBitmap, Matrix(), null)
+        canvas.drawBitmap(foreground, marginLeft, marginTop,null)
+        zoomBitmap.recycle()
+        foreground.recycle()
+        return bmOverlay
     }
 
     private fun zoomImg(bm: Bitmap, targetWidth: Float, targetHeight: Float): Bitmap {
@@ -568,7 +557,6 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         return bmpRet
     }
 
-
     override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
         if (requestCode == REQUEST_DOWNLOAD) {
             download()
@@ -583,8 +571,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         var content = ""
         if (requestCode == REQUEST_DOWNLOAD) {
             title = getString(com.cyberflow.sparkle.R.string.unable_to_save_files)
-            content =
-                getString(com.cyberflow.sparkle.R.string.you_have_turned_off_storage_permissions)
+            content = getString(com.cyberflow.sparkle.R.string.you_have_turned_off_storage_permissions)
         }
         showPermissionDialog(title, content, requestCode)
     }
