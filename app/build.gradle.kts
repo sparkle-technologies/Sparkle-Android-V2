@@ -74,7 +74,7 @@ dependencies {
     implementation(project(mapOf("path" to ":base")))
 
     // auth for twitter/google social login
-    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.libraries.places:places:3.1.0")
     implementation("com.google.firebase:firebase-crashlytics-ktx")   // crash

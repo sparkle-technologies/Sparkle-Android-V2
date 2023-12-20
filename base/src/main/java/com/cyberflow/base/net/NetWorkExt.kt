@@ -3,6 +3,7 @@ package com.cyberflow.base.net
 import android.util.Log
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.cyberflow.base.BaseApp
+import com.cyberflow.base.BuildConfig
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.ConstantGlobal
 import com.drake.net.NetConfig
@@ -30,13 +31,15 @@ fun initNetSpark(cacheDir: File) {
         readTimeout(20, TimeUnit.SECONDS)
         writeTimeout(30, TimeUnit.SECONDS)
         cache(Cache(cacheDir, 1024 * 1024 * 128))
-        setDebug(true)
         setErrorHandler(NetworkingErrorHandler())
         setConverter(SerializationConverter())
-        addInterceptor(LogRecordInterceptor(true))
         addInterceptor(HeaderInterceptor())
         addInterceptor(ResponseHeaderInterceptor())
-        addInterceptor(ChuckerInterceptor(BaseApp.instance!!))
+        if(BuildConfig.DEBUG){
+            setDebug(true)
+            addInterceptor(LogRecordInterceptor(true))
+            addInterceptor(ChuckerInterceptor(BaseApp.instance!!))
+        }
         setDialogFactory{
             BubbleDialog(it, "loading")
         }
