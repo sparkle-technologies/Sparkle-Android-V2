@@ -79,9 +79,9 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                     menuDialog?.hide()
                 }
             })
-            menuDialog?.showFriendRequestNum(friendRequestCount)
         }
-        menuDialog?.click()
+//        Log.e(TAG, "showMenuDialog: friendRequestCount=$friendRequestCount" )
+        menuDialog?.click(friendRequestCount)
     }
 
     private fun initAddFriend() {
@@ -279,7 +279,6 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
     private fun showFriendRequestNum() {
 //        Log.e(TAG, "showFriendRequestNum: isVisible=$isVisible" )
-        menuDialog?.showFriendRequestNum(friendRequestCount)
         if(isVisible){
             if(friendRequestCount > 0){
                 mDatabind.tvNum.isVisible = true

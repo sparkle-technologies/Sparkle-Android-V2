@@ -19,6 +19,7 @@ import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.click
+import com.cyberflow.sparkle.DBComponent.loadAvatar
 import com.cyberflow.sparkle.DBComponent.loadImage
 import com.cyberflow.sparkle.chat.DemoHelper
 import com.cyberflow.sparkle.chat.R
@@ -248,7 +249,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
 
     private fun loadCoraInfo(coraOpenUid: String) {
         val info = CacheUtil.getCoraInfo()
-        if(info == null){   // update cora info here
+        if(info == null || info.user?.avatar?.isNullOrEmpty() == true){   // update cora info here
             scopeNetLife {
                 val data = Post<DetailResponseData>(Api.USER_DETAIL) {
                     json("open_uid" to coraOpenUid.replace("_", "-"))
@@ -257,13 +258,15 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                     withMain {
                         CacheUtil.setCoraInfo(it)
                         avatar = it.user?.avatar.orEmpty()
-                        loadImage(mDataBinding.ivAvatar, avatar)
+                        val gender = it.user?.gender ?: 1
+                        loadAvatar(mDataBinding.ivAvatar, avatar, gender)
                     }
                 }
             }
         }else{   // use cache multi times
             avatar = info.user?.avatar.orEmpty()
-            loadImage(mDataBinding.ivAvatar, avatar)
+            val gender = info.user?.gender ?: 1
+            loadAvatar(mDataBinding.ivAvatar, avatar, gender )
         }
     }
 

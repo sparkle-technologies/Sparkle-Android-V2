@@ -49,7 +49,7 @@ class ToastDialog {
 
     companion object : IToastDialog {
         private var cache: WeakReference<NotificationDialog>? = null
-        private var count = 1
+        var count = 1
 
         override fun show(context: Context, type: Int, content: String) {
             if(Settings.canDrawOverlays(context)){

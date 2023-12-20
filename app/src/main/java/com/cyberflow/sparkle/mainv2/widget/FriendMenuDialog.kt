@@ -2,12 +2,13 @@ package com.cyberflow.sparkle.mainv2.widget
 
 import android.app.Dialog
 import android.content.Context
+import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.isVisible
 import com.cyberflow.base.resources.R
 import com.cyberflow.base.util.dp2px
 
@@ -56,7 +57,7 @@ class FriendMenuDialog {
         val window = mDialog?.window
         if (window != null) {
             val lp = window.attributes
-            lp.y = dp2px(48f)
+            lp.y = dp2px(53f)
             lp.x = dp2px(20f)
             lp.gravity = Gravity.TOP or Gravity.RIGHT
             lp.width = WindowManager.LayoutParams.WRAP_CONTENT
@@ -73,7 +74,7 @@ class FriendMenuDialog {
             lay_add_friends = findViewById<LinearLayout>(com.cyberflow.sparkle.R.id.lay_add_friends)
             lay_contacts = findViewById<LinearLayout>(com.cyberflow.sparkle.R.id.lay_contacts)
             lay_scan = findViewById<LinearLayout>(com.cyberflow.sparkle.R.id.lay_scan)
-            tv_num = findViewById<TextView>(com.cyberflow.sparkle.R.id.tv_num)
+            tv_num = findViewById<TextView>(com.cyberflow.sparkle.R.id.tv_request_count)
 
             lay_add_friends?.setOnClickListener {
                 mCallback?.onSelected(IDX_ADD)
@@ -87,27 +88,27 @@ class FriendMenuDialog {
         }
     }
 
-    fun showFriendRequestNum(totalUnread: Int){
+    private fun showFriendRequestNum(totalUnread: Int){
+        Log.e("TAG", "showFriendRequestNum: ", )
         tv_num?.apply {
-            if(isVisible){
-                if(totalUnread > 0){
-                    isVisible = true
-                    if(totalUnread > 99){
-                        text = "···"
-                    }else{
-                        text = "$totalUnread"
-                    }
+            if(totalUnread > 0){
+                visibility = View.VISIBLE
+                if(totalUnread > 99){
+                    text = "···"
                 }else{
-                    isVisible = false
+                    text = "$totalUnread"
                 }
+            }else{
+                visibility = View.INVISIBLE
             }
         }
     }
 
-    fun click(){
+    fun click(totalUnread: Int){
         if(mDialog?.isShowing == true){
             mDialog?.dismiss()
         }else{
+            showFriendRequestNum(totalUnread)
             mDialog?.show()
         }
     }

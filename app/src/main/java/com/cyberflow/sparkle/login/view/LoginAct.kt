@@ -25,6 +25,7 @@ import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.register.view.RegisterAct
 import com.cyberflow.sparkle.widget.ShadowImgButton
+import com.cyberflow.sparkle.widget.ToastDialog
 import com.drake.net.Post
 import com.drake.net.utils.TipUtils
 import com.drake.net.utils.scopeDialog
@@ -95,6 +96,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             DBManager.instance.db?.imConversationCacheDao()?.deleteAll()
             DBManager.instance.db?.horoscopeCacheDao()?.deleteAll()
             IMDataManager.instance.clearCache()
+            ToastDialog.count = 1
         }
     }
 
