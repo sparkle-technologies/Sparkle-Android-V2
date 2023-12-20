@@ -103,7 +103,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     override fun initView(savedInstanceState: Bundle?) {
         intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_ID)?.apply {
             conversationId = this.replace("-", "_")
-            isCora = conversationId == ConstantGlobal.CORA_OPEN_UID_DEV.replace("-", "_")
+            isCora = conversationId == ConstantGlobal.getCoraOpenUid().replace("-", "_")
             if(isCora){
                 intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_CORA_QUESTION)?.apply {
                     question = this

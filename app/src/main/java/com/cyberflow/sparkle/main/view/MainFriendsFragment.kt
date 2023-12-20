@@ -527,6 +527,6 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
             url = user?.avatar.orEmpty()
             name = user?.nick ?: "Cora"
         }
-        ChatActivity.launch(requireActivity(), conversationId = ConstantGlobal.CORA_OPEN_UID_DEV, avatar = url, nickName = name, question = question)
+        ChatActivity.launch(requireActivity(), conversationId = ConstantGlobal.getCoraOpenUid(), avatar = url, nickName = name, question = question)
     }
 }

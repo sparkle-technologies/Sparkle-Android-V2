@@ -108,9 +108,6 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             logout()
         }
 
-        initWalletConnect()
-
-//        initWeb3Auth()
 
         mViewBind.btnGoogleLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
@@ -142,7 +139,10 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
     }
 
     override fun initData() {
-
+        mViewBind.composeView.postDelayed({
+            initWalletConnect()
+        }, 1000)
+//        initWeb3Auth()
     }
 
     private fun request(authMsg: String, type: String){
@@ -214,7 +214,6 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     private fun initWalletConnect() {
         Log.e(MyApp.TAG, "initWalletConnect: ")
-
         lifecycleScope.launch {
             MyApp.instance.checkWalletConnect()
             MyApp.instance.walletConnectKit?.disconnect()

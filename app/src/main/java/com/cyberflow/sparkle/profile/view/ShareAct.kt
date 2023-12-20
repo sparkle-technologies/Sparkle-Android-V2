@@ -526,19 +526,19 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         val fgH = foreground.height
 
         val marginLeft = dp2px(20f).toFloat()
-        val marginTop = dp2px(70f).toFloat()
+        val marginTop = dp2px(30f).toFloat()
 
         // 左右 20  上下30
         val targetW = fgW + marginLeft * 2
         val targetH = fgH + marginTop * 2
 
-        val zoomBitmap = zoomImg(background, targetW, targetH)
+//        val zoomBitmap = zoomImg(background, targetW, targetH)
 
-        val bmOverlay = Bitmap.createBitmap(zoomBitmap.width, zoomBitmap.height, zoomBitmap.config)
+        val bmOverlay = Bitmap.createBitmap(targetW.toInt(), targetH.toInt(), background.config)
         val canvas = Canvas(bmOverlay)
-        canvas.drawBitmap(zoomBitmap, Matrix(), null)
+        canvas.drawBitmap(background, Matrix(), null)
         canvas.drawBitmap(foreground, marginLeft, marginTop,null)
-        zoomBitmap.recycle()
+        background.recycle()
         foreground.recycle()
         return bmOverlay
     }

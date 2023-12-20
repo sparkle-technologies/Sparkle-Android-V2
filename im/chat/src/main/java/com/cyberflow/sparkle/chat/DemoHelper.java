@@ -335,8 +335,9 @@ public class DemoHelper {
         return user;
     }
 
-    private final static String APP_KEY_TEST = "1111230615161307#sparkletest";
+//    private final static String APP_KEY_TEST = "1111230615161307#sparkletest";
 //    private final static String APP_KEY_TEST = "1111230615161307#demo";
+    private final static String APP_KEY_TEST = "1183231031159952#sparkle";  // pro
 
 
     /**

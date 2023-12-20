@@ -4,6 +4,7 @@ import android.util.Log
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.cyberflow.base.BaseApp
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.ConstantGlobal
 import com.drake.net.NetConfig
 import com.drake.net.interceptor.LogRecordInterceptor
 import com.drake.net.okhttp.setConverter
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit
 private const val TAG = "NetWorkExt"
 
 fun initNetSpark(cacheDir: File) {
-    NetConfig.initialize(Api.HOST) {
+    NetConfig.initialize(if(ConstantGlobal.PRO) Api.HOST_PRO else Api.HOST) {
         connectTimeout(30, TimeUnit.SECONDS)
         readTimeout(20, TimeUnit.SECONDS)
         writeTimeout(30, TimeUnit.SECONDS)
