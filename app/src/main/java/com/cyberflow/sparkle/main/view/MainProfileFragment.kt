@@ -18,7 +18,6 @@ import com.cyberflow.base.model.User
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.resources.R
 import com.cyberflow.base.util.CacheUtil
-import com.cyberflow.base.util.ToastUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.util.dp2px
@@ -120,7 +119,7 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
 
         mDatabind.btnWallet.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                ToastUtil.show(mActivity, "Coming soon...")
+                (requireActivity() as? BaseDBAct<*, *>)?.toastWarn(getString(com.cyberflow.sparkle.R.string.coming_soon))
             }
         })
 
@@ -129,7 +128,7 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
 //                Log.e(TAG, "clicked: action=$action   user=$user  ")
 //                Log.e(TAG, "clicked: openUid=${user?.open_uid}   user.name=${user?.nick}  ")
                 if(isMySelf){
-                    ToastUtil.show(mActivity, "Coming soon...")
+                    (requireActivity() as? BaseDBAct<*, *>)?.toastWarn(getString(com.cyberflow.sparkle.R.string.coming_soon))
                 }else{
                     when (action) {
                         CHAT -> {   // go chatActivity   avatar nickName

@@ -111,6 +111,7 @@
                 android:layout_marginStart="@dimen/dp_5"
                 android:background="@drawable/main_bg_unread_dot_yellow"
                 android:fontFamily="@font/poppins_regular"
+                android:visibility="invisible"
                 android:gravity="center"
                 android:maxLines="1"
                 android:minWidth="@dimen/dp_15"

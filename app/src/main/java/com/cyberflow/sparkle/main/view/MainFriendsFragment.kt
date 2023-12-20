@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +30,7 @@ import com.cyberflow.sparkle.im.view.IMSearchFriendAct
 import com.cyberflow.sparkle.main.adapter.QuestionsAdapter
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
+import com.cyberflow.sparkle.mainv2.widget.FriendMenuDialog
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.annotaion.DividerOrientation
@@ -59,49 +59,37 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         initListView()
     }
 
-    private fun initAddFriend() {
-        mDatabind.root.setOnClickListener {
-            hideAddDialog()
-        }
+    private var menuDialog: FriendMenuDialog? = null
 
-        mDatabind.btnAddFriends.setClickListener(object : ShadowImgButton.ShadowClickListener {
-            override fun clicked() {
-                mDatabind.layDialogAdd.apply {
-                    visibility = if (this.visibility == View.VISIBLE) {
-                        View.GONE
-                    } else {
-                        View.VISIBLE
+    private fun showMenuDialog(){
+        if(menuDialog == null){
+            menuDialog = FriendMenuDialog(requireContext(),  object : FriendMenuDialog.Callback {
+                override fun onSelected(idx: Int) {
+                    when(idx){
+                        FriendMenuDialog.IDX_ADD -> {
+                            IMSearchFriendAct.go(requireActivity())
+                        }
+                        FriendMenuDialog.IDX_CONTACTS -> {
+                            IMContactListAct.go(requireActivity())
+                        }
+                        FriendMenuDialog.IDX_SCAN -> {
+                            IMScanAct.go(requireActivity())
+                        }
                     }
+                    menuDialog?.hide()
                 }
-            }
-        })
-
-        mDatabind.layDialogAdd.apply {
-            tvNumSecLayer = findViewById<TextView>(R.id.tv_num)
-            findViewById<View>(R.id.lay_add_friends).setOnClickListener {
-                IMSearchFriendAct.go(requireActivity())
-                mDatabind.layDialogAdd.visibility = View.GONE
-            }
-            findViewById<View>(R.id.lay_contacts).setOnClickListener {
-                IMContactListAct.go(requireActivity())
-                mDatabind.layDialogAdd.visibility = View.GONE
-            }
-            findViewById<View>(R.id.lay_scan).setOnClickListener {
-                IMScanAct.go(requireActivity())
-                mDatabind.layDialogAdd.visibility = View.GONE
-            }
+            })
+            menuDialog?.showFriendRequestNum(friendRequestCount)
         }
+        menuDialog?.click()
     }
 
-
-    private fun hideAddDialog(){
-        mDatabind.layDialogAdd.apply {
-            visibility = if (this.visibility == View.VISIBLE) {
-                View.GONE
-            } else {
-                View.VISIBLE
+    private fun initAddFriend() {
+        mDatabind.btnAddFriends.setClickListener(object : ShadowImgButton.ShadowClickListener {
+            override fun clicked() {
+                showMenuDialog()
             }
-        }
+        })
     }
 
     private fun initListView() {
@@ -287,32 +275,28 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         banner?.stop()
     }
 
-    var totalUnread = 0
-    var tvNumSecLayer :TextView? = null  // in layout/include_main_top_right_add
+    private var friendRequestCount = 0
 
     private fun showFriendRequestNum() {
 //        Log.e(TAG, "showFriendRequestNum: isVisible=$isVisible" )
+        menuDialog?.showFriendRequestNum(friendRequestCount)
         if(isVisible){
-            if(totalUnread > 0){
-                tvNumSecLayer?.isVisible = true
+            if(friendRequestCount > 0){
                 mDatabind.tvNum.isVisible = true
 
-                if(totalUnread > 99){
-                    tvNumSecLayer?.text = "···"
+                if(friendRequestCount > 99){
                     mDatabind.tvNum.text = "···"
                 }else{
-                    tvNumSecLayer?.text = "$totalUnread"
-                    mDatabind.tvNum.text = "$totalUnread"
+                    mDatabind.tvNum.text = "$friendRequestCount"
                 }
             }else{
                 mDatabind.tvNum?.isVisible = false
-                tvNumSecLayer?.isVisible = false
             }
         }
     }
 
     fun freshFriendRequest(friendReqList: List<IMFriendRequest>?) {
-        totalUnread = friendReqList?.size ?: 0
+        friendRequestCount = friendReqList?.size ?: 0
         showFriendRequestNum()
     }
 
