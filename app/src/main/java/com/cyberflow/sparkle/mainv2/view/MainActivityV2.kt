@@ -29,6 +29,7 @@ import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import com.therouter.router.Route
 import kotlinx.coroutines.launch
 
+
 @Route(path = PageConst.App.PAGE_MAIN)
 class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>() {
 

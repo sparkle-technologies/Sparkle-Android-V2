@@ -619,7 +619,7 @@ public class EaseChatLayout extends RelativeLayout implements
 
     @Override
     public void onMessageReceived(List<EMMessage> messages) {
-        Log.e(TAG, "onMessageReceived: size:" + messages.size());
+        Log.e(TAG, "EaseChatLayout onMessageReceived: size:" + messages.size());
         boolean refresh = false;
         for (EMMessage message : messages) {
             String username = null;

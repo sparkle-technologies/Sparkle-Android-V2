@@ -37,6 +37,7 @@ import com.cyberflow.sparkle.profile.view.ShareAct
 import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.Post
+import com.drake.net.utils.scopeNet
 import com.drake.net.utils.scopeNetLife
 import com.drake.net.utils.withMain
 import com.google.android.material.snackbar.Snackbar
@@ -109,9 +110,6 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                 intent.getStringExtra(EaseConstant.EXTRA_CONVERSATION_CORA_QUESTION)?.apply {
                     question = this
                 }
-                if(question.isNullOrEmpty()){
-                    showQuestionsList() // say hi cora, show question list
-                }
                 loadCoraInfo(conversationId)
                 freshFlutter()
             }
@@ -134,12 +132,11 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         }
 
         mDataBinding.ivAvatar.click {
-            Log.e(TAG, "ivAvatar:  go chat detail or profile detail? ")
             goPreview(conversationId.replace("_", "-"))
         }
 
         mDataBinding.ivBtnRight.click {
-            Log.e(TAG, "ivBtnRight:  waiting for designer to decide what to do")
+//            Log.e(TAG, "ivBtnRight:  waiting for designer to decide what to do")
         }
         initChatFragment()
     }
@@ -270,11 +267,6 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         }
     }
 
-
-    private fun showQuestionsList(){
-        // todo
-    }
-
     override fun onReady() {
         fragment?.initCora(isCora, question)
     }
@@ -283,14 +275,15 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         onOtherTyping(TYPING)
         // cannot edit or send
         fragment?.cannotEditOrSend()
-        scopeNetLife {
+        scopeNet {
             Post<String>(Api.IM_CHAT) {
                 json("msgId" to msgId, "msg" to msg)
             }.await()
+            if(this@ChatActivity.isDestroyed) return@scopeNet
             withMain {
                 if(msg.equals(getString(com.cyberflow.base.resources.R.string.hi_cora))){
                     fragment?.showQuestions()
-                    fragment?.hideHiCoraBtn()
+                    fragment?.hideHiCoraBtn(true)
                 }else{
                     fragment?.hideQuestions()
                 }
@@ -316,17 +309,24 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
             val hasResult = customExt["hasResult"] // 可选字段（只有结果消息才有这个字段），是否有结果，1-有结果，0-无结果
             Log.e(TAG, "handleAIOMessage: ${GsonConverter.gson.toJson(customExt)}" )
             lifecycleScope.launch {
-                if(msgType == "1" && isValid == "1"){
-                    val questionMsg = DemoHelper.getInstance().chatManager.getMessage(msgId)
-                    val questionStr = (questionMsg?.body as? EMTextMessageBody)?.message
-                    FlutterProxyActivity.initTarotParams(msgId, questionStr, methodChannel)
-                    withMain {
-                        FlutterProxyActivity.go(this@ChatActivity, FlutterProxyActivity.ENGINE_ID_TAROT)
+                if(msgType == "1"){
+                    if(isValid == "1"){
+                        val questionMsg = DemoHelper.getInstance().chatManager.getMessage(msgId)
+                        val questionStr = (questionMsg?.body as? EMTextMessageBody)?.message
+                        FlutterProxyActivity.initTarotParams(msgId, questionStr, methodChannel)
+                        withMain {
+                            mDataBinding.tvTitle.postDelayed({
+                                FlutterProxyActivity.go(this@ChatActivity, FlutterProxyActivity.ENGINE_ID_TAROT)
+                            }, 1500)
+                        }
+                    }else{
+                        fragment?.hideHiCoraBtn(false)
                     }
                 }
                 if(msgType == "2" ){
+                    fragment?.hideHiCoraBtn(false)
                     if(hasResult == "1" && content?.isNotEmpty() == true){
-                        FlutterProxyActivity.nativeTarotResult(msgId, content, methodChannel)
+                        FlutterProxyActivity.nativeTarotResult(msgId, hasResult, methodChannel)
                     }
                 }
             }
@@ -344,7 +344,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     private fun initFlutter() {
         lifecycleScope.launch {
             methodChannel = FlutterProxyActivity.prepareFlutterEngine(this@ChatActivity, FlutterProxyActivity.ENGINE_ID_TAROT, FlutterProxyActivity.ROUTE_TAROT, FlutterProxyActivity.CHANNEL_TAROT, FlutterProxyActivity.SCENE_TAROT) { scene, method, call, result ->
-                Log.e(TAG, "initFlutter: call.method=$call.method" )
+                Log.e(TAG, "initFlutter: call.method=${call.method}" )
                 if (call.method == "flutterInitalized") {  // 通知 native 已初始化
                     Log.e(TAG, "initFlutter: flutterReady=$flutterReady")
                     flutterReady = true

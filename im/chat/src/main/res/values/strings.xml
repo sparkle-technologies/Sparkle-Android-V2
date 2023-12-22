@@ -705,7 +705,7 @@
     <string name="action_reTranslate">Retranslate</string>
     <string name="action_recall">Recall</string>
     <string name="action_translate">Translate</string>
-    <string name="alert_during_typing">Typing …</string>
+    <string name="alert_during_typing">Typing...</string>
     <string name="alert_kicked_for_offline">You\'ve been kicked out of the chat room due to network disconnection. Click here to rejoin the room. </string>
     <string name="all_members">All members</string>
     <string name="answer">Answer</string>

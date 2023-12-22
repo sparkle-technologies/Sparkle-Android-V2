@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="your_choice">Your choice:</string>
+    <string name="ask_cora_a_question">Ask Cora a question</string>
+    <string name="waiting_for_response">Waiting for response</string>
 </resources>

@@ -247,6 +247,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         });
 
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            Log.e(TAG, "ChatFragment 监听到消息  MESSAGE_CHANGE_CHANGE  准备下拉到最下面 " );
             if (event == null) {
                 return;
             }
@@ -1128,7 +1129,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 chatLayout.clickQuestion(question);
                 chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();
                 hideQuestions();
-                hideHiCoraBtn();
+                hideHiCoraBtn(true);
             }
         }
     }
@@ -1162,8 +1163,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     }
 
     // 隐藏 Hi Cora 按钮 因为已经发送出去了
-    public void hideHiCoraBtn() {
-        chatLayout.inputMenu.getPrimaryMenu().hideHiCoraBtn();
+    public void hideHiCoraBtn(boolean hide) {
+        chatLayout.inputMenu.getPrimaryMenu().hideHiCoraBtn(hide);
     }
 
     public void showQuestions() {

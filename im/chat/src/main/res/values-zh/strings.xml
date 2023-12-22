@@ -17,4 +17,6 @@
     <string name="compress_video_error">压缩视频异常</string>
     <string name="video_size_too_large">视频文件太大, 请确保文件低于 </string>
 
+    <string name="alert_during_typing">输入中...</string>
+
 </resources>

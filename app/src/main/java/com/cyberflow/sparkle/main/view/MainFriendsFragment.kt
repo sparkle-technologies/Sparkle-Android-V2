@@ -37,6 +37,7 @@ import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
+import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMConversation
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import com.youth.banner.Banner
@@ -321,8 +322,15 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
             Log.e(TAG, "merge:IMFriendInfo: $it", )
         }
         imConversationList?.forEach {
-            Log.e(TAG, "merge:EaseConversationInfo: $it", )
+            Log.e(TAG, "merge:EaseConversationInfo: ${(it.info as EMConversation)}  ", )
+            Log.e(TAG, "merge:: conversationId= ${(it.info as EMConversation)?.conversationId()}  unreadMsgCount= ${(it.info as EMConversation)?.unreadMsgCount}", )
         }*/
+
+        // handle cora logic ---
+        val conversation = EMClient.getInstance().chatManager().getConversation(ConstantGlobal.getCoraOpenUid().replace("-", "_"))
+        coraUnreadCount = conversation.unreadMsgCount
+        showQuestions()
+
         if(contactList.isNullOrEmpty()){
             showConversationList(null)
             return
@@ -366,7 +374,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         }
     }
 
-    var coraUnreadCount = 0
+    private var coraUnreadCount = 0
 
     fun showConversationListFromCache(data: List<IMConversationCache>?) {
         var modelData = arrayListOf<Any>()
@@ -475,9 +483,9 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
             banner?.isVisible = false
             tvCoraUnread?.isVisible = true
             if(coraUnreadCount == 1) {
-                tvCoraUnread?.text = "You have $coraUnreadCount new message"
+                tvCoraUnread?.text = getString(R.string.a_new_message)
             }else{
-                tvCoraUnread?.text = "You have $coraUnreadCount new messages"
+                tvCoraUnread?.text = getString(R.string.you_have_new_messages, coraUnreadCount)
             }
             tvCoraUnread?.setOnClickListener {
                 chatWithCora(null)

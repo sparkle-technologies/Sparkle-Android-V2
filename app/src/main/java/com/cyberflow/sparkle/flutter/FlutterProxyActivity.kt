@@ -279,10 +279,11 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
             }
         }
 
-        fun nativeTarotResult(msgId: String?, result: String, methodChannel: MethodChannel?) {
+        fun nativeTarotResult(msgId: String?, hasResult: String, methodChannel: MethodChannel?) {
             var map = mutableMapOf<String, Any>()
             map["msgId"] = msgId.orEmpty()
-            map["result"] = result
+            map["hasResult"] = hasResult
+//            map["result"] = result
             invoke(methodChannel, "nativeNotifyTarotResult", map)
         }
 

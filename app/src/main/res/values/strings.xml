@@ -69,4 +69,7 @@
     <string name="just_now">just now</string>
     <string name="aio_break">It seems you haven\'t finished drawing the cards. Is there anything I can assist you with? Or, would you like to try again with a different question?</string>
     <string name="coming_soon">Coming soon...</string>
+    <string name="a_new_message">You have a new message</string>
+    <string name="you_have_new_messages">You have %1$s new messages</string>
+
 </resources>

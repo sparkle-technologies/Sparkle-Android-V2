@@ -18,6 +18,7 @@ import com.cyberflow.base.model.User
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.resources.R
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.ConstantGlobal
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.util.dp2px
@@ -218,7 +219,11 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
     private var open_uid = ""
     fun setOpenUid(_action: Int = CHAT, _openUid: String) {
 //        Log.e(TAG, "setOpenUid: ")
-        action = _action
+        if(_openUid.replace("_", "-") == ConstantGlobal.getCoraOpenUid()){
+            action = CHAT
+        }else{
+            action = _action
+        }
         open_uid = _openUid
     }
 

@@ -85,6 +85,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         Log.e(TAG, "showHiCoraStatus: " );
         isCora = true;
         btnSayHi.setVisibility(VISIBLE);
+        editText.setHint(R.string.ask_cora_a_question);
         buttonSend.setVisibility(View.VISIBLE);
         buttonMore.setVisibility(View.GONE);
         faceNormal.setVisibility(View.GONE);
@@ -279,17 +280,26 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     public void startWaitingStatus() {
         // 无法操作模式
         stopEveryThing = true;
+        editText.setEnabled(false);
+        editText.setHint(R.string.waiting_for_response);
     }
 
     @Override
     public void endWaitingStatus() {
         // 恢复操作
         stopEveryThing = false;
+        editText.setEnabled(true);
+        editText.setHint(R.string.ask_cora_a_question);
     }
 
     @Override
-    public void hideHiCoraBtn() {
-        btnSayHi.setVisibility(GONE);
+    public void hideHiCoraBtn(boolean hide) {
+        if(hide){
+            btnSayHi.setVisibility(GONE);
+        }else{
+            btnSayHi.setVisibility(VISIBLE);
+            editText.setHint(R.string.ask_cora_a_question);
+        }
     }
 }
 

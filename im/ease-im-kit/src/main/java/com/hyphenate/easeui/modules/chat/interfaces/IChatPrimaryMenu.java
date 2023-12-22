@@ -7,7 +7,7 @@ public interface IChatPrimaryMenu {
     /**
      * 隐藏 Hi Cora 按钮
      */
-    void hideHiCoraBtn();
+    void hideHiCoraBtn(boolean hide);
 
     /**
      * 清除 等待模式  可编辑或者发送
