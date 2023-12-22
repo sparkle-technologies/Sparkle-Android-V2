@@ -22,12 +22,13 @@ class CalendarDialog {
     private var mDialog: BottomSheetDialog? = null
     private var isWeek = false
     private var birthDate: DateBean? = null
+    private var currentDate: DateBean? = null
 
     interface Callback {
         fun onSelected(select: DateBean?)
     }
 
-    constructor(context: Context, week: Boolean, birth: DateBean?, callback: Callback) {
+    constructor(context: Context, week: Boolean, birth: DateBean?, current: DateBean?, callback: Callback) {
         if (context == null || callback == null) {
             return
         }
@@ -36,6 +37,7 @@ class CalendarDialog {
         mCallback = callback
         isWeek = week
         birthDate = birth
+        currentDate = current
 
         initView()
         initData()
@@ -67,7 +69,7 @@ class CalendarDialog {
             tvMonth = findViewById(R.id.tv_month)
             tvYear = findViewById(R.id.tv_year)
             viewPager2 = findViewById(R.id.vpContainer)
-            calendarAdapter = CalendarAdapter(mCallback, isWeek, birthDate)
+            calendarAdapter = CalendarAdapter(mCallback, isWeek, birthDate, currentDate)
             viewPager2?.adapter = calendarAdapter
             btnPrevious = findViewById(R.id.btn_previous)
             btnNext = findViewById(R.id.btn_next)
@@ -122,7 +124,7 @@ class CalendarDialog {
         val currentIdx = data.size - 1
 //        Log.e("TAG", "after count1    data.size=${data.size}" )
         // 从今年 到  2100 年
-        val count = 2100 * 12 - (currentYear * 12 + currentMonth)
+        val count = 2030 * 12 - (currentYear * 12 + currentMonth)
 //        Log.e("TAG", "---2---:  count=$count" )
 
         for (i in 0 until count) {

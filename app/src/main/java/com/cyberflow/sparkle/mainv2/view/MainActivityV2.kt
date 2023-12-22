@@ -59,6 +59,7 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
             isUserInputEnabled = false
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             this.adapter = adapter
+            setCurrentItem(2, false)
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
 

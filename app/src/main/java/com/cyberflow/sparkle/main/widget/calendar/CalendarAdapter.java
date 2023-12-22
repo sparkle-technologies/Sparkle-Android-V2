@@ -16,19 +16,21 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarView> {
     private List<Calendar> calendar = new ArrayList<>();
     private boolean weekMode = false;
     private DateBean birthDate;
+    private DateBean currentDate;
     private CalendarDialog.Callback callback;
 
 
-    public CalendarAdapter(CalendarDialog.Callback callback, boolean _weekMode, DateBean _birth) {
+    public CalendarAdapter(CalendarDialog.Callback callback, boolean _weekMode, DateBean _birth, DateBean _current) {
         this.callback = callback;
         this.weekMode = _weekMode;
         this.birthDate = _birth;
+        this.currentDate = _current;
     }
 
     @NonNull
     @Override
     public CalendarView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new CalendarView(LayoutInflater.from(parent.getContext()).inflate(R.layout.calender_view, parent, false), callback, weekMode, birthDate);
+        return new CalendarView(LayoutInflater.from(parent.getContext()).inflate(R.layout.calender_view, parent, false), callback, weekMode, birthDate, currentDate);
     }
 
     @Override

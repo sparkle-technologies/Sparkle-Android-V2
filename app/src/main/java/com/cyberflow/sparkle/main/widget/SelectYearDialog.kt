@@ -26,19 +26,21 @@ class SelectYearDialog {
     private var mContext: Context? = null
     private var mCallback: Callback? = null
     private var birthDate: DateBean? = null
+    private var currentDate: DateBean? = null
     private var mDialog: BottomSheetDialog? = null
 
     interface Callback {
         fun onSelected(select: DateBean?)
     }
 
-    constructor(context: Context, birth: DateBean?, callback: Callback) {
+    constructor(context: Context, birth: DateBean?, current: DateBean?, callback: Callback) {
         if (context == null || callback == null) {
             return
         }
 
         mContext = context
         birthDate = birth
+        currentDate = current
         mCallback = callback
 
         initView()
@@ -101,6 +103,7 @@ class SelectYearDialog {
                     } else {
                         ivSelected.setImageDrawable(null)
                     }
+
                     if(model.year < (birthDate?.year ?: 1900) || model.year > 2100){
                         tvData.setTextColor(ResourcesCompat.getColor(context.resources, com.cyberflow.base.resources.R.color.color_7D7D80, null))
                     }else{
@@ -114,7 +117,7 @@ class SelectYearDialog {
                 if(model.year >= (birthDate?.year ?: 1900) && model.year <= 2100){
                     setChecked(layoutPosition, true)
                     itemView.postDelayed({
-                        mCallback?.onSelected(getModel<DateBean>(layoutPosition))
+//                        mCallback?.onSelected(getModel<DateBean>(layoutPosition))
                     }, 200)
                 }
             }

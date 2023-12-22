@@ -10,10 +10,12 @@ import android.view.WindowManager
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ItemHoroscopeSelectMonthBinding
 import com.cyberflow.sparkle.main.widget.calendar.DateBean
 import com.cyberflow.sparkle.main.widget.calendar.getMonthEngStr
+import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.drake.brv.utils.bindingAdapter
 import com.drake.brv.utils.models
@@ -26,19 +28,21 @@ class SelectMonthDialog {
     private var mContext: Context? = null
     private var mCallback: Callback? = null
     private var birthDate: DateBean? = null
+    private var currentDate: DateBean? = null
     private var mDialog: BottomSheetDialog? = null
 
     interface Callback {
         fun onSelected(select: DateBean?)
     }
 
-    constructor(context: Context,birth: DateBean?, callback: Callback) {
+    constructor(context: Context, birth: DateBean?, current: DateBean?, callback: Callback) {
         if (context == null || callback == null) {
             return
         }
 
         mContext = context
         birthDate = birth
+        currentDate = current
         mCallback = callback
 
         initView()
@@ -127,12 +131,18 @@ class SelectMonthDialog {
                     min = it.year * 12 +  it.month
                 }
                 val count = model.year * 12 + model.month
-                val max = 2100 * 12 + 1
+                var max = 2100 * 12 + 1
+                currentDate?.let {
+                    max = it.year * 12 + it.month + 1
+                }
                 if(count in min..max){
                     setChecked(layoutPosition, true)
                     itemView.postDelayed({
                         mCallback?.onSelected(getModel<DateBean>(layoutPosition))
                     }, 200)
+                }
+                if(count > max){
+                    LiveDataBus.get().with(NotificationDialog.EVENT_SUCCESS).postValue(context.getString(R.string.future_horoscope_will_be_coming_soon))
                 }
             }
         }

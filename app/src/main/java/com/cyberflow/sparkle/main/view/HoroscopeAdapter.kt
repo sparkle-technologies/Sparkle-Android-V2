@@ -20,7 +20,6 @@ class HoroscopeAdapter(imageUrls: List<HoroscopeReq>) : BannerAdapter<HoroscopeR
         return view
     }
 
-    // 不知道为啥  设置了 offscreenPageLimit = 2  还是会多次创建 view
     override fun onBindView(holder: HoroscopeView, data: HoroscopeReq, position: Int, size: Int) {
 //        Log.e(TAG, "onBindView: position=$position  data=$data", )
         holder.injectData(data)
@@ -32,8 +31,6 @@ class HoroscopeAdapter(imageUrls: List<HoroscopeReq>) : BannerAdapter<HoroscopeR
             it.slideUpdate(position, realPos)
         }
     }
-
-
 }
 
 data class HoroscopeReq(val selectMode: Int, val initTabIdx: Int, var param: DateBean? = null)

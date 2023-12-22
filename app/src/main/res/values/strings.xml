@@ -71,5 +71,6 @@
     <string name="coming_soon">Coming soon...</string>
     <string name="a_new_message">You have a new message</string>
     <string name="you_have_new_messages">You have %1$s new messages</string>
+    <string name="future_horoscope_will_be_coming_soon">Future horoscope will be coming soon</string>
 
 </resources>

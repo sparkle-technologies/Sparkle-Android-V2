@@ -19,9 +19,14 @@ public class CalendarDateAdapter extends BaseAdapter {
     private Context context;
     private List<DateBean> mData;
 
-    public CalendarDateAdapter(Context context, List<DateBean> mData) {
+    private DateBean birthDate;
+    private DateBean currentDate;
+
+    public CalendarDateAdapter(Context context, List<DateBean> mData, DateBean _birth, DateBean _current) {
         this.context = context;
         this.mData = mData;
+        this.birthDate = _birth;
+        this.currentDate = _current;
     }
 
     @Override
@@ -69,9 +74,14 @@ public class CalendarDateAdapter extends BaseAdapter {
             viewHolder.ivSelected.setVisibility(View.GONE);
         }
 
+        int birth = birthDate.getYear() * 365 + birthDate.getMonth()*30 + birthDate.getDay();
+        int select = data.getYear() * 365 + data.getMonth()*30 + data.getDay();
+        if(select < birth){
+            viewHolder.tvData.setTextColor(ResourcesCompat.getColor(context.getResources(), com.cyberflow.base.resources.R.color.color_7D7D80, null));
+        }
+
         //选中日期 表示为今天
-        Calendar calendar = Calendar.getInstance();
-        if (data.getYear() == calendar.get(Calendar.YEAR) && data.getMonth() == (calendar.get(Calendar.MONTH) + 1) && data.getDay() == calendar.get(Calendar.DAY_OF_MONTH)) {
+        if (data.getYear() == currentDate.getYear()  && data.getMonth() == currentDate.getMonth() && data.getDay() == currentDate.getDay()) {
             viewHolder.tvTop.setVisibility(View.VISIBLE);
             viewHolder.ivSelected.setImageResource(com.cyberflow.base.resources.R.drawable.main_bg_calendar_selected_yellow);
             viewHolder.tvData.setBackgroundResource(com.cyberflow.base.resources.R.drawable.main_bg_calendar_clicked);

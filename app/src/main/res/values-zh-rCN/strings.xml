@@ -69,5 +69,6 @@
     <string name="coming_soon">即将上线</string>
     <string name="a_new_message">您有一条未读消息</string>
     <string name="you_have_new_messages">您有 %1$s 条未读消息</string>
+    <string name="future_horoscope_will_be_coming_soon">Future horoscope will be coming soon</string>
 
 </resources>

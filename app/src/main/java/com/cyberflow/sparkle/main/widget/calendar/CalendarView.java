@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cyberflow.base.util.bus.LiveDataBus;
 import com.cyberflow.sparkle.R;
+import com.cyberflow.sparkle.widget.NotificationDialog;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -33,12 +35,14 @@ public class CalendarView extends RecyclerView.ViewHolder {
     private boolean weekMode = false;
 
     private DateBean birthDate;
+    private DateBean currentDate;
 
-    public CalendarView(@NonNull View itemView, CalendarDialog.Callback callback, boolean _weekMode, DateBean _birth) {
+    public CalendarView(@NonNull View itemView, CalendarDialog.Callback callback, boolean _weekMode, DateBean _birth, DateBean _current) {
         super(itemView);
         this.callback = callback;
         this.weekMode = _weekMode;
         this.birthDate = _birth;
+        this.currentDate = _current;
         gridView = itemView.findViewById(R.id.wgvCalendar);
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         context = itemView.getContext();
@@ -50,10 +54,14 @@ public class CalendarView extends RecyclerView.ViewHolder {
         gridView.setOnItemClickListener((adapterView, view, position, l) -> {
             DateBean selected = (DateBean) calendarDateAdapter.getItem(position);
 
-            int min = birthDate.getYear() * 365 + birthDate.getMonth()*30 + birthDate.getDay();
-            int max = 2100 * 365 + 1*30 + 1;
+            int min =   birthDate.getYear() * 365 +   birthDate.getMonth()*30 +   birthDate.getDay();
+            int max = currentDate.getYear() * 365 + currentDate.getMonth()*30 + currentDate.getDay() + 1;
             int count = selected.getYear()* 365 + selected.getMonth()*30 + selected.getDay();
-            if(count < min || count > max){
+            if(count < min){
+                return;
+            }
+            if(count > max){
+                LiveDataBus.get().with(NotificationDialog.EVENT_SUCCESS).postValue(context.getString(R.string.future_horoscope_will_be_coming_soon));
                 return;
             }
 
@@ -98,12 +106,7 @@ public class CalendarView extends RecyclerView.ViewHolder {
             }
 
             if(callback!=null){
-                gridView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        callback.onSelected(selected);
-                    }
-                }, 200);
+                gridView.postDelayed(() -> callback.onSelected(selected), 200);
             }
         });
     }
@@ -145,7 +148,7 @@ public class CalendarView extends RecyclerView.ViewHolder {
             }
         }
 
-        calendarDateAdapter = new CalendarDateAdapter(context, data);
+        calendarDateAdapter = new CalendarDateAdapter(context, data, birthDate, currentDate);
         gridView.setAdapter(calendarDateAdapter);
         setGridViewHeight(gridView, data.size());
     }

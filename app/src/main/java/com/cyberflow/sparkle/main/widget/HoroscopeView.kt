@@ -5,12 +5,14 @@ import android.animation.ValueAnimator
 import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.cyberflow.base.model.DBHoroscope
 import com.cyberflow.base.model.DailyHoroScopeData
 import com.cyberflow.base.model.YearlyHoroScopeData
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.net.GsonConverter
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ItemHoroscopeBannerBinding
@@ -24,6 +26,7 @@ import com.cyberflow.sparkle.main.view.MainHoroscopeFragment.Companion.DAILY
 import com.cyberflow.sparkle.main.view.MainHoroscopeFragment.Companion.MONTH
 import com.cyberflow.sparkle.main.view.MainHoroscopeFragment.Companion.WEEKLY
 import com.cyberflow.sparkle.main.view.MainHoroscopeFragment.Companion.YEAR
+import com.cyberflow.sparkle.main.widget.calendar.DateBean
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
@@ -33,14 +36,35 @@ import com.drake.net.utils.scope
 import com.drake.net.utils.withIO
 import com.drake.net.utils.withMain
 import java.lang.Math.abs
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 
 class HoroscopeView : RecyclerView.ViewHolder {
     private val TAG = "HoroscopeView"
 
+    private var birthDate : DateBean? = null
+    private var currentDate : DateBean? = null
+
     constructor(itemView: View) : super(itemView) {
         initView(itemView)
         initData()
+        CacheUtil.getUserInfo()?.user?.apply {
+            var date: Date? = null
+            val format = "yyyy-MM-dd"
+            try{
+                Log.e(TAG, "initBirthDate: birthdate=$birthdate" )
+                date = SimpleDateFormat(format).parse(birthdate)
+            }catch (e: Exception){
+                birthdate = "1990-01-01"
+                date = SimpleDateFormat(format).parse(birthdate)
+            }finally {
+                val calendar = Calendar.getInstance()
+                currentDate = DateBean(year = calendar[Calendar.YEAR], month = calendar[Calendar.MONTH] + 1, day = calendar[Calendar.DAY_OF_MONTH])
+                calendar.time = date
+                birthDate = DateBean(year = calendar[Calendar.YEAR], month = calendar[Calendar.MONTH] + 1, day = calendar[Calendar.DAY_OF_MONTH])
+            }
+        }
     }
 
     var mDatabind: ItemHoroscopeBannerBinding? = null
@@ -152,18 +176,63 @@ class HoroscopeView : RecyclerView.ViewHolder {
                 val realMonth = calendar.get(Calendar.MONTH) + 1
                 val realDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-                Log.e(TAG, "dailyTransform: before ${it.year}-${it.month}-${it.day}", )
-                Log.e(TAG, "dailyTransform: after ${realYear}-${realMonth}-${realDay}", )
+                Log.e(TAG, "dailyTransform: before ${it.year}-${it.month}-${it.day}")
+                Log.e(TAG, "dailyTransform: after ${realYear}-${realMonth}-${realDay}")
 
                 resetView()
 
                 mDatabind?.tvHoroscopeTitle?.text = "${realYear}-${realMonth}-${realDay}"
+                var needRequestData = true
+                when(params?.selectMode){
+                    DAILY -> {
+                        val birth = birthDate!!.year * 365 + birthDate!!.month * 30 + birthDate!!.day
+                        val today = currentDate!!.year * 365 + currentDate!!.month * 30 + currentDate!!.day
+                        val select: Int = realYear * 365 + realMonth * 30 + realDay
+                        if(select < birth){
+                            needRequestData = false
+                            showVoid()
+                        }
+                        if(select == birth){
+                            needRequestData = false
+                            showHappyBirthday()
+                        }
+                        if(select > today){
+                            needRequestData = false
+                            showFutureHoroscope()
+                        }
+                    }
+                    WEEKLY -> {
 
-                requestData(realYear, realMonth, realDay)
+                    }
+                    MONTH -> {
+                        val birth = birthDate!!.year * 365 + birthDate!!.month * 30
+                        val today = currentDate!!.year * 365 + currentDate!!.month * 30
+                        val select: Int = realYear * 365 + realMonth * 30
+
+                        if(select < birth){
+                            needRequestData = false
+                            showVoid()
+                        }
+                        if(select == birth){
+                            needRequestData = false
+                            showHappyBirthday()
+                        }
+                        if(select > today){
+                            needRequestData = false
+                            showFutureHoroscope()
+                        }
+                    }
+                    YEAR -> {
+                        needRequestData = false
+                        showCoraAnalyze()
+                    }
+                }
+                if(needRequestData){
+                    requestData(realYear, realMonth, realDay)
+                }
             }
         }
     }
-
 
     private var requestYear = 0
     private var requestMonth = 0
@@ -247,10 +316,65 @@ class HoroscopeView : RecyclerView.ViewHolder {
 
     private fun showData() {
         mDatabind?.state?.showContent()
-        if(params?.selectMode == YEAR){
-            showData(yearlyHoroScopeData)
-        }
         showData(horoScopeData)
+    }
+
+    // happy birthday
+    // future horoscope
+    private fun showEmptyView(){
+        when(params?.selectMode){
+            YEAR -> {
+                showCoraAnalyze()
+            }
+            MONTH -> {
+
+            }
+            DAILY -> {
+
+            }
+        }
+    }
+
+    private fun showCoraAnalyze(){
+        mDatabind?.apply {
+            layMain.isVisible = false
+            layEmpty.isVisible = true
+            tvCoraAnalyzing.isVisible = true
+            btnCoraCommingSoon.isVisible = true
+            tvHint.isVisible = false
+        }
+    }
+
+    private fun showVoid(){
+        mDatabind?.apply {
+            layMain.isVisible = false
+            layEmpty.isVisible = false
+            tvCoraAnalyzing.isVisible = false
+            btnCoraCommingSoon.isVisible = false
+            tvHint.isVisible = false
+        }
+    }
+
+    private fun showHappyBirthday(){
+        mDatabind?.apply {
+            layMain.isVisible = false
+            layEmpty.isVisible = true
+            tvCoraAnalyzing.isVisible = false
+            btnCoraCommingSoon.isVisible = false
+            tvHint.isVisible = true
+            tvHint.text = "\uD83D\uDC23Happy Birthday!"
+        }
+    }
+
+    private fun showFutureHoroscope(){
+        mDatabind?.apply {
+            layMain.isVisible = false
+            layEmpty.isVisible = true
+            tvCoraAnalyzing.isVisible = false
+            btnCoraCommingSoon.isVisible = false
+            tvHint.isVisible = true
+            tvHint.text = "If you have any feedback, please contact support@sparkle.fun"
+        }
     }
 
     private fun initData() {
@@ -281,16 +405,13 @@ class HoroscopeView : RecyclerView.ViewHolder {
         }
     }
 
-    // 目前接口还没数据  后面好了再整活
-    private fun showData(data: YearlyHoroScopeData?) {
-        mDatabind?.apply {
-            layMain.visibility = View.GONE
-            layEmpty.visibility = View.VISIBLE
-        }
-    }
-
     private fun resetView(){
         mDatabind?.apply {
+            layMain.isVisible = false
+            layEmpty.isVisible = false
+            tvCoraAnalyzing.isVisible = false
+            btnCoraCommingSoon.isVisible = false
+            tvHint.isVisible = false
             showTotalAnima(0)
             tvLove.text = ""
             tvFortune.text = ""

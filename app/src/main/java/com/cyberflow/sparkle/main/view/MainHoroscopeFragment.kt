@@ -8,6 +8,8 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.bus.LiveDataBus
+import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.util.safeClick
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.databinding.FragmentMainHoroscopeBinding
@@ -68,6 +70,8 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             var d2 = DateBean(year = it.year, month = it.month, day = it.day)
             var d3 = DateBean(year = it.year, month = it.month, day = it.day)
 
+            var banner2 = (mDatabind.banner as Banner<HoroscopeReq, HoroscopeAdapter>)
+            banner2.setUserInputEnabled(true)
             when(selectMode){
                 DAILY -> {
                     calendar.add(Calendar.DAY_OF_MONTH, 1)
@@ -92,11 +96,11 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                     updateDate(d2, calendar)
                     calendar.add(Calendar.YEAR, 1)
                     updateDate(d3, calendar)
+                    banner2.setUserInputEnabled(false)
                 }
             }
 
             horoAdpter = HoroscopeAdapter(arrayListOf(HoroscopeReq(selectMode, 0, d1), HoroscopeReq(selectMode, 1, d2), HoroscopeReq(selectMode, 2, d3)))
-            var banner2 = (mDatabind.banner as Banner<HoroscopeReq, HoroscopeAdapter>)
             banner2.setAdapter(horoAdpter)
         }
     }
@@ -111,17 +115,17 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
     }
 
     override fun initData() {
-        mDatabind.tabLayout.setTabData(arrayOf(getString(com.cyberflow.base.resources.R.string.daily), getString(com.cyberflow.base.resources.R.string.weekly), getString(com.cyberflow.base.resources.R.string.monthly), getString(com.cyberflow.base.resources.R.string.yearly)))
-//        mDatabind.tabLayout.setTabData(arrayOf(getString(com.cyberflow.base.resources.R.string.daily), getString(com.cyberflow.base.resources.R.string.monthly), getString(com.cyberflow.base.resources.R.string.yearly)))
+//        mDatabind.tabLayout.setTabData(arrayOf(getString(com.cyberflow.base.resources.R.string.daily), getString(com.cyberflow.base.resources.R.string.weekly), getString(com.cyberflow.base.resources.R.string.monthly), getString(com.cyberflow.base.resources.R.string.yearly)))
+        mDatabind.tabLayout.setTabData(arrayOf(getString(com.cyberflow.base.resources.R.string.daily), getString(com.cyberflow.base.resources.R.string.monthly), getString(com.cyberflow.base.resources.R.string.yearly)))
         mDatabind.tabLayout.setOnTabSelectListener(object : OnTabSelectListener{
             override fun onTabSelect(position: Int) {
                 Log.e(TAG, "onTabSelect: position=$position")
 
                 when(position){
                     0 -> topBar(DAILY)
-                    1 -> topBar(WEEKLY)
-                    2 -> topBar(MONTH)
-                    3 -> topBar(YEAR)
+//                    1 -> topBar(WEEKLY)
+                    1 -> topBar(MONTH)
+                    2 -> topBar(YEAR)
                 }
             }
 
@@ -136,17 +140,18 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             viewPager2.offscreenPageLimit = 1
 //            setAdapter(horoAdpter)
             removeIndicator()
+
             isAutoLoop(false)
             setBannerGalleryEffect(10, 10, 1f)
             addPageTransformer(AlphaPageTransformer(0.2f))
             addOnPageChangeListener(object : OnPageChangeListener{
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-//                    Log.e(TAG, "onPageScrolled: position=$position positionOffset=$positionOffset   positionOffsetPixels=$positionOffsetPixels" )
+                    Log.e(TAG, "onPageScrolled: position=$position positionOffset=$positionOffset   positionOffsetPixels=$positionOffsetPixels" )
                 }
 
                 // 初始化是0  左滑是2  右滑是1   201   012  120
                 override fun onPageSelected(position: Int) {
-//                    Log.e(TAG, "onPageSelected: position=$position" )
+                    Log.e(TAG, "onPageSelected: position=$position" )
                     if(position == 0){
                         if(previousPos == 2) realPos++
                         if(previousPos == 1) realPos--
@@ -187,8 +192,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 }
 
                 override fun onPageScrollStateChanged(state: Int) {
-//                    Log.e(TAG, "onPageScrollStateChanged: state=$state" )
-//                    viewPager2.isUserInputEnabled = !(state == ViewPager2.SCROLL_STATE_DRAGGING && viewPager2.currentItem == 2)
+                    Log.e(TAG, "onPageScrollStateChanged: state=$state" )
                 }
             })
         }
@@ -255,9 +259,9 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
 
     companion object {
         const val DAILY = 0
-        const val WEEKLY = 1
-        const val MONTH = 2
-        const val YEAR = 3
+        const val WEEKLY = -1  // 暂时不做
+        const val MONTH = 1
+        const val YEAR = 2
     }
 
     private var selectMode = DAILY
@@ -265,16 +269,16 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
     private fun showCalendarDialog() {
         when(mDatabind.tabLayout.currentTab){
             0 -> { showDailyOrWeekly(false) }
-            1 -> { showDailyOrWeekly(true)  }
-            2 -> { showMonth() }
-            3 -> { showYear() }
+//            1 -> { showDailyOrWeekly(true)  }
+            1 -> { showMonth() }
+            2 -> { showYear() }
         }
     }
 
     private var yearDialog : SelectYearDialog? = null
     private fun showYear(){
         Log.e("TAG", "showYear: " )
-        yearDialog = SelectYearDialog(requireActivity() , birthDate, object : SelectYearDialog.Callback {
+        yearDialog = SelectYearDialog(requireActivity() , birthDate, currentDate, object : SelectYearDialog.Callback {
             override fun onSelected(select: DateBean?) {
                 Log.e(TAG, "onSelected: $select" )
 //                ToastUtil.show(requireContext(), "${select?.year}")
@@ -288,7 +292,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
     private var monthDialog : SelectMonthDialog? = null
 
     private fun showMonth(){
-        monthDialog = SelectMonthDialog(requireActivity(), birthDate, object : SelectMonthDialog.Callback {
+        monthDialog = SelectMonthDialog(requireActivity(), birthDate, currentDate, object : SelectMonthDialog.Callback {
             override fun onSelected(select: DateBean?) {
                 Log.e(TAG, "onSelected: $select" )
 //                ToastUtil.show(requireContext(), "${select?.month}")
@@ -301,7 +305,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
 
     private var calendarDialog : CalendarDialog? = null
     private fun showDailyOrWeekly(isWeek: Boolean){
-        calendarDialog = CalendarDialog(requireActivity(), isWeek, birthDate,  object : CalendarDialog.Callback {
+        calendarDialog = CalendarDialog(requireActivity(), isWeek, birthDate, currentDate,  object : CalendarDialog.Callback {
             override fun onSelected(select: DateBean??) {
                 Log.e(TAG, "onSelected: $select" )
 //                ToastUtil.show(requireContext(), "${select?.year}-${select?.month}-${select?.day}")
@@ -313,14 +317,23 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
     }
 
     private var birthDate : DateBean? = null
+    private var currentDate : DateBean? = null
 
     private fun initBirthDate(){
+        LiveDataBus.get().with(SparkleEvent.PROFILE_CHANGED, String::class.java).observe(this){
+            updateBirthday()
+        }
+        updateBirthday()
+    }
+
+    private fun updateBirthday(){
         CacheUtil.getUserInfo()?.user?.apply {
             try{
                 Log.e(TAG, "initBirthDate: birthdate=$birthdate" )
                 val format = "yyyy-MM-dd"
                 val date = SimpleDateFormat(format).parse(birthdate)
                 val calendar = Calendar.getInstance()
+                currentDate = DateBean(year = calendar[Calendar.YEAR], month = calendar[Calendar.MONTH] + 1, day = calendar[Calendar.DAY_OF_MONTH])
                 calendar.time = date
                 birthDate = DateBean(year = calendar[Calendar.YEAR], month = calendar[Calendar.MONTH] + 1, day = calendar[Calendar.DAY_OF_MONTH])
 //                birthDate = DateBean(year = 2000, month = 7, day = 26)
