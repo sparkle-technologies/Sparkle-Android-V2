@@ -82,6 +82,7 @@ class CalendarDialog {
                         setCurrentItem(currentItem - 1, true)
                     }
                 }
+                handleBtn()
             }
         })
 
@@ -92,6 +93,7 @@ class CalendarDialog {
                         setCurrentItem(currentItem + 1, true)
                     }
                 }
+                handleBtn()
             }
         })
     }
@@ -160,6 +162,16 @@ class CalendarDialog {
                 }
             })
         }
+
+        handleBtn()
+    }
+
+    private fun handleBtn(){
+        val cur = viewPager2?.currentItem ?: 0
+        val size = calendarAdapter?.itemCount ?: 0
+        Log.e("TAG", "handleBtn: cur=$cur  size=$size" )
+        btnPrevious?.disableBg(cur == 0)
+        btnNext?.disableBg((size == 0) || (cur == (size - 1)) )
     }
 
     fun updatePagerHeightForChild(view: View, pager: ViewPager2?) {

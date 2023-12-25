@@ -39,6 +39,10 @@
         <attr name="view_img_shadow_distance" format="dimension" />
         <attr name="view_img_src" format="reference" />
         <attr name="view_bg_src" format="reference" />
+
+        <attr name="view_img_disable_src" format="reference" />
+        <attr name="view_img_disable_bg" format="reference" />
+        <attr name="view_img_disable" format="boolean" />
     </declare-styleable>
 
 

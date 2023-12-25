@@ -180,7 +180,7 @@ class HoroscopeView : RecyclerView.ViewHolder {
 
                 resetView()
 
-                mDatabind?.tvHoroscopeTitle?.text = "${realYear}-${realMonth}-${realDay}"
+//                mDatabind?.tvHoroscopeTitle?.text = "${realYear}-${realMonth}-${realDay}"
                 var needRequestData = true
                 when(params?.selectMode){
                     DAILY -> {

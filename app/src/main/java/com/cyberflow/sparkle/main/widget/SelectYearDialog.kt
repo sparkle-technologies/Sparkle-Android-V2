@@ -146,16 +146,22 @@ class SelectYearDialog {
 
         Log.e("TAG", "action: selectYear=$selectYear   birthDate=$birthDate" )  // 2018
         if (next) {
-            if(selectYear > 2100 ){
+            if(selectYear >= 2100 ){
+                btnNext?.disableBg(true)
                 return
             }
             selectYear += COUNT
         } else {
-            if(selectYear - COUNT < (birthDate?.year ?: 1900)){
+            if(selectYear - COUNT <= (birthDate?.year ?: 1900)){
+                btnPrevious?.disableBg(true)
                 return
             }
             selectYear -= COUNT
         }
+
+        btnPrevious?.disableBg((selectYear - COUNT + 1) <= (birthDate?.year ?: 1900))
+        btnNext?.disableBg(selectYear >= 2100)
+
         tvYear?.text = "${selectYear - COUNT + 1} - $selectYear"
         getYearData(selectYear).apply {
             rv?.models = this

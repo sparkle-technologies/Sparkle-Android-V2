@@ -27,9 +27,13 @@
         android:layout_height="@dimen/dp_40"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:view_bg_src="@drawable/main_ic_add_friends_bg"
         app:view_img_shadow_distance="1dp"
-        app:view_img_src="@drawable/main_ic_calendar_previous" />
+        app:view_bg_src="@drawable/main_ic_add_friends_bg"
+        app:view_img_src="@drawable/main_ic_calendar_previous"
+        app:view_img_disable_src="@drawable/main_ic_calendar_previous_disable"
+        app:view_img_disable_bg="@drawable/main_ic_add_friends_bg_disable"
+        app:view_img_disable="false"
+        />
 
     <com.cyberflow.sparkle.widget.ShadowImgButton
         android:id="@+id/btn_next"
@@ -39,7 +43,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:view_bg_src="@drawable/main_ic_add_friends_bg"
         app:view_img_shadow_distance="1dp"
-        app:view_img_src="@drawable/main_ic_calendar_next" />
+        app:view_img_src="@drawable/main_ic_calendar_next"
+        app:view_img_disable_src="@drawable/main_ic_calendar_next_disable"
+        app:view_img_disable_bg="@drawable/main_ic_add_friends_bg_disable"
+        app:view_img_disable="false"
+        />
 
     <View
         android:id="@+id/line_horizon"

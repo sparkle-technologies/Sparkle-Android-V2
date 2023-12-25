@@ -168,15 +168,21 @@ class SelectMonthDialog {
     private fun action(next: Boolean) {
         if (next) {
             if(selectYear >= 2100){
+                btnNext?.disableBg(true)
                 return
             }
             selectYear++
         } else {
             if(selectYear <= (birthDate?.year ?: 1900)){
+                btnPrevious?.disableBg(true)
                 return
             }
             selectYear--
         }
+
+        btnPrevious?.disableBg(selectYear <= (birthDate?.year ?: 1900))
+        btnNext?.disableBg(selectYear >= 2100)
+
         tvYear?.text = "$selectYear"
         getMonthData(selectYear).apply {
             rv?.models = this
