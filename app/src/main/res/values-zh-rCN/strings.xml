@@ -69,6 +69,10 @@
     <string name="coming_soon">即将上线</string>
     <string name="a_new_message">您有一条未读消息</string>
     <string name="you_have_new_messages">您有 %1$s 条未读消息</string>
-    <string name="future_horoscope_will_be_coming_soon">Future horoscope will be coming soon</string>
+
+    <string name="future_horoscope_hint">未来运势即将上线。</string>
+    <string name="happy_birthday_hint">🐣破壳日！再往前没有内容了～</string>
+    <string name="happy_birthday">🐣破壳日!</string>
+    <string name="feedback_contact">如果您有任何反馈，欢迎联系support@sparkle.fun</string>
 
 </resources>

@@ -6,12 +6,14 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.lifecycleScope
+import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.fragment.BaseDBFragment
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SparkleEvent
 import com.cyberflow.base.util.safeClick
 import com.cyberflow.base.viewmodel.BaseViewModel
+import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainHoroscopeBinding
 import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.main.widget.SelectMonthDialog
@@ -64,14 +66,16 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
             calendar.set(Calendar.MONTH, it.month - 1)
             calendar.set(Calendar.DAY_OF_MONTH, it.day)
 
-            showSelectDateTitle(calendar, selectMode)
-
             var d1 = DateBean(year = it.year, month = it.month, day = it.day)
             var d2 = DateBean(year = it.year, month = it.month, day = it.day)
             var d3 = DateBean(year = it.year, month = it.month, day = it.day)
 
             var banner2 = (mDatabind.banner as Banner<HoroscopeReq, HoroscopeAdapter>)
             banner2.setUserInputEnabled(true)
+
+            handleScrollRange(banner2, calendar, selectMode)
+            showSelectDateTitle(calendar, selectMode)
+
             when(selectMode){
                 DAILY -> {
                     calendar.add(Calendar.DAY_OF_MONTH, 1)
@@ -185,9 +189,10 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                                 calendar.add(Calendar.YEAR, realPos)
                             }
                         }
+                        handleScrollRange(banner2, calendar, selectMode)
                         showSelectDateTitle(calendar, selectMode)
                     }
-
+//                    Log.e(TAG, "onPageSelected: realPos=$realPos" )
                     horoAdpter?.slideUpdate(position, realPos)
                 }
 
@@ -195,9 +200,74 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                     Log.e(TAG, "onPageScrollStateChanged: state=$state" )
                 }
             })
+
+            setScrollResult { scrollLeft, scrollRight ->
+                if(!scrollLeft){
+                    (requireActivity() as? BaseDBAct<*, *>)?.toastSuccess(getString(R.string.happy_birthday_hint))
+                }
+            }
         }
         initBirthDate()
         topBar(DAILY)
+    }
+
+
+    private fun handleScrollRange(
+        banner2: Banner<HoroscopeReq, HoroscopeAdapter>,
+        calendar: Calendar,
+        selectMode: Int
+    ) {
+        banner2.scrollLeft = true
+        banner2.scrollRight = true
+
+        when(selectMode){
+            DAILY -> {
+                val min = birthDate?.let {
+                    it.year * 365 + it.month * 30 + it.day
+                } ?: (1900 * 365 + 1 * 30 + 1)
+
+                val max = currentDate?.let {
+                    it.year * 365 + it.month * 30 + it.day
+                } ?: (2100 * 365 + 1 * 30 + 1)
+
+                val select = calendar.get(Calendar.YEAR) * 365 + (calendar.get(Calendar.MONTH) + 1) * 30 + calendar.get(Calendar.DAY_OF_MONTH)
+                Log.e(TAG, "handleScrollRange: min=$min max=$max select=$select" )
+
+                banner2.scrollLeft = select > min
+                banner2.scrollRight = select <= max
+
+                if(select == max + 1){
+                    (requireActivity() as? BaseDBAct<*, *>)?.toastSuccess(getString(R.string.future_horoscope_hint))
+                }
+            }
+            WEEKLY -> {
+                 // todo
+            }
+            MONTH -> {
+                val min = birthDate?.let {
+                    it.year * 12 + it.month
+                } ?: (1900 * 12 + 1)
+
+                val max = currentDate?.let {
+                    it.year * 12 + it.month
+                } ?: (2100 * 12 + 1)
+
+//                Log.e(TAG, "onPageSelected: birthDate=$birthDate " )
+//                Log.e(TAG, "onPageSelected: currentDate=$currentDate " )
+
+                val select = calendar.get(Calendar.YEAR) * 12 + calendar.get(Calendar.MONTH) + 1
+                Log.e(TAG, "handleScrollRange: min=$min max=$max select=$select" )
+                banner2.scrollLeft = select > min
+                banner2.scrollRight = select <= max
+
+                if(select == max + 1){
+                    (requireActivity() as? BaseDBAct<*, *>)?.toastSuccess(getString(R.string.future_horoscope_hint))
+                }
+            }
+            YEAR -> {
+                // todo
+            }
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -245,7 +315,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
         }
         val simpleDateFormat = SimpleDateFormat(pattern)
         val dateStr = simpleDateFormat.format(calendar.time)
-        Log.e(TAG, "showSelectDateTitle: $dateStr" )
+        Log.e(TAG, " $dateStr" )
         if(selectMode == WEEKLY){
             calendar.add(Calendar.DAY_OF_MONTH, 6)
             val weekStr = simpleDateFormat.format(calendar.time)

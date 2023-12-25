@@ -13,6 +13,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
@@ -215,8 +216,54 @@ public class Banner<T, BA extends BannerAdapter<T, ? extends RecyclerView.ViewHo
         setIndicatorSelectedColor(selectedColor);
     }
 
+    public boolean scrollLeft = true;
+    public boolean scrollRight = true;
+    private float beforeX = 0;
+    private long lastTime = 0L;
+
+    public interface IScrollResult{
+        void onScrollResult(boolean scrollLeft, boolean scrollRight);
+    }
+
+    private IScrollResult scrollResult;
+    public void setScrollResult(IScrollResult scrollResult){
+        this.scrollResult = scrollResult;
+    }
+
+    private void recordTime(){
+        if(System.currentTimeMillis() - lastTime > 1*1000){
+            lastTime = System.currentTimeMillis();
+            if(scrollResult!=null){
+                scrollResult.onScrollResult(scrollLeft, scrollRight);
+            }
+        }
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                beforeX = ev.getX();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float motionValue = ev.getX() - beforeX;
+                if(!scrollLeft && motionValue > 0){
+                    Log.e("TAG", "dispatchTouchEvent: left 被拦截了" );
+                    recordTime();
+                    return true;
+                }
+                if(!scrollRight && motionValue < 0){
+                    Log.e("TAG", "dispatchTouchEvent: right 被拦截了" );
+                    recordTime();
+                    return true;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                beforeX = 0f;
+                break;
+        }
+
         if (!getViewPager2().isUserInputEnabled()) {
             return super.dispatchTouchEvent(ev);
         }

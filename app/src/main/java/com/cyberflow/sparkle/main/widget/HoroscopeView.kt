@@ -2,7 +2,6 @@ package com.cyberflow.sparkle.main.widget
 
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.core.view.isVisible
@@ -53,7 +52,7 @@ class HoroscopeView : RecyclerView.ViewHolder {
             var date: Date? = null
             val format = "yyyy-MM-dd"
             try{
-                Log.e(TAG, "initBirthDate: birthdate=$birthdate" )
+//                Log.e(TAG, "initBirthDate: birthdate=$birthdate" )
                 date = SimpleDateFormat(format).parse(birthdate)
             }catch (e: Exception){
                 birthdate = "1990-01-01"
@@ -128,7 +127,7 @@ class HoroscopeView : RecyclerView.ViewHolder {
 
     // 外部切换   左右滑  切换周期的时候
     fun slideUpdate(currentPos: Int, realPos: Int) {
-        Log.e(TAG, "slideUpdate: currentPos=$currentPos  realPos=$realPos   $params")
+//        Log.e(TAG, "slideUpdate: currentPos=$currentPos  realPos=$realPos   $params")
         dailyTransform(params, currentPos, realPos)
     }
 
@@ -176,8 +175,8 @@ class HoroscopeView : RecyclerView.ViewHolder {
                 val realMonth = calendar.get(Calendar.MONTH) + 1
                 val realDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-                Log.e(TAG, "dailyTransform: before ${it.year}-${it.month}-${it.day}")
-                Log.e(TAG, "dailyTransform: after ${realYear}-${realMonth}-${realDay}")
+//                Log.e(TAG, "dailyTransform: before ${it.year}-${it.month}-${it.day}")
+//                Log.e(TAG, "dailyTransform: after ${realYear}-${realMonth}-${realDay}")
 
                 resetView()
 
@@ -362,7 +361,7 @@ class HoroscopeView : RecyclerView.ViewHolder {
             tvCoraAnalyzing.isVisible = false
             btnCoraCommingSoon.isVisible = false
             tvHint.isVisible = true
-            tvHint.text = "\uD83D\uDC23Happy Birthday!"
+            tvHint.text = tvHint.context.getString(R.string.happy_birthday)
         }
     }
 
@@ -373,7 +372,7 @@ class HoroscopeView : RecyclerView.ViewHolder {
             tvCoraAnalyzing.isVisible = false
             btnCoraCommingSoon.isVisible = false
             tvHint.isVisible = true
-            tvHint.text = "If you have any feedback, please contact support@sparkle.fun"
+            tvHint.text = tvHint.context.getString(R.string.feedback_contact)
         }
     }
 

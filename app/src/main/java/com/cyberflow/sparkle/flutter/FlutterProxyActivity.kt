@@ -216,6 +216,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                 map["token"] = token
                 map["openuid"] = openUid
                 map["localeLanguage"] = local
+                map["userAgent"] = "Sparkle/1.0 (iPhone; iOS 16.4; Scale/3.00)"
 
                 if(scene == SCENE_PROFILE_EDIT){
                     map["editBio"] = 1
@@ -256,6 +257,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
 //                map["token"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVaWQiOjMxNCwiT3BlblVpZCI6IjE2OTMyMjI0LTcxNjEtNDY3My04MjEwLTQ2NTk4NmRmMDA5MiIsIk9wZW5JZCI6IjB4NTc4YzY3MDg4MDU4MjYyZGVmNjUyMTBiYzkzM2E3MjcxMTZiMTUyOSIsIkF1dGhUeXBlIjoyLCJCdWZmZXJUaW1lIjoyNTkyMDAsImV4cCI6MTcwMTk1MDE4MCwiaXNzIjoic3BhcmtsZSIsIm5iZiI6MTcwMTM0NDM4MH0.nLgje_92Gbyp9co3Y3yb1S08xvijGRrCXgAtNgx1u2c"
 //                map["open_uid"] = "eebe94a3-fb8d-403f-9696-6be1a9e43eb3"
                 map["localeLanguage"] = local
+                map["userAgent"] = "Sparkle/1.0 (iPhone; iOS 16.4; Scale/3.00)"
                 val params = GsonConverter.gson.toJson(map)
                 Log.e(TAG, "initParams:  params: $params")
                 invoke(methodChannel, "nativeShareParams", map)
@@ -273,6 +275,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
                 var map = mutableMapOf<String, Any>()
                 map["token"] = token
                 map["localeLanguage"] = local
+                map["userAgent"] = "Sparkle/1.0 (iPhone; iOS 16.4; Scale/3.00)"
                 map["msgId"] = msgId.orEmpty()
                 map["question"] = questionStr.orEmpty()
                 invoke(methodChannel, "nativeShareParams", map)
@@ -312,6 +315,7 @@ class FlutterProxyActivity : BaseDBAct<BaseViewModel, ActivityFlutterProxyBindin
 //                map["token"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVaWQiOjMxNCwiT3BlblVpZCI6IjE2OTMyMjI0LTcxNjEtNDY3My04MjEwLTQ2NTk4NmRmMDA5MiIsIk9wZW5JZCI6IjB4NTc4YzY3MDg4MDU4MjYyZGVmNjUyMTBiYzkzM2E3MjcxMTZiMTUyOSIsIkF1dGhUeXBlIjoyLCJCdWZmZXJUaW1lIjoyNTkyMDAsImV4cCI6MTcwMTk1MDE4MCwiaXNzIjoic3BhcmtsZSIsIm5iZiI6MTcwMTM0NDM4MH0.nLgje_92Gbyp9co3Y3yb1S08xvijGRrCXgAtNgx1u2c"
 //                map["open_uid"] = "eebe94a3-fb8d-403f-9696-6be1a9e43eb3"
                 map["localeLanguage"] = local
+                map["userAgent"] = "Sparkle/1.0 (iPhone; iOS 16.4; Scale/3.00)"
                 val params = GsonConverter.gson.toJson(map)
                 Log.e(TAG, "initParams:  params: $params")
                 invoke(methodChannel, "nativeShareParams", map)

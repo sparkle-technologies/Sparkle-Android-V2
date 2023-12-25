@@ -142,7 +142,7 @@ class SelectMonthDialog {
                     }, 200)
                 }
                 if(count > max){
-                    LiveDataBus.get().with(NotificationDialog.EVENT_SUCCESS).postValue(context.getString(R.string.future_horoscope_will_be_coming_soon))
+                    LiveDataBus.get().with(NotificationDialog.EVENT_SUCCESS).postValue(context.getString(R.string.future_horoscope_hint))
                 }
             }
         }
