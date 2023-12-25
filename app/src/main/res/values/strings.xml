@@ -77,4 +77,8 @@
     <string name="happy_birthday">🐣Happy Birthday!</string>
     <string name="feedback_contact">If you have any feedback, please contact support@sparkle.fun</string>
 
+    <string name="edit">edit</string>
+    <string name="no_bio">There’s no bio yet, please go to </string>
+    <string name="has_not_yet_constructed_the_bio">has not yet constructed the bio.</string>
+
 </resources>

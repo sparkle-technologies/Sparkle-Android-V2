@@ -1271,8 +1271,11 @@ public class EaseChatLayout extends RelativeLayout implements
         }
     }
 
+    // todo 考虑加入动画
     public void dismissQuestion(){
-        layQuestion.setVisibility(View.GONE);
+        layQuestion.postDelayed(() -> {
+            layQuestion.setVisibility(View.GONE);
+        }, 200);
     }
 
     private int questionIdx = 0;
@@ -1298,10 +1301,16 @@ public class EaseChatLayout extends RelativeLayout implements
         }
     }
 
+    private long lastClick = 0L;
     public void clickQuestion(TextView tv) {  // 内部点击问题
+        if(System.currentTimeMillis() - lastClick < 1500){
+            return;
+        }
+        lastClick = System.currentTimeMillis();
         String question = tv.getText().toString();
         Log.e(TAG, "clickQuestion: " + question);
         inputMenu.onSendBtnClicked(question);
+        dismissQuestion();
     }
 
     private String coraQuestion = "";

@@ -336,19 +336,25 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
     private fun setSpan(tv: TextView) {
         tv.movementMethod = ClickableMovementMethod.getInstance()
         val measurePaint = tv.paint
-        val pWidth = measurePaint.measureText("There‘s no signature yet, please go to image edit")
+        val pref = getString(com.cyberflow.sparkle.R.string.no_bio)
+        val img = "image"
+        val edit = getString(com.cyberflow.sparkle.R.string.edit)
+        val str = "$pref $img $edit"
+
+//        val pWidth = measurePaint.measureText("There’s no bio yet, please go to image edit")
+        val pWidth = measurePaint.measureText(str)
         val screenWidth = ScreenUtils.getScreenSize(mActivity)[0]
         val marLeft = dp2px(20f)
         val marRight = dp2px(20f)
 //        Log.e(TAG, " pWidth=$pWidth  screenWidth=$screenWidth  marLeft=$marLeft  marRight=$marRight" )
         val breakLine = if (pWidth < (screenWidth - marLeft - marRight)) "" else "\n"
-        tv.text = ("There‘s no signature yet, please go to $breakLine").setSpan(ColorSpan("#000000"))
-                .addSpan("image", CenterImageSpan(mActivity, R.drawable.profile_ic_edit).setDrawableSize(dp2px(15f)).setMarginHorizontal(dp2px(2f)))
-                .addSpan(" edit")
-                .replaceSpan("image") {
+        tv.text = ("$pref $breakLine").setSpan(ColorSpan("#000000"))
+                .addSpan(img, CenterImageSpan(mActivity, R.drawable.profile_ic_edit).setDrawableSize(dp2px(15f)).setMarginHorizontal(dp2px(2f)))
+                .addSpan(" $edit")
+                .replaceSpan(img) {
                     HighlightSpan("#8B82DB") {
                         goEditProfile() }
-                }.replaceSpan("edit") {
+                }.replaceSpan(edit) {
                     HighlightSpan("#8B82DB") {
                         goEditProfile()
                     }
@@ -453,7 +459,7 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
                         setSpan(tvContent)
                         initFlutter()
                     } else {
-                        tvContent.text = "${if(data.gender == 1) "He" else "She"} has not yet constructed the bio."
+                        tvContent.text = getString(com.cyberflow.sparkle.R.string.has_not_yet_constructed_the_bio)
                     }
                 }
 

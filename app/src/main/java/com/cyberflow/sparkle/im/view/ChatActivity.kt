@@ -271,13 +271,18 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         fragment?.initCora(isCora, question)
     }
 
+    private var hiCoraMsg = ""
     override fun sendChatInfoToServer(msgId: String?, msg: String?) {
         onOtherTyping(TYPING)
         // cannot edit or send
         fragment?.cannotEditOrSend()
+        if(hiCoraMsg.isEmpty()){
+            hiCoraMsg = getString(com.cyberflow.base.resources.R.string.hi_cora)
+        }
         scopeNet {
+            val isHiCora = if(msg == hiCoraMsg){ 1 }else { 0 }
             Post<String>(Api.IM_CHAT) {
-                json("msgId" to msgId, "msg" to msg)
+                json("msgId" to msgId, "msg" to msg, "isHiCora" to isHiCora)
             }.await()
             if(this@ChatActivity.isDestroyed) return@scopeNet
             withMain {
@@ -320,17 +325,30 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                             }, 1500)
                         }
                     }else{
-                        fragment?.hideHiCoraBtn(false)
+//                        // 继续提问 一轮还没完
                     }
                 }
                 if(msgType == "2" ){
-                    fragment?.hideHiCoraBtn(false)
+                    fragment?.hideHiCoraBtn(false)  //不管结果如何  都完成了一轮提问
                     if(hasResult == "1" && content?.isNotEmpty() == true){
                         FlutterProxyActivity.nativeTarotResult(msgId, hasResult, methodChannel)
                     }
                 }
             }
         }
+    }
+
+    override fun isQuestionFinished(message: EMMessage?) : Boolean {
+        val txtBody = message?.body as? EMCustomMessageBody
+        if (txtBody != null) {
+            val customExt = txtBody.params
+            val msgType = customExt["msgType"] // 0-普通消息，1-校验消息，2-结果消息
+            Log.e(TAG, "isQuestionFinished: ${GsonConverter.gson.toJson(customExt)}" )
+            if(msgType == "2" ){
+                return true
+            }
+        }
+        return false
     }
 
     // 弹出分享弹窗

@@ -75,4 +75,8 @@
     <string name="happy_birthday">🐣破壳日!</string>
     <string name="feedback_contact">如果您有任何反馈，欢迎联系support@sparkle.fun</string>
 
+    <string name="edit">编辑</string>
+    <string name="no_bio">还没有填写个性签名，去</string>
+    <string name="has_not_yet_constructed_the_bio">Ta还没有个性签名.</string>
+
 </resources>

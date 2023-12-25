@@ -57,6 +57,7 @@ import com.cyberflow.sparkle.widget.PermissionDialog;
 import com.drake.tooltip.dialog.BubbleDialog;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
@@ -1025,6 +1026,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
         void handleAIOMessage(EMMessage message);   // 接收到自定义消息
 
+        boolean isQuestionFinished(EMMessage message);   // 消息是否完成了
+
         void handleAIOShareAction(EMMessage message);   // 分享
     }
 
@@ -1118,18 +1121,38 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
     private boolean isCore = false;
 
+    private EMConversation conversation;
+
     // 初始化 将cora数据传进来
     public void initCora(boolean cora, String question) {
         if(cora){
             isCore = true;
             chatLayout.showItemDefaultMenu(false);
-            if(question.isEmpty()){
-                chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();  // 展示 Hi Cora面板
-            }else{  // 直接发送问题
-                chatLayout.clickQuestion(question);
-                chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();
-                hideQuestions();
-                hideHiCoraBtn(true);
+            if(conversation == null ){
+                conversation = EMClient.getInstance().chatManager().getConversation(conversationId, EaseCommonUtils.getConversationType(chatType), true);
+            }
+            EMMessage message = conversation.getLastMessage();
+            boolean isFinishQuestion = infoListener.isQuestionFinished(message);
+            Log.e(TAG, "initCora: 问题走完了吗? " + isFinishQuestion );
+            if(isFinishQuestion){    // 如果提问完成了
+                if(question.isEmpty() ){
+                    chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();  // 展示 Hi Cora面板
+                }else{  // 直接发送问题
+                    chatLayout.clickQuestion(question);
+                    chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();
+                    hideQuestions();
+                    hideHiCoraBtn(true);
+                }
+            }else{     // 如果提问还没完成
+                if(question.isEmpty() ){
+                    chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();  // 展示 Hi Cora面板
+                    hideHiCoraBtn(true);
+                }else{
+                    chatLayout.clickQuestion(question);
+                    chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();
+                    hideQuestions();
+                    hideHiCoraBtn(true);
+                }
             }
         }
     }
