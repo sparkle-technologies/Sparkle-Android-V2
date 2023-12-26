@@ -78,7 +78,7 @@
         <com.youth.banner.Banner
             android:id="@+id/banner"
             android:layout_width="220dp"
-            android:layout_height="15dp"
+            android:layout_height="25dp"
             app:banner_orientation="vertical"
             android:layout_marginStart="@dimen/dp_22"
             app:layout_constraintTop_toTopOf="@+id/bg_question"

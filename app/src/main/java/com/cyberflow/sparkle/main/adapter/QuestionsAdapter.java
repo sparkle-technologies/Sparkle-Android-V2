@@ -2,6 +2,7 @@ package com.cyberflow.sparkle.main.adapter;
 
 
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ public class QuestionsAdapter extends BannerAdapter<String, QuestionsAdapter.Ban
         tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         tv.setTextColor(ResourcesCompat.getColor(parent.getContext().getResources(), com.cyberflow.base.resources.R.color.color_8B82DB, null));
         tv.setMaxLines(1);
+        tv.setGravity(Gravity.CENTER_VERTICAL);
         tv.setEllipsize(TextUtils.TruncateAt.END);
         return new BannerViewHolder(tv);
     }

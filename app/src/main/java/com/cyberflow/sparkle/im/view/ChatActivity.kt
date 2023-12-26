@@ -280,13 +280,13 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
             hiCoraMsg = getString(com.cyberflow.base.resources.R.string.hi_cora)
         }
         scopeNet {
-            val isHiCora = if(msg == hiCoraMsg){ 1 }else { 0 }
+            val isHiCora = if(msg == hiCoraMsg && fragment?.isHiCoraCliked == true){ 1 }else { 0 }
             Post<String>(Api.IM_CHAT) {
                 json("msgId" to msgId, "msg" to msg, "isHiCora" to isHiCora)
             }.await()
             if(this@ChatActivity.isDestroyed) return@scopeNet
             withMain {
-                if(msg.equals(getString(com.cyberflow.base.resources.R.string.hi_cora))){
+                if(isHiCora == 1){
                     fragment?.showQuestions()
                     fragment?.hideHiCoraBtn(true)
                 }else{
@@ -339,16 +339,23 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
     }
 
     override fun isQuestionFinished(message: EMMessage?) : Boolean {
+        if(message == null) return true
         val txtBody = message?.body as? EMCustomMessageBody
         if (txtBody != null) {
             val customExt = txtBody.params
             val msgType = customExt["msgType"] // 0-普通消息，1-校验消息，2-结果消息
             Log.e(TAG, "isQuestionFinished: ${GsonConverter.gson.toJson(customExt)}" )
+            if(msgType == "0" ){
+                return false
+            }
+            if(msgType == "1" ){
+                return false
+            }
             if(msgType == "2" ){
                 return true
             }
         }
-        return false
+        return true
     }
 
     // 弹出分享弹窗
@@ -368,24 +375,27 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                     flutterReady = true
                 }
                 if (call.method == "flutterDestroy") {  // flutter 完成使命  通知 native 销毁
-                    val isDrawCards = call.argument<Int>("isDrawCards")  // isDrawCards: 1-已抽卡，0-未抽卡（抽牌未完成中途退出）
-                    Log.e(TAG, "initFlutter: isDrawCards=$isDrawCards"  )
-                    if(isDrawCards == 0){
-                        // 插入一条消息  告诉 抽卡未完成
+                    Log.e(TAG, "initFlutter: isFlutterDrawCards=$isFlutterDrawCards" )
+                    if(!isFlutterDrawCards){  // 抽卡未完成  需要插入一条消息
                         val msgStr = getString(com.cyberflow.sparkle.R.string.aio_break)
                         val from = conversationId
                         val to = CacheUtil.getUserInfo()?.user?.open_uid.orEmpty().replace("-", "_")
                         fragment?.insertMsg(msgStr, from, to)
                     }
+                    isFlutterDrawCards = false
                     FlutterProxyActivity.handleFlutterCommonEvent(this@ChatActivity, scene, method, call, result)
                     freshFlutter()
                 }
                 if (call.method == "flutterDrawCards") {  // flutter 抽卡完成，通知 native   如果没有这个 则表示被中途打断的  需要插入一条消息
-//                    freshFlutter()
+                    isFlutterDrawCards = true
+                    onOtherTyping(TYPING)
+                    fragment?.cannotEditOrSend()
                 }
             }
         }
     }
+
+    private var isFlutterDrawCards = false   // flutter 是否完成了抽卡  给服务端发请求
 
     private fun freshFlutter(){
         methodChannel?.setMethodCallHandler(null)

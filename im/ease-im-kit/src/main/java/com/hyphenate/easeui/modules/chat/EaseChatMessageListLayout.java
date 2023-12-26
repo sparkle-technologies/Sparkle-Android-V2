@@ -591,6 +591,7 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
         messageAdapter.setData(data);
         if (toLatest) {
             seekToPosition(data.size() - 1);
+            seekToBottom(data.size() - 1, true);
         }
     }
 
@@ -810,6 +811,31 @@ public class EaseChatMessageListLayout extends RelativeLayout implements IChatMe
             return false;
         }
         return conversation.getLastMessage().getMsgTime() > messageAdapter.getData().get(messageAdapter.getData().size() - 1).getMsgTime();
+    }
+
+    private void seekToBottom(int position, boolean smooth) {
+        if (position != -1) {
+            messageAdapter.notifyItemChanged(position);
+            boolean isNoBottom = rvList.canScrollVertically(1);
+            if (!isNoBottom) {
+                View oldView = rvList.getLayoutManager().findViewByPosition(messageAdapter.getItemCount() - 1);
+                int oldHeight = 0;
+                if (oldView != null) {
+                    oldHeight = oldView.getMeasuredHeight();
+                }
+                int finalOldHeight = oldHeight;
+
+                rvList.postDelayed(() -> {
+                    View v = rvList.getLayoutManager().findViewByPosition(messageAdapter.getItemCount() - 1);
+                    int height = 0;
+                    if (v != null) {
+                        height = v.getMeasuredHeight();
+                    }
+                    rvList.smoothScrollBy(0, height - finalOldHeight);
+                }, 500);
+
+            }
+        }
     }
 
     /**

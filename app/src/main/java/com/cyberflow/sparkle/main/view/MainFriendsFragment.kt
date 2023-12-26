@@ -103,7 +103,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
             onCreate {
                 when (itemViewType) {
                     R.layout.item_official_cora -> {
-                        banner = getBinding<ItemOfficialCoraBinding>().banner  as? Banner<HoroscopeReq, HoroscopeAdapter>
+                        banner = getBinding<ItemOfficialCoraBinding>().banner  as? Banner<String, QuestionsAdapter>
                         tvCoraUnread = getBinding<ItemOfficialCoraBinding>().coraUnread
                         Log.e(TAG, "initListView: showQuestions", )
                         showQuestions()
@@ -472,7 +472,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         mDatabind.page.finishRefresh()
     }
 
-    private var banner : Banner<HoroscopeReq, HoroscopeAdapter>? = null
+    private var banner : Banner<String, QuestionsAdapter>? = null
     private var tvCoraUnread : TextView? = null
 
     fun showQuestions() {
@@ -485,7 +485,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
             if(coraUnreadCount == 1) {
                 tvCoraUnread?.text = getString(R.string.a_new_message)
             }else{
-                tvCoraUnread?.text = getString(R.string.you_have_new_messages, coraUnreadCount)
+                tvCoraUnread?.text = getString(R.string.you_have_new_messages, "$coraUnreadCount")
             }
             tvCoraUnread?.setOnClickListener {
                 chatWithCora(null)

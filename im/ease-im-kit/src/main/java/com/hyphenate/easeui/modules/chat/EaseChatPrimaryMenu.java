@@ -70,6 +70,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
             public void clicked(boolean disable) {
                 Log.e(TAG, "clicked: " );
                 btnSayHi.disableBg(false);
+                isHiCoraClicked = true;
                 listener.onSendBtnClicked(getContext().getString(com.cyberflow.base.resources.R.string.hi_cora));
             }
         });
@@ -77,6 +78,15 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         showNormalStatus();
 
         initListener();
+    }
+
+    private boolean isHiCoraClicked = false;
+
+    @Override
+    public boolean isHiCoraCliked() {
+        boolean result = isHiCoraClicked;
+        isHiCoraClicked = false;
+        return result;
     }
 
     private boolean isCora = false;

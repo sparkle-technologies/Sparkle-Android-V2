@@ -1143,8 +1143,10 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     hideQuestions();
                     hideHiCoraBtn(true);
                 }
-            }else{     // 如果提问还没完成
-                if(question.isEmpty() ){
+            }else{     // 如果提问还没完成   有问题过来也不发送   和没问题带过来一样
+                chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();  // 展示 Hi Cora面板
+                hideHiCoraBtn(true);
+                /*if(question.isEmpty() ){
                     chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();  // 展示 Hi Cora面板
                     hideHiCoraBtn(true);
                 }else{
@@ -1152,7 +1154,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                     chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();
                     hideQuestions();
                     hideHiCoraBtn(true);
-                }
+                }*/
             }
         }
     }
@@ -1188,6 +1190,10 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     // 隐藏 Hi Cora 按钮 因为已经发送出去了
     public void hideHiCoraBtn(boolean hide) {
         chatLayout.inputMenu.getPrimaryMenu().hideHiCoraBtn(hide);
+    }
+
+    public boolean isHiCoraCliked() {
+        return chatLayout.inputMenu.getPrimaryMenu().isHiCoraCliked();
     }
 
     public void showQuestions() {

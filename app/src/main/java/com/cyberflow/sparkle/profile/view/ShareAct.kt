@@ -108,6 +108,11 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
 
     override fun initView(savedInstanceState: Bundle?) {
         mDataBinding.bgRoot.setOnClickListener {
+            Log.e(TAG, "bgRoot click")
+            finish()
+        }
+        mDataBinding.bg.setOnClickListener {
+            Log.e(TAG, "bg click")
             dialog?.hideOrShow()
         }
         mDataBinding.layChat.setOnClickListener {
@@ -162,11 +167,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         IMDataManager.instance.setForwardMsg(msg)
         IMDataManager.instance.setForwardImageUri(imgUri)
         if (isMore) {
-            TheRouter.build(PageConst.IM.PAGE_IM_FORWARD).withString(
-                    "forward_msg_id",
-                    ""
-                )  // must be empty, clear to know is this a forward msg, or a new created msg?
-                .navigation()
+            TheRouter.build(PageConst.IM.PAGE_IM_FORWARD).withString("forward_msg_id", "").navigation()  // must be empty, clear to know is this a forward msg, or a new created msg?
         } else {
             shareUser?.also {
                 shareTo(
@@ -446,7 +447,12 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                 val bitmap = if (from == SHARE_FROM_PROFILE) {
                     convertViewToBitmap(mDataBinding.bgIm)
                 } else {
-                    convertViewToBitmap(mDataBinding.layChat)
+                    val bgBitmap = BitmapFactory.decodeResource(
+                        resources,
+                        com.cyberflow.sparkle.R.drawable.share_bg
+                    )
+                    val viewBitmap = convertViewToBitmap(mDataBinding.layChat)
+                    combineBitmap(bgBitmap, viewBitmap)
                 }
                 val storePath = application.getExternalFilesDir(null)!!.absolutePath
                 val appDir = File(storePath)
@@ -498,7 +504,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                 fileOutputStream.close()
                 if (!isSuccess) {
                     withMain {
-                        toastError(getString(com.cyberflow.sparkle.R.string.fail_to_compress_image))
+                        toastError(getString(com.cyberflow.sparkle.R.string.oops_image_download_failed))
                         LoadingDialogHolder.getLoadingDialog()?.hide()
                     }
                     return@launch
@@ -507,12 +513,10 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                     DownloadFileUtils.saveLocalFile(this@ShareAct, file.absolutePath, "image/jpeg") { realPath ->
                         LoadingDialogHolder.getLoadingDialog()?.hide()
                         if (TextUtils.isEmpty(realPath)) {
-                            val errorMsg: String =
-                                getString(com.luck.picture.lib.R.string.ps_save_image_error)
-                            toastError(errorMsg)
+                            toastError(getString(com.cyberflow.sparkle.R.string.oops_image_download_failed))
                         } else {
                             PictureMediaScannerConnection(this@ShareAct, realPath)
-                            toastSuccess("${getString(com.luck.picture.lib.R.string.ps_save_success)}\n$realPath")
+                            toastSuccess(getString(com.cyberflow.sparkle.R.string.image_successfully_downloaded))
                         }
                     }
                 }

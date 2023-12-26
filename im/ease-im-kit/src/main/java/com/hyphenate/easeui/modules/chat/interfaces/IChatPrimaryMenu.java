@@ -5,6 +5,13 @@ import android.widget.EditText;
 public interface IChatPrimaryMenu {
 
     /**
+     * 是否点击了 Hi Cora 按钮  只能取一次
+     * @return
+     */
+    boolean isHiCoraCliked();
+
+
+    /**
      * 隐藏 Hi Cora 按钮
      */
     void hideHiCoraBtn(boolean hide);

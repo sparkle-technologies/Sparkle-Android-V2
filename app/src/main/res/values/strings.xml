@@ -83,5 +83,7 @@
     <string name="join_me_on_starry_book">Join me on Starry Book!</string>
     <string name="explore_more_on_starry_book">Explore more on Starry Book!</string>
     <string name="cora_s_tarot_world">Cora\'s Tarot world</string>
+    <string name="image_successfully_downloaded">Image successfully downloaded.</string>
+    <string name="oops_image_download_failed">Oops! Image download failed.</string>
 
 </resources>

@@ -33,7 +33,8 @@
             <com.hyphenate.easeui.modules.chat.EaseInputEditText
                 android:id="@+id/et_sendmessage"
                 android:layout_width="match_parent"
-                android:layout_height="43dp"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp_43"
                 android:background="@drawable/ease_send_message_et_bg"
                 android:focusableInTouchMode="true"
                 android:fontFamily="@font/poppins_regular"
@@ -42,6 +43,7 @@
                 android:imeOptions="actionSend"
                 android:maxLines="5"
                 android:paddingStart="12dp"
+                android:text=""
                 android:paddingEnd="70dp"
                 android:textColor="@color/color_2a2a2b"
                 android:textColorHint="@color/color_bcbdc6"
