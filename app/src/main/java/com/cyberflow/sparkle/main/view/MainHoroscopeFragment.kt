@@ -141,7 +141,7 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
         var banner2 = (mDatabind.banner as Banner<HoroscopeReq, HoroscopeAdapter>)
         banner2.apply {
             addBannerLifecycleObserver(requireActivity())
-            viewPager2.offscreenPageLimit = 1
+            viewPager2.offscreenPageLimit = 3
 //            setAdapter(horoAdpter)
             removeIndicator()
 

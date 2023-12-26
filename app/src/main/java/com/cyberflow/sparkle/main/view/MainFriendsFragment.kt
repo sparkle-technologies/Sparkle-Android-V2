@@ -328,7 +328,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
         // handle cora logic ---
         val conversation = EMClient.getInstance().chatManager().getConversation(ConstantGlobal.getCoraOpenUid().replace("-", "_"))
-        coraUnreadCount = conversation.unreadMsgCount
+        coraUnreadCount = conversation?.unreadMsgCount ?: 0
         showQuestions()
 
         if(contactList.isNullOrEmpty()){

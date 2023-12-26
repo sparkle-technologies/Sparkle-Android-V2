@@ -84,6 +84,7 @@
                         android:text="Lucky Point"
                         android:textColor="@color/color_000000_57"
                         android:textSize="@dimen/sp_10"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toTopOf="@+id/line_smc"
                         app:layout_constraintLeft_toLeftOf="@+id/line_smc"
                         app:layout_constraintRight_toRightOf="@+id/line_smc" />
@@ -92,7 +93,7 @@
                         android:id="@+id/tv_range"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp_5"
+                        android:layout_marginBottom="@dimen/dp_1"
                         android:fontFamily="@font/sigmarone"
                         android:gravity="bottom"
                         android:text="--"
@@ -104,12 +105,12 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                 <!-- love  fortune  career -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:layout_collapseMode="pin"
                     android:layout_marginStart="@dimen/dp_10"
                     android:layout_marginTop="@dimen/dp_16"
                     android:layout_marginEnd="@dimen/dp_10">
@@ -232,13 +233,14 @@
             <com.drake.statelayout.StateLayout
                 android:id="@+id/state"
                 android:layout_width="match_parent"
+                android:elevation="-10dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/dp_10"
                 android:layout_marginTop="-20dp"
                 android:layout_marginEnd="@dimen/dp_10"
                 android:layout_marginBottom="@dimen/dp_10"
                 app:error_layout="@layout/layout_error_top"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:loading_layout="@layout/layout_loading_top">
 
                 <!-- for item -->
@@ -246,6 +248,7 @@
                     android:id="@+id/rv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_horoscope" />
 

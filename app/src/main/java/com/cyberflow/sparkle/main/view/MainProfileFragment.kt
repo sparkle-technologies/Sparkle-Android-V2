@@ -3,6 +3,7 @@ package com.cyberflow.sparkle.main.view
 import android.os.Bundle
 import android.text.Html
 import android.util.Log
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
@@ -562,11 +563,18 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
                 if(select!=null){
                     mDatabind.btnRight.isVisible = false
                     showBondDetailInfo(select)
+                    scrollToBottom()
                 }
                 dialog?.onDestroy()
             }
         })
         dialog?.show()
+    }
+
+    private fun scrollToBottom() {
+        mDatabind.scroll.postDelayed({
+            mDatabind.scroll.fullScroll(ScrollView.FOCUS_DOWN)
+        }, 200)
     }
 
     private fun requestSynastryDetail() {
