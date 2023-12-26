@@ -78,5 +78,8 @@
     <string name="edit">编辑</string>
     <string name="no_bio">还没有填写个性签名，去</string>
     <string name="has_not_yet_constructed_the_bio">Ta还没有个性签名.</string>
+    <string name="join_me_on_starry_book">来小星书，加我为好友！</string>
+    <string name="explore_more_on_starry_book">来小星书，探索更多！</string>
+    <string name="cora_s_tarot_world">Cora的塔罗世界</string>
 
 </resources>

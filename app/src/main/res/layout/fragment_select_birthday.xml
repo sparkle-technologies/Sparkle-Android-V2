@@ -44,6 +44,9 @@
 
             app:endIconDrawable="@drawable/register_ic_date"
             app:endIconMode="custom"
+            app:endIconTint="@color/black"
+            app:endIconTintMode="multiply"
+            app:hintTextAppearance="@style/input_layout_text"
 
             app:errorEnabled="false"
 
@@ -70,6 +73,9 @@
 
             app:endIconDrawable="@drawable/register_ic_time"
             app:endIconMode="custom"
+            app:endIconTint="@color/black"
+            app:endIconTintMode="multiply"
+            app:hintTextAppearance="@style/input_layout_text"
 
             app:errorEnabled="false"
             app:helperText="@string/time_is_important_for_determining_your_horoscope"

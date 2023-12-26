@@ -80,5 +80,8 @@
     <string name="edit">edit</string>
     <string name="no_bio">There’s no bio yet, please go to </string>
     <string name="has_not_yet_constructed_the_bio">has not yet constructed the bio.</string>
+    <string name="join_me_on_starry_book">Join me on Starry Book!</string>
+    <string name="explore_more_on_starry_book">Explore more on Starry Book!</string>
+    <string name="cora_s_tarot_world">Cora\'s Tarot world</string>
 
 </resources>

@@ -45,6 +45,10 @@
 
             app:endIconDrawable="@drawable/register_ic_place"
             app:endIconMode="custom"
+            app:endIconTint="@color/black"
+            app:endIconTintMode="multiply"
+            app:hintTextAppearance="@style/input_layout_text"
+
             app:errorEnabled="false"
             app:helperTextEnabled="false"
             app:helperText="@string/birth_place_help_txt"

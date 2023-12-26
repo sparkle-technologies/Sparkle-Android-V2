@@ -16,7 +16,6 @@ import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.Post
-import com.drake.net.utils.TipUtils
 import com.drake.net.utils.scopeDialog
 import com.vanniktech.ui.hideKeyboard
 
@@ -62,10 +61,6 @@ class IMAddFriendAct : BaseDBAct<IMViewModel, ActivityImAddFriendBinding>() {
 
     private fun submit() {
         val msg = mDataBinding.et.text.toString()
-        if (msg.isEmpty()) {
-            TipUtils.toast("please Enter authentication messaged")
-            return
-        }
         hideKeyboard()
         scopeDialog {
             Log.e(TAG, "submit: currentUsername=${DemoHelper.getInstance().model.currentUsername}" )

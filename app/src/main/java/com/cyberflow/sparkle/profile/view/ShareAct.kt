@@ -305,7 +305,8 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                 }
                 mDataBinding.tvChatContent.text = result.result
             }
-            setExploreSpan(mDataBinding.tvChatExplore)
+//            mDataBinding.tvChatExplore.text = getString(com.cyberflow.sparkle.R.string.explore_more_on_starry_book)
+//            setExploreSpan(mDataBinding.tvChatExplore)
             val open_uid = message.to.replace("_", "-")
             Log.e(TAG, "generateQRcode: open_uid=$open_uid" )
             generateQRcode("${ConstantGlobal.SHARE_BODY}${open_uid}", mDataBinding.ivChatQr)
@@ -350,7 +351,8 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
     private fun showBody(user: User) {
         mDataBinding.tvName.text = user.nick  // name
         mDataBinding.tvNameIm.text = user.nick
-        setSpan(mDataBinding.tvContent)       // content
+//        mDataBinding.tvContent.text = getString(com.cyberflow.sparkle.R.string.join_me_on_starry_book)
+//        setSpan(mDataBinding.tvContent)       // content
 //        generateQRcode("https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf")
         generateQRcode("${ConstantGlobal.SHARE_BODY}${user.open_uid}", mDataBinding.ivQrCode)
     }

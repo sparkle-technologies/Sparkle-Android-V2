@@ -88,7 +88,7 @@
     <string name="before_you_begin">Before you begin</string>
     <string name="before_you_begin_tips">Choose your favorite avatar design to represent you in the web3 world.</string>
     <string name="birthday">Birthday</string>
-    <string name="tell_us_what_is_your_date_of_birth">Tell us what is your date of birth</string>
+    <string name="tell_us_what_is_your_date_of_birth">Tell us what is your date of birth.</string>
     <string name="birth_date">Birth Date</string>
     <string name="select_your_birthday">Select your birthday</string>
     <string name="birth_time">Birth Time</string>
@@ -101,14 +101,14 @@
     <string name="set_date">Set Date</string>
     <string name="set_time">Set Time</string>
     <string name="birth_place">Birth Place</string>
-    <string name="tell_us_where_is_your_birth_place">Tell us where is your birth place</string>
+    <string name="tell_us_where_is_your_birth_place">Tell us where is your birth place.</string>
     <string name="select_your_birth_place">Select your birth place</string>
     <string name="birth_place_help_txt">We need your birth place to analyze the positions of the stars and planets.</string>
-    <string name="please_select_your_birth_place">please select your birth place</string>
+    <string name="please_select_your_birth_place">please select your birth place.</string>
     <string name="nick_name">Nick Name</string>
     <string name="please_enter_your_nick_name">Please enter your nick name</string>
     <string name="how_would_you_like_to_be_identified">How would you like to be identified?</string>
-    <string name="opps_something_s_wrong_please_change_to_another_nickname">"Opps！ Something’s wrong. Please change to another nickname. "</string>
+    <string name="opps_something_s_wrong_please_change_to_another_nickname">Opps！ Something’s wrong. Please change to another nickname.</string>
     <string name="daily">Daily</string>
     <string name="weekly">Weekly</string>
     <string name="monthly">Monthly</string>

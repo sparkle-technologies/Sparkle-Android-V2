@@ -265,7 +265,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins_regular"
                 android:maxLines="1"
-                android:text="Add me on Sparkle ! "
+                android:text="@string/join_me_on_starry_book"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_12"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -280,11 +280,11 @@
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_13"
             android:layout_marginEnd="@dimen/dp_20"
-            android:scrollbars="none"
             android:layout_marginBottom="@dimen/dp_10"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_delete">
 
             <LinearLayout
@@ -559,18 +559,38 @@ Recently, you may feel more impatient and irritable. "
                     android:gravity="bottom"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/tv_chat_explore"
+                    <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/dp_16"
                         android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/poppins_regular"
-                        android:maxLines="1"
-                        android:text="Explore more in *** Sparkle！"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/sp_12" />
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppins_bold"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:text="@string/cora_s_tarot_world"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/sp_15" />
+
+                        <TextView
+                            android:id="@+id/tv_chat_explore"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="@string/explore_more_on_starry_book"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/sp_12" />
+
+                    </LinearLayout>
+
 
                     <ImageView
                         android:id="@+id/iv_chat_qr"
