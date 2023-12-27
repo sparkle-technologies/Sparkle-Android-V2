@@ -17,9 +17,7 @@
             android:id="@+id/lay_img"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_108"
-            android:layout_marginEnd="@dimen/dp_20"
             android:layout_marginBottom="@dimen/dp_100"
             android:fitsSystemWindows="false"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -28,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.luck.picture.lib.photoview.PhotoView
-                android:id="@+id/coverImageView"
+                android:id="@+id/photoView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -67,9 +65,9 @@
                 android:layout_width="@dimen/dp_40"
                 android:layout_height="@dimen/dp_42"
                 android:layout_marginEnd="@dimen/dp_10"
+                app:view_bg_src="@drawable/main_ic_add_friends_bg"
                 app:layout_constraintRight_toLeftOf="@+id/shadow_btn_download"
                 app:layout_constraintTop_toTopOf="@+id/shadow_btn_download"
-                app:view_bg_src="@drawable/main_ic_add_friends_bg"
                 app:view_img_shadow_distance="1dp"
                 app:view_img_src="@drawable/im_ic_preview_share" />
 

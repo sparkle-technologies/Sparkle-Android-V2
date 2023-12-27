@@ -115,6 +115,17 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
             Log.e(TAG, "bg click")
             dialog?.hideOrShow()
         }
+
+        mDataBinding.scroll.setOnScrollChangeListener { view, x, y, oldX, oldY ->
+//            Log.e(TAG, "initView: (y-oldY)=${y-oldY}" )
+            if(y - oldY > 3){
+                dialog?.justHide()
+            }
+
+            if(oldY - y > 3){
+                dialog?.justShow()
+            }
+        }
         mDataBinding.layChat.setOnClickListener {
             Log.e(TAG, "layChat click")
             dialog?.hideOrShow()

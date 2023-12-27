@@ -39,23 +39,17 @@ import com.hyphenate.easeui.utils.GlideEngine
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.entity.LocalMedia
 import com.luck.picture.lib.photoview.OnViewTapListener
-import com.luck.picture.lib.photoview.PhotoView
 import com.luck.picture.lib.utils.BitmapUtils
 import com.luck.picture.lib.utils.DensityUtil
 import com.luck.picture.lib.utils.MediaUtils
 import com.therouter.TheRouter
-import com.vanniktech.ui.hideKeyboard
 import kotlinx.coroutines.launch
 
 class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
 
     companion object {
         fun go(act: Activity, conversationId: String, chatType: Int, localMedia: LocalMedia) {
-
-            Log.e(
-                TAG,
-                "go: conversationId=$conversationId \t chatType=$chatType localMedia=${localMedia.path}"
-            )
+            Log.e(TAG, "go: conversationId=$conversationId \t chatType=$chatType localMedia=${localMedia.path}")
             val intent = Intent(act, PreviewActivity::class.java)
             intent.putExtra(EaseConstant.EXTRA_CONVERSATION_ID, conversationId)
             intent.putExtra(EaseConstant.EXTRA_CHAT_TYPE, chatType)
@@ -70,15 +64,11 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun initView(savedInstanceState: Bundle?) {
-
-        coverImageView = findViewById(R.id.coverImageView)
-
         mViewBind.shadowBtnDelete.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 finish()
             }
         })
-
         mViewBind.shadowBtnScan.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 Log.e(TAG, "shadowBtnScan  clicked: ")
@@ -97,16 +87,27 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
                 fragment?.saveImageOrVideo(localMedia)
             }
         })
-
-        coverImageView?.setOnViewTapListener(OnViewTapListener { view, x, y ->
-            fragment?.onOutSideClicked()
-        })
-
-        coverImageView?.setOnViewDragListener { dx, dy ->
-//            Log.e(TAG, "initView: $dy" )
-            if (dy > 30) {
-                hideKeyboard()
-                finish()
+        mViewBind.photoView.apply {
+            setOnPhotoTapListener { view, x, y ->
+                Log.e(TAG, "photoView  PhotoTap x=$x  y=$y" )
+            }
+            setOnOutsidePhotoTapListener {
+                Log.e(TAG, "photoView  OutsidePhotoTap" )
+            }
+            setOnViewTapListener(OnViewTapListener { view, x, y ->
+                Log.e(TAG, "photoView  ViewTap x=$x  y=$y" )
+                fragment?.onOutSideClicked()
+            })
+            setOnViewDragListener { dx, dy ->
+//                Log.e(TAG, "photoView: ViewDrag  dx=$dx  dy=$dy" )
+//                if (dy > 30) {
+//                hideKeyboard()
+//                finish()
+//                }
+            }
+            setOnSingleFlingListener { e1, e2, velocityX, velocityY ->
+                Log.e(TAG, "photoView: SingleFling  e1=$e1  e2=$e2 velocityX=$velocityX velocityY=$velocityY" )
+                true
             }
         }
     }
@@ -122,8 +123,6 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
             }
         }
     }
-
-    private var coverImageView: PhotoView? = null
 
     override fun initData() {
 
@@ -212,9 +211,9 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
             val availablePath = media.availablePath
             Log.e(PreviewFragment.TAG, "loadImage: availablePath=$availablePath")
             if (maxWidth == PictureConfig.UNSET && maxHeight == PictureConfig.UNSET) {
-                loadImage(this@PreviewActivity, availablePath, coverImageView)
+                loadImage(this@PreviewActivity, availablePath, mViewBind.photoView)
             } else {
-                loadImage(this@PreviewActivity, coverImageView, availablePath, maxWidth, maxHeight)
+                loadImage(this@PreviewActivity, mViewBind.photoView, availablePath, maxWidth, maxHeight)
             }
         }
     }
@@ -222,7 +221,7 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
     private fun setScaleDisplaySize(media: LocalMedia) {
         if (screenWidth < screenHeight) {
             if (media.width > 0 && media.height > 0) {
-                val layoutParams = coverImageView!!.layoutParams as ConstraintLayout.LayoutParams
+                val layoutParams = mViewBind.photoView!!.layoutParams as ConstraintLayout.LayoutParams
                 layoutParams.width = screenWidth
                 layoutParams.height = screenAppInHeight
 //                layoutParams.gravity = Gravity.CENTER
@@ -232,9 +231,9 @@ class PreviewActivity : BaseVBAct<BaseViewModel, ActivityPreivewBinding>() {
 
     private fun setCoverScaleType(media: LocalMedia) {
         if (MediaUtils.isLongImage(media.width, media.height)) {
-            coverImageView!!.scaleType = ImageView.ScaleType.CENTER_CROP
+            mViewBind.photoView!!.scaleType = ImageView.ScaleType.CENTER_CROP
         } else {
-            coverImageView!!.scaleType = ImageView.ScaleType.FIT_CENTER
+            mViewBind.photoView!!.scaleType = ImageView.ScaleType.FIT_CENTER
         }
     }
 

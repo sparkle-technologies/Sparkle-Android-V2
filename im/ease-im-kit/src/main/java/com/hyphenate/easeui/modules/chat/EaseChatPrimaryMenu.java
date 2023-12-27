@@ -69,9 +69,13 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
             @Override
             public void clicked(boolean disable) {
                 Log.e(TAG, "clicked: " );
+                if(lastClickTime - System.currentTimeMillis() < 1000){
+                    return;
+                }
                 btnSayHi.disableBg(false);
                 isHiCoraClicked = true;
                 listener.onSendBtnClicked(getContext().getString(com.cyberflow.base.resources.R.string.hi_cora));
+                lastClickTime = System.currentTimeMillis();
             }
         });
 
@@ -79,6 +83,8 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
 
         initListener();
     }
+
+    private long lastClickTime = 0;
 
     private boolean isHiCoraClicked = false;
 
