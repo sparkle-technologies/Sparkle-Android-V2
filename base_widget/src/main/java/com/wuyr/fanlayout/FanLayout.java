@@ -32,6 +32,8 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Created by wuyr on 18-5-5 下午6:15.
  * GitHub: https://github.com/wuyr/FanLayout
+ * https://blog.csdn.net/u011387817/article/details/80313184
+ * https://blog.csdn.net/u011387817/article/details/80788704
  */
 @SuppressWarnings("unused")
 public class FanLayout extends ViewGroup implements View.OnClickListener, View.OnLongClickListener {

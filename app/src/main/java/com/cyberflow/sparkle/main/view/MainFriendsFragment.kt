@@ -31,6 +31,7 @@ import com.cyberflow.sparkle.main.adapter.QuestionsAdapter
 import com.cyberflow.sparkle.main.viewmodel.MainViewModel
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.mainv2.widget.FriendMenuDialog
+import com.cyberflow.sparkle.profile.view.CompatibilityAct
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.annotaion.DividerOrientation
@@ -193,8 +194,13 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
             onBind {
                 when (itemViewType) {
                     R.layout.item_official_cora -> {
-                        getBinding<ItemOfficialCoraBinding>().root.setOnClickListener {
-                            chatWithCora(null)
+                        getBinding<ItemOfficialCoraBinding>().apply {
+                            root.setOnClickListener {
+                                chatWithCora(null)
+                            }
+                            layCompatibility.setOnClickListener {
+                                compatibility()
+                            }
                         }
                     }
 
@@ -520,4 +526,9 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
         }
         ChatActivity.launch(requireActivity(), conversationId = ConstantGlobal.getCoraOpenUid(), avatar = url, nickName = name, question = question)
     }
+
+    private fun compatibility() {
+        CompatibilityAct.go(requireActivity())
+    }
+
 }

@@ -85,11 +85,14 @@
         <activity android:name=".setting.view.LanguageActivity" />
         <activity android:name=".setting.view.ConnectedAccountActivity" />
 
-        <activity android:name=".profile.view.ProfileAct"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".profile.view.ProfileAct"
+            android:launchMode="singleTask" />
         <activity
             android:name=".profile.view.ShareAct"
             android:theme="@style/Theme.AppCompat.Translucent" />
+
+        <activity android:name=".profile.view.CompatibilityAct" />
 
         <activity android:name=".im.view.ChatActivity" />
         <activity android:name=".im.view.IMSearchFriendAct" />
@@ -98,12 +101,12 @@
         <activity android:name=".im.view.IMForwardListAct" />
         <activity android:name=".im.view.IMScanAct" />
 
-       <!-- <activity
-            android:name="io.flutter.embedding.android.FlutterActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:theme="@style/MyTheme"
-            android:windowSoftInputMode="adjustResize" />-->
+        <!-- <activity
+             android:name="io.flutter.embedding.android.FlutterActivity"
+             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+             android:hardwareAccelerated="true"
+             android:theme="@style/MyTheme"
+             android:windowSoftInputMode="adjustResize" />-->
 
     </application>
 

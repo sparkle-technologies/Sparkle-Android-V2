@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_2nd">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/status_bar_height"
+            android:fontFamily="@font/poppins_semibold"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/ll_back"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_56"
+            android:elevation="@dimen/dp_10"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title">
+
+            <ImageView
+                android:id="@+id/iv_btn_back"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:layout_centerInParent="true"
+                android:background="@drawable/svg_btn_left" />
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/bg"
+                android:layout_width="541dp"
+                android:layout_height="541dp"
+                android:layout_marginTop="-78dp"
+                android:layout_marginEnd="-180dp"
+                android:src="@drawable/circle_bg"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_rotate"
+                android:layout_width="398dp"
+                android:layout_height="398dp"
+                android:src="@drawable/circle_rotate"
+                app:layout_constraintBottom_toBottomOf="@+id/bg"
+                app:layout_constraintLeft_toLeftOf="@+id/bg"
+                app:layout_constraintRight_toRightOf="@+id/bg"
+                app:layout_constraintTop_toTopOf="@+id/bg" />
+
+            <ImageView
+                android:layout_width="398dp"
+                android:layout_height="398dp"
+                android:src="@drawable/circle_arrow"
+                app:layout_constraintBottom_toBottomOf="@+id/bg"
+                app:layout_constraintLeft_toLeftOf="@+id/bg"
+                app:layout_constraintRight_toRightOf="@+id/bg"
+                app:layout_constraintTop_toTopOf="@+id/bg" />
+
+            <com.wuyr.fanlayout.FanLayout
+                android:id="@+id/fan_layout"
+                android:layout_width="0dp"
+                android:elevation="100dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                app:auto_select="true"
+                app:bearing_color="#9F55"
+                app:bearing_gravity="left"
+                app:bearing_layout="@layout/bearing_view"
+                app:bearing_offset="270dp"
+                app:bearing_radius="20dp"
+                app:bearing_type="view"
+                app:item_layout_mode="average"
+                app:layout_constraintBottom_toBottomOf="@+id/bg"
+                app:layout_constraintLeft_toLeftOf="@+id/bg"
+                app:layout_constraintRight_toRightOf="@+id/bg"
+                app:layout_constraintTop_toTopOf="@+id/bg" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <FrameLayout
+            android:id="@+id/root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_37">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/barLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_transparent">
+
+                    <!-- android:layout_height="423dp"  -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/lay_pan"
+                        android:layout_width="match_parent"
+                        android:layout_height="423dp"
+                        app:layout_scrollFlags="exitUntilCollapsed|scroll|enterAlwaysCollapsed">
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/compatibility_bg_content"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/dp_20"
+                        android:paddingTop="@dimen/dp_56"
+                        android:paddingEnd="@dimen/dp_20"
+                        android:paddingBottom="@dimen/dp_116">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_extrabold"
+                            android:text="Compatibility"
+                            android:textColor="@color/black"
+                            android:textSize="36sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center_vertical"
+                                android:text="Harry"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sp_17" />
+
+                            <ImageView
+                                android:id="@+id/iv_anima"
+                                android:layout_width="@dimen/dp_95"
+                                android:layout_height="@dimen/dp_37"
+                                android:layout_marginStart="@dimen/dp_20"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/compatibility_bg_electrocardiogram" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center_vertical"
+                                android:text="Potter"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sp_17" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_21"
+                            android:fontFamily="@font/poppins_regular"
+                            android:gravity="center_vertical"
+                            android:minHeight="104dp"
+                            android:text="
+ During this period of time, you will have great challenges no matter from the spiritual or material level change.Choose a constellation to see how you guys fit.
+ "
+                            android:textColor="@color/color_7d7d80"
+                            android:textSize="@dimen/sp_14" />
+
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginBottom="-2dp"
+                android:background="@drawable/compatibility_bg_btn" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_83"
+                android:background="@color/color_F5F5F5"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingEnd="@dimen/dp_20"
+                android:paddingBottom="@dimen/dp_33"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <!-- state 1 -->
+                <com.cyberflow.sparkle.widget.ShadowTxtButton
+                    android:id="@+id/btn_invite_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_48"
+                    app:view_bg="@drawable/register_btn_next"
+                    app:view_shadow_distance="1dp"
+                    app:view_text="Invite your friends for deeper insights>>"
+                    app:view_text_bold="true"
+                    app:view_text_size="@dimen/sp_16" />
+
+                <!-- state 2 -->
+
+                <LinearLayout
+                    android:id="@+id/lay_invite_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <com.cyberflow.sparkle.widget.ShadowTxtButton
+                        android:id="@+id/btn_invite_two"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp_48"
+                        android:layout_weight="1"
+                        app:view_bg="@drawable/register_btn_next"
+                        app:view_shadow_distance="1dp"
+                        app:view_text="Invite friends for deeper insights"
+                        app:view_text_bold="true"
+                        app:view_text_size="@dimen/sp_16" />
+
+                    <com.cyberflow.sparkle.widget.ShadowImgButton
+                        android:id="@+id/btn_invite_list"
+                        android:layout_width="@dimen/dp_43"
+                        android:layout_height="@dimen/dp_44"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/dp_6"
+                        app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                        app:view_img_shadow_distance="1dp"
+                        app:view_img_src="@drawable/im_ic_preview_delete" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

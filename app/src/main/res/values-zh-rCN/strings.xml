@@ -83,5 +83,6 @@
     <string name="cora_s_tarot_world">Cora的塔罗世界</string>
     <string name="image_successfully_downloaded">图片已成功下载到相册</string>
     <string name="oops_image_download_failed">图片下载失败，请重试</string>
+    <string name="compatibility">合盘</string>
 
 </resources>

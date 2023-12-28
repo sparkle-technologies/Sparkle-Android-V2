@@ -69,7 +69,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
             @Override
             public void clicked(boolean disable) {
                 Log.e(TAG, "clicked: " );
-                if(lastClickTime - System.currentTimeMillis() < 1000){
+                if(System.currentTimeMillis() - lastClickTime > 1000){
                     return;
                 }
                 btnSayHi.disableBg(false);
