@@ -98,6 +98,9 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
             }
 
             rotateImg()
+
+            // handle user interaction
+            mDataBinding.frameLayout.setViews(mDataBinding.scrollView, mDataBinding.ivAnchor, mDataBinding.fanLayout)
         }
     }
     private var isRestored = true

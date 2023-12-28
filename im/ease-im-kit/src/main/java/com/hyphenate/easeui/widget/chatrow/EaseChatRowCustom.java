@@ -126,6 +126,9 @@ public class EaseChatRowCustom extends EaseChatRow {
         String uprightOrReversed = tarotCard.getUprightOrReversed();
         tv.setText(name);
         Glide.with(context).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false).into(iv);
+        if(tarotCard.isReversed() == 1){
+            iv.setRotation(180);
+        }
         tvBottom.setText(uprightOrReversed);
     }
 

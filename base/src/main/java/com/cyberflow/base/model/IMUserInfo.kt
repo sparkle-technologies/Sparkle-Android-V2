@@ -82,7 +82,8 @@ data class AIOResult(
 
 @Serializable
 data class TarotCard(
-    val imgUrl: String,
     val name: String,
-    val uprightOrReversed: String
+    val imgUrl: String,
+    val uprightOrReversed: String,
+    val isReversed: Int  // 1-逆向，0-正向
 )

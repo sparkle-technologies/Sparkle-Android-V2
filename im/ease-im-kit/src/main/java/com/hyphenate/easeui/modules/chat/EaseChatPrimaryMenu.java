@@ -68,14 +68,12 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         btnSayHi.setClickListener(new ShadowTxtButton.ShadowClickListener() {
             @Override
             public void clicked(boolean disable) {
-                Log.e(TAG, "clicked: " );
                 if(System.currentTimeMillis() - lastClickTime > 1000){
-                    return;
+                    btnSayHi.disableBg(false);
+                    isHiCoraClicked = true;
+                    listener.onSendBtnClicked(getContext().getString(com.cyberflow.base.resources.R.string.hi_cora));
+                    lastClickTime = System.currentTimeMillis();
                 }
-                btnSayHi.disableBg(false);
-                isHiCoraClicked = true;
-                listener.onSendBtnClicked(getContext().getString(com.cyberflow.base.resources.R.string.hi_cora));
-                lastClickTime = System.currentTimeMillis();
             }
         });
 
