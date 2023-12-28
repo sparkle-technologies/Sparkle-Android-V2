@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.PageConst
+import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityCompatibilityBinding
@@ -101,6 +102,8 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
 
             // handle user interaction
             mDataBinding.frameLayout.setViews(mDataBinding.scrollView, mDataBinding.ivAnchor, mDataBinding.fanLayout)
+            mDataBinding.frameLayout.setTxtStrict(mDataBinding.layBottom, mDataBinding.tvDetails, dp2px(20f))
+
         }
     }
     private var isRestored = true

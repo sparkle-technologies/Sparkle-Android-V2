@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 
 public class CompatibilityFrameLayout extends FrameLayout {
 
-    private final static String TAG = "MyFrame";
+    private final static String TAG = "CompatibilityFrameLayout";
 
     public CompatibilityFrameLayout(Context context) {
         this(context, null);
@@ -31,63 +31,66 @@ public class CompatibilityFrameLayout extends FrameLayout {
         this.scrollView = scrollView;
         this.center = center;
         this.circle = circle;
+    }
 
+    private View bottomView;
+    private View tv;
+    private int gap = 0;
 
-
+    public void setTxtStrict(View bottom, View tv, int gap) {
+        this.bottomView = bottom;
+        this.tv = tv;
+        this.gap = gap;
     }
 
     // 只要手指在 center 的范围内  而且scrollview 没有越过 center 就触发
     private float startY = 0f;
-    private int bottom =0;
+    private int bottom = 0;
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                startY = ev.getRawY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-
-                break;
-            case MotionEvent.ACTION_UP:
-                if(startY < bottom){
-                    circle.dispatchTouchEvent(ev);
-                }
-                break;
-        }
-
         // 起始点在下面 再滑也不能带动
         int[] location = new int[2];
-        if(bottom <= 0){
+        if (bottom <= 0) {
             center.getLocationOnScreen(location);
             int fy = location[1];
             bottom = fy + center.getMeasuredHeight();
         }
 
-        Log.e(TAG, "bottom=" + bottom + " ev.getRawY()=" + ev.getRawY());
-
-        // 手指在转盘之下
-        if(ev.getRawY() > bottom){
-            Log.e(TAG, "手指在转盘之下" );
-            return super.dispatchTouchEvent(ev);
-        }
-
         scrollView.getLocationOnScreen(location);
         int top = location[1];  // view距离 屏幕顶边的距离（即y轴方向）
 
-        if(ev.getRawY() > top){
-            Log.e(TAG, "手指在scrollview之下" );
-            return super.dispatchTouchEvent(ev);
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                startY = ev.getRawY();
+                break;
+            case MotionEvent.ACTION_UP:
+                if (startY < bottom) {
+                    circle.dispatchTouchEvent(ev);
+                }
+                break;
         }
 
-        Log.e(TAG, " top=" + top );
-
-        //  ev.getRawY()=513.60077 bottom=658, top=883,
-        if(ev.getRawY() < bottom && ev.getRawY() < top){
+        if (ev.getRawY() < bottom && ev.getRawY() < top) {
             circle.dispatchTouchEvent(ev);
-            Log.e(TAG, " 被拦截了" );
+            Log.e(TAG, " 被拦截了");
             return true;
         }
 
+        if (ev.getAction() == MotionEvent.ACTION_MOVE) {
+            if (ev.getRawY() - startY < 0) {
+                tv.getLocationOnScreen(location);
+                int tvTop = location[1];
+                int tvBottom = tvTop + tv.getMeasuredHeight();
+                bottomView.getLocationOnScreen(location);
+                int bottomViewTop = location[1];
+//                Log.e(TAG, "ACTION_MOVE   tvBottom=" + tvBottom + " gap=" + gap + ",  bottomViewTop=" + bottomViewTop);
+                if ( (bottomViewTop > tvBottom) && (bottomViewTop - tvBottom > gap)) {
+                    ev.setAction(MotionEvent.ACTION_CANCEL);
+                    return super.dispatchTouchEvent(ev);
+                }
+            }
+        }
         return super.dispatchTouchEvent(ev);
     }
 

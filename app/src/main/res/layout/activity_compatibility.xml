@@ -189,13 +189,23 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/tv_details"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_21"
+                            android:background="#ff0"
                             android:fontFamily="@font/poppins_regular"
                             android:gravity="center_vertical"
                             android:minHeight="104dp"
                             android:text="
+ During this period of time, you will have great challenges no matter from the spiritual or material level change.Choose a constellation to see how you guys fit.
+ During this period of time, you will have great challenges no matter from the spiritual or material level change.Choose a constellation to see how you guys fit.
+ During this period of time, you will have great challenges no matter from the spiritual or material level change.Choose a constellation to see how you guys fit.
+ During this period of time, you will have great challenges no matter from the spiritual or material level change.Choose a constellation to see how you guys fit.
+ During this period of time, you will have great challenges no matter from the spiritual or material level change.Choose a constellation to see how you guys fit.
+ During this period of time, you will have great challenges no matter from the spiritual or material level change.Choose a constellation to see how you guys fit.
+ During this period of time, you will have great challenges no matter from the spiritual or material level change.Choose a constellation to see how you guys fit.
+ During this period of time, you will have great challenges no matter from the spiritual or material level change.Choose a constellation to see how you guys fit.
  During this period of time, you will have great challenges no matter from the spiritual or material level change.Choose a constellation to see how you guys fit.
  "
                             android:textColor="@color/color_7d7d80"
@@ -208,6 +218,7 @@
         </com.cyberflow.sparkle.profile.widget.CompatibilityFrameLayout>
 
         <LinearLayout
+            android:id="@+id/layBottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
