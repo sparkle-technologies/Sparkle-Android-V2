@@ -2,6 +2,7 @@ package com.hyphenate.easeui.widget.chatrow;
 
 import android.content.Context;
 import android.text.Spannable;
+import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -80,17 +81,24 @@ public class EaseChatRowCustom extends EaseChatRow {
             String content = customExt.get("content");      // 消息内容，结果消息且有结果的情况，是结构化消息；否则，是 aio 显示的消息
             String hasResult = customExt.get("hasResult");  // 可选字段（只有结果消息才有这个字段），是否有结果，1-有结果，0-无结果
 
-//            String str = GsonConverter.Companion.getGson().toJson(customExt);
-//            Log.e(TAG, "EMCustomMessageBody: " + str );
+            String str = GsonConverter.Companion.getGson().toJson(customExt);
+            Log.e(TAG, "EMCustomMessageBody: " + str );
 
             if(msgType.equals("2")){
-                AIOResult result = GsonConverter.Companion.getGson().fromJson(content, AIOResult.class);
-                if(hasResult.equals("1")){
-                    showAIOResult(result);
-                }else{
+                try{
+                    AIOResult result = GsonConverter.Companion.getGson().fromJson(content, AIOResult.class);
+                    if(hasResult.equals("1")){
+                        showAIOResult(result);
+                    }else{
+                        layResult.setVisibility(View.GONE);
+                        btnShare.setVisibility(View.GONE);
+                        Spannable span = EaseSmileUtils.getSmiledText(context, result.getResult());
+                        contentView.setText(span, TextView.BufferType.SPANNABLE);
+                    }
+                }catch (Exception e){  // 万一解析挂了  直接显示内容
                     layResult.setVisibility(View.GONE);
                     btnShare.setVisibility(View.GONE);
-                    Spannable span = EaseSmileUtils.getSmiledText(context, result.getResult());
+                    Spannable span = EaseSmileUtils.getSmiledText(context, content);
                     contentView.setText(span, TextView.BufferType.SPANNABLE);
                 }
             }else{

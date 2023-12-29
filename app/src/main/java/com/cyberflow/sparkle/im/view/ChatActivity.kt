@@ -312,6 +312,7 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
             val isValid = customExt["isValid"] // 可选字段（只有校验消息才有这个字段），是否有效，1-有效，0-无效
             val content = customExt["content"] // 消息内容，结果消息且有结果的情况，是结构化消息；否则，是 aio 显示的消息
             val hasResult = customExt["hasResult"] // 可选字段（只有结果消息才有这个字段），是否有结果，1-有结果，0-无结果
+            val isRoundEnd = customExt["isRoundEnd"] // 结束标志
             Log.e(TAG, "handleAIOMessage: ${GsonConverter.gson.toJson(customExt)}" )
             lifecycleScope.launch {
                 if(msgType == "1"){
@@ -329,10 +330,12 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                     }
                 }
                 if(msgType == "2" ){
-                    fragment?.hideHiCoraBtn(false)  //不管结果如何  都完成了一轮提问
                     if(hasResult == "1" && content?.isNotEmpty() == true){
                         FlutterProxyActivity.nativeTarotResult(msgId, hasResult, methodChannel)
                     }
+                }
+                if(isRoundEnd == "1"){
+                    fragment?.hideHiCoraBtn(false)
                 }
             }
         }
@@ -343,19 +346,13 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
         val txtBody = message?.body as? EMCustomMessageBody
         if (txtBody != null) {
             val customExt = txtBody.params
-            val msgType = customExt["msgType"] // 0-普通消息，1-校验消息，2-结果消息
+            val isRoundEnd = customExt["isRoundEnd"] // 结束标志
             Log.e(TAG, "isQuestionFinished: ${GsonConverter.gson.toJson(customExt)}" )
-            if(msgType == "0" ){
-                return false
-            }
-            if(msgType == "1" ){
-                return false
-            }
-            if(msgType == "2" ){
+            if(isRoundEnd == "1" ){
                 return true
             }
         }
-        return true
+        return false
     }
 
     // 弹出分享弹窗
