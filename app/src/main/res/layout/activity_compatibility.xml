@@ -175,7 +175,7 @@
                                 android:layout_marginStart="@dimen/dp_20"
                                 android:layout_marginEnd="@dimen/dp_20"
                                 android:scaleType="fitXY"
-                                android:src="@drawable/compatibility_bg_electrocardiogram" />
+                                android:src="@drawable/compatibility_bg_diogram" />
 
                             <TextView
                                 android:layout_width="wrap_content"

@@ -8,6 +8,7 @@ import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityCompatibilityRelationBinding
 import com.cyberflow.sparkle.databinding.ItemCompatibilityRelationBinding
+import com.drake.brv.annotaion.AnimationType
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.linear
@@ -32,6 +33,9 @@ class CompatibilityRelationAct : BaseDBAct<BaseViewModel, ActivityCompatibilityR
             orientation = DividerOrientation.VERTICAL
             setDivider(16, true)
         }.setup {
+            animationRepeat = true
+            setAnimation(AnimationType.SCALE)
+
             addType<RelationItem>(R.layout.item_compatibility_relation)
             onBind {
                 getBinding<ItemCompatibilityRelationBinding>().apply {

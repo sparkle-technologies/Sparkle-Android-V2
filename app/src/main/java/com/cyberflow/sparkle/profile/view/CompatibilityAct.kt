@@ -7,6 +7,7 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -117,6 +118,7 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     private var initRotation = 0f
 
     private var timer: Timer? = null // 30s 转完
+    private var isRotate = false
 
     private fun rotateImg() {
         Log.e("TAG", "rotateImg: ")
@@ -127,11 +129,32 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
         timer?.schedule(object : TimerTask() {
             override fun run() {
                 Log.e(TAG, " timer run: ")
+                isRotate = true
                 mDataBinding.fanLayout.rotation(0.6f)
             }
         }, 0, 100)
     }
 
+    fun isTouchPointInView(view: View, x: Float, y: Float): Boolean {
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        val left = location[0]
+        val top = location[1]
+        val right = left + view.measuredWidth
+        val bottom = top + view.measuredHeight
+        return y >= top && y <= bottom && x >= left && x <= right
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        ev?.apply {
+            if(action == MotionEvent.ACTION_DOWN && isTouchPointInView(mDataBinding.ivAnchor, rawX, rawY)){
+                if(isRotate){
+                    stopRotateImg()
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
     private fun stopRotateImg() {
         timer?.cancel()
         timer?.purge()
