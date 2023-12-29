@@ -17,6 +17,7 @@ import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityCompatibilityBinding
+import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.therouter.router.Route
 import com.wuyr.fanlayout.FanLayout
 import java.util.Timer
@@ -37,6 +38,12 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
         mDataBinding.llBack.setOnClickListener {
             finish()
         }
+
+        mDataBinding.btnInviteList.setClickListener(object : ShadowImgButton.ShadowClickListener{
+            override fun clicked() {
+                CompatibilityRelationAct.go(this@CompatibilityAct)
+            }
+        })
     }
 
     override fun initData() {

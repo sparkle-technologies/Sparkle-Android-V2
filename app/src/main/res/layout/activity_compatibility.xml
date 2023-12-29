@@ -193,7 +193,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_21"
-                            android:background="#ff0"
                             android:fontFamily="@font/poppins_regular"
                             android:gravity="center_vertical"
                             android:minHeight="104dp"
@@ -248,6 +247,7 @@
                     app:view_shadow_distance="1dp"
                     app:view_text="Invite your friends for deeper insights>>"
                     app:view_text_bold="true"
+                    android:visibility="gone"
                     app:view_text_size="@dimen/sp_16" />
 
                 <!-- state 2 -->
@@ -256,8 +256,7 @@
                     android:id="@+id/lay_invite_two"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:orientation="horizontal">
 
                     <com.cyberflow.sparkle.widget.ShadowTxtButton
                         android:id="@+id/btn_invite_two"

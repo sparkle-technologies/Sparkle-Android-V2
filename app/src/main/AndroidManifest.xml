@@ -93,6 +93,7 @@
             android:theme="@style/Theme.AppCompat.Translucent" />
 
         <activity android:name=".profile.view.CompatibilityAct" />
+        <activity android:name=".profile.view.CompatibilityRelationAct" />
 
         <activity android:name=".im.view.ChatActivity" />
         <activity android:name=".im.view.IMSearchFriendAct" />
