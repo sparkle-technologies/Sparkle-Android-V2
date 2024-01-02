@@ -5,24 +5,34 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.Compatibility
+import com.cyberflow.base.model.CompatibilityItem
+import com.cyberflow.base.net.Api
+import com.cyberflow.base.net.GsonConverter
+import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityCompatibilityBinding
+import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.widget.ShadowImgButton
+import com.cyberflow.sparkle.widget.ShadowTxtButton
+import com.drake.net.Post
+import com.drake.net.utils.scopeNetLife
+import com.drake.net.utils.withIO
+import com.drake.net.utils.withMain
 import com.therouter.router.Route
 import com.wuyr.fanlayout.FanLayout
-import java.util.Timer
-import java.util.TimerTask
+import kotlinx.coroutines.launch
 
 @Route(path = PageConst.App.PAGE_COMPATIBILITY)
 class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>() {
@@ -40,7 +50,12 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
             finish()
         }
 
-        mDataBinding.btnInviteList.setClickListener(object : ShadowImgButton.ShadowClickListener{
+        mDataBinding.btnInviteTwo.setClickListener(object : ShadowTxtButton.ShadowClickListener {
+            override fun clicked(disable: Boolean) {
+                toastSuccess(getString(R.string.coming_soon))
+            }
+        })
+        mDataBinding.btnInviteList.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 CompatibilityRelationAct.go(this@CompatibilityAct)
             }
@@ -48,16 +63,24 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     override fun initData() {
+        CacheUtil.getUserInfo()?.user?.apply {
+            mDataBinding.tvA.text = this.nick
+        }
+        mDataBinding.tvB.text = "?"
 
+        batchFetch()
         initFanLayout()
     }
 
+    private var isRestored = true
 
     private fun initFanLayout() {
         mDataBinding.fanLayout.apply {
             setOnItemRotateListener { rotation ->
+                Log.e(TAG, "FanLayout: ItemRotateListener rotation=$rotation" )
                 initRotation += rotation
                 mDataBinding.ivRotate.rotation = initRotation
+
                 if (!isRestored) {
                     for (i in 0 until childCount) {
                         val v: View = getChildAt(i)
@@ -66,7 +89,10 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
                             for (j in 0 until viewGroup.childCount) {
                                 val child = viewGroup.getChildAt(j)
                                 if (child is ImageView) {
-                                    child.drawable.setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.DST)
+                                    child.drawable.setColorFilter(
+                                        Color.TRANSPARENT,
+                                        PorterDuff.Mode.DST
+                                    )
                                     child.invalidate()
                                 }
                             }
@@ -77,13 +103,14 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
             }
             setOnBearingClickListener { }
             setOnItemClickListener { view, index ->
+                Log.e(TAG, "FanLayout: ItemClickListener index=$index" )
                 stopRotateImg()
             }
             setOnItemSelectedListener { item ->
-                val selectIdx: Int = getCurrentSelectedIndex()
-                Log.d("TAG", "onSelected: selectIdx=$selectIdx")
+                val selectIdx: Int = currentSelectedIndex
                 val str: String = result[selectIdx % 12]
-                showToast(str)
+                Log.d("TAG", "FanLayout onSelected: selectIdx=$selectIdx  str=$str")
+                handleSelect(str)
 
                 if (item is ViewGroup) {
                     val viewGroup = item as ViewGroup
@@ -102,65 +129,24 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
                 }
             }
 
-            repeat(12){
+            repeat(12) {
                 addView(getView())
             }
 
-            rotateImg()
-
             // handle user interaction
-            mDataBinding.frameLayout.setViews(mDataBinding.scrollView, mDataBinding.ivAnchor, mDataBinding.fanLayout)
-            mDataBinding.frameLayout.setTxtStrict(mDataBinding.layBottom, mDataBinding.tvDetails, dp2px(20f))
-
+            mDataBinding.frameLayout.setViews(
+                mDataBinding.scrollView,
+                mDataBinding.ivAnchor,
+                mDataBinding.fanLayout
+            )
+            mDataBinding.frameLayout.setTxtStrict(
+                mDataBinding.layBottom,
+                mDataBinding.tvDetails,
+                dp2px(20f)
+            )
         }
     }
-    private var isRestored = true
-    private var initRotation = 0f
 
-    private var timer: Timer? = null // 30s 转完
-    private var isRotate = false
-
-    private fun rotateImg() {
-        Log.e("TAG", "rotateImg: ")
-        if (timer != null) {
-            stopRotateImg()
-        }
-        timer = Timer()
-        timer?.schedule(object : TimerTask() {
-            override fun run() {
-                Log.e(TAG, " timer run: ")
-                isRotate = true
-                mDataBinding.fanLayout.rotation(0.6f)
-            }
-        }, 0, 100)
-    }
-
-    fun isTouchPointInView(view: View, x: Float, y: Float): Boolean {
-        val location = IntArray(2)
-        view.getLocationOnScreen(location)
-        val left = location[0]
-        val top = location[1]
-        val right = left + view.measuredWidth
-        val bottom = top + view.measuredHeight
-        return y >= top && y <= bottom && x >= left && x <= right
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        ev?.apply {
-            if(action == MotionEvent.ACTION_DOWN && isTouchPointInView(mDataBinding.ivAnchor, rawX, rawY)){
-                if(isRotate){
-                    stopRotateImg()
-                }
-            }
-        }
-        return super.dispatchTouchEvent(ev)
-    }
-    private fun stopRotateImg() {
-        timer?.cancel()
-        timer?.purge()
-        timer = null
-        mDataBinding.fanLayout.playFixingAnimation()
-    }
 
     private val mIds = arrayListOf<Int>(
         R.drawable.ic_0,
@@ -178,19 +164,20 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     )
 
     private val result = arrayListOf<String>(
-        "牡羊座（白羊座）Aries",
-        "金牛座 Taurus",
-        "雙子座 Gemini",
-        "巨蟹座 Cancer",
-        "獅子座 Leo",
-        "處女座 Virgo",
-        "天秤座 Libra",
-        "天蠍座 Scorpio",
-        "射手座 Sagittarius",
-        "摩羯座 Capricorn",
-        "水瓶座 Aquarius",
-        "雙魚座 Pisces"
+        "Aries",
+        "Taurus",
+        "Gemini",
+        "Cancer",
+        "Leo",
+        "Virgo",
+        "Libra",
+        "Scorpio",
+        "Sagittarius",
+        "Capricorn",
+        "Aquarius",
+        "Pisces"
     )
+
     private fun getView(): View? {
         val viewGroup = LayoutInflater.from(this).inflate(R.layout.item, null) as ViewGroup
         var index: Int = mDataBinding.fanLayout.childCount
@@ -209,8 +196,136 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
         }
         return viewGroup
     }
-    private fun showToast(content: String) {
-        Toast.makeText(this, content, Toast.LENGTH_SHORT).show()
+
+    private fun handleSelect(str: String) {
+        lifecycleScope.launch {
+            val cache = DBManager.instance.db?.compatibilityCacheDao()?.fetch(str)
+            cache?.also {
+                withIO {
+                    val data = GsonConverter.gson.fromJson(it.data, CompatibilityItem::class.java)
+                    withMain {
+                        showData(data)
+                    }
+                }
+            }
+        }
     }
 
+    private fun batchFetch() {
+        result.forEach { name ->
+            scopeNetLife {
+                val cache = DBManager.instance.db?.compatibilityCacheDao()?.fetch(name)
+                if (cache == null) {
+                    val result = Post<CompatibilityItem>(Api.USER_COMPATIBILITY) {
+                        json("constellation" to name)
+                    }.await()
+                    withIO {
+                        val data = GsonConverter.gson.toJson(result)
+                        data?.also {
+                            DBManager.instance.db?.compatibilityCacheDao()
+                                ?.insert(Compatibility(name, it))
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showData(data: CompatibilityItem?) {
+//        mDataBinding.scrollView.fullScroll(View.FOCUS_DOWN)
+//        mDataBinding.tvB.text = data?.constellation_b
+//        mDataBinding.tvDetails.text = data?.content
+    }
+
+    private var isFirst = true
+    private var stillRotate = false
+
+    override fun onStart() {
+        super.onStart()
+        if (isFirst) {
+            rotateImg()
+            isFirst = false
+        } else {
+            if (stillRotate) {
+                rotateImg()
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stillRotate = (timerTask?.isCancelled == false)
+        stopRotateImg()
+    }
+
+    private var initRotation = 0f
+
+    private var timerTask: TimerTask? = null
+    private fun rotateImg() {
+        Log.e(TAG, "rotateImg: ")
+        if(timerTask!=null){
+            timerTask?.cancel()
+            timerTask = null
+        }
+        timerTask = TimerTask(100) {
+            Log.e(TAG, "tick rotateImg: ")
+            mDataBinding.fanLayout.rotation(0.6f)
+        }
+        timerTask?.start()
+    }
+
+    private fun stopRotateImg() {
+        Log.e(TAG, "stopRotateImg: ")
+        timerTask?.cancel()
+        timerTask = null
+        mDataBinding.fanLayout.playFixingAnimation()
+    }
+
+    private fun isTouchPointInView(view: View, x: Float, y: Float): Boolean {
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        val left = location[0]
+        val top = location[1]
+        val right = left + view.measuredWidth
+        val bottom = top + view.measuredHeight
+        return y >= top && y <= bottom && x >= left && x <= right
+    }
+
+    /*override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        ev?.apply {
+            if (timerTask != null && action == MotionEvent.ACTION_DOWN && isTouchPointInView(mDataBinding.ivAnchor, rawX, rawY)) {
+                if (timerTask?.isCancelled == false) {
+                    stopRotateImg()
+                }
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }*/
+
+    class TimerTask(private val interval: Long, private val callback: () -> Unit) {
+        private val handler = Handler()
+        public var isCancelled = false
+        private var runnable: Runnable? = null
+
+        fun start() {
+            isCancelled = false
+            runnable = object : Runnable {
+                override fun run() {
+                    if (!isCancelled) {
+                        callback.invoke()
+                        handler.postDelayed(this, interval)
+                    }
+                }
+            }
+            handler.postDelayed(runnable!!, interval)
+        }
+
+        fun cancel() {
+            isCancelled = true
+            runnable?.let {
+                handler.removeCallbacks(it)
+                runnable = null
+            }
+        }
+    }
 }
