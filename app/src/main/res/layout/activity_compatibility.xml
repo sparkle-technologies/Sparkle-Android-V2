@@ -88,6 +88,51 @@
                 app:layout_constraintRight_toRightOf="@+id/bg"
                 app:layout_constraintTop_toTopOf="@+id/bg" />
 
+
+            <com.wuyr.fanlayout.FanLayout
+                android:id="@+id/fan_layout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:auto_select="true"
+                app:bearing_color="#9F55"
+                app:bearing_gravity="left"
+                app:bearing_layout="@layout/bearing_view"
+                app:bearing_offset="270dp"
+                app:bearing_radius="20dp"
+                app:bearing_type="view"
+                app:item_layout_mode="average"
+                app:layout_constraintBottom_toBottomOf="@+id/bg"
+                app:layout_constraintLeft_toLeftOf="@+id/bg"
+                app:layout_constraintRight_toRightOf="@+id/bg"
+                app:layout_constraintTop_toTopOf="@+id/bg" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/bg2"
+                android:layout_width="541dp"
+                android:layout_height="541dp"
+                android:layout_marginStart="@dimen/dp_17"
+                android:layout_marginTop="-11dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/iv_arrow2"
+                android:layout_width="386dp"
+                android:layout_height="386dp"
+                app:layout_constraintBottom_toBottomOf="@+id/bg2"
+                app:layout_constraintLeft_toLeftOf="@+id/bg2"
+                app:layout_constraintRight_toRightOf="@+id/bg2"
+                app:layout_constraintTop_toTopOf="@+id/bg2" />
+
             <View
                 android:id="@+id/line"
                 android:layout_width="@dimen/dp_1"
@@ -95,8 +140,8 @@
                 android:layout_marginStart="42dp"
                 android:layout_marginBottom="54dp"
                 android:background="@drawable/dash_line_divider_vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_arrow"
-                app:layout_constraintLeft_toLeftOf="@+id/iv_arrow" />
+                app:layout_constraintBottom_toBottomOf="@+id/iv_arrow2"
+                app:layout_constraintLeft_toLeftOf="@+id/iv_arrow2" />
 
             <TextView
                 android:id="@+id/tv_selected"
@@ -123,23 +168,6 @@
                 app:layout_constraintLeft_toLeftOf="@+id/line"
                 app:layout_constraintRight_toRightOf="@+id/line"
                 app:layout_constraintTop_toBottomOf="@+id/line" />
-
-            <com.wuyr.fanlayout.FanLayout
-                android:id="@+id/fan_layout"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:auto_select="true"
-                app:bearing_color="#9F55"
-                app:bearing_gravity="left"
-                app:bearing_layout="@layout/bearing_view"
-                app:bearing_offset="270dp"
-                app:bearing_radius="20dp"
-                app:bearing_type="view"
-                app:item_layout_mode="average"
-                app:layout_constraintBottom_toBottomOf="@+id/bg"
-                app:layout_constraintLeft_toLeftOf="@+id/bg"
-                app:layout_constraintRight_toRightOf="@+id/bg"
-                app:layout_constraintTop_toTopOf="@+id/bg" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -238,9 +266,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_21"
                             android:fontFamily="@font/poppins_regular"
-                            android:gravity="center_vertical"
                             android:minHeight="104dp"
-                            android:text="Choose a constellation to see how you guys fit."
+                            tools:text="Choose a constellation to see how you guys fit."
                             android:textColor="@color/color_7d7d80"
                             android:textSize="@dimen/sp_14" />
 

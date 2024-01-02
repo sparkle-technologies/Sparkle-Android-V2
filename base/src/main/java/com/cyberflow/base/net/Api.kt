@@ -21,7 +21,6 @@ object Api {
     const val LOGIN_UNBIND = "stars-cipher/user/unbinding"
     const val LOGIN_BIND = "stars-cipher/user/binding"
 
-    const val BOND_LIST = "ticket/user/bond_list"
     const val BOND = "ticket/user/synastry"
     const val BOND_DETAIL = "ticket/user/synastry_detail"
     const val RECOMMAND_FRIEND = "ticket/user/friends_recommend"
@@ -34,6 +33,7 @@ object Api {
     const val RELATIONSHIP_FRIEND_LIST = "relationship/user/get_friend_list"
 
     const val USER_COMPATIBILITY = "stars-cipher/user/compatibility"
+    const val BOND_LIST = "stars-cipher/user/bond_list"
 
 
     const val SITE_MESSAGE = "sparkle-msg-notify/site_message"

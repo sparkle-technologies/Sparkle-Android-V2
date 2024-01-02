@@ -46,7 +46,9 @@
             android:paddingStart="@dimen/dp_20"
             android:paddingEnd="@dimen/dp_20"
             android:paddingBottom="@dimen/dp_12"
-            app:empty_layout="@layout/layout_im_request_empty"
+            app:loading_layout="@layout/layout_loading_top"
+            app:error_layout="@layout/layout_error_top"
+            app:empty_layout="@layout/layout_relationship_history_empty"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_back">
 

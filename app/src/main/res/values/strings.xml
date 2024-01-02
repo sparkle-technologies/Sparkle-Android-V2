@@ -86,5 +86,6 @@
     <string name="image_successfully_downloaded">Image successfully downloaded.</string>
     <string name="oops_image_download_failed">Oops! Image download failed.</string>
     <string name="compatibility">Compatibility</string>
+    <string name="no_result_yet">No result yet.</string>
 
 </resources>

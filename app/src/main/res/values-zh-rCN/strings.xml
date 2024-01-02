@@ -84,5 +84,6 @@
     <string name="image_successfully_downloaded">图片已成功下载到相册</string>
     <string name="oops_image_download_failed">图片下载失败，请重试</string>
     <string name="compatibility">合盘</string>
+    <string name="no_result_yet">没有合盘记录</string>
 
 </resources>

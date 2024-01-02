@@ -2,8 +2,6 @@ package com.cyberflow.sparkle.profile.view
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -11,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.model.Compatibility
@@ -21,6 +20,7 @@ import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
+import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityCompatibilityBinding
 import com.cyberflow.sparkle.im.DBManager
@@ -33,6 +33,7 @@ import com.drake.net.utils.withMain
 import com.therouter.router.Route
 import com.wuyr.fanlayout.FanLayout
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 @Route(path = PageConst.App.PAGE_COMPATIBILITY)
 class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>() {
@@ -63,16 +64,20 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     override fun initData() {
-        CacheUtil.getUserInfo()?.user?.apply {
-            mDataBinding.tvA.text = this.nick
-        }
-        mDataBinding.tvB.text = "?"
-
         batchFetch()
         initFanLayout()
+
+        CacheUtil.getUserInfo()?.user?.apply {
+            mDataBinding.tvA.text = this.nick
+            mDataBinding.fanLayout.bearingView?.findViewById<ImageView>(R.id.iv_avatar)?.also {
+                DBComponent.loadAvatar(it, avatar, gender)
+            }
+        }
+        mDataBinding.tvB.text = "?"
+        mDataBinding.tvDetails.text = "Choose a constellation to see how you guys fit."
+        mDataBinding.layArrow.isVisible = false
     }
 
-    private var isRestored = true
 
     private fun initFanLayout() {
         mDataBinding.fanLayout.apply {
@@ -80,26 +85,6 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
                 Log.e(TAG, "FanLayout: ItemRotateListener rotation=$rotation" )
                 initRotation += rotation
                 mDataBinding.ivRotate.rotation = initRotation
-
-                if (!isRestored) {
-                    for (i in 0 until childCount) {
-                        val v: View = getChildAt(i)
-                        if (!isBearingView(v)) {
-                            val viewGroup = v as ViewGroup
-                            for (j in 0 until viewGroup.childCount) {
-                                val child = viewGroup.getChildAt(j)
-                                if (child is ImageView) {
-                                    child.drawable.setColorFilter(
-                                        Color.TRANSPARENT,
-                                        PorterDuff.Mode.DST
-                                    )
-                                    child.invalidate()
-                                }
-                            }
-                        }
-                    }
-                    isRestored = true
-                }
             }
             setOnBearingClickListener { }
             setOnItemClickListener { view, index ->
@@ -107,26 +92,14 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
                 stopRotateImg()
             }
             setOnItemSelectedListener { item ->
+                if(isFirstSelect){
+                    isFirstSelect = false
+                    return@setOnItemSelectedListener
+                }
                 val selectIdx: Int = currentSelectedIndex
                 val str: String = result[selectIdx % 12]
-                Log.d("TAG", "FanLayout onSelected: selectIdx=$selectIdx  str=$str")
+                Log.e("TAG", "FanLayout onSelected: selectIdx=$selectIdx  str=$str")
                 handleSelect(str)
-
-                if (item is ViewGroup) {
-                    val viewGroup = item as ViewGroup
-                    for (i in 0 until viewGroup.childCount) {
-                        val child = viewGroup.getChildAt(i)
-                        if (child is ImageView) {
-                            val imageView = child
-                            imageView.drawable.setColorFilter(
-                                resources.getColor(com.cyberflow.base.resources.R.color.almost_black),
-                                PorterDuff.Mode.MULTIPLY
-                            )
-                            imageView.invalidate()
-                        }
-                    }
-                    isRestored = false
-                }
             }
 
             repeat(12) {
@@ -134,19 +107,12 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
             }
 
             // handle user interaction
-            mDataBinding.frameLayout.setViews(
-                mDataBinding.scrollView,
-                mDataBinding.ivAnchor,
-                mDataBinding.fanLayout
-            )
-            mDataBinding.frameLayout.setTxtStrict(
-                mDataBinding.layBottom,
-                mDataBinding.tvDetails,
-                dp2px(20f)
-            )
+            mDataBinding.frameLayout.setViews(mDataBinding.scrollView, mDataBinding.ivAnchor, mDataBinding.fanLayout)
+            mDataBinding.frameLayout.setTxtStrict(mDataBinding.layBottom, mDataBinding.tvDetails, dp2px(20f))
         }
     }
 
+    private var isFirstSelect = true
 
     private val mIds = arrayListOf<Int>(
         R.drawable.ic_0,
@@ -198,6 +164,11 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     private fun handleSelect(str: String) {
+        Log.e(TAG, "handleSelect: " )
+
+        mDataBinding.tvSelected.text = str
+        mDataBinding.layArrow.isVisible = true
+
         lifecycleScope.launch {
             val cache = DBManager.instance.db?.compatibilityCacheDao()?.fetch(str)
             cache?.also {
@@ -232,8 +203,18 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     private fun showData(data: CompatibilityItem?) {
+        Log.e(TAG, "showData: $data" )
+
 //        mDataBinding.scrollView.fullScroll(View.FOCUS_DOWN)
-//        mDataBinding.tvB.text = data?.constellation_b
+        mDataBinding.tvB.text = data?.constellation_b
+        data?.content?.also {
+            val maxLength = it.length
+            val randomLength = Random.nextInt(1, maxLength + 1) // 随机生成截取的长度
+            val startIndex = Random.nextInt(0, it.length - randomLength + 1) // 随机生成截取的起始索引
+            val endIndex = startIndex + randomLength // 计算截取的结束索引
+            val substring = it.substring(startIndex, endIndex) // 截取字符串的一部分
+            mDataBinding.tvDetails.text = substring
+        }
 //        mDataBinding.tvDetails.text = data?.content
     }
 
@@ -278,29 +259,28 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
         Log.e(TAG, "stopRotateImg: ")
         timerTask?.cancel()
         timerTask = null
-        mDataBinding.fanLayout.playFixingAnimation()
     }
 
-    private fun isTouchPointInView(view: View, x: Float, y: Float): Boolean {
-        val location = IntArray(2)
-        view.getLocationOnScreen(location)
-        val left = location[0]
-        val top = location[1]
-        val right = left + view.measuredWidth
-        val bottom = top + view.measuredHeight
-        return y >= top && y <= bottom && x >= left && x <= right
-    }
-
-    /*override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        ev?.apply {
-            if (timerTask != null && action == MotionEvent.ACTION_DOWN && isTouchPointInView(mDataBinding.ivAnchor, rawX, rawY)) {
-                if (timerTask?.isCancelled == false) {
-                    stopRotateImg()
-                }
-            }
-        }
-        return super.dispatchTouchEvent(ev)
-    }*/
+//    private fun isTouchPointInView(view: View, x: Float, y: Float): Boolean {
+//        val location = IntArray(2)
+//        view.getLocationOnScreen(location)
+//        val left = location[0]
+//        val top = location[1]
+//        val right = left + view.measuredWidth
+//        val bottom = top + view.measuredHeight
+//        return y >= top && y <= bottom && x >= left && x <= right
+//    }
+//
+//    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+//        ev?.apply {
+//            if (timerTask != null && action == MotionEvent.ACTION_DOWN && isTouchPointInView(mDataBinding.ivAnchor, rawX, rawY)) {
+//                if (timerTask?.isCancelled == false) {
+//                    stopRotateImg()
+//                }
+//            }
+//        }
+//        return super.dispatchTouchEvent(ev)
+//    }
 
     class TimerTask(private val interval: Long, private val callback: () -> Unit) {
         private val handler = Handler()
