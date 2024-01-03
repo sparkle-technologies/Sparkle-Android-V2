@@ -71,6 +71,9 @@ object DBComponent {
         requestBuilder.into(v)
     }
 
+    @SuppressLint("CheckResult")
+    @BindingAdapter(value = ["url", "gender"], requireAll = false)
+    @JvmStatic
     fun loadAvatar(v: ImageView, url: Any?, gender: Int = 1) {
         val resId = if (gender == 1) {
             com.cyberflow.base.resources.R.drawable.home_male_head_default

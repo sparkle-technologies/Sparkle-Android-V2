@@ -63,6 +63,7 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     override fun initData() {
+
         batchFetch()
         initFanLayout()
 
@@ -70,6 +71,7 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
             mDataBinding.tvA.text = this.nick
             DBComponent.loadAvatar(mDataBinding.ivAvatar, avatar, gender)
         }
+
         mDataBinding.tvB.text = "?"
         mDataBinding.tvDetails.text = getString(R.string.choose_a_constellation_to_see_how_you_guys_fit)
         mDataBinding.layArrow.isVisible = false

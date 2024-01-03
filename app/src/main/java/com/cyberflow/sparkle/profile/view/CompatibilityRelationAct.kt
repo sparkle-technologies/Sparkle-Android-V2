@@ -71,6 +71,7 @@ class CompatibilityRelationAct : BaseDBAct<CompatibilityViewModel, ActivityCompa
                         to_open_uid = it.to_open_uid,
                         myurl = user?.avatar.orEmpty(),
                         taurl = it.avatar,
+                        gender = it.avatar_style,
                         name = "${user?.nick} & ${it.nick}",
                         relation = it.title,
                         score = it.score,
@@ -109,6 +110,7 @@ data class Bond(
 data class BondListItem(
     val to_open_uid: String = "",
     val avatar: String = "",
+    val avatar_style: Int = 1,
     val nick: String = "",
     var title: String = "",
     var sun_sign: String = "",
@@ -124,6 +126,7 @@ data class RelationItem(
     val to_open_uid: String = "",
     val myurl: String = "",
     val taurl: String = "",
+    val gender: Int = 1,
     var name: String = "",
     var relation: String = "",
     var score: Int = 0,
