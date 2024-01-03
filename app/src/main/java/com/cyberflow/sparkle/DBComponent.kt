@@ -56,6 +56,21 @@ object DBComponent {
         requestBuilder.into(v)
     }
 
+    fun loadAvatarWithCornor(v: ImageView, url: Any?, gender: Int = 1, corner: Int?) {
+        val resId = if (gender == 1) {
+            com.cyberflow.base.resources.R.drawable.home_male_head_default
+        } else {
+            com.cyberflow.base.resources.R.drawable.home_female_head_default
+        }
+        val holder = ResourcesCompat.getDrawable(v.resources, resId, null)
+        val requestBuilder = Glide.with(v.context).load(url).placeholder(holder)
+            .diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false)
+        if (corner != null) {
+            requestBuilder.transform(CenterCrop(), RoundedCorners((corner * BaseApp.instance!!.resources.displayMetrics.density).toInt()))
+        }
+        requestBuilder.into(v)
+    }
+
     fun loadAvatar(v: ImageView, url: Any?, gender: Int = 1) {
         val resId = if (gender == 1) {
             com.cyberflow.base.resources.R.drawable.home_male_head_default

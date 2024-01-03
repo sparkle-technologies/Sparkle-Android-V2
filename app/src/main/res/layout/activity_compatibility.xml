@@ -336,7 +336,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_40"
                 android:layout_marginBottom="-2dp"
-                android:background="@drawable/compatibility_bg_btn2" />
+                android:background="@drawable/compatibility_bg_btn" />
 
             <FrameLayout
                 android:layout_width="match_parent"

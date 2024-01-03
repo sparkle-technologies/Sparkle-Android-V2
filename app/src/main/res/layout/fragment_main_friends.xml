@@ -15,7 +15,7 @@
             android:id="@+id/page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_50"
             app:error_layout="@layout/layout_error_top"
             app:srlEnableLoadMore="false"
             app:stateEnabled="true">

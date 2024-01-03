@@ -218,13 +218,15 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
     }
 
     private var open_uid = ""
-    fun setOpenUid(_action: Int = CHAT, _openUid: String) {
+    private var scrollToBottom = false
+    fun setOpenUid(_action: Int = CHAT, _openUid: String, _scolllToBottom: Boolean = false) {
 //        Log.e(TAG, "setOpenUid: ")
         if(_openUid.replace("_", "-") == ConstantGlobal.getCoraOpenUid()){
             action = CHAT
         }else{
             action = _action
         }
+        scrollToBottom = _scolllToBottom
         open_uid = _openUid
     }
 
@@ -532,6 +534,10 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
             .supportFragmentManager.beginTransaction()
             .add(com.cyberflow.sparkle.R.id.fragment_synastry_container, fragment)
             .commit()
+
+        if(scrollToBottom){
+            scrollToBottom()
+        }
     }
 
     private fun openFlutterVC(route: String?, params: Any?) {

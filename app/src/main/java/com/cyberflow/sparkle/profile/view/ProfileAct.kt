@@ -20,14 +20,16 @@ class ProfileAct : BaseDBAct<BaseViewModel, ActivityProfileBinding>() {
 
     companion object {
         const val OPEN_UID = "open_uid"
+        const val SCROLL_BOTTOM = "scroll_bottom"
 
         const val CHAT = 0
         const val ADD_FRIEND = 1
         const val ACCEPT_FRIEND = 2
 
-        fun go(context: Context, openUid: String) {
+        fun go(context: Context, openUid: String, scrollToBottom: Boolean = false) {
             val intent = Intent(context, ProfileAct::class.java)
             intent.putExtra(OPEN_UID, openUid)
+            intent.putExtra(SCROLL_BOTTOM, scrollToBottom)
             context.startActivity(intent)
         }
     }
@@ -38,10 +40,15 @@ class ProfileAct : BaseDBAct<BaseViewModel, ActivityProfileBinding>() {
 
     private var action = ADD_FRIEND
     private var open_uid = ""
+    private var scrollToBottom = false
 
     override fun initData() {
         intent.getStringExtra(OPEN_UID)?.apply {
             open_uid = this.replace("_", "-")
+        }
+
+        intent.getBooleanExtra(SCROLL_BOTTOM, false)?.apply {
+            scrollToBottom = this
         }
 
         lifecycleScope.launch{
@@ -61,7 +68,7 @@ class ProfileAct : BaseDBAct<BaseViewModel, ActivityProfileBinding>() {
             }
             withMain {
                 val fragment = MainProfileFragment()
-                fragment.setOpenUid(action, open_uid)
+                fragment.setOpenUid(action, open_uid, scrollToBottom)
                 supportFragmentManager.beginTransaction()
                     .add(R.id.fragment_container, fragment)
                     .commit()

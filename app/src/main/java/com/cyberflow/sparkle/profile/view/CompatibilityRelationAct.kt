@@ -48,7 +48,9 @@ class CompatibilityRelationAct : BaseDBAct<CompatibilityViewModel, ActivityCompa
             onBind {
                 getBinding<ItemCompatibilityRelationBinding>().apply {
                     item.setOnClickListener {
-                        toastSuccess(getString(R.string.coming_soon))
+                        getModel<RelationItem>().let {
+                            ProfileAct.go(this@CompatibilityRelationAct, it.to_open_uid, true)
+                        }
                     }
                 }
             }
@@ -66,6 +68,7 @@ class CompatibilityRelationAct : BaseDBAct<CompatibilityViewModel, ActivityCompa
 
                 mDataBinding.rv.models = it.bond_list.map {
                     RelationItem(
+                        to_open_uid = it.to_open_uid,
                         myurl = user?.avatar.orEmpty(),
                         taurl = it.avatar,
                         name = "${user?.nick} & ${it.nick}",
@@ -118,6 +121,7 @@ data class BondListItem(
 
 @Serializable
 data class RelationItem(
+    val to_open_uid: String = "",
     val myurl: String = "",
     val taurl: String = "",
     var name: String = "",

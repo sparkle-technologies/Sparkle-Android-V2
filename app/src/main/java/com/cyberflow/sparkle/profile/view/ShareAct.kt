@@ -41,7 +41,7 @@ import com.cyberflow.base.util.ViewExt.convertViewToBitmap
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.DBComponent
-import com.cyberflow.sparkle.DBComponent.loadAvatar
+import com.cyberflow.sparkle.DBComponent.loadAvatarWithCornor
 import com.cyberflow.sparkle.chat.DemoHelper
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.manager.PushAndMessageHelper
@@ -281,7 +281,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
 
     private fun showCompatibilityUI() {
          CacheUtil.getUserInfo()?.user?.also {
-             loadAvatar(mDataBinding.ivCompatibilityAvatar, it.avatar, it.gender)
+             loadAvatarWithCornor(mDataBinding.ivCompatibilityAvatar, it.avatar, it.gender, 16)
              mDataBinding.tvCompatibilityName.text = it.nick
              generateQRcode("${ConstantGlobal.SHARE_BODY}${it.open_uid}", mDataBinding.ivCompatibilityQr)
          }
