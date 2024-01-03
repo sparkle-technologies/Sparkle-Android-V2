@@ -223,8 +223,9 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     private var isFirst = true
     private var stillRotate = false
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        Log.e(TAG, "onResume: ", )
+        super.onResume()
         if (isFirst) {
             rotateImg()
             isFirst = false
@@ -236,6 +237,7 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     override fun onPause() {
+        Log.e(TAG, "onPause: " )
         super.onPause()
         stillRotate = (timerTask?.isCancelled == false)
         stopRotateImg()
