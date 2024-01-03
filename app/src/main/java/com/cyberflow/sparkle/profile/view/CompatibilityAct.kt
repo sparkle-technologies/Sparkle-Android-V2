@@ -105,7 +105,8 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
             }
 
             // handle user interaction
-            mDataBinding.frameLayout.setViews(mDataBinding.scrollView, mDataBinding.ivAnchor, mDataBinding.fanLayout)
+//            mDataBinding.frameLayout.setViews(mDataBinding.scrollView, mDataBinding.ivAnchor, mDataBinding.fanLayout)
+            mDataBinding.frameLayout.setViews(mDataBinding.tvCompatibilityTitle, mDataBinding.ivAnchor, mDataBinding.fanLayout)
             mDataBinding.frameLayout.setTxtStrict(mDataBinding.layBottom, mDataBinding.tvDetails, dp2px(20f))
         }
     }

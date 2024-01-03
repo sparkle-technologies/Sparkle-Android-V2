@@ -193,13 +193,17 @@
         <com.cyberflow.sparkle.profile.widget.CompatibilityFrameLayout
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_37">
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/dp_37"
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/coordinator"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:background="@color/transparent">
 
                 <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/barLayout"
@@ -216,38 +220,40 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </com.google.android.material.appbar.AppBarLayout>
-
-                <androidx.core.widget.NestedScrollView
-                    android:id="@+id/scroll_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="none"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/compatibility_bg_content"
+                        android:layout_height="161dp"
                         android:orientation="vertical"
-                        android:paddingStart="@dimen/dp_20"
-                        android:paddingTop="@dimen/dp_56"
-                        android:paddingEnd="@dimen/dp_20"
-                        android:paddingBottom="@dimen/dp_116">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_extrabold"
-                            android:text="@string/compatibility"
-                            android:textColor="@color/black"
-                            android:textSize="36sp" />
+                        app:tabMode="scrollable">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_10"
-                            android:orientation="horizontal">
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/compatibility_bg_pin"
+                            android:paddingStart="@dimen/dp_20"
+                            android:paddingEnd="@dimen/dp_20"
+                            android:paddingBottom="@dimen/dp_20">
+
+                            <TextView
+                                android:id="@+id/tv_compatibility_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:fontFamily="@font/poppins_extrabold"
+                                android:text="@string/compatibility"
+                                android:textColor="@color/black"
+                                android:textSize="36sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="37dp"
+                            android:background="@drawable/compatibility_bg_scroll"
+                            android:orientation="horizontal"
+                            android:paddingStart="@dimen/dp_20"
+                            android:paddingEnd="@dimen/dp_20">
 
                             <TextView
                                 android:id="@+id/tv_a"
@@ -279,16 +285,39 @@
 
                         </LinearLayout>
 
+                    </LinearLayout>
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/color_F4F5F5F5"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/dp_20"
+                        android:paddingTop="@dimen/dp_20"
+                        android:paddingEnd="@dimen/dp_20">
+
                         <TextView
                             android:id="@+id/tv_details"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp_21"
                             android:fontFamily="@font/poppins_regular"
                             android:minHeight="104dp"
                             android:textColor="@color/color_7d7d80"
                             android:textSize="@dimen/sp_14"
                             tools:text="Choose a constellation to see how you guys fit." />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp" />
 
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
@@ -307,7 +336,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_40"
                 android:layout_marginBottom="-2dp"
-                android:background="@drawable/compatibility_bg_btn" />
+                android:background="@drawable/compatibility_bg_btn2" />
 
             <FrameLayout
                 android:layout_width="match_parent"
