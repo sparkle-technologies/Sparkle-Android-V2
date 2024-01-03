@@ -1,11 +1,35 @@
 package com.hyphenate.easeui.modules.chat.interfaces;
 
-import android.graphics.drawable.Drawable;
 import android.widget.EditText;
 
-import com.hyphenate.easeui.modules.chat.EaseInputMenuStyle;
-
 public interface IChatPrimaryMenu {
+
+    /**
+     * 是否点击了 Hi Cora 按钮  只能取一次
+     * @return
+     */
+    boolean isHiCoraCliked();
+
+
+    /**
+     * 隐藏 Hi Cora 按钮
+     */
+    void hideHiCoraBtn(boolean hide);
+
+    /**
+     * 清除 等待模式  可编辑或者发送
+     */
+    void endWaitingStatus();
+
+    /**
+     * 开始 等待模式  无法编辑或者发送
+     */
+    void startWaitingStatus();
+
+    /**
+     * Hi Cora 模式
+     */
+    void showHiCoraStatus();
 
     /**
      * 常规模式

@@ -35,6 +35,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.cyberflow.base.BaseApp;
+import com.cyberflow.base.act.BaseDBAct;
 import com.cyberflow.base.act.BaseVBAct;
 import com.cyberflow.base.util.PageConst;
 import com.cyberflow.base.util.bus.LiveDataBus;
@@ -50,13 +51,16 @@ import com.cyberflow.sparkle.chat.ui.dialog.DemoDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.DemoListDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.LabelEditDialogFragment;
 import com.cyberflow.sparkle.chat.ui.dialog.SimpleDialogFragment;
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager;
 import com.cyberflow.sparkle.chat.viewmodel.MessageViewModel;
 import com.cyberflow.sparkle.widget.PermissionDialog;
 import com.drake.tooltip.dialog.BubbleDialog;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.easeui.adapter.EaseMessageAdapter;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.domain.EaseUser;
@@ -88,6 +92,8 @@ import com.luck.picture.lib.interfaces.OnResultCallbackListener;
 import com.luck.picture.lib.permissions.PermissionUtil;
 import com.luck.picture.lib.utils.ToastUtils;
 import com.therouter.TheRouter;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -164,8 +170,8 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
         initAnima();
         initCustomView();
+        infoListener.onReady();
     }
-
 
     private void setSwindleLayoutInChatFragemntHead() {
         EaseChatMessageListLayout messageListLayout = chatLayout.getChatMessageListLayout();
@@ -242,6 +248,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         });
 
         LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_CHANGE, EaseEvent.class).observe(getViewLifecycleOwner(), event -> {
+            Log.e(TAG, "ChatFragment 监听到消息  MESSAGE_CHANGE_CHANGE  准备下拉到最下面 " );
             if (event == null) {
                 return;
             }
@@ -338,6 +345,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     private void showSelectDialog() {
 
     }
+
 
     @Override
     public void onUserAvatarClick(String username) {
@@ -674,7 +682,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 chatLayout.sendVideoMessage(mapped, duration);
             } else {
                 if(size > CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW){
-                    ToastUtils.showToast(mContext, "video size too large, make sure it less than " + CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW + "MB");
+                    ((BaseDBAct)requireActivity()).toastWarn(getString(R.string.video_size_too_large)+ CompressFileEngineImpl.VIDEO_SIZE_VERY_LOW + "MB");
                     return;
                 }
 
@@ -689,7 +697,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                         hideCompressDialog();
                         Log.e(TAG, "onCallback: srcPath=" + srcPath + "\t resultPath=" + resultPath);
                         if(srcPath == null || resultPath == null){
-                            ToastUtils.showToast(mContext, "compress video error");
+                            ((BaseDBAct)requireActivity()).toastWarn(getString(R.string.compress_video_error));
                             return;
                         }
                         File oldF = new File(srcPath);
@@ -707,7 +715,7 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                         // >10MB   不行
                         Log.e(TAG, "onCallback: size1=" + old_file_size + "MB  \t size2=" + new_file_size + "MB  \t  percent=" + percent);
                         if(new_file_size > CompressFileEngineImpl.ORIGIN_VIDEO_MAX_SIZE){
-                            ToastUtils.showToast(mContext, "video size cannot more than 10MB");
+                            ((BaseDBAct)requireActivity()).toastWarn(getString(R.string.video_size_exceed));
                             return;
                         }
                         chatLayout.sendVideoMessage(Uri.fromFile(new File(resultPath)), duration);
@@ -862,8 +870,11 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
                 if (v.getId() == com.hyphenate.easeui.R.id.subBubble) {
                     helper.findItemVisible(R.id.action_chat_forward, false);
                 }
+                if(message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)){
+                    helper.findItemVisible(R.id.action_chat_forward, false);
+                }
                 break;
-            case IMAGE:
+            case IMAGE, VIDEO:
                 helper.findItemVisible(R.id.action_chat_forward, true);
                 break;
         }
@@ -876,9 +887,9 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
     @Override
     public boolean onMenuItemClick(MenuItemBean item, EMMessage message) {
         if (item.getItemId() == R.id.action_chat_forward) {
-
             Log.e(TAG, "onMenuItemClick: message.getMsgId()="+ message.getMsgId() );
 
+            IMDataManager.Companion.getInstance().setForwardMsg(message);
             TheRouter.build(PageConst.IM.PAGE_IM_FORWARD)
                     .withString("forward_msg_id", message.getMsgId())
                     .navigation();
@@ -1008,6 +1019,16 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
         void onChatError(int code, String errorMsg);
 
         void onOtherTyping(String action);
+
+        void onReady();   // fragment 初始化完成  显示 coar ui
+
+        void sendChatInfoToServer(String msgId, String msg);  // 每次发送消息  需要将消息透传给后段
+
+        void handleAIOMessage(EMMessage message);   // 接收到自定义消息
+
+        boolean isQuestionFinished(EMMessage message);   // 消息是否完成了
+
+        void handleAIOShareAction(EMMessage message);   // 分享
     }
 
     @Override
@@ -1075,12 +1096,12 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
 
         switch (requestCode) {
             case REQUEST_CODE_CAMERA:
-                title = "Unable to take photos";
-                content  = "You have turned off camera  permissions.";
+                title = getString(R.string.unable_to_take_photos);
+                content  = getString(R.string.you_have_turned_off_camera_permissions);
                 break;
             case REQUEST_CODE_STORAGE_PICTURE:
-                title = "Unable to access the gallery";
-                content  = "You have turned off gallery  permissions.";
+                title = getString(R.string.unable_to_access_the_gallery);
+                content  = getString(R.string.you_have_turned_off_gallery_permissions);
                 break;
         }
 
@@ -1096,5 +1117,99 @@ public class ChatFragment extends EaseChatFragment implements OnRecallMessageRes
             }
         });
         dialog.show();
+    }
+
+    private boolean isCore = false;
+
+    private EMConversation conversation;
+
+    // 初始化 将cora数据传进来
+    public void initCora(boolean cora, String question) {
+        if(cora){
+            isCore = true;
+            chatLayout.showItemDefaultMenu(false);
+            if(conversation == null ){
+                conversation = EMClient.getInstance().chatManager().getConversation(conversationId, EaseCommonUtils.getConversationType(chatType), true);
+            }
+            EMMessage message = conversation.getLastMessage();
+            boolean isFinishQuestion = infoListener.isQuestionFinished(message);
+            Log.e(TAG, "initCora: 问题走完了吗? " + isFinishQuestion );
+            if(isFinishQuestion){    // 如果提问完成了
+                if(question.isEmpty() ){
+                    chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();  // 展示 Hi Cora面板
+                }else{  // 直接发送问题
+                    chatLayout.clickQuestion(question);
+                    chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();
+                    hideQuestions();
+                    hideHiCoraBtn(true);
+                }
+            }else{     // 如果提问还没完成   有问题过来也不发送   和没问题带过来一样
+                chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();  // 展示 Hi Cora面板
+                hideHiCoraBtn(true);
+                /*if(question.isEmpty() ){
+                    chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();  // 展示 Hi Cora面板
+                    hideHiCoraBtn(true);
+                }else{
+                    chatLayout.clickQuestion(question);
+                    chatLayout.inputMenu.getPrimaryMenu().showHiCoraStatus();
+                    hideQuestions();
+                    hideHiCoraBtn(true);
+                }*/
+            }
+        }
+    }
+
+    // 每次发送消息给环信IM后的回调
+    @Override
+    public void onChatSuccess(EMMessage message) {
+        Log.e(TAG, "onChatSuccess  after send message : " + message.getMsgId() );
+        if(isCore){
+            EMTextMessageBody body = (EMTextMessageBody) message.getBody();
+            String msgId = message.getMsgId();
+            String msg = body.getMessage();
+            infoListener.sendChatInfoToServer(msgId, msg);
+        }
+    }
+
+    // 收到 特殊消息 考虑打开 flutter 塔罗
+    @Override
+    public void onReceiveAIOMessage(EMMessage message) {
+        infoListener.handleAIOMessage(message);
+    }
+
+    // 无法编辑或发送
+    public void cannotEditOrSend() {
+        chatLayout.inputMenu.getPrimaryMenu().startWaitingStatus();
+    }
+
+    // 可以编辑或发送  恢复正常
+    public void canEditOrSend() {
+        chatLayout.inputMenu.getPrimaryMenu().endWaitingStatus();
+    }
+
+    // 隐藏 Hi Cora 按钮 因为已经发送出去了
+    public void hideHiCoraBtn(boolean hide) {
+        chatLayout.inputMenu.getPrimaryMenu().hideHiCoraBtn(hide);
+    }
+
+    public boolean isHiCoraCliked() {
+        return chatLayout.inputMenu.getPrimaryMenu().isHiCoraCliked();
+    }
+
+    public void showQuestions() {
+        chatLayout.initQuestionsList();
+    }
+
+    public void hideQuestions() {
+        chatLayout.dismissQuestion();
+    }
+
+    public void insertMsg(@NotNull String s, @NotNull String from, @NotNull String to) {
+        chatLayout.insertMsg(s, from, to);
+    }
+
+    @Override
+    public void onAIOResultClick(EMMessage message) {
+        infoListener.handleAIOShareAction(message);
     }
 }

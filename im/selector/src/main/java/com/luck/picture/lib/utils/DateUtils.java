@@ -142,4 +142,53 @@ public class DateUtils {
         return diff > 1000 ? diff / 1000 + "秒" : diff + "毫秒";
     }
 
+
+    public static int dayDiff(long timestampNow, long timestampToCheck) {
+        // 获取当前日期和时间戳
+//        Log.e("TAG", "dayDiff: timestampNow="+ timestampNow+ "\t timestampToCheck="+timestampToCheck );
+        Calendar calendarNow = Calendar.getInstance();
+        calendarNow.setTimeInMillis(timestampNow);
+        Date now = calendarNow.getTime();
+
+//        long nowTimestamp = now.getTime();
+        // 转换为日期
+        Calendar calendarToCheck = Calendar.getInstance();
+        calendarToCheck.setTimeInMillis(timestampToCheck);
+        Date dateToCheck = calendarToCheck.getTime();
+
+//        Log.e("TAG", "dayDiff: now="+ now );
+//        Log.e("TAG", "dayDiff: dateToCheck="+ dateToCheck );
+
+        //1701941396
+
+        // 比较日期
+        if (isSameDay(dateToCheck, now)) {
+//            System.out.println("今天");
+            return 0;
+        } else {
+            // 将当前日期减去一天
+            calendarNow.add(Calendar.DAY_OF_MONTH, -1);
+            Date yesterday = calendarNow.getTime();
+            if (isSameDay(dateToCheck, yesterday)) {
+//                System.out.println("昨天");
+                return 1;
+            } else {
+//                System.out.println("既不是今天也不是昨天");
+                return 2;
+            }
+        }
+    }
+
+    // 判断两个日期是否为同一天
+    private static boolean isSameDay(Date date1, Date date2) {
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH) &&
+                cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH);
+    }
+
+
 }

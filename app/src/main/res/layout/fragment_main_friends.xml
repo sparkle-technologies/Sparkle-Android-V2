@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingTop="@dimen/status_bar_height"
+        android:paddingEnd="@dimen/dp_20">
+
+        <com.drake.brv.PageRefreshLayout
+            android:id="@+id/page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_40"
+            app:error_layout="@layout/layout_error_top"
+            app:srlEnableLoadMore="false"
+            app:stateEnabled="true">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="com.drake.brv.layoutmanager.HoverLinearLayoutManager" />
+
+        </com.drake.brv.PageRefreshLayout>
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_add_friends"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_42"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/main_ic_add_friends" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center|left"
+            android:text="@string/friends"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_18"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_add_friends"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_add_friends" />
+
+        <TextView
+            android:id="@+id/tv_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_4"
+            android:layout_marginBottom="@dimen/dp_6"
+            android:background="@drawable/main_bg_unread_dot_yellow"
+            android:fontFamily="@font/poppins_regular"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:maxLines="1"
+            android:minWidth="@dimen/dp_12"
+            android:minHeight="@dimen/dp_12"
+            android:paddingStart="@dimen/dp_3"
+            android:paddingEnd="@dimen/dp_3"
+            android:textSize="@dimen/sp_10"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_add_friends"
+            app:layout_constraintRight_toRightOf="@+id/btn_add_friends" />
+
+        <FrameLayout
+            android:id="@+id/lay_dialog_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_5"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_add_friends">
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

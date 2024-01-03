@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:background="#00000000"
+    android:clipChildren="false">
+
+    <RelativeLayout
+        android:id="@+id/lay1"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_49"
+        android:layout_marginTop="@dimen/dp_30"
+        android:scaleType="fitCenter"
+        android:src="@drawable/nav_friends_off"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/lay2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv1"
+            style="@style/home_bottom_navigation_img"
+            android:src="@drawable/nav_friends_off" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/lay2"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_49"
+        app:layout_constraintLeft_toRightOf="@+id/lay1"
+        app:layout_constraintRight_toLeftOf="@+id/lay3"
+        app:layout_constraintTop_toTopOf="@+id/lay1">
+
+        <ImageView
+            android:id="@+id/iv2"
+            style="@style/home_bottom_navigation_img"
+            android:src="@drawable/nav_feed_off" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/lay3"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_18"
+        app:layout_constraintLeft_toRightOf="@+id/lay2"
+        app:layout_constraintRight_toLeftOf="@+id/lay4"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv3"
+            style="@style/home_bottom_navigation_img"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
+            android:src="@drawable/nav_eye_close" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/lay4"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_49"
+        app:layout_constraintLeft_toRightOf="@+id/lay3"
+        app:layout_constraintRight_toLeftOf="@+id/lay5"
+        app:layout_constraintTop_toTopOf="@+id/lay1">
+
+        <ImageView
+            android:id="@+id/iv4"
+            style="@style/home_bottom_navigation_img"
+            android:src="@drawable/nav_notify_off" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/lay5"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dp_49"
+        app:layout_constraintLeft_toRightOf="@+id/lay4"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/lay1">
+
+        <ImageView
+            android:id="@+id/iv5"
+            style="@style/home_bottom_navigation_img"
+            android:src="@drawable/nav_profile_off" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_unread"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textColor="@color/black"
+        android:background="@drawable/main_bg_unread_dot_yellow"
+        android:fontFamily="@font/poppins_regular"
+        android:minHeight="@dimen/dp_12"
+        android:minWidth="@dimen/dp_12"
+        android:paddingStart="@dimen/dp_5"
+        android:paddingEnd="@dimen/dp_5"
+        android:gravity="center"
+        android:textSize="@dimen/sp_10"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="@+id/lay1"
+        app:layout_constraintTop_toTopOf="@+id/lay1"
+        tool:text="2" />
+
+    <View
+        android:id="@+id/site_unread"
+        android:layout_width="@dimen/dp_8"
+        android:layout_height="@dimen/dp_8"
+        android:layout_marginStart="@dimen/dp_43"
+        android:layout_marginTop="@dimen/dp_12"
+        android:background="@drawable/main_bg_unread_dot_yellow"
+        android:visibility="invisible"
+        app:layout_constraintLeft_toLeftOf="@+id/lay4"
+        app:layout_constraintTop_toTopOf="@+id/lay4" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+

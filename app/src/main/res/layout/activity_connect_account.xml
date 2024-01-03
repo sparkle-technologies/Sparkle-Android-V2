@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_2nd">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/status_bar_height"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/connected_accounts"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/ll_back"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_56"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title">
+
+            <ImageView
+                android:id="@+id/iv_btn_back"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:layout_centerInParent="true"
+                android:background="@drawable/svg_btn_left" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:id="@+id/lay_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_24"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@drawable/register_bg_gender_white"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_8"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:src="@drawable/connect_account_ic_x"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_x_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_52"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="X"
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/sp_14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.cyberflow.sparkle.widget.ShadowImgButton
+                    android:id="@+id/btn_disconnect_x"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                    app:view_img_shadow_distance="0.6dp"
+                    app:view_img_src="@drawable/connect_account_ic_disconnect" />
+
+                <TextView
+                    android:id="@+id/tv_x"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_28"
+                    android:layout_marginEnd="@dimen/dp_4"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:textColor="@color/color_7d7d80"
+                    android:textSize="@dimen/sp_16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_disconnect_x"
+                    app:layout_constraintLeft_toRightOf="@+id/tv_x_title"
+                    app:layout_constraintRight_toLeftOf="@+id/btn_disconnect_x"
+                    app:layout_constraintTop_toTopOf="@+id/btn_disconnect_x"
+                    tools:text="\@charing" />
+
+                <com.cyberflow.sparkle.widget.ShadowTxtButton
+                    android:id="@+id/btn_connect_x"
+                    android:layout_width="@dimen/dp_90"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:view_bg="@drawable/register_btn_next"
+                    app:view_shadow_distance="1dp"
+                    app:view_text="@string/connect"
+                    app:view_text_bold="true"
+                    app:view_text_size="@dimen/sp_14" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginStart="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_6"
+                android:layout_marginEnd="@dimen/dp_12"
+                android:layout_marginBottom="@dimen/dp_6"
+                android:background="@drawable/register_google_place_divider" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:src="@drawable/connect_account_ic_discord"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_discord_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_52"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Discord"
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/sp_14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.cyberflow.sparkle.widget.ShadowImgButton
+                    android:id="@+id/btn_disconnect_discord"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                    app:view_img_shadow_distance="0.6dp"
+                    app:view_img_src="@drawable/connect_account_ic_disconnect" />
+
+                <TextView
+                    android:id="@+id/tv_discord"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_28"
+                    android:layout_marginEnd="@dimen/dp_4"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:textColor="@color/color_7d7d80"
+                    android:textSize="@dimen/sp_16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_disconnect_discord"
+                    app:layout_constraintLeft_toRightOf="@+id/tv_discord_title"
+                    app:layout_constraintRight_toLeftOf="@+id/btn_disconnect_discord"
+                    app:layout_constraintTop_toTopOf="@+id/btn_disconnect_discord"
+                    tools:text="\@charing" />
+
+                <com.cyberflow.sparkle.widget.ShadowTxtButton
+                    android:id="@+id/btn_connect_discord"
+                    android:layout_width="@dimen/dp_90"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:view_bg="@drawable/register_btn_next"
+                    app:view_shadow_distance="1dp"
+                    app:view_text="@string/sconnect"
+                    app:view_text_bold="true"
+                    app:view_text_size="@dimen/sp_14" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginStart="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_6"
+                android:layout_marginEnd="@dimen/dp_12"
+                android:layout_marginBottom="@dimen/dp_6"
+                android:background="@drawable/register_google_place_divider" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_24"
+                    android:layout_height="@dimen/dp_24"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:src="@drawable/connect_account_ic_wallet"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_wallet_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_52"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="@string/web3_wallet"
+                    android:textColor="@color/color_000000"
+                    android:textSize="@dimen/sp_14"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.cyberflow.sparkle.widget.ShadowImgButton
+                    android:id="@+id/btn_disconnect_wallet"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                    app:view_img_shadow_distance="0.6dp"
+                    app:view_img_src="@drawable/connect_account_ic_disconnect" />
+
+                <TextView
+                    android:id="@+id/tv_wallet"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_28"
+                    android:layout_marginEnd="@dimen/dp_4"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="right"
+                    android:maxLines="1"
+                    android:textColor="@color/color_7d7d80"
+                    android:textSize="@dimen/sp_16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/btn_disconnect_wallet"
+                    app:layout_constraintLeft_toRightOf="@+id/tv_wallet_title"
+                    app:layout_constraintRight_toLeftOf="@+id/btn_disconnect_wallet"
+                    app:layout_constraintTop_toTopOf="@+id/btn_disconnect_wallet"
+                    tools:text="0x2df332jn23" />
+
+                <com.cyberflow.sparkle.widget.ShadowTxtButton
+                    android:id="@+id/btn_connect_wallet"
+                    android:layout_width="@dimen/dp_90"
+                    android:layout_height="@dimen/dp_30"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:view_bg="@drawable/register_btn_next"
+                    app:view_shadow_distance="1dp"
+                    app:view_text="@string/sconnect"
+                    app:view_text_bold="true"
+                    app:view_text_size="@dimen/sp_14" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/compose_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_46"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

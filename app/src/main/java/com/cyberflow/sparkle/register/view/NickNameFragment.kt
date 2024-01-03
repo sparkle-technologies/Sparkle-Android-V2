@@ -6,8 +6,6 @@ import android.util.Log
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseVBFragment
-import com.cyberflow.base.model.GENDER_MAN
-import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.net.GsonConverter
@@ -18,18 +16,19 @@ import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.Post
 import com.drake.net.utils.scopeDialog
+import com.hyphenate.easeui.input.util.ViewUtil.hideKeyboard
 
 class NickNameFragment :
     BaseVBFragment<LoginRegisterViewModel, FragmentRegisterNicknameBinding>() {
     override fun initData() {
-        actVm?.registerBean?.gender?.apply {
+        /*actVm?.registerBean?.gender?.apply {
             if (this == GENDER_MAN) {
                 mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_man_divider)
             }
             if (this == GENDER_WOMEN) {
                 mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_women_divider)
             }
-        }
+        }*/
     }
 
     private var actVm: LoginRegisterViewModel? = null
@@ -48,6 +47,11 @@ class NickNameFragment :
                 error = !error
             }
         })*/
+
+        mViewBind.root.setOnClickListener {
+            mViewBind.etNiceName.clearFocus()
+            hideKeyboard(requireActivity(), mViewBind.etNiceName)
+        }
 
         mViewBind.etNiceName.addTextChangedListener {
             if (it.isNullOrEmpty()) {
@@ -69,8 +73,7 @@ class NickNameFragment :
                 val txt = mViewBind.etNiceName.text.toString().trim()
                 val pass = txt.isNotEmpty()
                 mViewBind.outlinedTextField.also {
-                    it.error =
-                        if (pass) null else "Opps！ Something’s wrong. Please change to another nickname. "
+                    it.error = if (pass) null else getString(com.cyberflow.base.resources.R.string.opps_something_s_wrong_please_change_to_another_nickname)
                 }
                 if (pass) {
                     submitRegister()
@@ -94,7 +97,7 @@ class NickNameFragment :
                     val token = CacheUtil.getUserInfo()?.token.orEmpty()
                     Log.e("NickNameFragment", "got new token from login :  $token")
                     LoginAct.imLogin(requireActivity())
-                    requireActivity().finish()
+//                    requireActivity().finish()
                 }
             }
         }

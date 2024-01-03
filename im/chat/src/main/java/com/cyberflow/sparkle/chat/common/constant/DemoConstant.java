@@ -43,6 +43,8 @@ public interface DemoConstant extends EaseConstant {
     String NOTIFY_GROUP_JOIN_RECEIVE = "invite_join_receive";
     String NOTIFY_CHANGE = "notify_change";
 
+    String FRESH_MAIN_IM_DATA = "fresh_main_im_data";
+
     String MESSAGE_GROUP_JOIN_ACCEPTED = "message_join_accepted";
     String MESSAGE_GROUP_AUTO_ACCEPT = "message_auto_accept";
 

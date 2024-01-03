@@ -6,7 +6,6 @@ import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMValueCallBack;
@@ -25,6 +24,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseFileUtils;
 import com.hyphenate.easeui.utils.EaseImageUtils;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMFileHelper;
 import com.hyphenate.util.EMLog;
 import com.hyphenate.util.ImageUtils;
 import com.hyphenate.util.PathUtil;
@@ -88,12 +88,21 @@ public class EaseHandleMessagePresenterImpl extends EaseHandleMessagePresenter {
         sendImageMessage(imageUri, true);
     }
 
+
+    private final static int MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+
     @Override
     public void sendImageMessage(Uri imageUri, boolean sendOriginalImage) {
         //Compatible with web and does not support heif image terminal
         //convert heif format to jpeg general image format
+        boolean sendOriginalImg = true;
+        if(EMFileHelper.getInstance().isFileExist(imageUri)) {
+            if(EMFileHelper.getInstance().getFileLength(imageUri) > MAX_IMAGE_SIZE) {
+                sendOriginalImg = false;
+            }
+        }
         imageUri = handleImageHeifToJpeg(imageUri);
-        EMMessage message = EMMessage.createImageSendMessage(imageUri, true, toChatUsername);
+        EMMessage message = EMMessage.createImageSendMessage(imageUri, sendOriginalImg, toChatUsername);
         sendMessage(message);
     }
 

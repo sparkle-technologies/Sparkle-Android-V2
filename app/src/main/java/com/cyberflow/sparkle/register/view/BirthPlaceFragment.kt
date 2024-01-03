@@ -5,25 +5,23 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseVBFragment
-import com.cyberflow.base.model.GENDER_MAN
-import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.base.model.LocationInfo
 import com.cyberflow.sparkle.databinding.FragmentRegisterBirthPlaceBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.widget.searchplace.SearchPlaceDialog
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.google.android.material.snackbar.Snackbar
 
 class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegisterBirthPlaceBinding>() {
     override fun initData() {
-        actVm?.registerBean?.gender?.apply {
+        /*actVm?.registerBean?.gender?.apply {
             if(this == GENDER_MAN){
                 mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_man_divider)
             }
             if(this == GENDER_WOMEN){
                 mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_women_divider)
             }
-        }
+        }*/
     }
 
     private var actVm: LoginRegisterViewModel? = null
@@ -50,7 +48,8 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(disable: Boolean) {
                 if(disable){
-                    Snackbar.make(mViewBind.btnRegisterNext, "please select your birth place", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(mViewBind.btnRegisterNext,
+                        getString(com.cyberflow.base.resources.R.string.please_select_your_birth_place), Snackbar.LENGTH_SHORT).show()
                     return
                 }
                 actVm?.clickNext()
@@ -75,6 +74,6 @@ class BirthPlaceFragment : BaseVBFragment<LoginRegisterViewModel, FragmentRegist
                 }
             }
         })
-        searchPlaceDialog.show(requireActivity().supportFragmentManager, "Birth Place")
+        searchPlaceDialog.show(requireActivity().supportFragmentManager, getString(com.cyberflow.base.resources.R.string.birth_place))
     }
 }

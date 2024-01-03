@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/status_bar_height">
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginTop="@dimen/dp_1"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:background="@drawable/main_bg_horoscope_top_shadow"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.flyco.tablayout.SegmentTabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+
+            tl:tl_bar_color="#ffffff"
+            tl:tl_bar_corner_radius="16dp"
+            tl:tl_bar_stroke_color="@color/black"
+            tl:tl_bar_stroke_width="1dp"
+
+            tl:tl_indicator_anim_enable="true"
+            tl:tl_indicator_bounce_enable="false"
+            tl:tl_indicator_color="@color/color_A89FF9"
+            tl:tl_indicator_corner_radius="12dp"
+            tl:tl_indicator_height="30dp"
+            tl:tl_indicator_margin_bottom="5dp"
+            tl:tl_indicator_margin_left="5dp"
+            tl:tl_indicator_margin_right="5dp"
+            tl:tl_indicator_margin_top="5dp"
+            tl:tl_indicator_width="75dp"
+            tl:tl_tab_space_equal="true"
+            tl:tl_textSelectColor="@color/black"
+
+            tl:tl_textUnselectColor="#7D7D80" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_28"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/black"
+            android:text="@string/horoscope"
+            android:textSize="@dimen/sp_24"
+            app:layout_constraintLeft_toLeftOf="@+id/tabLayout"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/main_bg_horoscope_calendar_shadow"
+            app:layout_constraintBottom_toBottomOf="@+id/lay_calendar_shadow"
+            app:layout_constraintLeft_toLeftOf="@+id/tabLayout"
+            app:layout_constraintRight_toRightOf="@+id/lay_calendar_shadow"
+            app:layout_constraintTop_toTopOf="@+id/lay_calendar_shadow" />
+
+        <LinearLayout
+            android:id="@+id/lay_calendar_shadow"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_66"
+            android:background="@drawable/main_bg_horoscope_calendar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/dp_13"
+            android:paddingEnd="@dimen/dp_13"
+            android:visibility="invisible"
+            app:layout_constraintLeft_toLeftOf="@+id/tabLayout"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout">
+
+            <ImageView
+                android:layout_width="@dimen/dp_15"
+                android:layout_height="@dimen/dp_16"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:src="@drawable/main_horoscope_ic_calendar" />
+
+            <TextView
+                android:id="@+id/tv_calendar_shadow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Dec 13, 2023" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lay_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_65"
+            android:background="@drawable/main_bg_horoscope_calendar"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/dp_13"
+            android:paddingEnd="@dimen/dp_13"
+            app:layout_constraintLeft_toLeftOf="@+id/tabLayout"
+            app:layout_constraintTop_toBottomOf="@+id/tabLayout">
+
+            <ImageView
+                android:layout_width="@dimen/dp_15"
+                android:layout_height="@dimen/dp_16"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:src="@drawable/main_horoscope_ic_calendar" />
+
+            <TextView
+                android:id="@+id/tv_calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Dec 13, 2023" />
+
+        </LinearLayout>
+
+
+        <com.youth.banner.Banner
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="-28dp"
+            android:layout_marginBottom="-7dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_owl" />
+
+        <ImageView
+            android:id="@+id/iv_owl"
+            android:layout_width="108dp"
+            android:layout_height="117dp"
+            android:layout_marginTop="@dimen/dp_80"
+            android:layout_marginEnd="@dimen/dp_17"
+            android:elevation="@dimen/dp_20"
+            android:src="@drawable/main_ic_owl"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="15.57dp"
+            android:layout_height="12.21dp"
+            android:layout_marginTop="@dimen/dp_28"
+            android:src="@drawable/main_ic_owl_bubble"
+            app:layout_constraintRight_toLeftOf="@+id/iv_owl"
+            app:layout_constraintTop_toTopOf="@+id/iv_owl" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

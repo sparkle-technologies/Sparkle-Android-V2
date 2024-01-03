@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.cyberflow.base.BaseApp;
+import com.cyberflow.base.util.ConstantGlobal;
 import com.cyberflow.sparkle.chat.common.db.DemoDbHelper;
 import com.cyberflow.sparkle.chat.common.delegates.ChatRecallAdapterDelegate;
 import com.cyberflow.sparkle.chat.common.manager.UserProfileManager;
@@ -335,9 +336,10 @@ public class DemoHelper {
         return user;
     }
 
-    private final static String APP_KEY_TEST = "1111230615161307#sparkletest";
+        private final static String APP_KEY_TEST = ConstantGlobal.Companion.IM_APP_KEY();  // test
+//        private final static String APP_KEY_TEST = "1111230615161307#sparkletest";  // test
 //    private final static String APP_KEY_TEST = "1111230615161307#demo";
-
+//    private final static String APP_KEY_TEST = "1183231031159952#sparkle";  // pro
 
     /**
      * 根据自己的需要进行配置
@@ -358,7 +360,7 @@ public class DemoHelper {
          */
         EMPushConfig.Builder builder = new EMPushConfig.Builder(context);
 
-        builder.enableFCM("782795210914");  // from firebase server : https://console.firebase.google.com/project/sparkle-android-app/settings/cloudmessaging?hl=zh-cn
+        builder.enableFCM("486305608428");  // from firebase server : https://console.firebase.google.com/project/sparkle-android-app/settings/cloudmessaging?hl=zh-cn
 
       /*  builder.enableVivoPush() // 需要在AndroidManifest.xml中配置appId和appKey
                 .enableMeiZuPush("134952", "f00e7e8499a549e09731a60a4da399e3")

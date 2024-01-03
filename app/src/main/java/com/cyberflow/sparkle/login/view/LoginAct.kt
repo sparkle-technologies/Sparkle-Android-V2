@@ -1,6 +1,5 @@
 package com.cyberflow.sparkle.login.view
 
-import android.animation.Animator
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
@@ -13,24 +12,32 @@ import com.cyberflow.base.act.BaseVBAct
 import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.CacheUtil
+import com.cyberflow.base.util.PageConst
 import com.cyberflow.base.util.callback.IMLoginResponse
 import com.cyberflow.base.util.callback.IMV2Callback
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.chat.IMManager
+import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
+import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.main.view.MainActivity
+import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.register.view.RegisterAct
 import com.cyberflow.sparkle.widget.ShadowImgButton
+import com.cyberflow.sparkle.widget.ToastDialog
 import com.drake.net.Post
 import com.drake.net.utils.TipUtils
 import com.drake.net.utils.scopeDialog
+import com.drake.net.utils.withMain
+import com.github.penfeizhou.animation.apng.APNGDrawable
+import com.github.penfeizhou.animation.loader.AssetStreamLoader
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthCredential
 import com.google.firebase.auth.OAuthProvider
 import com.hyphenate.easeui.ui.dialog.LoadingDialogHolder
 import com.hyphenate.easeui.ui.dialog.ThreadUtil
+import com.therouter.router.Route
 import com.web3auth.singlefactorauth.SingleFactorAuth
 import com.web3auth.singlefactorauth.types.LoginParams
 import com.web3auth.singlefactorauth.types.SingleFactorAuthArgs
@@ -43,10 +50,8 @@ import org.json.JSONObject
 import org.torusresearch.fetchnodedetails.types.TorusNetwork
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutionException
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
-
+@Route(path = PageConst.App.PAGE_LOGIN)
 class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     companion object {
@@ -64,7 +69,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                     ThreadUtil.runOnMainThread{
                         LoadingDialogHolder.getLoadingDialog()?.hide()
                         if(event.success){
-                            MainActivity.go(activity)
+                            MainActivityV2.go(activity)
                             activity.finish()
                         }else{
                             val msg = event.message ?: "IM login failed"
@@ -76,6 +81,25 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         }
     }
 
+
+    // 1.
+    // 2. twitter
+    // 3. web3Auth
+    // 4. unipass
+    //  walletConnect  im twitter database
+    private fun logout(){
+        FirebaseAuth.getInstance().signOut()
+        lifecycleScope.launch {
+            IMManager.instance.keepLogout()   //  make sure no login in IM
+            DBManager.instance.db?.imFriendRequestDao()?.deleteAll()
+            DBManager.instance.db?.imFriendInfoDao()?.deleteAll()
+            DBManager.instance.db?.imConversationCacheDao()?.deleteAll()
+            DBManager.instance.db?.horoscopeCacheDao()?.deleteAll()
+            IMDataManager.instance.clearCache()
+            ToastDialog.count = 1
+        }
+    }
+
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()
 
@@ -83,17 +107,13 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             imLogin(this)
             return
         }else{
-            IMManager.instance.keepLogout()   // make sure no login in IM
+            logout()
         }
 
-        initWalletConnect()
-
-        initWeb3Auth()
 
         mViewBind.btnGoogleLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                TipUtils.toast("coming soon...")
-
+                toastWarn("coming soon...")
 //                CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "MetaMask")
 //                request("0x73cf3CB3dc0D6872878a316509aFb7510E7cd44d", "MetaMask")
             }
@@ -102,7 +122,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         mViewBind.btnIgLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 //viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")
-                TipUtils.toast("coming soon...")
+                toastWarn("coming soon...")
 
                 // for test
 //                val bundle = Bundle()
@@ -121,7 +141,10 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
     }
 
     override fun initData() {
-
+        mViewBind.composeView.postDelayed({
+            initWalletConnect()
+        }, 1000)
+//        initWeb3Auth()
     }
 
     private fun request(authMsg: String, type: String){
@@ -193,7 +216,6 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     private fun initWalletConnect() {
         Log.e(MyApp.TAG, "initWalletConnect: ")
-
         lifecycleScope.launch {
             MyApp.instance.checkWalletConnect()
             MyApp.instance.walletConnectKit?.disconnect()
@@ -250,13 +272,24 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     /********************* anim ******************************/
 
+
     private fun initAnim() {
         lifecycleScope.launch {
-            execLottieAnim()
+            val asset = AssetStreamLoader(this@LoginAct, "login.png")
+            APNGDrawable(asset).apply {
+                setLoopLimit(-1)
+                withMain {
+                    mViewBind.ivAnima.setImageDrawable(this@apply)
+                    start()
+                }
+            }
         }
+        /*lifecycleScope.launch {
+            execLottieAnim()
+        }*/
     }
 
-    private suspend fun execLottieAnim() {
+  /*  private suspend fun execLottieAnim() {
         suspendCoroutine {
             val lottieView = mViewBind.lavHomepage
             lottieView.addAnimatorListener(object : Animator.AnimatorListener {
@@ -278,7 +311,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                 }
             })
         }
-    }
+    }*/
 
 
     /************************************** 这个以后再弄  得搞个新接口刷新JWT ***********************************************/

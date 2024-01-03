@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="your_choice">你的选择:</string>
+    <string name="ask_cora_a_question">向Cora提问</string>
+    <string name="waiting_for_response">等待回复</string>
+</resources>

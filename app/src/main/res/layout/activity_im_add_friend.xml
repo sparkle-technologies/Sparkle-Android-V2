@@ -103,13 +103,13 @@
                     android:textSize="@dimen/sp_17"
                     tools:text="Arc Chan" />
 
-                <TextView
+              <!--  <TextView
                     android:id="@+id/tv_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_regular"
                     android:textSize="@dimen/sp_12"
-                    tools:text="0xb98...3c6e" />
+                    tools:text="0xb98...3c6e" />-->
             </LinearLayout>
 
 
@@ -168,7 +168,7 @@
                 android:layout_marginTop="@dimen/dp_10"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center|left"
-                android:text="Enter authentication message"
+                android:text="@string/say_hello_and_introduce_yourself"
                 android:textColor="@color/color_7D7D80"
                 android:textSize="@dimen/sp_12"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -186,9 +186,9 @@
                 android:background="@drawable/im_bg_edit_text_shape"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="top"
-                android:hint="Hi, glad to see you here."
+                android:hint="@string/hello_stellar_greetings_on_our_astrology_journey"
                 android:inputType="textMultiLine"
-                android:maxLength="120"
+                android:maxLength="80"
                 android:paddingLeft="@dimen/dp_11"
                 android:paddingTop="@dimen/dp_19"
                 android:paddingRight="@dimen/dp_11"
@@ -228,7 +228,7 @@
             app:view_disable="false"
             app:view_disable_bg="@drawable/register_btn_next_disable"
             app:view_shadow_distance="1dp"
-            app:view_text="Send"
+            app:view_text="@string/send"
             app:view_text_bold="true"/>
 
 

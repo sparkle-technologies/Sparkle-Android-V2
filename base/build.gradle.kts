@@ -37,6 +37,9 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -89,6 +92,7 @@ dependencies {
 
     //image
     api("com.github.bumptech.glide:glide:4.15.1")
+    api("com.github.penfeizhou.android.animation:apng:2.28.0")
 
     // cache mmkv
     api("com.tencent:mmkv:1.3.0")
@@ -99,5 +103,16 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
     api("androidx.room:room-ktx:$room_version")
+
+    // for qr code
+    api("com.huawei.hms:scanplus:2.12.0.301")
+
+    // for multi languages
+    api("com.github.getActivity:MultiLanguages:9.0")
+    api("com.beust:klaxon:5.5")
+
+    api(project(mapOf("path" to ":base_widget")))
+    
+    api("cn.therouter:router:1.2.0-rc1")
 
 }

@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_2nd"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/status_bar_height"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/profile"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16"
+                    android:visibility="invisible"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RelativeLayout
+                    android:id="@+id/ll_back"
+                    android:layout_width="@dimen/dp_60"
+                    android:layout_height="@dimen/dp_56"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_title">
+
+                    <ImageView
+                        android:id="@+id/iv_btn_back"
+                        android:layout_width="@dimen/dp_24"
+                        android:layout_height="@dimen/dp_24"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/svg_btn_left" />
+                </RelativeLayout>
+
+                <com.cyberflow.sparkle.widget.ShadowImgButton
+                    android:id="@+id/btn_setting"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_42"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_title"
+                    app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                    app:view_img_shadow_distance="1dp"
+                    app:view_img_src="@drawable/profile_ic_setting" />
+
+                <com.cyberflow.sparkle.widget.ShadowImgButton
+                    android:id="@+id/btn_share_purple"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_42"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_title"
+                    app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                    app:view_img_shadow_distance="1dp"
+                    app:view_img_src="@drawable/profile_ic_share_purple" />
+
+                <com.cyberflow.sparkle.widget.ShadowImgButton
+                    android:id="@+id/btn_wallet"
+                    android:layout_width="@dimen/dp_40"
+                    android:layout_height="@dimen/dp_42"
+                    android:layout_marginEnd="@dimen/dp_13"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+                    app:layout_constraintRight_toLeftOf="@+id/btn_setting"
+                    app:layout_constraintTop_toTopOf="@+id/tv_title"
+                    app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                    app:view_img_shadow_distance="1dp"
+                    app:view_img_src="@drawable/profile_ic_wallet" />
+
+                <View
+                    android:id="@+id/bg_avatar"
+                    android:layout_width="@dimen/dp_130"
+                    android:layout_height="@dimen/dp_138"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_17"
+                    android:background="@drawable/profile_bg_yellow"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/img_card"
+                    android:layout_width="121dp"
+                    android:layout_height="130dp"
+                    android:layout_marginStart="@dimen/dp_24"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:background="@color/white"
+                    app:cardCornerRadius="@dimen/dp_16"
+                    app:cardElevation="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                    app:strokeColor="@color/black"
+                    app:strokeWidth="@dimen/dp_1">
+
+                    <ImageView
+                        android:id="@+id/iv_avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/profile_default_avatar" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <TextView
+                    android:id="@+id/btn_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginTop="@dimen/dp_20"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_18"
+                    app:layout_constraintLeft_toRightOf="@+id/bg_avatar"
+                    app:layout_constraintTop_toTopOf="@+id/bg_avatar"
+                    tools:text="Harry Zhang" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/lv_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    app:layout_constraintLeft_toLeftOf="@+id/btn_name"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_name"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_profile_label" />
+
+                <LinearLayout
+                    android:id="@+id/lay_label_add"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:background="@drawable/profile_bg_label"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingStart="@dimen/dp_10"
+                    android:paddingTop="@dimen/dp_6"
+                    android:paddingEnd="@dimen/dp_10"
+                    android:paddingBottom="@dimen/dp_6"
+                    app:layout_constraintLeft_toLeftOf="@+id/btn_name"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_name">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_12"
+                        android:layout_height="@dimen/dp_12"
+                        android:src="@drawable/profile_ic_label_add" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_4"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="@string/describe_yourself"
+                        android:textColor="@color/color_2A2A2B"
+                        android:textSize="@dimen/sp_11" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lay_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_24"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/bg_avatar">
+
+                    <com.cyberflow.sparkle.widget.ShadowTxtButton
+                        android:id="@+id/btn_left"
+                        android:layout_width="0dp"
+                        android:visibility="gone"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="@dimen/dp_5"
+                        android:layout_weight="1"
+                        app:view_bg="@drawable/register_btn_next"
+                        app:view_shadow_distance="1dp"
+                        app:view_text="Go to Closet"
+                        app:view_text_bold="true"
+                        app:view_text_size="@dimen/sp_17" />
+
+                    <com.cyberflow.sparkle.widget.ShadowTxtButton
+                        android:id="@+id/btn_right"
+                        android:layout_width="0dp"
+                        android:visibility="gone"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp_5"
+                        android:layout_weight="1"
+                        app:view_bg="@drawable/register_btn_next"
+                        app:view_shadow_distance="1dp"
+                        app:view_text="Share"
+                        app:view_text_bold="true"
+                        app:view_text_size="@dimen/sp_17" />
+
+                </LinearLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/layTwitter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_16"
+                android:gravity="center"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/dp_14"
+                    android:layout_height="@dimen/dp_14"
+                    android:src="@drawable/profile_ic_twitter" />
+
+                <TextView
+                    android:id="@+id/tv_twitter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_4"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_11"
+                    tools:text="\@ charing" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_16"
+                android:fontFamily="@font/poppins_regular"
+                android:gravity="center_vertical|top"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_13"
+                tools:text="Fashion enthusiast. Traveler. Dreame. Always pushing boundaries and chasing after new experience" />
+
+
+            <LinearLayout
+                android:id="@+id/flutter_astro_code"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="@dimen/dp_28"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Astro code"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16" />
+
+                <FrameLayout
+                    android:id="@+id/fragment_astro_code_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="487dp"
+                    android:layout_marginTop="@dimen/dp_11" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/flutter_synastry"
+                android:layout_width="match_parent"
+                android:layout_height="520dp"
+                android:layout_marginTop="@dimen/dp_28"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_flutter_synastry_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="You &amp; Cici"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16" />
+
+                <FrameLayout
+                    android:id="@+id/fragment_synastry_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="487dp"
+                    android:layout_marginTop="@dimen/dp_11" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/lay_recommand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_40"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="@string/people_you_may_know"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_recommand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_profile_friend_recommand" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

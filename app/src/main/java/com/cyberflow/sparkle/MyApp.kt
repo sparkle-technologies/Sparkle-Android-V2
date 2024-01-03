@@ -1,13 +1,16 @@
 package com.cyberflow.sparkle
 
+import android.content.Context
 import android.util.Log
 import com.cyberflow.base.BaseApp
 import com.cyberflow.base.net.initNetSpark
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.sparkle.chat.IMManager
+import com.cyberflow.sparkle.im.DBManager
 import com.drake.brv.utils.BRV
 import com.google.android.libraries.places.api.Places
 import com.google.firebase.FirebaseApp
+import com.hjq.language.MultiLanguages
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import com.scwang.smart.refresh.footer.ClassicsFooter
@@ -15,8 +18,13 @@ import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import dev.pinkroom.walletconnectkit.core.WalletConnectKitConfig
 import dev.pinkroom.walletconnectkit.sign.dapp.WalletConnectKit
+import io.flutter.embedding.engine.FlutterEngineGroup
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MyApp : BaseApp() {
+
+    lateinit var engines: FlutterEngineGroup
 
     companion object {
 
@@ -34,27 +42,39 @@ class MyApp : BaseApp() {
                 projectId = "216dc6e2b36be94b855cd28ea41fda6d",
                 appUrl = "https://sparkle.fun",
             )
-            walletConnectKit = WalletConnectKit.builder(MyApp.instance).config(config).build()
+            walletConnectKit = WalletConnectKit.builder(instance).config(config).build()
         }
     }
 
     override fun onCreate() {
         super.onCreate()
         instance = this
-
         var st = System.currentTimeMillis()
+        runOnMainThread()
+        runOnBackgroundThread()
+        Log.e(TAG, "onCreate:  time cost: ${System.currentTimeMillis() - st}")
+    }
 
-        BRV.modelId = BR.m
+
+    // for necessary library, high priority, must be init at Main Thread
+    private fun runOnMainThread() {
+        DBManager.instance.initDB(this)
+        engines = FlutterEngineGroup(this)
         initNetSpark(cacheDir)
         CacheUtil.init(this)
-        initRefresh()
         FirebaseApp.initializeApp(this)
-        Logger.addLogAdapter(AndroidLogAdapter())
+        MultiLanguages.init(this)
+    }
 
-        IMManager.instance.initUI()
-        IMManager.instance.initSDKAndDB(this)
-
-        Log.e(TAG, "onCreate:  time cost: ${System.currentTimeMillis() - st}")
+    // low priority
+    private fun runOnBackgroundThread() {
+        GlobalScope.launch {
+            BRV.modelId = BR.m
+            initRefresh()
+            Logger.addLogAdapter(AndroidLogAdapter())
+            IMManager.instance.initUI()
+            IMManager.instance.initSDKAndDB(instance)
+        }
     }
 
     fun initGooglePlace() {
@@ -70,5 +90,14 @@ class MyApp : BaseApp() {
         SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout ->
             ClassicsFooter(this)
         }
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(MultiLanguages.attach(base))
+    }
+
+    override fun onTerminate() {
+        DBManager.instance.closeDB()
+        super.onTerminate()
     }
 }

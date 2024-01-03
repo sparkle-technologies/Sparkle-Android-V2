@@ -12,15 +12,15 @@
     <FrameLayout
         android:id="@+id/item"
         android:layout_width="match_parent"
-        android:background="@color/white"
-        android:layout_height="45dp">
+        android:layout_height="48dp"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/poppins_semibold"
             android:gravity="center|left"
             android:text="@{m.title}"
-            android:fontFamily="@font/poppins_semibold"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_16"
             android:textStyle="bold"

@@ -10,19 +10,24 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!--write permission for save QRCODE Bitmap,not for scankit itself-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <!--<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />-->
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
 
     <application
         android:name=".MyApp"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/sparkle_app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:preserveLegacyExternalStorage="true"
         android:requestLegacyExternalStorage="true"
@@ -42,6 +47,12 @@
             android:name=".login.view.LoginAct"
             android:exported="true">
 
+        </activity>
+
+        <activity
+            android:name=".BootActivity"
+            android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,30 +67,47 @@
 
         </activity>
 
-        <receiver
-            android:name=".main.view.MainLeftFragment$AlarmReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.cyberflow.sparkle.main.view.MainLeftFragment.AlarmReceiver" />
-            </intent-filter>
-        </receiver>
 
         <activity
-            android:name=".main.view.MainActivity"
+            android:name=".mainv2.view.MainActivityV2"
             android:launchMode="singleTask" />
 
-        <activity android:name=".register.view.RegisterAct" />
+        <activity
+            android:name=".register.view.RegisterAct"
+            android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".setting.view.SettingsActivity" />
-        <activity android:name=".profile.view.ProfileAct"/>
-        <activity android:name=".profile.view.ShareAct"  android:theme="@style/Theme.AppCompat.Translucent"/>
+        <activity
+            android:name=".setting.view.SettingsActivity"
+            android:launchMode="singleTask" />
 
-        <activity android:name=".im.view.ChatActivity"/>
-        <activity android:name=".im.view.IMSearchFriendAct"/>
-        <activity android:name=".im.view.IMAddFriendAct"/>
-        <activity android:name=".im.view.IMContactListAct"/>
-        <activity android:name=".im.view.IMForwardListAct"/>
-        <activity android:name=".im.view.IMScanAct"/>
+        <activity android:name=".flutter.FlutterProxyActivity" />
+
+        <activity android:name=".setting.view.LanguageActivity" />
+        <activity android:name=".setting.view.ConnectedAccountActivity" />
+
+        <activity
+            android:name=".profile.view.ProfileAct"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".profile.view.ShareAct"
+            android:theme="@style/Theme.AppCompat.Translucent" />
+
+        <activity android:name=".profile.view.CompatibilityAct" />
+        <activity android:name=".profile.view.CompatibilityRelationAct" />
+
+        <activity android:name=".im.view.ChatActivity" />
+        <activity android:name=".im.view.IMSearchFriendAct" />
+        <activity android:name=".im.view.IMAddFriendAct" />
+        <activity android:name=".im.view.IMContactListAct" />
+        <activity android:name=".im.view.IMForwardListAct" />
+        <activity android:name=".im.view.IMScanAct" />
+
+        <!-- <activity
+             android:name="io.flutter.embedding.android.FlutterActivity"
+             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+             android:hardwareAccelerated="true"
+             android:theme="@style/MyTheme"
+             android:windowSoftInputMode="adjustResize" />-->
 
     </application>
 

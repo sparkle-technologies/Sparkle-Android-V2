@@ -5,13 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import com.cyberflow.base.fragment.BaseVBFragment
-import com.cyberflow.base.model.GENDER_MAN
-import com.cyberflow.base.model.GENDER_WOMEN
 import com.cyberflow.sparkle.databinding.FragmentSelectBirthdayBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
-import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.cyberflow.sparkle.register.widget.daytimepicker.CustomDatePicker
 import com.cyberflow.sparkle.register.widget.daytimepicker.DateFormatUtils
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -20,14 +18,14 @@ import java.util.Locale
 class SelectBirthdayFragment :
     BaseVBFragment<LoginRegisterViewModel, FragmentSelectBirthdayBinding>() {
     override fun initData() {
-        actVm?.registerBean?.gender?.apply {
+        /*actVm?.registerBean?.gender?.apply {
             if(this == GENDER_MAN){
                 mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_man_divider)
             }
             if(this == GENDER_WOMEN){
                 mViewBind.btnHead.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_women_divider)
             }
-        }
+        }*/
     }
 
     private var actVm: LoginRegisterViewModel? = null
@@ -57,11 +55,13 @@ class SelectBirthdayFragment :
         mViewBind.btnRegisterNext.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(disable: Boolean) {
                  if(selectDate.isNullOrEmpty()){
-                    Snackbar.make(mViewBind.btnRegisterNext, "please select birth date", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(mViewBind.btnRegisterNext,
+                        getString(com.cyberflow.base.resources.R.string.please_select_birth_date), Snackbar.LENGTH_SHORT).show()
                     return
                 }
                 if(selectTime.isNullOrEmpty()){
-                    Snackbar.make(mViewBind.btnRegisterNext, "please select birth time", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(mViewBind.btnRegisterNext,
+                        getString(com.cyberflow.base.resources.R.string.please_select_birth_time), Snackbar.LENGTH_SHORT).show()
                     return
                }
                 if(disable) return
@@ -117,7 +117,7 @@ class SelectBirthdayFragment :
             beginTimestamp,
             endTimestamp
         ).apply {
-            setTitle("Set Date");
+            setTitle(getString(com.cyberflow.base.resources.R.string.set_date));
             setCancelable(true)
             setCanShowPreciseTime(false)
             setScrollLoop(false)
@@ -147,7 +147,7 @@ class SelectBirthdayFragment :
                 beginTime,
                 endTime
             ).apply {
-                setTitle("Set Time")
+                setTitle(getString(com.cyberflow.base.resources.R.string.set_time))
                 setCancelable(true)
                 setCanShowPreciseDate(false)
                 setCanShowPreciseTime(true)

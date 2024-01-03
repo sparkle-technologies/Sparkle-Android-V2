@@ -16,7 +16,7 @@ data class User(
     var default_nft_list: List<NftItem>? = null ,
     var gender: Int = 0,
     var label_list: List<String>? = null ,
-    var label_list_v2: List<String>? = null ,
+    var label_list_v2: List<LabelV2>? = null ,
     var location_info: LocationInfo? = null ,
     var nft_list: List<NftItem>? = null ,
     var nick: String = "",
@@ -45,8 +45,25 @@ data class NftItem(
 
 @Serializable
 data class StartSignItem(
+    var PlanetId: Int = 0,
     var PlanetEnglish: String = "",
+    var PlanetName: String = "",
     var SignEnglish: String = "",
+    var SignName: String = "",
+    var InSignIndex: Int = 0,
     var Desc: String = "",
     var Labels: List<String>,
 )
+
+@Serializable
+data class LabelV2(
+    var label: String = "",
+    var planet: String = "",
+    var sign: String = "",
+)
+
+@Serializable
+data class BindingResult(
+    var bind_list: List<BindBean>? = null
+)
+

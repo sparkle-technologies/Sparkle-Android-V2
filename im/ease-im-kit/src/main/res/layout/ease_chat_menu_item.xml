@@ -10,7 +10,7 @@
     <com.cyberflow.sparkle.widget.ShadowImgButton
         android:id="@+id/image"
         android:layout_width="@dimen/dp_64"
-        android:layout_height="@dimen/dp_64"
+        android:layout_height="@dimen/dp_66"
         app:view_bg_src="@drawable/im_chat_menu_shape"
         app:view_img_shadow_distance="1dp"
         app:view_img_src="@drawable/im_ic_menu_camera" />

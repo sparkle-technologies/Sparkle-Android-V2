@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white_2nd">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/status_bar_height"
+            android:fontFamily="@font/poppins_semibold"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <RelativeLayout
+            android:id="@+id/ll_back"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_56"
+            android:elevation="@dimen/dp_10"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_title">
+
+            <ImageView
+                android:id="@+id/iv_btn_back"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:layout_centerInParent="true"
+                android:background="@drawable/svg_btn_left" />
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/bg"
+                android:layout_width="541dp"
+                android:layout_height="541dp"
+                android:layout_marginStart="@dimen/dp_17"
+                android:layout_marginTop="-11dp"
+                android:scaleX="1.35"
+                android:scaleY="1.35"
+                android:src="@drawable/circle_bg"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/iv_anchor"
+                android:layout_width="398dp"
+                android:layout_height="398dp"
+                app:layout_constraintBottom_toBottomOf="@+id/bg"
+                app:layout_constraintLeft_toLeftOf="@+id/bg"
+                app:layout_constraintRight_toRightOf="@+id/bg"
+                app:layout_constraintTop_toTopOf="@+id/bg" />
+
+            <ImageView
+                android:id="@+id/iv_rotate"
+                android:layout_width="386dp"
+                android:layout_height="386dp"
+                android:scaleX="1.35"
+                android:scaleY="1.35"
+                android:src="@drawable/circle_rotate"
+                app:layout_constraintBottom_toBottomOf="@+id/bg"
+                app:layout_constraintLeft_toLeftOf="@+id/bg"
+                app:layout_constraintRight_toRightOf="@+id/bg"
+                app:layout_constraintTop_toTopOf="@+id/bg" />
+
+            <ImageView
+                android:id="@+id/iv_arrow"
+                android:layout_width="386dp"
+                android:layout_height="386dp"
+                android:scaleX="1.35"
+                android:scaleY="1.35"
+                android:src="@drawable/circle_arrow"
+                app:layout_constraintBottom_toBottomOf="@+id/bg"
+                app:layout_constraintLeft_toLeftOf="@+id/bg"
+                app:layout_constraintRight_toRightOf="@+id/bg"
+                app:layout_constraintTop_toTopOf="@+id/bg" />
+
+
+            <com.wuyr.fanlayout.FanLayout
+                android:id="@+id/fan_layout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:auto_select="true"
+                app:bearing_color="#9F55"
+                app:bearing_gravity="left"
+                app:bearing_layout="@layout/bearing_view"
+                app:bearing_offset="270dp"
+                app:bearing_radius="20dp"
+                app:bearing_type="view"
+                app:item_layout_mode="average"
+                app:layout_constraintBottom_toBottomOf="@+id/bg"
+                app:layout_constraintLeft_toLeftOf="@+id/bg"
+                app:layout_constraintRight_toRightOf="@+id/bg"
+                app:layout_constraintTop_toTopOf="@+id/bg" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_arrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/bg2"
+                android:layout_width="541dp"
+                android:layout_height="541dp"
+                android:layout_marginStart="@dimen/dp_17"
+                android:layout_marginTop="-11dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/iv_arrow2"
+                android:layout_width="386dp"
+                android:layout_height="386dp"
+                app:layout_constraintBottom_toBottomOf="@+id/bg2"
+                app:layout_constraintLeft_toLeftOf="@+id/bg2"
+                app:layout_constraintRight_toRightOf="@+id/bg2"
+                app:layout_constraintTop_toTopOf="@+id/bg2" />
+
+            <View
+                android:id="@+id/line"
+                android:layout_width="@dimen/dp_1"
+                android:layout_height="@dimen/dp_20"
+                android:layout_marginStart="42dp"
+                android:layout_marginBottom="54dp"
+                android:background="@drawable/dash_line_divider_vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_arrow2"
+                app:layout_constraintLeft_toLeftOf="@+id/iv_arrow2" />
+
+            <TextView
+                android:id="@+id/tv_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="-3.3dp"
+                android:background="@drawable/compatibility_bg_selected"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="center"
+                android:paddingStart="@dimen/dp_22"
+                android:paddingEnd="@dimen/dp_22"
+                android:text="Sagittarius"
+                android:textColor="@color/color_8B82DB"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintLeft_toLeftOf="@+id/dot"
+                app:layout_constraintRight_toRightOf="@+id/dot"
+                app:layout_constraintTop_toBottomOf="@+id/dot" />
+
+            <View
+                android:id="@+id/dot"
+                android:layout_width="@dimen/dp_5"
+                android:layout_height="@dimen/dp_5"
+                android:background="@drawable/main_ic_horoscope_dot"
+                app:layout_constraintLeft_toLeftOf="@+id/line"
+                app:layout_constraintRight_toRightOf="@+id/line"
+                app:layout_constraintTop_toBottomOf="@+id/line" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.cyberflow.sparkle.profile.widget.CompatibilityFrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_37">
+
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/barLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/color_transparent">
+
+                    <!-- android:layout_height="423dp"  -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/lay_pan"
+                        android:layout_width="match_parent"
+                        android:layout_height="423dp"
+                        app:layout_scrollFlags="exitUntilCollapsed|scroll|enterAlwaysCollapsed">
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+                <androidx.core.widget.NestedScrollView
+                    android:id="@+id/scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/compatibility_bg_content"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/dp_20"
+                        android:paddingTop="@dimen/dp_56"
+                        android:paddingEnd="@dimen/dp_20"
+                        android:paddingBottom="@dimen/dp_116">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_extrabold"
+                            android:text="Compatibility"
+                            android:textColor="@color/black"
+                            android:textSize="36sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_10"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_a"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center_vertical"
+                                tools:text="Harry"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sp_17" />
+
+                            <ImageView
+                                android:id="@+id/iv_anima"
+                                android:layout_width="@dimen/dp_95"
+                                android:layout_height="@dimen/dp_37"
+                                android:layout_marginStart="@dimen/dp_20"
+                                android:layout_marginEnd="@dimen/dp_20"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/compatibility_bg_diogram" />
+
+                            <TextView
+                                android:id="@+id/tv_b"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/poppins_medium"
+                                android:gravity="center_vertical"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/sp_17" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_21"
+                            android:fontFamily="@font/poppins_regular"
+                            android:minHeight="104dp"
+                            tools:text="Choose a constellation to see how you guys fit."
+                            android:textColor="@color/color_7d7d80"
+                            android:textSize="@dimen/sp_14" />
+
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        </com.cyberflow.sparkle.profile.widget.CompatibilityFrameLayout>
+
+        <LinearLayout
+            android:id="@+id/layBottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginBottom="-2dp"
+                android:background="@drawable/compatibility_bg_btn" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_83"
+                android:background="@color/color_F5F5F5"
+                android:paddingStart="@dimen/dp_20"
+                android:paddingEnd="@dimen/dp_20"
+                android:paddingBottom="@dimen/dp_33"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <!-- state 1 -->
+                <com.cyberflow.sparkle.widget.ShadowTxtButton
+                    android:id="@+id/btn_invite_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_48"
+                    android:visibility="gone"
+                    app:view_bg="@drawable/register_btn_next"
+                    app:view_shadow_distance="1dp"
+                    app:view_text="Invite your friends for deeper insights>>"
+                    app:view_text_bold="true"
+                    app:view_text_size="@dimen/sp_16" />
+
+                <!-- state 2 -->
+
+                <LinearLayout
+                    android:id="@+id/lay_invite_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.cyberflow.sparkle.widget.ShadowTxtButton
+                        android:id="@+id/btn_invite_two"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/dp_48"
+                        android:layout_weight="1"
+                        app:view_bg="@drawable/register_btn_next"
+                        app:view_shadow_distance="1dp"
+                        app:view_text="Invite friends for deeper insights"
+                        app:view_text_bold="true"
+                        app:view_text_size="@dimen/sp_16" />
+
+                    <com.cyberflow.sparkle.widget.ShadowImgButton
+                        android:id="@+id/btn_invite_list"
+                        android:layout_width="@dimen/dp_43"
+                        android:layout_height="@dimen/dp_44"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/dp_6"
+                        app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                        app:view_img_shadow_distance="1dp"
+                        app:view_img_src="@drawable/compatibility_ic_list" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

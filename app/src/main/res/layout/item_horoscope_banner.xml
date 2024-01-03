@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="m"
+            type="com.cyberflow.sparkle.main.view.FriendMessageInfo" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/register_bg_gender_white">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/lay_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/barLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_transparent"
+                android:paddingTop="@dimen/dp_15">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/lay_pan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:layout_marginEnd="@dimen/dp_20"
+                    app:layout_scrollFlags="exitUntilCollapsed|scroll|enterAlwaysCollapsed">
+
+                    <TextView
+                        android:id="@+id/tv_horoscope_title"
+                        style="@style/font_semi_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_11"
+                        android:text="Today's Horoscope"
+                        android:textColor="@color/color_000000"
+                        android:textSize="@dimen/sp_18"
+                        android:visibility="gone"
+                        android:textStyle="bold"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!--  semi circle progress bar -->
+
+                    <com.cyberflow.sparkle.main.widget.SemiCircleArcProgressBar
+                        android:id="@+id/smc"
+                        android:layout_width="150dp"
+                        android:layout_height="83dp"
+                        android:layout_marginTop="@dimen/dp_10"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_horoscope_title"
+                        app:percent="-10"
+                        app:progressBarColor="@color/color_8B82DB"
+                        app:progressBarWidth="17"
+                        app:progressPlaceHolderColor="@color/color_000000"
+                        app:progressPlaceHolderWidth="25" />
+
+                    <View
+                        android:id="@+id/line_smc"
+                        android:layout_width="160dp"
+                        android:layout_height="@dimen/dp_2"
+                        android:background="@drawable/main_bg_luck_point"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/smc" />
+
+                    <TextView
+                        android:id="@+id/tv_luck_point"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_light"
+                        android:text="Lucky Point"
+                        android:textColor="@color/color_000000_57"
+                        android:textSize="@dimen/sp_10"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toTopOf="@+id/line_smc"
+                        app:layout_constraintLeft_toLeftOf="@+id/line_smc"
+                        app:layout_constraintRight_toRightOf="@+id/line_smc" />
+
+                    <TextView
+                        android:id="@+id/tv_range"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp_1"
+                        android:fontFamily="@font/sigmarone"
+                        android:gravity="bottom"
+                        android:text="--"
+                        android:textColor="@color/color_000000"
+                        android:textSize="@dimen/sp_40"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_luck_point"
+                        app:layout_constraintLeft_toLeftOf="@+id/line_smc"
+                        app:layout_constraintRight_toRightOf="@+id/line_smc" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- love  fortune  career -->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_collapseMode="pin"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:layout_marginEnd="@dimen/dp_10">
+
+                    <View
+                        android:id="@+id/bg_page"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_33"
+                        android:background="@drawable/main_bg_page_white_200_radius"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:id="@+id/bg_tmp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/dp_2"
+                        android:layout_marginEnd="@dimen/dp_2"
+                        android:background="@drawable/main_bg_page_half_left_200_radius"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_page"
+                        app:layout_constraintRight_toLeftOf="@+id/line_left"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+                    <View
+                        android:id="@+id/bg_fortune"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_margin="@dimen/dp_2"
+                        android:background="@null"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_page"
+                        app:layout_constraintLeft_toRightOf="@+id/line_left"
+                        app:layout_constraintRight_toLeftOf="@+id/line_right"
+                        app:layout_constraintTop_toTopOf="@+id/bg_page" />
+
+                    <View
+                        android:id="@+id/line_left"
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:layout_marginBottom="@dimen/dp_4"
+                        android:background="@drawable/dash_line_divider_vertical"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toRightOf="@+id/bg_love"
+                        app:layout_constraintRight_toLeftOf="@+id/bg_fortune"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+                    <View
+                        android:id="@+id/line_right"
+                        android:layout_width="@dimen/dp_1"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/dp_4"
+                        android:layout_marginBottom="@dimen/dp_4"
+                        android:background="@drawable/dash_line_divider_vertical"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toRightOf="@+id/bg_fortune"
+                        app:layout_constraintRight_toLeftOf="@+id/bg_career"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+                    <View
+                        android:id="@+id/bg_love"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/dp_2"
+                        android:layout_marginEnd="@dimen/dp_2"
+                        android:background="@null"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_page"
+                        app:layout_constraintRight_toLeftOf="@+id/line_left"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+                    <View
+                        android:id="@+id/bg_career"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="@dimen/dp_2"
+                        android:layout_marginEnd="@dimen/dp_2"
+                        android:background="@null"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toRightOf="@+id/line_right"
+                        app:layout_constraintRight_toRightOf="@+id/bg_page"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+
+                    <!-- for txt and icon -->
+
+                    <TextView
+                        android:id="@+id/tv_love"
+                        style="@style/main_page_tv_title"
+                        android:drawableLeft="@drawable/main_ic_love"
+                        android:text="--"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_love"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_love"
+                        app:layout_constraintRight_toRightOf="@+id/bg_love"
+                        app:layout_constraintTop_toTopOf="@+id/bg_love" />
+
+                    <TextView
+                        android:id="@+id/tv_fortune"
+                        style="@style/main_page_tv_title"
+                        android:drawableLeft="@drawable/main_ic_fortune"
+                        android:text="--"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_fortune"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_fortune"
+                        app:layout_constraintRight_toRightOf="@+id/bg_fortune"
+                        app:layout_constraintTop_toTopOf="@+id/bg_fortune" />
+
+                    <TextView
+                        android:id="@+id/tv_career"
+                        style="@style/main_page_tv_title"
+                        android:drawableLeft="@drawable/main_ic_career"
+                        android:text="--"
+                        app:layout_constraintBottom_toBottomOf="@+id/bg_career"
+                        app:layout_constraintLeft_toLeftOf="@+id/bg_career"
+                        app:layout_constraintRight_toRightOf="@+id/bg_career"
+                        app:layout_constraintTop_toTopOf="@+id/bg_career" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.drake.statelayout.StateLayout
+                android:id="@+id/state"
+                android:layout_width="match_parent"
+                android:elevation="-10dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp_10"
+                android:layout_marginTop="-20dp"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:layout_marginBottom="@dimen/dp_10"
+                app:error_layout="@layout/layout_error_top"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:loading_layout="@layout/layout_loading_top">
+
+                <!-- for item -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_horoscope" />
+
+            </com.drake.statelayout.StateLayout>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_cora_analyzing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_40"
+                android:gravity="center"
+                android:visibility="invisible"
+                android:fontFamily="@font/poppins_regular"
+                android:text="@string/cora_is_analyzing"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.cyberflow.sparkle.widget.ShadowTxtButton
+                android:id="@+id/btn_cora_comming_soon"
+                android:layout_width="@dimen/dp_155"
+                android:layout_height="@dimen/dp_48"
+                android:layout_marginTop="@dimen/dp_70"
+                android:visibility="invisible"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_cora_analyzing"
+                app:view_bg="@drawable/main_horoscope_btn_coming_soon"
+                app:view_click_enable="false"
+                app:view_shadow_distance="1dp"
+                app:view_text="Coming Soon"
+                app:view_text_bold="true"
+                app:view_text_color="@color/color_7D7D80"
+                app:view_text_size="@dimen/sp_16" />
+
+
+            <TextView
+                android:id="@+id/tv_hint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginEnd="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_40"
+                android:visibility="invisible"
+                android:fontFamily="@font/poppins_regular"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:text=""
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</layout>

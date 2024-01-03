@@ -7,6 +7,7 @@
 
     <dimen name="status_bar_height">44dp</dimen>
 
+    <dimen name="dp_0">0dp</dimen>
     <dimen name="dp_0_1">0.1dp</dimen>
     <dimen name="dp_0_5">0.5dp</dimen>
     <dimen name="dp_1">1dp</dimen>
@@ -75,14 +76,21 @@
     <dimen name="dp_63">63dp</dimen>
     <dimen name="dp_64">64dp</dimen>
     <dimen name="dp_65">65dp</dimen>
+    <dimen name="dp_66">66dp</dimen>
     <dimen name="dp_68">68dp</dimen>
 
     <dimen name="dp_70">70dp</dimen>
     <dimen name="dp_73">73dp</dimen>
     <dimen name="dp_74">74dp</dimen>
+    <dimen name="dp_78">78dp</dimen>
     <dimen name="dp_80">80dp</dimen>
+    <dimen name="dp_81">81dp</dimen>
+    <dimen name="dp_83">83dp</dimen>
+    <dimen name="dp_85">85dp</dimen>
     <dimen name="dp_86">86dp</dimen>
     <dimen name="dp_90">90dp</dimen>
+    <dimen name="dp_95">95dp</dimen>
+    <dimen name="dp_97">97dp</dimen>
     <dimen name="dp_100">100dp</dimen>
     <dimen name="dp_103">103dp</dimen>
     <dimen name="dp_108">108dp</dimen>
@@ -95,9 +103,12 @@
     <dimen name="dp_140">140dp</dimen>
     <dimen name="dp_150">150dp</dimen>
     <dimen name="dp_154">154dp</dimen>
+    <dimen name="dp_155">155dp</dimen>
+    <dimen name="dp_157">157dp</dimen>
     <dimen name="dp_158">158dp</dimen>
     <dimen name="dp_160">160dp</dimen>
     <dimen name="dp_166">166dp</dimen>
+    <dimen name="dp_169">169dp</dimen>
     <dimen name="dp_188">188dp</dimen>
     <dimen name="dp_190">190dp</dimen>
     <dimen name="dp_194">194dp</dimen>
@@ -117,6 +128,7 @@
     <dimen name="sp_4">4sp</dimen>
     <dimen name="sp_5">5sp</dimen>
     <dimen name="sp_8_6">8.6sp</dimen>
+    <dimen name="sp_9">9sp</dimen>
     <dimen name="sp_10">10sp</dimen>
     <dimen name="sp_11">11sp</dimen>
     <dimen name="sp_12">12sp</dimen>

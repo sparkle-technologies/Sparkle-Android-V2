@@ -3,7 +3,6 @@ package com.cyberflow.sparkle.widget
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,7 +12,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
-import com.cyberflow.base.util.dp2px
 
 class ShadowTxtButton : ConstraintLayout {
 
@@ -44,6 +42,7 @@ class ShadowTxtButton : ConstraintLayout {
     private var bg: Int = 0          // button background drawable, default is R.drawable.button_start
     private var bgDisable: Int = 0
     private var disable: Boolean = false
+    private var viewClickEnable: Boolean = true
     private var drawableLeft: Int = -1
 
     private fun attributes(attrs: AttributeSet?) {
@@ -52,6 +51,7 @@ class ShadowTxtButton : ConstraintLayout {
             com.cyberflow.base.resources.R.styleable.shadowButton
         )
         distance = dp2px(
+            context,
             mTypedArray.getDimension(
                 com.cyberflow.base.resources.R.styleable.shadowButton_view_shadow_distance,
                 2.0f
@@ -72,6 +72,8 @@ class ShadowTxtButton : ConstraintLayout {
         bgDisable = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_disable_bg, com.cyberflow.base.resources.R.drawable.register_btn_next_disable)
 
         disable = mTypedArray.getBoolean(com.cyberflow.base.resources.R.styleable.shadowButton_view_disable, false)
+
+        viewClickEnable = mTypedArray.getBoolean(com.cyberflow.base.resources.R.styleable.shadowButton_view_click_enable, true)
 
         drawableLeft = mTypedArray.getResourceId(com.cyberflow.base.resources.R.styleable.shadowButton_view_left_drawable, -1)
 
@@ -117,7 +119,7 @@ class ShadowTxtButton : ConstraintLayout {
         }
 
         if(txt_size > 0){
-            Log.e("TAG", "============================= txt_size=$txt_size"  )
+//            Log.e("TAG", "============================= txt_size=$txt_size"  )
             tvNormal?.setTextSize(TypedValue.COMPLEX_UNIT_PX, txt_size)
             tvClicking?.setTextSize(TypedValue.COMPLEX_UNIT_PX, txt_size)
         }
@@ -129,25 +131,27 @@ class ShadowTxtButton : ConstraintLayout {
             }
         }
 
-        ivClicking?.setOnClickListener {
-            listener?.clicked(disable)
-        }
+        if(viewClickEnable){
+            ivClicking?.setOnClickListener {
+                listener?.clicked(disable)
+            }
 
-        ivClicking?.setOnTouchListener { v, motionEvent ->
-            staticButtonTouchAnim(
-                motionEvent,
-                ivClicking,
-                ivBgShadow,
-                tvClicking,
-                if(disable) bgDisable else bg,
-                com.cyberflow.base.resources.R.drawable.button_start_shadow
-            )
-            false
+            ivClicking?.setOnTouchListener { v, motionEvent ->
+                staticButtonTouchAnim(
+                    motionEvent,
+                    ivClicking,
+                    ivBgShadow,
+                    tvClicking,
+                    if(disable) bgDisable else bg,
+                    com.cyberflow.base.resources.R.drawable.button_start_shadow
+                )
+                false
+            }
         }
     }
 
     fun disableBg(disable: Boolean){
-        Log.e("TAG", "disableBg: disable=$disable", )
+//        Log.e("TAG", "disableBg: disable=$disable", )
         this.disable = disable
         if(disable){
             ResourcesCompat.getColor(resources, txt_disable_color, null).apply {
@@ -202,4 +206,9 @@ class ShadowTxtButton : ConstraintLayout {
             }
         }
     }
+}
+
+fun dp2px(context: Context, dpValue: Float): Int {
+    val scale = context.resources.displayMetrics.density
+    return (dpValue * scale + 0.5f).toInt()
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="m"
+            type="com.cyberflow.sparkle.im.widget.ForwardTxt" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_13">
+
+        <com.vanniktech.emoji.EmojiTextView
+            android:id="@+id/tv_msg_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:fontFamily="@font/poppins_regular"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:gravity="left|center"
+            android:textColor="@color/color_7d7d80"
+            android:textSize="@dimen/sp_13"
+            tools:text="Morning, just send me a photo! I can’t wait!" />
+
+    </LinearLayout>
+
+
+</layout>

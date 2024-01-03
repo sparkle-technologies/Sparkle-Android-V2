@@ -14,11 +14,10 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_img"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_108"
-            android:layout_marginEnd="@dimen/dp_20"
             android:layout_marginBottom="@dimen/dp_100"
             android:fitsSystemWindows="false"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -27,7 +26,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.luck.picture.lib.photoview.PhotoView
-                android:id="@+id/coverImageView"
+                android:id="@+id/photoView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
@@ -42,7 +41,7 @@
             <com.cyberflow.sparkle.widget.ShadowImgButton
                 android:id="@+id/shadow_btn_delete"
                 android:layout_width="@dimen/dp_40"
-                android:layout_height="@dimen/dp_40"
+                android:layout_height="@dimen/dp_42"
                 android:layout_marginStart="@dimen/dp_22"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -53,7 +52,7 @@
             <com.cyberflow.sparkle.widget.ShadowImgButton
                 android:id="@+id/shadow_btn_download"
                 android:layout_width="@dimen/dp_40"
-                android:layout_height="@dimen/dp_40"
+                android:layout_height="@dimen/dp_42"
                 android:layout_marginEnd="@dimen/dp_22"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/shadow_btn_delete"
@@ -64,13 +63,84 @@
             <com.cyberflow.sparkle.widget.ShadowImgButton
                 android:id="@+id/shadow_btn_share"
                 android:layout_width="@dimen/dp_40"
-                android:layout_height="@dimen/dp_40"
+                android:layout_height="@dimen/dp_42"
                 android:layout_marginEnd="@dimen/dp_10"
+                app:view_bg_src="@drawable/main_ic_add_friends_bg"
                 app:layout_constraintRight_toLeftOf="@+id/shadow_btn_download"
                 app:layout_constraintTop_toTopOf="@+id/shadow_btn_download"
-                app:view_bg_src="@drawable/main_ic_add_friends_bg"
                 app:view_img_shadow_distance="1dp"
                 app:view_img_src="@drawable/im_ic_preview_share" />
+
+            <com.cyberflow.sparkle.widget.ShadowImgButton
+                android:id="@+id/shadow_btn_scan"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_42"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:visibility="gone"
+                app:layout_constraintRight_toLeftOf="@+id/shadow_btn_share"
+                app:layout_constraintTop_toTopOf="@+id/shadow_btn_share"
+                app:view_bg_src="@drawable/main_ic_add_friends_bg"
+                app:view_img_shadow_distance="1dp"
+                app:view_img_src="@drawable/im_ic_preview_scan" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RelativeLayout
+            android:id="@+id/lay_scan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:layout_marginBottom="@dimen/dp_100"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/iv_anima"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/qr_bg_animator"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lay_result"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@+id/lay_img"
+            app:layout_constraintBottom_toBottomOf="@+id/lay_img"
+            android:background="@color/color_252525">
+
+            <View
+                android:id="@+id/lay_no_result"
+                android:layout_width="145dp"
+                android:layout_height="145dp"
+                android:background="@drawable/share_bg_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:layout_width="@dimen/dp_33"
+                android:layout_height="@dimen/dp_33"
+                android:layout_marginTop="@dimen/dp_32"
+                android:src="@drawable/scan_qr_ic_no_result"
+                app:layout_constraintLeft_toLeftOf="@+id/lay_no_result"
+                app:layout_constraintRight_toRightOf="@+id/lay_no_result"
+                app:layout_constraintTop_toTopOf="@+id/lay_no_result" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_33"
+                android:fontFamily="@font/poppins_regular"
+                android:text="@string/no_results"
+                android:textSize="@dimen/sp_16"
+                app:layout_constraintBottom_toBottomOf="@+id/lay_no_result"
+                app:layout_constraintLeft_toLeftOf="@+id/lay_no_result"
+                app:layout_constraintRight_toRightOf="@+id/lay_no_result" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

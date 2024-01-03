@@ -17,7 +17,6 @@ import com.hyphenate.chat.EMClient
 import com.hyphenate.chat.EMUserInfo
 import com.hyphenate.easeui.domain.EaseUser
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
-import com.luck.picture.lib.utils.ToastUtils.showToast
 import kotlinx.coroutines.launch
 
 
@@ -171,7 +170,7 @@ fun <T> Activity.parseResource(response: Resource<T>?, callback: OnResourceParse
     } else if (response.status === Status.ERROR) {
         callback.hideLoading()
         if (!callback.hideErrorMsg) {
-            showToast(this, response.message)
+//            showToast(this, response.message)
         }
         callback.onError(response.errorCode, response.message)
     } else if (response.status === Status.LOADING) {

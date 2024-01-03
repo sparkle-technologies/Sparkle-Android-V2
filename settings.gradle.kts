@@ -15,7 +15,7 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
@@ -28,6 +28,8 @@ dependencyResolutionManagement {
         maven { url = uri("https://mirrors.tencent.com/nexus/repository/maven-public/") }
 
         maven { url = uri("https://developer.huawei.com/repo/") }
+
+        maven { url = uri("https://storage.googleapis.com/download.flutter.io") }
     }
 }
 
@@ -54,6 +56,9 @@ include(":dapp")
 project(":core").projectDir = File("wallet_connector/core")
 project(":sdkdapp").projectDir = File("wallet_connector/sdkdapp")
 project(":dapp").projectDir = File("wallet_connector/dapp")
+
+// for flutter import
+apply(from = "flutter_settings.gradle")
 
 /**
  * 开发规范

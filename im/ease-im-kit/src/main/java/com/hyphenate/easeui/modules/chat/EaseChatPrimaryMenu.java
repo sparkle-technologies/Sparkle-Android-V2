@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.RequiresApi;
 
+import com.cyberflow.sparkle.widget.ShadowTxtButton;
 import com.hyphenate.easeui.R;
 import com.hyphenate.easeui.modules.chat.interfaces.EaseChatPrimaryMenuListener;
 import com.hyphenate.easeui.modules.chat.interfaces.IChatPrimaryMenu;
@@ -32,6 +33,7 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     private ImageView faceChecked;
     private CheckBox buttonMore;
     private CheckBox buttonSend;
+    private ShadowTxtButton btnSayHi;
 
     private EaseChatPrimaryMenuListener listener;
 
@@ -61,9 +63,47 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         buttonMore = findViewById(R.id.btn_more);
         buttonSend = findViewById(R.id.btn_send);
 
+        btnSayHi = findViewById(R.id.btn_say_hi);
+
+        btnSayHi.setClickListener(new ShadowTxtButton.ShadowClickListener() {
+            @Override
+            public void clicked(boolean disable) {
+                if(System.currentTimeMillis() - lastClickTime > 1000){
+                    btnSayHi.disableBg(false);
+                    isHiCoraClicked = true;
+                    listener.onSendBtnClicked(getContext().getString(com.cyberflow.base.resources.R.string.hi_cora));
+                    lastClickTime = System.currentTimeMillis();
+                }
+            }
+        });
+
         showNormalStatus();
 
         initListener();
+    }
+
+    private long lastClickTime = 0;
+
+    private boolean isHiCoraClicked = false;
+
+    @Override
+    public boolean isHiCoraCliked() {
+        boolean result = isHiCoraClicked;
+        isHiCoraClicked = false;
+        return result;
+    }
+
+    private boolean isCora = false;
+    @Override
+    public void showHiCoraStatus() {
+        Log.e(TAG, "showHiCoraStatus: " );
+        isCora = true;
+        btnSayHi.setVisibility(VISIBLE);
+        editText.setHint(R.string.ask_cora_a_question);
+        buttonSend.setVisibility(View.VISIBLE);
+        buttonMore.setVisibility(View.GONE);
+        faceNormal.setVisibility(View.GONE);
+        faceChecked.setVisibility(View.GONE);
     }
 
     private void initListener() {
@@ -82,8 +122,11 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
         editText.removeTextChangedListener(this);
     }
 
+    private boolean stopEveryThing = false;
+
     @Override
     public void onClick(View v) {
+        if(stopEveryThing) return;
         int id = v.getId();
         if (id == R.id.btn_send) {  //发送
             if (listener != null) {
@@ -187,19 +230,39 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
 
     private void checkSendButton() {
         if (TextUtils.isEmpty(editText.getText().toString().trim())) {
-            buttonMore.setVisibility(VISIBLE);
-            buttonSend.setVisibility(GONE);
+            if(isCora){
+                faceNormal.setVisibility(GONE);
+                faceChecked.setVisibility(GONE);
+                buttonMore.setVisibility(GONE);
+                buttonSend.setVisibility(GONE);
+            }else{
+                buttonMore.setVisibility(VISIBLE);
+                buttonSend.setVisibility(GONE);
+            }
         } else {
-            buttonMore.setVisibility(GONE);
-            buttonSend.setVisibility(VISIBLE);
+            if(isCora){
+                faceNormal.setVisibility(GONE);
+                faceChecked.setVisibility(GONE);
+                buttonMore.setVisibility(GONE);
+                buttonMore.setVisibility(GONE);
+                buttonSend.setVisibility(VISIBLE);
+            }else{
+                buttonMore.setVisibility(GONE);
+                buttonSend.setVisibility(VISIBLE);
+            }
         }
     }
 
     @Override
     public void showEmojOrKeyboard(boolean showEmoj) {
 //        Log.e(TAG, "showEmojOrKeyboard: showEmoj=" + showEmoj );
-        faceNormal.setVisibility(showEmoj ? View.VISIBLE : View.INVISIBLE);
-        faceChecked.setVisibility(!showEmoj ? View.VISIBLE : View.INVISIBLE);
+        if(isCora){
+            faceNormal.setVisibility(View.INVISIBLE);
+            faceChecked.setVisibility(View.INVISIBLE);
+        }else{
+            faceNormal.setVisibility(showEmoj ? View.VISIBLE : View.INVISIBLE);
+            faceChecked.setVisibility(!showEmoj ? View.VISIBLE : View.INVISIBLE);
+        }
     }
 
 
@@ -225,6 +288,32 @@ public class EaseChatPrimaryMenu extends RelativeLayout implements IChatPrimaryM
     @Override
     public void afterTextChanged(Editable s) {
         Log.e("TAG", this.getClass().getSimpleName() + " afterTextChanged s:" + s);
+    }
+
+    @Override
+    public void startWaitingStatus() {
+        // 无法操作模式
+        stopEveryThing = true;
+        editText.setEnabled(false);
+        editText.setHint(R.string.waiting_for_response);
+    }
+
+    @Override
+    public void endWaitingStatus() {
+        // 恢复操作
+        stopEveryThing = false;
+        editText.setEnabled(true);
+        editText.setHint(R.string.ask_cora_a_question);
+    }
+
+    @Override
+    public void hideHiCoraBtn(boolean hide) {
+        if(hide){
+            btnSayHi.setVisibility(GONE);
+        }else{
+            btnSayHi.setVisibility(VISIBLE);
+            editText.setHint(R.string.ask_cora_a_question);
+        }
     }
 }
 

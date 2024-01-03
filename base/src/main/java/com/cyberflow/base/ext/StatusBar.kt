@@ -19,6 +19,7 @@ package com.cyberflow.base.ext
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -26,6 +27,7 @@ import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.annotation.ColorInt
@@ -358,3 +360,38 @@ val Context?.statusBarHeight: Int
         }
         return result
     } // </editor-fold>
+
+
+// activity 导航栏为透明
+fun Activity.transparentNavigationBar(window: Window) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        window.isNavigationBarContrastEnforced = false
+    }
+    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+    var systemUiVisibility = window.decorView.systemUiVisibility
+    systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+    window.decorView.systemUiVisibility = systemUiVisibility
+    window.navigationBarColor = Color.TRANSPARENT
+
+    //设置导航栏按钮或导航条颜色
+//        setNavigationBarBtnColor(window, NightMode.isNightMode(window.context))
+    setNavigationBarBtnColor(window, isNightMode(window.context))
+}
+
+private fun isNightMode(context: Context): Boolean {
+    val nightModeFlags = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+    return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
+}
+
+private fun setNavigationBarBtnColor(window: Window, night: Boolean) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        var systemUiVisibility = window.decorView.systemUiVisibility
+        systemUiVisibility = if (night) { //白色按钮
+            systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        } else { //黑色按钮
+            systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv()
+        }
+        window.decorView.systemUiVisibility = systemUiVisibility
+    }
+}

@@ -19,7 +19,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -83,6 +82,51 @@ public class EaseImageUtils extends com.hyphenate.util.ImageUtils {
             maxSize[1] = (int) (screenInfo[0] / 2);
         }
         return maxSize;
+    }
+
+    public static void showImageImg(Context context, ImageView imageView, EMMessage message){
+        EMMessageBody body = message.getBody();
+        if (!(body instanceof EMImageMessageBody)) {
+            return ;
+        }
+
+        //获取图片本地资源地址
+        Uri imageUri = ((EMImageMessageBody) body).getLocalUri();
+        if (!EaseFileUtils.isFileExistByUri(context, imageUri)) {
+            imageUri = ((EMImageMessageBody) body).thumbnailLocalUri();
+            EMLog.d("tag", "current show small view thumbnail file: uri:" + imageUri + " exist: " + EaseFileUtils.isFileExistByUri(context, imageUri));
+            if (!EaseFileUtils.isFileExistByUri(context, imageUri)) {
+                //context.revokeUriPermission(imageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                imageUri = null;
+            }
+        }
+
+        //获取图片服务器地址
+        String thumbnailUrl = null;
+        // If not auto download thumbnail, do not set remote url
+        if (EMClient.getInstance().getOptions().getAutodownloadThumbnail()) {
+            thumbnailUrl = ((EMImageMessageBody) body).getThumbnailUrl();
+            if (TextUtils.isEmpty(thumbnailUrl)) {
+                thumbnailUrl = ((EMImageMessageBody) body).getRemoteUrl();
+            }
+        }
+        Glide.with(context).load(imageUri == null ? thumbnailUrl : imageUri).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
+    }
+
+
+    public static void showVideoImg(Context context, ImageView imageView,EMMessage message){
+        EMMessageBody body = message.getBody();
+        if (!(body instanceof EMVideoMessageBody)) {
+            return ;
+        }
+        //获取视频封面本地资源路径
+        Uri localThumbUri = ((EMVideoMessageBody) body).getLocalThumbUri();
+        //获取视频封面服务器地址
+        String thumbnailUrl = ((EMVideoMessageBody) body).getThumbnailUrl();
+        if (!EaseFileUtils.isFileExistByUri(context, localThumbUri)) {
+            localThumbUri = null;
+        }
+        Glide.with(context).load(localThumbUri == null ? thumbnailUrl : localThumbUri).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
     }
 
     /**

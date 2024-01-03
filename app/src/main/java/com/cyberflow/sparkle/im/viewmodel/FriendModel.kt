@@ -2,7 +2,6 @@ package com.cyberflow.sparkle.im.viewmodel
 
 import com.drake.brv.item.ItemHover
 import com.drake.brv.item.ItemPosition
-import com.hyphenate.chat.EMMessage
 import kotlinx.serialization.Serializable
 
 
@@ -18,12 +17,9 @@ data class FriendRequest(
     var gender: Int = 0,
     var url: String = "",
     var openUid: String = "",
-    val emMessage: EMMessage? = null,
     override var itemPosition: Int = 0
 ) : ItemPosition{
-    fun freshTxt() : String {
-        return if (status == 1) "Accepted" else "Refused"
-    }
+
 }
 
 const val STATUS_NORMAL = 0

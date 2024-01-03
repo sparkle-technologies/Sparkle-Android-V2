@@ -2,29 +2,26 @@ package com.cyberflow.sparkle.im.viewmodel
 
 import android.text.TextUtils
 import android.util.Log
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.cyberflow.base.BaseApp
+import com.cyberflow.base.model.IMFriendInfo
+import com.cyberflow.base.model.IMFriendList
+import com.cyberflow.base.model.IMFriendRequest
+import com.cyberflow.base.model.IMFriendRequestList
+import com.cyberflow.base.model.IMUserSearchList
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.bus.SingleSourceLiveData
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
-import com.cyberflow.sparkle.chat.common.db.entity.InviteMessageStatus
 import com.cyberflow.sparkle.chat.common.net.Resource
 import com.cyberflow.sparkle.chat.common.repositories.EMContactManagerRepository
-import com.cyberflow.base.model.IMUserInfoList
-import com.cyberflow.base.model.IMUserSearchList
+import com.cyberflow.sparkle.im.DBManager
 import com.drake.net.Post
 import com.drake.net.utils.scopeNet
 import com.hyphenate.chat.EMClient
-import com.hyphenate.chat.EMConversation
-import com.hyphenate.chat.EMMessage
-import com.hyphenate.chat.EMTextMessageBody
 import com.hyphenate.easeui.constants.EaseConstant
 import com.hyphenate.easeui.domain.EaseUser
-import com.hyphenate.easeui.manager.EaseSystemMsgManager
 import com.hyphenate.easeui.model.EaseEvent
 import com.hyphenate.easeui.modules.conversation.model.EaseConversationInfo
 import com.hyphenate.easeui.utils.EaseCommonUtils
@@ -32,82 +29,80 @@ import kotlinx.coroutines.launch
 
 class IMViewModel : BaseViewModel() {
 
+
+    var inviteMsgObservable: MutableLiveData<IMFriendRequestList> = MutableLiveData()
+    fun loadFriendRequestMessages() = scopeNet {
+        inviteMsgObservable.value = Post<IMFriendRequestList>(Api.RELATIONSHIP_FRIEND_REQUEST_LIST) {}.await()
+    }
+
+    var acceptFriendObservable: MutableLiveData<String> = MutableLiveData()
+    fun acceptFriend(openUid : String?) = scopeNet {
+        Post<String>(Api.RELATIONSHIP_FRIEND_ACCEPT) {
+            json("open_uid" to openUid)
+        }.await()
+        acceptFriendObservable.value = openUid.orEmpty()
+    }
+
+    var deleteMsgObservable: MutableLiveData<String> = MutableLiveData()
+    fun deleteMessage(openUid : String?) = scopeNet {
+        deleteMsgObservable.value = Post<String>(Api.RELATIONSHIP_FRIEND_REJECT) {
+            json("open_uid" to openUid)
+        }.await()
+    }
+
+    var contactObservable: MutableLiveData<IMFriendList> = MutableLiveData()
+    fun loadContactList()  = scopeNet {
+        contactObservable.value = Post<IMFriendList>(Api.RELATIONSHIP_FRIEND_LIST) {}.await()
+    }
+
+
+    // same as com.cyberflow.sparkle.main.viewmodel.MainViewModel.saveInviteData2DB
+    fun saveInviteData2DB(data: List<IMFriendRequest>?) {
+        viewModelScope.launch {
+            DBManager.instance.db?.imFriendRequestDao()?.deleteAll()
+            if(data.isNullOrEmpty()){
+            }else{
+                DBManager.instance.db?.imFriendRequestDao()?.insert(*data.toTypedArray())
+            }
+        }
+    }
+
+    // same as com.cyberflow.sparkle.main.viewmodel.MainViewModel.saveContactData2DB
+    fun saveContactData2DB(data: List<IMFriendInfo>?) {
+        viewModelScope.launch {
+            DBManager.instance.db?.imFriendInfoDao()?.deleteAll()
+            if(data.isNullOrEmpty()){
+            }else{
+                DBManager.instance.db?.imFriendInfoDao()?.insert(*data.toTypedArray())
+            }
+        }
+    }
+
+    /********************************** old **********************************************************/
+
+    fun IM_addFriend(username: String, reason: String) {
+        Log.e("TAG", "addFriend: username=$username reason=$reason")
+        viewModelScope.launch {
+            mContactRepository?.addContact(username, reason)   // todo  it will be replaced by our server
+        }
+    }
+
+    fun IM_acceptFriend(fromUid : String?){
+        Log.e("TAG", "acceptFriend: fromUid=$fromUid")
+        viewModelScope.launch {
+            mContactRepository?.acceptInvitation(fromUid?.replace("-", "_"))  // todo  it will be replaced by our server
+            LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent())
+        }
+    }
+
+
     var imUserListData: MutableLiveData<IMUserSearchList> = MutableLiveData()
 
     val mContactRepository = EMContactManagerRepository()
 
-    var friendObservable: MediatorLiveData<Resource<Boolean>> = MediatorLiveData()
-    fun addFriend(username: String, reason: String) {
-        Log.e("TAG", "addFriend: username=$username reason=$reason")
-        mContactRepository?.also {
-            friendObservable?.addSource(it.addContact(username, reason)) { response ->
-                friendObservable.value = response
-            }
-        }
-    }
-
-    var imNewFriendListData: MutableLiveData<IMUserInfoList> = MutableLiveData()
-
-    fun getIMNewFriendInfoList(openUidList: List<String>?) = scopeNet {
-        imNewFriendListData.value = Post<IMUserInfoList>(Api.IM_BATCH_USER_INFO) {
-            json("scene" to "0", "open_uid_list" to openUidList)
-        }.await()
-    }
-
-    val contactObservable = SingleSourceLiveData<Resource<List<EaseUser>>>()
-    fun loadContactList(server: Boolean) {
-        contactObservable.setSource(mRepository.getContactList(server));
-    }
 
     val userInfoObservable = SingleSourceLiveData<Resource<EaseUser>>()
     val mRepository = EMContactManagerRepository()
-
-    val inviteMsgObservable = SingleSourceLiveData<List<EMMessage>>()
-
-    fun loadFriendRequestMessages() {
-        viewModelScope.launch {
-            val emMessages = EMClient.getInstance().chatManager().searchMsgFromDB(
-                EMMessage.Type.TXT,
-                System.currentTimeMillis(),
-                1000,
-                EaseConstant.DEFAULT_SYSTEM_MESSAGE_ID,
-                EMConversation.EMSearchDirection.UP
-            ).sortedBy {
-                it.msgTime
-            }
-            inviteMsgObservable.setSource(MutableLiveData(emMessages))
-        }
-    }
-
-    val acceptFriendObservable = SingleSourceLiveData<String>()
-    fun acceptFriend(msg : EMMessage?){
-        if(msg==null) {
-            acceptFriendObservable.postValue("")
-            return
-        }
-        viewModelScope.launch {
-            val name = msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM)
-            EMClient.getInstance().contactManager().acceptInvitation(name)
-            val message = BaseApp.instance?.getString(com.cyberflow.sparkle.chat.R.string.demo_system_agree_invite, msg.getStringAttribute(DemoConstant.SYSTEM_MESSAGE_FROM))
-            msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_STATUS, InviteMessageStatus.AGREED.name)
-            msg.setAttribute(DemoConstant.SYSTEM_MESSAGE_REASON, message)
-            val body = EMTextMessageBody(message)
-            msg.body = body
-            EaseSystemMsgManager.getInstance().updateMessage(msg)
-            acceptFriendObservable.postValue(name)
-            LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent())
-        }
-    }
-
-    val deleteMsgObservable = SingleSourceLiveData<Boolean>()
-    fun deleteMessage(msgId : String?){
-        viewModelScope.launch {
-            EMClient.getInstance().chatManager().getConversation(DemoConstant.DEFAULT_SYSTEM_MESSAGE_ID, EMConversation.EMConversationType.Chat, true).removeMessage(msgId)
-            deleteMsgObservable.postValue(true)
-            LiveDataBus.get().with(DemoConstant.NOTIFY_CHANGE).postValue(EaseEvent())
-        }
-    }
-
 
     val conversationCacheObservable = MutableLiveData<List<EaseConversationInfo>>()
     fun getConversationFromCache() {

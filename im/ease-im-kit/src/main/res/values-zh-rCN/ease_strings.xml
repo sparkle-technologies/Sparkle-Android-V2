@@ -1,0 +1,104 @@
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+
+    <string name="text_ack_msg">已读</string>
+    <string name="text_delivered_msg">已发送</string>
+    <string name="not_download">未下载:</string>
+    <string name="have_downloaded">下载</string>
+    <string name="did_not_download">未下载</string>
+    <string name="have_uploaded">上传</string>
+    <string name="downwaiting">下载文件中, 请等候.</string>
+    <string name="Failed_to_download_file">下载文件失败: </string>
+    <string name="File_expired">文件过期:</string>
+    <string name="Download_the_pictures">下载图片: 0%</string>
+    <string name="Image_expired">图片过期!</string>
+    <string name="Video_expired">视频过期!</string>
+    <string name="video_file_not_exist">视频文件不存在!</string>
+    <string name="need_permission_to_download_video">需要权限下载视频</string>
+    <string name="permission_request_failed">请求权限失败</string>
+    <string name="Download_the_pictures_new">下载图片:</string>
+    <string name="button_send">发送</string>
+    <string name="Network_error">网络异常</string>
+    <string name="is_down_please_wait">下载视频中, 请等待. </string>
+    <string name="send_failure_please">发送消息失败, 请检查网络. </string>
+    <string name="send_fail">发送消息失败, </string>
+    <string name="attach_smile">表情</string>
+    <string name="attach_picture">相册</string>
+    <string name="attach_take_pic">相机</string>
+    <string name="attach_location">位置</string>
+    <string name="attach_video">视频</string>
+    <string name="attach_file">文件</string>
+    <string name="sd_card_does_not_exist">没有找到sd卡, 无法拍照</string>
+    <string name="cant_find_pictures">找不到图片</string>
+    <string name="File_does_not_exist">文件不存在</string>
+    <string name="no_more_messages">没有更多消息</string>
+    <string name="not_connect_to_server">没有连接到服务器,请重试. </string>
+
+    <string name="msg_recall_by_self">你撤回了一条消息</string>
+    <string name="msg_recall_by_user">%1$s 撤回了一条消息</string>
+    <string name="msg_recall_by_another">%1$s 从 %2$s 撤回了一条消息</string>
+
+    <string name="Video_footage">录制视频</string>
+    <string name="recording_video">正在录制视频</string>
+    <string name="The_video_to_start">开始录制</string>
+    <string name="Whether_to_send">现在发送?</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="Open_the_equipment_failure">打开设备失败!</string>
+
+    <string name="Has_been_cancelled">取消</string>
+    <string name="illegal_user_name">非法用户名</string>
+    <string name="can_not_connect_chat_server_connection">无法连接到聊天服务器</string>
+    <string name="call_duration">通话时长</string>
+    <string name="Refused">拒绝</string>
+    <string name="switch_camera">切换摄像头</string>
+
+    <string name="search_new">搜索</string>
+    <string name="has_been_send">发送</string>
+
+    <string name="ease_search_text_hint">搜索</string>
+
+    <string name="ease_list_no_data_text">无数据</string>
+    <string name="ease_list_no_conversation_data_text">无聊天数据</string>
+
+    <string name="ease_conversation_menu_make_read">设置为已读</string>
+    <string name="ease_conversation_menu_make_top">钉到顶部</string>
+    <string name="ease_conversation_menu_cancel_top">取消钉到顶部</string>
+    <string name="ease_conversation_menu_delete">删除会话</string>
+
+
+    <string name="action_copy">复制</string>
+    <string name="action_forward">转发</string>
+    <string name="action_recall">撤回</string>
+    <string name="action_delete">删除</string>
+    <string name="action_multi_select">多选</string>
+    <string name="delete_voice">删除语音</string>
+    <string name="delete_video">删除视频</string>
+
+    <string name="contact_send_message">你有 %2$s 条消息来自于 %1$s </string>
+    <string name="unsupported_message_body">不支持到消息体</string>
+    <string name="can_not_find_app_open_file">找不到合适到应用打开此文件</string>
+    <string name="no_ack">No receipt info</string>
+    <string name="action_translate">翻译</string>
+    <string name="action_reTranslate">取消翻译</string>
+    <string name="action_hide">隐藏</string>
+    <string name="action_label">标签</string>
+
+    <string name="camera">相机</string>
+    <string name="library">相册</string>
+    <string name="send_token">发送Token</string>
+    <string name="send_nft">发送 NFT</string>
+    <string name="daily_horoscope">日运</string>
+    <string name="horoscope">运势</string>
+    <string name="compatibility">Compatibility</string>
+
+
+    <string name="token_transfer">Token Transfer</string>
+    <string name="amount_sparkle">Amount (SPARKLE)</string>
+    <string name="sparkle_coin">SparkleCoin</string>
+    <string name="add_your_message">Add your message</string>
+    <string name="transfer">Transfer</string>
+
+
+</resources>

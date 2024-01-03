@@ -4,19 +4,25 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.viewmodel.BaseViewModel
-import com.cyberflow.sparkle.MyApp
-import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivitySettingBinding
-import com.cyberflow.sparkle.im.DBManager
+import com.cyberflow.sparkle.flutter.FlutterProxyActivity
+import com.cyberflow.sparkle.flutter.FlutterProxyActivity.Companion.handleFlutterCommonEvent
+import com.cyberflow.sparkle.flutter.FlutterProxyActivity.Companion.initParams
+import com.cyberflow.sparkle.flutter.FlutterProxyActivity.Companion.prepareFlutterEngine
 import com.cyberflow.sparkle.login.view.LoginAct
+import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowTxtButton
-import com.google.firebase.auth.FirebaseAuth
+import com.hjq.language.MultiLanguages
+import com.hjq.language.OnLanguageListener
+import io.flutter.embedding.engine.FlutterEngineCache
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
 
@@ -27,142 +33,127 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         }
     }
 
-    // 0. clear cache
-    // 1. walletConnect
-    // 2. twitter
-    // 3. web3Auth
-    // 4. unipass
+    override fun initView(savedInstanceState: Bundle?) {
+        mDataBinding.llBack.setOnClickListener {
+            onBackPressed()
+        }
+        mDataBinding.layEditProfile.setOnClickListener {
+            goEditProfile()
+        }
+        mDataBinding.layAccountPrivacy.setOnClickListener {
+            goAccountPrivacy()
+        }
+        mDataBinding.layConnectedAccounts.setOnClickListener {
+            goConnetedAccount()
+        }
+        mDataBinding.layLanguage.setOnClickListener {
+            goLanguage()
+        }
+        mDataBinding.btnLogout.setClickListener(object : ShadowTxtButton.ShadowClickListener {
+            override fun clicked(d: Boolean) {
+                logout()
+            }
+        })
+    }
+
+    // 0. clear cache   . just clear cache, then at login act  well do anything for logout, more clear I think
     private fun logout() {
-
-        sb.clear()
-        if (loginMethod == "Twitter") {
-            sb.append("exit twitter")
-            sb.append("\n")
-            freshUI()
-            twitter()
-        } else {
-            sb.append("exit wallet-connect")
-            sb.append("\n")
-            freshUI()
-            walletConnect()
-        }
-
-        sb.append("clear local cache")
-        sb.append("\n")
-        freshUI()
-
-        lifecycleScope.launch {
-            DBManager.instance.db?.imUserInfoDao()?.deleteAll()
-            IMDataManager.instance.clearCache()
-        }
 
         CacheUtil.setUserInfo(null)
         CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "")
         CacheUtil.savaString(CacheUtil.UNIPASS_PUBK, "")
         CacheUtil.savaString(CacheUtil.UNIPASS_PRIK, "")
 
-        sb.append("waiting for 5 seconds then go login page.......")
-        freshUI()
-
-        Thread {
-            Thread.sleep(1 * 1000)
-            runOnUiThread {
-                LoginAct.go(this)
-                finish()
-            }
-        }.start()
+        LoginAct.go(this@SettingsActivity)
+        finish()
     }
-
-    var sb = StringBuilder("")
-
-    private fun getInitInfo() {
-        sb.append("userInfo: $userInfo")
-        sb.append("\n")
-        sb.append("bindList: $bindList")
-        sb.append("\n")
-        sb.append("wallets: $wallets")
-        sb.append("\n")
-        sb.append(other)
-        sb.append("\n")
-        sb.append("loginMethod: $loginMethod")
-        sb.append("\n")
-        sb.append("publicKey: $publicKey")
-        sb.append("\n")
-        sb.append("privateKey: $privateKey")
-    }
-
-    var userInfo = ""
-    var bindList = ""
-    var wallets = ""
-    var other = ""
-    var loginMethod = ""
-    var publicKey = ""
-    var privateKey = ""
-
-    override fun initView(savedInstanceState: Bundle?) {
-        CacheUtil.apply {
-            getUserInfo()?.let {
-                it.user?.let {
-                    userInfo =
-                        "name: ${it.nick}  \t gender: ${it.gender} \t birthdate: ${it.birthdate} \t birthtime: ${it.birth_time} \t birth_location: ${it.birthplace_info} \n open_uid: ${it.open_uid}"
-                    it.bind_list?.first()?.let {
-                        bindList = "type: ${it.type} \t nick: ${it.nick}"
-                    }
-                    wallets = "wallet_address: ${it.wallet_address} \t ca_wallet: ${it.ca_wallet}"
-                    other =
-                        "task_completed: ${it.task_completed} \t profile_permission: ${it.profile_permission} \t signature: ${it.signature}"
-                }
-            }
-            getString(LOGIN_METHOD)?.let {
-                loginMethod = it
-            }
-            getString(UNIPASS_PUBK)?.let {
-                publicKey = it
-            }
-            getString(UNIPASS_PRIK)?.let {
-                privateKey = it
-            }
-        }
-
-        mDataBinding.btnLogout.setClickListener(object : ShadowTxtButton.ShadowClickListener {
-            override fun clicked(d: Boolean) {
-                Toast.makeText(this@SettingsActivity, "ready logout now", Toast.LENGTH_LONG).show()
-                logout()
-            }
-        })
-        getInitInfo()
-        freshUI()
-    }
-
-    private fun walletConnect() {
-        MyApp.instance.checkWalletConnect()
-        MyApp.instance.walletConnectKit?.disconnect {
-            it.printStackTrace()
-            Log.e(TAG, "clicked:  $it")
-
-            sb.append("succeed exit wallet-connect")
-            sb.append("\n")
-            freshUI()
-        }
-    }
-
-    private fun twitter() {
-        FirebaseAuth.getInstance().signOut()
-        sb.append("succeed exit twitter")
-        sb.append("\n")
-        freshUI()
-    }
-
-    private fun web3Auth() {
-
-    }
-
-    private fun freshUI() {
-        mDataBinding.tv.text = sb.toString()
-    }
-
 
     override fun initData() {
+        initFlutter()
+//        initMultiLanguage()
+    }
 
+    private fun initMultiLanguage() {
+        MultiLanguages.setOnLanguageListener(object : OnLanguageListener {
+            override fun onAppLocaleChange(oldLocale: Locale?, newLocale: Locale?) {
+                Log.e(TAG, "onAppLocaleChange: old=$oldLocale  \t new=$newLocale")
+//                MultiLanguages.updateAppLanguage(this@SettingsActivity)
+            }
+
+            override fun onSystemLocaleChange(oldLocale: Locale?, newLocale: Locale?) {
+
+            }
+        })
+    }
+
+    private var editMethodChannel : MethodChannel? = null
+    private var privacyMethodChannel : MethodChannel? = null
+
+    private fun initFlutter() {
+        lifecycleScope.launch {
+            editMethodChannel = prepareFlutterEngine(this@SettingsActivity, FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE, FlutterProxyActivity.ROUTE_EDIT_PROFILE, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_EDIT){
+                    scene, method, call, result ->
+                handleFlutterEvent(scene, method, call, result)
+            }
+
+            privacyMethodChannel = prepareFlutterEngine(this@SettingsActivity, FlutterProxyActivity.ENGINE_ID_ACCOUNT_PRIVACY, FlutterProxyActivity.ROUTE_ACCOUNT_PRIVACY, FlutterProxyActivity.CHANNEL_SETTING, FlutterProxyActivity.SCENE_SETTING_PRIVACY){
+                    scene, method, call, result ->
+                handleFlutterEvent(scene, method, call, result)
+            }
+        }
+    }
+
+    private fun handleFlutterEvent(
+        scene: Int,
+        method: MethodChannel,
+        call: MethodCall,
+        result: MethodChannel.Result
+    ) {
+        if (call.method == "flutterToast") {
+            val type = call.argument<Int>("type") ?: NotificationDialog.TYPE_SUCCESS
+            val content = call.argument<String>("content")
+            if (content?.isNotEmpty() == true) {
+                myToast(type, content)
+            }
+            result.success("success")
+        }else{
+            handleFlutterCommonEvent(this, scene, method, call, result)
+        }
+    }
+
+    private var isFirstTimeForEdit = true
+
+    private fun goEditProfile() {
+        if(isFirstTimeForEdit){
+            isFirstTimeForEdit = false
+        }else{
+            editMethodChannel?.let { initParams(FlutterProxyActivity.SCENE_SETTING_EDIT, it) }
+        }
+        FlutterProxyActivity.go(this, FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE)
+    }
+
+    private var isFirstTimeForPrivacy = true
+
+    private fun goAccountPrivacy() {
+        if(isFirstTimeForPrivacy){
+            isFirstTimeForPrivacy = false
+        }else{
+            privacyMethodChannel?.let { initParams(FlutterProxyActivity.SCENE_SETTING_PRIVACY, it) }
+        }
+        FlutterProxyActivity.go(this, FlutterProxyActivity.ENGINE_ID_ACCOUNT_PRIVACY)
+    }
+
+    private fun goConnetedAccount() {
+        ConnectedAccountActivity.go(this)
+    }
+
+    private fun goLanguage() {
+        LanguageActivity.go(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+//        FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_EDIT_PROFILE)?.destroy()
+        FlutterEngineCache.getInstance().get(FlutterProxyActivity.ENGINE_ID_ACCOUNT_PRIVACY)?.destroy()
     }
 }

@@ -1,5 +1,33 @@
 [
   {
+    "path": "/app/profile/ProfileAct",
+    "className": "com.cyberflow.sparkle.profile.view.ProfileAct",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/app/profile/CompatibilityAct",
+    "className": "com.cyberflow.sparkle.profile.view.CompatibilityAct",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/app/MainActivityV2",
+    "className": "com.cyberflow.sparkle.mainv2.view.MainActivityV2",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
+    "path": "/app/LoginAct",
+    "className": "com.cyberflow.sparkle.login.view.LoginAct",
+    "action": "",
+    "description": "",
+    "params": {}
+  },
+  {
     "path": "/im/IMForwardListAct",
     "className": "com.cyberflow.sparkle.im.view.IMForwardListAct",
     "action": "",

@@ -4,23 +4,36 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tv_contact_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/tv_empty_hint"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_122"
+            android:layout_marginTop="@dimen/dp_60"
             android:layout_marginEnd="@dimen/dp_20"
             android:gravity="center"
-            android:fontFamily="@font/poppins_regular"
-            android:lineSpacingExtra="@dimen/dp_3"
-            android:text="Keep going! Pushing your boundaries!"
-            android:textColor="@color/color_000000"
-            android:textSize="@dimen/sp_14"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/cora_is_analyzing"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.cyberflow.sparkle.widget.ShadowTxtButton
+            android:id="@+id/btn_comming_soon"
+            android:layout_width="@dimen/dp_155"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginTop="@dimen/dp_70"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_empty_hint"
+            app:view_bg="@drawable/main_horoscope_btn_coming_soon"
+            app:view_click_enable="false"
+            app:view_shadow_distance="1dp"
+            app:view_text="Coming Soon"
+            app:view_text_bold="true"
+            app:view_text_color="@color/color_7D7D80"
+            app:view_text_size="@dimen/sp_16" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

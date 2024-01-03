@@ -17,8 +17,8 @@ android {
         applicationId = "com.cyberflow.sparkle"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -37,6 +37,12 @@ android {
             )
         }
     }
+
+    lint {
+        checkReleaseBuilds = false
+        abortOnError = false
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -66,11 +72,9 @@ dependencies {
     implementation("androidx.compose.runtime:runtime:1.5.0")  // for compose
 
     implementation(project(mapOf("path" to ":base")))
-    implementation(project(mapOf("path" to ":base_resources")))
-    implementation(project(mapOf("path" to ":base_widget")))
 
     // auth for twitter/google social login
-    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.libraries.places:places:3.1.0")
     implementation("com.google.firebase:firebase-crashlytics-ktx")   // crash
@@ -89,7 +93,8 @@ dependencies {
     implementation("com.github.UniPassID:android-custom-auth-sdk:v0.0.1-alpha.9")
 
     // for UI
-    implementation("com.tbuonomo:dotsindicator:5.0")     // viewpager2 indicator
+//    implementation("com.tbuonomo:dotsindicator:5.0")        // viewpager2 indicator
+//    implementation("io.github.youth5201314:banner:2.2.2")
 
 //    kapt("cn.therouter:apt:1.2.0-rc1")
 //    implementation("cn.therouter:router:1.2.0-rc1")
@@ -98,13 +103,12 @@ dependencies {
     implementation(project(mapOf("path" to ":chat")))
 
     kapt("cn.therouter:apt:1.2.0-rc1")
-    implementation("cn.therouter:router:1.2.0-rc1")
-
-    // for qr code
-    implementation("com.huawei.hms:scanplus:2.12.0.301")
+//    implementation("cn.therouter:router:1.2.0-rc1")
 
     val room_version = "2.5.1"
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
+
+    implementation(project(mapOf("path" to ":flutter")))
 
 }

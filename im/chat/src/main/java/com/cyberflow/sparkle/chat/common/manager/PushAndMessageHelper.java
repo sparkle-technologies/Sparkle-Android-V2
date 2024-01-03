@@ -17,11 +17,13 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMImageMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.hyphenate.chat.EMVideoMessageBody;
 import com.hyphenate.easeui.constants.EaseConstant;
 import com.hyphenate.easeui.model.EaseEvent;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.easeui.utils.EaseFileUtils;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.EMFileHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,8 +68,25 @@ public class PushAndMessageHelper {
                 if (uri != null) {
                     sendImageMessage(toChatUsername, uri);
                 } else {
-                    LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD)
-                            .postValue(new EaseEvent(BaseApp.getInstance().getApplicationContext().getString(R.string.no_image_resource), EaseEvent.TYPE.MESSAGE));
+                    LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR).postValue(BaseApp.getInstance().getApplicationContext().getString(R.string.no_image_resource));
+                }
+                break;
+            case VIDEO:
+                if(message.getBody() instanceof EMVideoMessageBody){
+                    EMVideoMessageBody body = (EMVideoMessageBody)message.getBody();
+                    int videoLength = body.getDuration();
+                    Uri videoUri = body.getLocalUri();
+                    //EMFileHelper.getInstance().formatInUri("");
+                    String thumbPath = body.getLocalThumb();
+
+//                    Log.e("TAG", "getDuration: " + body.getDuration() );
+//                    Log.e("TAG", "getThumbnailUrl: " + body.getThumbnailUrl() );
+//                    Log.e("TAG", "getLocalThumb: " + body.getLocalThumb() );
+//                    Log.e("TAG", "getLocalUri: " + body.getLocalUri() );
+//                    Log.e("TAG", "getRemoteUrl: " + body.getRemoteUrl() );
+
+                    EMMessage newMsg = EMMessage.createVideoSendMessage(videoUri, thumbPath, videoLength, toChatUsername);
+                    sendMessage(newMsg);
                 }
                 break;
         }
@@ -311,14 +330,38 @@ public class PushAndMessageHelper {
         sendMessage(message);
     }
 
+    private final static int MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+
     /**
      * send image message
      *
      * @param toChatUsername
      * @param imageUri
      */
-    private static void sendImageMessage(String toChatUsername, Uri imageUri) {
-        EMMessage message = EMMessage.createImageSendMessage(imageUri, true, toChatUsername);
+    public static void sendImageMessage(String toChatUsername, Uri imageUri) {
+        boolean sendOriginalImg = true;
+        if(EMFileHelper.getInstance().isFileExist(imageUri)) {
+            if(EMFileHelper.getInstance().getFileLength(imageUri) > MAX_IMAGE_SIZE) {
+                sendOriginalImg = false;
+            }
+        }
+        EMMessage message = EMMessage.createImageSendMessage(imageUri, sendOriginalImg, toChatUsername);
+        sendMessage(message);
+    }
+
+    public static void sendProfileShareImageMessage(String from, String toChatUsername, Uri imageUri) {
+        boolean sendOriginalImg = true;
+        if(EMFileHelper.getInstance().isFileExist(imageUri)) {
+            if(EMFileHelper.getInstance().getFileLength(imageUri) > MAX_IMAGE_SIZE) {
+                sendOriginalImg = false;
+            }
+        }
+        final EMMessage message = EMMessage.createSendMessage(EMMessage.Type.IMAGE);
+        message.setTo(toChatUsername);
+        EMImageMessageBody body = new EMImageMessageBody(imageUri);
+        body.setSendOriginalImage(sendOriginalImg);
+        body.setFileName(EaseConstant.MESSAGE_PREF_SHARE + from);
+        message.addBody(body);
         sendMessage(message);
     }
 
@@ -349,7 +392,7 @@ public class PushAndMessageHelper {
 
             @Override
             public void onError(int code, String error) {
-
+                LiveDataBus.get().with(DemoConstant.MESSAGE_CHANGE_SEND_ERROR).postValue(error);
             }
 
             @Override

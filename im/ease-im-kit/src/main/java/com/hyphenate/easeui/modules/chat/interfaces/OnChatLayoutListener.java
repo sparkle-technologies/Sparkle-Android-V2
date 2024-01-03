@@ -19,6 +19,9 @@ public interface OnChatLayoutListener {
      */
     boolean onBubbleClick(EMMessage message);
 
+
+    void onAIOResultClick(EMMessage message);
+
     /**
      * 长按消息bubble区域
      *
@@ -67,6 +70,13 @@ public interface OnChatLayoutListener {
      */
     default void onChatSuccess(EMMessage message) {
     }
+
+    /**
+     * 接收到AIO消息的回调
+     *
+     * @param message
+     */
+    default void onReceiveAIOMessage(EMMessage message) {}
 
     /**
      * 聊天中错误信息

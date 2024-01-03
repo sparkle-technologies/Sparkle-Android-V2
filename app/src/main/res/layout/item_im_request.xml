@@ -13,6 +13,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -20,7 +21,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_56">
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp_56"
+            android:paddingTop="@dimen/dp_18"
+            android:paddingBottom="@dimen/dp_10">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardview"
@@ -29,7 +33,6 @@
                 android:layout_marginStart="@dimen/dp_16"
                 app:cardCornerRadius="@dimen/dp_16"
                 app:cardElevation="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:strokeColor="@color/black"
@@ -37,9 +40,9 @@
 
                 <ImageView
                     android:id="@+id/iv_head"
+                    url="@{m.url}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    url="@{m.url}"
                     android:scaleType="fitXY" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -48,12 +51,12 @@
                 android:id="@+id/lay_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp_8"
                 android:layout_marginEnd="@dimen/dp_10"
                 android:gravity="center"
                 android:paddingStart="@dimen/dp_6"
                 android:paddingEnd="@dimen/dp_6"
                 android:visibility="@{m.status == 0 ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -68,9 +71,8 @@
                 android:id="@+id/lay_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/lay_delete"
                 app:layout_constraintRight_toLeftOf="@+id/lay_delete"
-                app:layout_constraintTop_toTopOf="@+id/lay_delete"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_goneMarginRight="@dimen/dp_38">
 
                 <com.cyberflow.sparkle.widget.ShadowTxtButton
@@ -82,7 +84,7 @@
                     app:view_disable="false"
                     app:view_disable_bg="@drawable/register_btn_next_disable"
                     app:view_shadow_distance="1dp"
-                    app:view_text="Accept"
+                    app:view_text="@string/accept"
                     app:view_text_bold="false"
                     app:view_text_size="@dimen/sp_14" />
 
@@ -92,7 +94,6 @@
                     android:layout_height="@dimen/dp_30"
                     android:fontFamily="@font/poppins_regular"
                     android:gravity="center"
-                    android:text="@{m.freshTxt}"
                     android:textColor="@color/color_7d7d80"
                     android:textSize="@dimen/sp_14"
                     android:visibility="@{m.status == 0  ? View.GONE : View.VISIBLE}"
@@ -100,40 +101,41 @@
 
             </FrameLayout>
 
-
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_6"
                 android:orientation="vertical"
                 android:paddingStart="@dimen/dp_12"
-                android:layout_marginEnd="@dimen/dp_12"
-                app:layout_constraintBottom_toBottomOf="@+id/lay_status"
                 app:layout_constraintLeft_toRightOf="@+id/cardview"
                 app:layout_constraintRight_toLeftOf="@+id/lay_status"
-                app:layout_constraintTop_toTopOf="@+id/lay_status">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/tv_friend_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:ellipsize="end"
                     android:fontFamily="@font/poppins_semibold"
+                    android:maxLines="1"
                     android:text="@{m.name}"
                     android:textColor="@color/color_2A2A2B"
                     android:textSize="@dimen/sp_17"
                     tools:text="Arc Chan" />
 
-                <TextView
+                <cn.carbs.android.expandabletextview.library.ExpandableTextView
                     android:id="@+id/tv_msg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_light"
+                    tools:text="hi, glad to see you glad to seeto see you glad to see yoto see you glad to see yo you gee you glad to see ylad to see you"
+                    app:etv_InitState="shrink"
+                    app:etv_MaxLinesOnShrink="1"
                     android:text="@{m.msg}"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:textColor="@color/color_7d7d80"
-                    android:textSize="@dimen/sp_12"
-                    tools:text="Hi, glad to see you..." />
+                    app:etv_ToExpandHintColor="@color/color_8B82DB"
+                    app:etv_ToExpandHintColorBgPressed="@color/transparent"
+                    app:etv_ToShrinkHintColor="@color/color_8B82DB"
+                    app:etv_ToShrinkHintColorBgPressed="@color/transparent" />
 
             </LinearLayout>
 

@@ -10,6 +10,10 @@
         <option name="gradleJvm" value="jbr-17" />
         <option name="modules">
           <set>
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/flutter_localization-0.1.14/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/path_provider_android-2.2.1/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/shared_preferences_android-2.2.1/android" />
+            <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/sqflite-2.3.0/android" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/base" />
@@ -21,9 +25,11 @@
             <option value="$PROJECT_DIR$/wallet_connector/core" />
             <option value="$PROJECT_DIR$/wallet_connector/dapp" />
             <option value="$PROJECT_DIR$/wallet_connector/sdkdapp" />
+            <option value="$PROJECT_DIR$/../flutter_workspace/sparkle-flutter/.android/Flutter" />
           </set>
         </option>
       </GradleProjectSettings>
     </option>
+    <option name="offlineMode" value="true" />
   </component>
 </project>

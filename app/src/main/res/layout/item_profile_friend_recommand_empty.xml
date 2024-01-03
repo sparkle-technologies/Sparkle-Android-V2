@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="m"
+            type="java.lang.String" />
+    </data>
+
+    <View
+        android:id="@+id/lay_go_chat"
+        android:layout_width="@dimen/dp_10"
+        android:background="@color/transparent"
+        android:layout_height="177dp"/>
+
+</layout>

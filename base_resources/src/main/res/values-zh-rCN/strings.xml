@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sparkle_app_name">Starry Book</string>
+
+    <string name="year_string">年</string>
+    <string name="month_string">月</string>
+    <string name="date_string">日</string>
+    <string name="time_string">日期</string>
+    <string name="picker_title">设置日期</string>
+    <string name="cancel">取消</string>
+    <string name="done">完成</string>
+
+    <string name="location">Location</string>
+    <string name="Place">地点</string>
+    <string name="input_your_birth_place">input your birth place</string>
+
+    <string name="login_bg_string">Unlock the secrets of the stars and discover your true destiny with Sparkle</string>
+    <string name="meta_mask">MetaMask</string>
+    <string name="coin_base_wallet">Coinbase Wallet</string>
+    <string name="wallet_connect">WalletConnect</string>
+    <string name="connect_wallet">Connect Wallet</string>
+    <string name="ask_birthday">What is your date of birth?</string>
+    <string name="ask_birth_place">What is your place of birth?</string>
+    <string name="do_it_later">I\'ll do it later</string>
+    <string name="later">Later</string>
+    <string name="skip_place_of_birth_tips">Some features won\'t be available if birth place is missing.</string>
+    <string name="skip_time_of_birth_tips">Some features won\'t be available if birth time is missing.</string>
+    <string name="to_add">To add</string>
+    <string name="nickname">Nickname</string>
+    <string name="nickname_tips">Please enter your nickname</string>
+    <string name="set_your_nickname">Enter your nickname</string>
+    <string name="confirm">确认</string>
+    <string name="limit_edit_input">/30</string>
+    <string name="limit_edit_input_120">/120</string>
+    <string name="edit_input_num">0</string>
+    <string name="connect_with_third_platform">Or connect with social account</string>
+    <string name="birth_place_tips">Tell us what is your place of birth</string>
+    <string name="birthday_tips">Tell us what is your date of birth</string>
+    <string name="forget_birth_time">If you don\'t remember the time, you can do it later</string>
+    <string name="friends">好友</string>
+    <string name="home_find_friend_title">Find Friends</string>
+    <string name="home_find_friend_desc">Discover more friends</string>
+    <string name="profile_title">Profile</string>
+    <string name="chat">聊天</string>
+    <string name="add">添加</string>
+    <string name="add_friend">添加好友</string>
+    <string name="view">View</string>
+    <string name="view_detail">View Detail</string>
+    <string name="view_details">View Details</string>
+    <string name="settings_title">设置</string>
+    <string name="account">账号</string>
+    <string name="edit_avatar">Edit Avatar</string>
+    <string name="message_notifications">Message Notifications</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="logout">Log out</string>
+    <string name="save">Save</string>
+    <string name="signature">Signature</string>
+    <string name="open_sea">OpenSea</string>
+    <string name="get_it_for_free">Get it for free</string>
+    <string name="color">Color</string>
+    <string name="no_more_content">no more content</string>
+    <string name="complete_your_profile">Complete Your Profile</string>
+    <string name="friend_search_hint">Search contacts or new friends</string>
+    <string name="contact_list">Contact List</string>
+    <string name="contact">Contact</string>
+    <string name="current">Current</string>
+    <string name="birth">Birth</string>
+    <string name="more">More</string>
+    <string name="my_friends">My Friends</string>
+    <string name="send_message">Send message...</string>
+    <string name="send_a_message">Send a message</string>
+    <string name="send_to">转发给</string>
+    <string name="share">分享</string>
+    <string name="user_profile">用户资料</string>
+    <string name="accept_friend">同意请求</string>
+    <string name="scan_qr_code">扫描二维码</string>
+    <string name="gallery">相册</string>
+    <string name="no_results">未找到结果</string>
+
+
+    <string name="chats">聊天</string>
+    <string name="what_s_in_your_mind">你在想什么？</string>
+    <string name="add_friends">添加好友</string>
+    <string name="contacts">联系人</string>
+    <string name="scan">扫一扫</string>
+    <string name="feed">动态</string>
+    <string name="profile">资料</string>
+    <string name="before_you_begin">准备起航</string>
+    <string name="before_you_begin_tips">告诉我们您对头像风格的偏好，这将是您在web3世界中的身份。</string>
+    <string name="birthday">生日</string>
+    <string name="tell_us_what_is_your_date_of_birth">告诉我们你的出生日期。</string>
+    <string name="birth_date">出生日期</string>
+    <string name="select_your_birthday">选择日期</string>
+    <string name="birth_time">出生时间</string>
+    <string name="select_your_birth_time">选择你的出生时间。</string>
+    <string name="time_is_important_for_determining_your_horoscope">时间对于确定你的星座非常重要。</string>
+    <string name="previous">上一步</string>
+    <string name="next">下一步</string>
+    <string name="please_select_birth_date">请选择你的出生日期</string>
+    <string name="please_select_birth_time">请选择你的出生时间</string>
+    <string name="set_date">设置日期</string>
+    <string name="set_time">设置时间</string>
+    <string name="birth_place">出生地点</string>
+    <string name="tell_us_where_is_your_birth_place">告诉我们你的出生地点。</string>
+    <string name="select_your_birth_place">选择你的出生地点</string>
+    <string name="birth_place_help_txt">我们需要您的出生地来准确计算出生时恒星和行星的位置。</string>
+    <string name="please_select_your_birth_place">请选择你的出生地点。</string>
+    <string name="nick_name">昵称</string>
+    <string name="please_enter_your_nick_name">请输入你的昵称</string>
+    <string name="how_would_you_like_to_be_identified">我们应该怎样称呼你？</string>
+    <string name="opps_something_s_wrong_please_change_to_another_nickname">Opps！ 什么东西出错了, 请将昵称改成其他内容。</string>
+    <string name="daily">今天</string>
+    <string name="weekly">周度</string>
+    <string name="monthly">月度</string>
+    <string name="yearly">年度</string>
+    <string name="horoscope">星座运势</string>
+    <string name="comming_soon">敬请期待</string>
+    <string name="empty_feed">动态为空</string>
+    <string name="the_magic_seems_to_have_nmalfunctioned">魔法似乎出了点问题。</string>
+    <string name="reload">重新加载</string>
+    <string name="edit_profile">编辑资料</string>
+    <string name="account_privacy">账户隐私</string>
+    <string name="connected_accounts">已连接账户</string>
+    <string name="language">语言</string>
+    <string name="log_out">退出登录</string>
+
+
+
+    <string name="new_friend">新的好友</string>
+    <string name="search">搜索</string>
+    <string name="send">发送</string>
+    <string name="hello_stellar_greetings_on_our_astrology_journey">你好，很高兴认识你</string>
+    <string name="say_hello_and_introduce_yourself">发送招呼语</string>
+    <string name="friends_request">好友请求</string>
+    <string name="friend_request">好友请求</string>
+    <string name="see_all">查看更多</string>
+    <string name="your_contacts">联系人</string>
+    <string name="accept">接受</string>
+    <string name="refused">拒绝</string>
+    <string name="no_friend_request_yet">暂时还没有好友申请</string>
+    <string name="cora_is_analyzing">Cora正在分析你在宇宙中的轨迹。请稍候</string>
+
+    <string name="recent">近期</string>
+    <string name="message_sent">消息已发送</string>
+    <string name="send_message_error">消息发送失败</string>
+
+
+    <string name="name">昵称</string>
+    <string name="choose_the_language_you_preferred">选择你偏好的语言</string>
+    <string name="more_language_support_is_on_the_way">*更多语言支持即将推出.</string>
+
+    <string name="hi_cora">Hi, Cora</string>
+
+    <string name="to_expand_hint">展开</string>
+    <string name="to_shrink_hint">收起</string>
+
+</resources>

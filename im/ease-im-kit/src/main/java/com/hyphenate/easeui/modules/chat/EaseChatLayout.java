@@ -16,16 +16,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cyberflow.base.model.IMQuestionList;
+import com.cyberflow.base.util.CacheUtil;
+import com.cyberflow.sparkle.widget.ShadowImgButton;
 import com.hyphenate.EMConversationListener;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMChatManager;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMCmdMessageBody;
 import com.hyphenate.chat.EMConversation;
+import com.hyphenate.chat.EMCustomMessageBody;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.chat.EMTranslationResult;
@@ -65,6 +70,7 @@ import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.luck.picture.lib.entity.LocalMedia;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EaseChatLayout extends RelativeLayout implements
@@ -183,6 +189,7 @@ public class EaseChatLayout extends RelativeLayout implements
         rootLinearLayout = findViewById(R.id.rootLinearLayout);
         messageListLayout = findViewById(R.id.layout_chat_message);
         inputMenu = findViewById(R.id.layout_menu);
+        findQuestionsViews();
 
         presenter.attachView(this);
 
@@ -255,6 +262,10 @@ public class EaseChatLayout extends RelativeLayout implements
             EMClient.getInstance().groupManager().addGroupChangeListener(groupListener);
         }
         initTypingHandler();
+
+        if(!coraQuestion.isEmpty()){
+            clickQuestion(coraQuestion);
+        }
     }
 
     /**
@@ -608,6 +619,7 @@ public class EaseChatLayout extends RelativeLayout implements
 
     @Override
     public void onMessageReceived(List<EMMessage> messages) {
+        Log.e(TAG, "EaseChatLayout onMessageReceived: size:" + messages.size());
         boolean refresh = false;
         for (EMMessage message : messages) {
             String username = null;
@@ -623,6 +635,10 @@ public class EaseChatLayout extends RelativeLayout implements
             // if the message is for current conversation
             if (username.equals(conversationId) || message.getTo().equals(conversationId) || message.conversationId().equals(conversationId)) {
                 refresh = true;
+            }
+
+            if (message.getBody() instanceof EMCustomMessageBody) {  // 特殊处理
+                listener.onReceiveAIOMessage(message);
             }
         }
         if (refresh) {
@@ -842,7 +858,7 @@ public class EaseChatLayout extends RelativeLayout implements
     public void onPicturePreview(LocalMedia localMedia, int position) {
         Log.e(TAG, "onPicturePreview: ");
         if (listener != null) {
-             listener.onPicturePreview(localMedia, position);
+            listener.onPicturePreview(localMedia, position);
         }
     }
 
@@ -1098,6 +1114,9 @@ public class EaseChatLayout extends RelativeLayout implements
                     if (showTranslation(message))
                         menuHelper.findItemVisible(R.id.action_chat_translate, true);
                 }
+                if (message.getBooleanAttribute(EaseConstant.MESSAGE_ATTR_IS_BIG_EXPRESSION, false)) {
+                    menuHelper.findItemVisible(R.id.action_chat_copy, false);
+                }
                 break;
             case LOCATION:
             case FILE:
@@ -1118,6 +1137,7 @@ public class EaseChatLayout extends RelativeLayout implements
             menuHelper.findItemVisible(R.id.action_chat_recall, false);
         }
     }
+
 
     private class ChatRoomListener extends EaseChatRoomListener {
 
@@ -1203,6 +1223,128 @@ public class EaseChatLayout extends RelativeLayout implements
     @Override
     public void onInputPanelCollapsed() {
         // do nothing
+    }
+
+    private View layQuestion;
+    private TextView tv1, tv2, tv3, tv4, tv5;
+    private ShadowImgButton btn;
+
+    private void findQuestionsViews(){
+        layQuestion = findViewById(R.id.lay_questions);
+        tv1 = findViewById(R.id.question_tv1);
+        tv2 = findViewById(R.id.question_tv2);
+        tv3 = findViewById(R.id.question_tv3);
+        tv4 = findViewById(R.id.question_tv4);
+        tv5 = findViewById(R.id.question_tv5);
+
+        btn = findViewById(R.id.btn);
+    }
+
+    public void initQuestionsList() {
+
+        tv1.setOnClickListener(view -> clickQuestion(tv1));
+        tv2.setOnClickListener(view -> clickQuestion(tv2));
+        tv3.setOnClickListener(view -> clickQuestion(tv3));
+        tv4.setOnClickListener(view -> clickQuestion(tv4));
+        tv5.setOnClickListener(view -> clickQuestion(tv5));
+
+        IMQuestionList list = CacheUtil.INSTANCE.getAIOQuestions();
+        if (list != null) {
+            List<String> question = list.getQuestions();
+            List<List<String>> data = new ArrayList<>();
+            int groupSize = 5;
+            for (int i = 0; i < question.size(); i += groupSize) {
+                int endIndex = Math.min(i + groupSize, question.size());
+                List<String> subList = question.subList(i, endIndex);
+                if(endIndex - i == groupSize){
+                    data.add(subList);
+                }
+            }
+            btn.setClickListener(() -> {
+                questionIdx++;
+                showQuestionsList(data);
+            });
+            if(!data.isEmpty()){
+                layQuestion.setVisibility(View.VISIBLE);
+            }
+            showQuestionsList(data);
+        }
+    }
+
+    // todo 考虑加入动画
+    public void dismissQuestion(){
+        layQuestion.postDelayed(() -> {
+            layQuestion.setVisibility(View.GONE);
+        }, 200);
+    }
+
+    private int questionIdx = 0;
+
+    private void showQuestionsList(List<List<String>> data) {
+        List<String> select = data.get(questionIdx % (data.size() - 1));
+        for (int index = 0; index < select.size(); index++) {
+            if (index == 0) {
+                tv1.setText(select.get(index));
+            }
+            if (index == 1) {
+                tv2.setText(select.get(index));
+            }
+            if (index == 2) {
+                tv3.setText(select.get(index));
+            }
+            if (index == 3) {
+                tv4.setText(select.get(index));
+            }
+            if (index == 4) {
+                tv5.setText(select.get(index));
+            }
+        }
+    }
+
+    private long lastClick = 0L;
+    public void clickQuestion(TextView tv) {  // 内部点击问题
+        if(System.currentTimeMillis() - lastClick < 1500){
+            return;
+        }
+        lastClick = System.currentTimeMillis();
+        String question = tv.getText().toString();
+        Log.e(TAG, "clickQuestion: " + question);
+        inputMenu.onSendBtnClicked(question);
+        dismissQuestion();
+    }
+
+    private String coraQuestion = "";
+
+    public void clickQuestion(String question) {  // 最外面点击问题   带进来直接发送
+        Log.e(TAG, "clickQuestion: " + question);
+        coraQuestion = question;
+        if(presenter.conversation != null){
+            inputMenu.onSendBtnClicked(question);
+            coraQuestion = "";
+        }
+    }
+
+    public void insertMsg(String content, String from, String to) {
+        EMMessage msg = EMMessage.createSendMessage(EMMessage.Type.TXT);
+        EMTextMessageBody txtBody = new EMTextMessageBody(content);
+        msg.addBody(txtBody);
+        msg.setFrom(from);
+        msg.setTo(to);
+        msg.setUnread(false);
+        msg.setChatType(EMMessage.ChatType.Chat);
+        msg.setDirection(EMMessage.Direct.RECEIVE);
+        long currentTimeMillis = System.currentTimeMillis();
+        msg.setLocalTime(currentTimeMillis);
+        msg.setMsgTime(currentTimeMillis);
+//        presenter.conversation.insertMessage(msg);
+        presenter.conversation.appendMessage(msg);
+
+        messageListLayout.refreshToLatest();
+    }
+
+    @Override
+    public void onAIOResultClick(EMMessage message) {
+        listener.onAIOResultClick(message);
     }
 }
 

@@ -3,8 +3,9 @@ package com.cyberflow.base.util
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
+import com.cyberflow.base.model.DetailResponseData
+import com.cyberflow.base.model.IMQuestionList
 import com.cyberflow.base.model.LoginResponseData
-import com.cyberflow.base.model.UserInfo
 import com.cyberflow.base.net.GsonConverter
 import com.tencent.mmkv.MMKV
 
@@ -16,6 +17,8 @@ object CacheUtil {
     private const val NATIVE_MIX_IMGS = "sparkle_native_mix_imgs"
     const val WALLET_NAME = "sparkle_wallet_name"
     private const val DAILY_HOROSCOPE_INFO = "sparkle_daily_horoscope_info"
+    private const val AIO_QUESTIONS = "sparkle_aio_questions"
+    private const val CORA_INFO = "sparkle_cora_info"
 
     const val UNIPASS_PUBK = "sparkle_unipass_pubk"
     const val UNIPASS_PRIK = "sparkle_unipass_prik"
@@ -35,23 +38,6 @@ object CacheUtil {
         }
     }
 
-    fun getSimpleUserInfo(): UserInfo? {
-        val result = UserInfo()
-        getUserInfo()?.apply {
-            if (user == null) {
-                return null
-            }
-            result.gender = user.gender
-            result.birthdate = user.birthdate
-            result.birth_time = user.birth_time
-            result.nick = user.nick
-            result.signature = user.signature
-            result.birthplace_info = user.birthplace_info
-            result.location_info = user.location_info
-            return result
-        }
-        return result
-    }
 
     fun setUserInfo(obj: LoginResponseData?) {
         val kv = getMMKV()
@@ -62,6 +48,48 @@ object CacheUtil {
             val json = GsonConverter.gson.toJson(obj)
             Log.e("TAG", "setUserInfo: $obj")
             kv.encode(USERINFO, json)
+        }
+    }
+
+    fun setAIOQuestions(obj: IMQuestionList?) {
+        val kv = getMMKV()
+        if (obj == null) {
+            Log.e("TAG", "setUserInfo:obj is null")
+            kv.encode(AIO_QUESTIONS, "")
+        } else {
+            val json = GsonConverter.gson.toJson(obj)
+            Log.e("TAG", "setUserInfo: $obj")
+            kv.encode(AIO_QUESTIONS, json)
+        }
+    }
+
+    fun getAIOQuestions(): IMQuestionList? {
+        val kv = getMMKV()
+        val str = kv.decodeString(AIO_QUESTIONS)
+        return if (TextUtils.isEmpty(str)) {
+            null
+        } else {
+            GsonConverter.gson.fromJson<IMQuestionList>(str, IMQuestionList::class.java)
+        }
+    }
+
+    fun setCoraInfo(obj: DetailResponseData?) {
+        val kv = getMMKV()
+        if (obj == null) {
+            kv.encode(CORA_INFO, "")
+        } else {
+            val json = GsonConverter.gson.toJson(obj)
+            kv.encode(CORA_INFO, json)
+        }
+    }
+
+    fun getCoraInfo(): DetailResponseData? {
+        val kv = getMMKV()
+        val str = kv.decodeString(CORA_INFO)
+        return if (TextUtils.isEmpty(str)) {
+            null
+        } else {
+            GsonConverter.gson.fromJson<DetailResponseData>(str, DetailResponseData::class.java)
         }
     }
 
@@ -86,23 +114,6 @@ object CacheUtil {
             GsonConverter.gson.fromJson<DailyHoroScopeData>(str, DailyHoroScopeData::class.java)
         }
     }*/
-
-
-    fun isLoggedInAndHasUserInfoCompleted(): Boolean {
-        getUserInfo()?.apply {
-            if (user == null) {
-                return false
-            }
-            val necessary1 = token?.isNotEmpty()
-            val necessary2 = user.open_uid?.isNotEmpty()
-            val necessary3 = user.nft_list?.any { it.url.isNotEmpty() }
-            return necessary1 == true && necessary2 == true && necessary3 == true
-        }
-        return false
-    }
-
-
-
 
     fun init(context: Context) {
         MMKV.initialize(context)

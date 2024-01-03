@@ -53,7 +53,7 @@
             android:layout_marginStart="@dimen/dp_5"
             android:layout_marginEnd="@dimen/dp_5"
             android:gravity="center"
-            android:text="New friend"
+            android:text="@string/new_friend"
             android:textColor="@color/color_B0B0B0"
             android:textSize="@dimen/sp_16"
             android:fontFamily="@font/poppins_semibold"

@@ -14,6 +14,8 @@
 package com.hyphenate.easeui.constants;
 
 public interface EaseConstant {
+    String MESSAGE_PREF_SHARE = "profileMsg://";
+
     String MESSAGE_ATTR_IS_VOICE_CALL = "is_voice_call";
     String MESSAGE_ATTR_IS_VIDEO_CALL = "is_video_call";
 
@@ -38,6 +40,7 @@ public interface EaseConstant {
     String EXTRA_CONVERSATION_ID = "conversationId";
     String EXTRA_CONVERSATION_AVATAR = "conversationAvatar";
     String EXTRA_CONVERSATION_NICK_NAME = "conversationNickName";
+    String EXTRA_CONVERSATION_CORA_QUESTION = "conversationCoraQuestion";
     String EXTRA_IS_ROAM = "isRoaming";
 
     String MESSAGE_TYPE_TXT = "txt";

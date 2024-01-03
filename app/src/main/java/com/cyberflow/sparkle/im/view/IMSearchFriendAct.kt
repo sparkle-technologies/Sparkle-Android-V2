@@ -8,16 +8,17 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.model.IMSearchData
+import com.cyberflow.base.model.IMUserSearchList
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.KeyboardUtil
 import com.cyberflow.sparkle.DBComponent.loadImage
 import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.ActivityImSearchFriendBinding
 import com.cyberflow.sparkle.databinding.ItemImSearchBinding
-import com.cyberflow.base.model.IMSearchData
-import com.cyberflow.base.model.IMUserSearchList
 import com.cyberflow.sparkle.im.viewmodel.IMViewModel
 import com.cyberflow.sparkle.profile.view.ProfileAct
+import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.models
 import com.drake.brv.utils.setup
@@ -55,26 +56,27 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
             addType<IMSearchData>(R.layout.item_im_search)
             onBind {
                 val data = getModel<IMSearchData>()
-                val binding = getBinding<ItemImSearchBinding>()
-                binding.tvFriendResult.text = getSpan(data.nick)
-
-                Log.e(TAG, "initView: ${data.avatar}" )
-
-                loadImage(binding.ivHead, data.avatar)
-                val address = if(data.wallet_address.isNullOrEmpty()) data.ca_wallet else data.wallet_address
-                if(address.length > 5){
-                    binding.tvAddress.text = "${address.substring(0, 5)}...${address.substring(address.length - 5, address.length)}"
+                getBinding<ItemImSearchBinding>().apply {
+                    tvFriendResult.text = getSpan(data.nick)
+//                    Log.e(TAG, "initView: ${data.avatar}" )
+                    loadImage(ivHead, data.avatar)
+                   /* val address = if(data.wallet_address.isNullOrEmpty()) data.ca_wallet else data.wallet_address
+                    if(address.length > 5){
+                        tvAddress.text = "${address.substring(0, 5)}...${address.substring(address.length - 5, address.length)}"
+                    }*/
+                    line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
+                    cardview.setOnClickListener {
+                        hideKeyboard(mDataBinding.edtSearchFriend)
+                        ProfileAct.go(this@IMSearchFriendAct, data.open_uid)
+                    }
+                    tvAdd.setClickListener(object : ShadowTxtButton.ShadowClickListener{
+                        override fun clicked(disable: Boolean) {
+                            val model = getModel<IMSearchData>()
+                            Log.e(TAG, "you choose:  $model")
+                            onItemClicked(model)
+                        }
+                    })
                 }
-                binding.line.visibility = if (layoutPosition == modelCount - 1) View.INVISIBLE else View.VISIBLE
-                binding.cardview.setOnClickListener {
-                    hideKeyboard(mDataBinding.edtSearchFriend)
-                    ProfileAct.go(this@IMSearchFriendAct, data.open_uid, ProfileAct.ADD_FRIEND)
-                }
-            }
-            R.id.tv_add.onClick {
-                val model = getModel<IMSearchData>()
-                Log.e(TAG, "you choose:  $model")
-                onItemClicked(model)
             }
         }
 
@@ -82,6 +84,10 @@ class IMSearchFriendAct : BaseDBAct<IMViewModel, ActivityImSearchFriendBinding>(
             onBackPressed()
         }
         mDataBinding.tvSearch.setOnClickListener {
+            mDataBinding.edtSearchFriend.apply {
+                clearFocus()
+                hideKeyboard(it)
+            }
             searchFriends()
         }
         mDataBinding.ivClear.setOnClickListener {

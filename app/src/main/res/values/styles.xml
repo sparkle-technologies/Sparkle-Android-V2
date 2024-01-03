@@ -19,4 +19,27 @@
     <style name="share_horizontal_line">
         <item name="android:background">@drawable/dash_line_divider_horizontal</item>
     </style>
+
+    <style name="horoscope_calendar_title">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/dp_18</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/color_7d7d80</item>
+        <item name="android:textSize">@dimen/sp_13</item>
+    </style>
+
+    <style name="home_bottom_navigation_img">
+        <item name="android:layout_width">@dimen/dp_25</item>
+        <item name="android:layout_height">@dimen/dp_25</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="input_layout_text" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
 </resources>

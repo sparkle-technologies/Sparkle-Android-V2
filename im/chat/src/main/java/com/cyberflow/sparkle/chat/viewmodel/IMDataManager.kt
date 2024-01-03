@@ -1,9 +1,8 @@
 package com.cyberflow.sparkle.chat.viewmodel
 
-import com.cyberflow.base.model.IMUserInfo
+import android.net.Uri
 import com.cyberflow.base.model.User
 import com.hyphenate.chat.EMMessage
-import com.hyphenate.easeui.domain.EaseUser
 
 
 class IMDataManager private constructor() {
@@ -13,42 +12,29 @@ class IMDataManager private constructor() {
         const val TAG = "IMDataManager"
     }
 
-    private var inviteCacheData : List<EMMessage>?  =  null
-    private var contactCacheData : List<EaseUser>?  =  null
-    private var conversationCacheData : List<IMUserInfo>?  =  null   //for share page
-
-    fun getInviteData(): List<EMMessage> {
-        return inviteCacheData.orEmpty()
-    }
-
-    fun getContactData(): List<EaseUser> {
-        return contactCacheData.orEmpty()
-    }
-
-    fun setInviteData(list: List<EMMessage>?) {
-        inviteCacheData = list
-    }
-
-    fun setContactData(data: List<EaseUser>?) {
-        contactCacheData = data
-    }
-
-    fun setConversationData(data: List<IMUserInfo>?) {
-        conversationCacheData = data
-    }
-
-    fun getConversationData(): List<IMUserInfo> {
-        return conversationCacheData.orEmpty()
-    }
-
-
     // for profile page
-    private var emMessage: EMMessage? = null
-    fun getEmMessage(): EMMessage? {
-        return emMessage
+    private var openUidProfile: String? = null
+    fun getOpenUidProfile(): String? {
+        return openUidProfile
     }
-    fun setEmMessage(emMessage: EMMessage?) {
-        this.emMessage = emMessage
+    fun setOpenUidProfile(openUidProfile: String?) {
+        this.openUidProfile = openUidProfile
+    }
+
+    private var forwardMsg: EMMessage? = null   // for forward page
+    fun getForwardMsg(): EMMessage? {
+        return forwardMsg
+    }
+    fun setForwardMsg(forwardMsg: EMMessage?) {
+        this.forwardMsg = forwardMsg
+    }
+
+    private var forwardImageUri : Uri? = null   // not forward, share image to contact
+    fun getForwardImageUri(): Uri? {
+        return forwardImageUri
+    }
+    fun setForwardImageUri(forwardImageUri: Uri?) {
+        this.forwardImageUri = forwardImageUri
     }
 
     private var user: User? = null
@@ -59,11 +45,19 @@ class IMDataManager private constructor() {
         this.user = user
     }
 
+    private var shareMsg: EMMessage? = null
+    fun getShareMsg(): EMMessage? {
+        return shareMsg
+    }
+    fun setShareMsg(shareMsg: EMMessage?) {
+        this.shareMsg = shareMsg
+    }
+
     fun clearCache(){
-        inviteCacheData = null
-        contactCacheData = null
-        conversationCacheData = null
-        emMessage = null
+        openUidProfile = null
+        forwardMsg = null
+        forwardImageUri = null
         user = null
+        shareMsg = null
     }
 }

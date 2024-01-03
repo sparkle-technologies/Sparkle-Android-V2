@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -453,6 +454,11 @@ public class EaseChatFragment extends EaseBaseFragment implements OnChatLayoutLi
         if (mContext != null) {
             mContext.finish();
         }
+    }
+
+    @Override
+    public void onAIOResultClick(EMMessage message) {
+
     }
 }
 

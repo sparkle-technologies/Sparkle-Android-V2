@@ -17,7 +17,7 @@
         android:fontFamily="@font/poppins_semibold"
         android:paddingTop="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_10"
-        android:text="Your contacts"
+        android:text="@string/your_contacts"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_14"
         app:layout_constraintLeft_toLeftOf="parent"

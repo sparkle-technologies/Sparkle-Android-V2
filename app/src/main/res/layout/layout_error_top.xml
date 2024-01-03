@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_90"
-            android:text="Oops!"
+            android:text="@string/oops"
             android:fontFamily="@font/poppins_semibold"
             android:textColor="@color/color_000000"
             android:textSize="@dimen/sp_16"
@@ -31,7 +31,7 @@
             android:layout_marginTop="@dimen/dp_14"
             android:gravity="center"
             android:fontFamily="@font/poppins_regular"
-            android:text="The magic seems to have \nmalfunctioned."
+            android:text="@string/the_magic_seems_to_have_nmalfunctioned"
             android:textColor="@color/color_000000"
             android:textSize="@dimen/sp_14"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -50,7 +50,7 @@
             app:view_bg="@drawable/main_bg_add_friends_empty_white"
             app:view_left_drawable="@drawable/main_ic_reload"
             app:view_shadow_distance="1dp"
-            app:view_text="Reload"
+            app:view_text="@string/reload"
             app:view_text_color="@color/color_000000" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

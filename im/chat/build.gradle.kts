@@ -40,6 +40,7 @@ android {
         buildConfigField("String", "APP_SEND_SMS_FROM_SERVER", "\"/inside/app/sms/send\"")
         buildConfigField("String", "APP_VERIFICATION_CODE", "\"/inside/app/image/\"")
 
+//        manifestPlaceholders["EASEMOB_APPKEY"] = "1183231031159952#sparkle"
         manifestPlaceholders["EASEMOB_APPKEY"] = "1111230615161307#sparkletest"
     }
 
@@ -74,8 +75,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation(project(mapOf("path" to ":base")))
-    implementation(project(mapOf("path" to ":base_resources")))
-    implementation(project(mapOf("path" to ":base_widget")))
     api(project(mapOf("path" to ":ease-im-kit")))
 
     api("io.hyphenate:hyphenate-chat:4.0.3")

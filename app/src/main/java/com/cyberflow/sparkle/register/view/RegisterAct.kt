@@ -13,6 +13,7 @@ import com.cyberflow.base.model.RegisterRequestBean
 import com.cyberflow.sparkle.MyApp
 import com.cyberflow.sparkle.databinding.ActivityRegiserBinding
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
+import com.hyphenate.easeui.input.util.ViewUtil
 
 class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() {
 
@@ -24,6 +25,8 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+//        initAnim()
+
         var adapter = PageAdapter(supportFragmentManager, lifecycle)
         adapter.addFragment(SelectGenderFragment())
         adapter.addFragment(SelectBirthdayFragment())
@@ -33,8 +36,57 @@ class RegisterAct : BaseVBAct<LoginRegisterViewModel, ActivityRegiserBinding>() 
             isUserInputEnabled = false
             orientation = ViewPager2.ORIENTATION_HORIZONTAL
             this.adapter = adapter
+            registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                   handleIndicator(position)
+                }
+            })
         }
-        mViewBind.dotsIndicator.attachTo(mViewBind.pager)
+//        mViewBind.dotsIndicator.attachTo(mViewBind.pager)
+
+        mViewBind.root.setOnClickListener {
+            mViewBind.pager.clearFocus()
+            ViewUtil.hideKeyboard(this, mViewBind.pager)
+        }
+    }
+
+    private fun handleIndicator(position: Int) {
+         when(position){
+             0 -> {
+                 mViewBind.iv1.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_1)
+                 mViewBind.iv2.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_empty)
+                 mViewBind.iv3.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_empty)
+                 mViewBind.iv4.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_empty)
+             }
+             1 -> {
+                 mViewBind.iv1.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_1)
+                 mViewBind.iv2.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_2)
+                 mViewBind.iv3.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_empty)
+                 mViewBind.iv4.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_empty)
+             }
+             2 -> {
+                 mViewBind.iv1.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_1)
+                 mViewBind.iv2.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_2)
+                 mViewBind.iv3.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_3)
+                 mViewBind.iv4.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_empty)
+             }
+             3 -> {
+                 mViewBind.iv1.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_1)
+                 mViewBind.iv2.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_2)
+                 mViewBind.iv3.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_3)
+                 mViewBind.iv4.setImageResource(com.cyberflow.base.resources.R.drawable.register_ic_dot_4)
+             }
+         }
+    }
+
+    private fun initAnim() {
+        /*val rotateDrawable = mViewBind.ivRotate.background as RotateDrawable
+        ObjectAnimator.ofInt(rotateDrawable, "level", 0, 10000).apply {
+            duration = 9000
+            repeatCount = ValueAnimator.INFINITE
+            interpolator = LinearInterpolator()
+            start()
+        }*/
     }
 
     override fun initData() {

@@ -29,8 +29,8 @@
         <attr name="view_text_size" format="dimension" />
         <attr name="view_text_bold" format="boolean" />
         <attr name="view_text_disable_color" format="color" />
-
         <attr name="view_bg" format="reference" />
+        <attr name="view_click_enable" format="boolean" />
         <attr name="view_disable" format="boolean" />
         <attr name="view_disable_bg" format="reference" />
     </declare-styleable>
@@ -39,6 +39,10 @@
         <attr name="view_img_shadow_distance" format="dimension" />
         <attr name="view_img_src" format="reference" />
         <attr name="view_bg_src" format="reference" />
+
+        <attr name="view_img_disable_src" format="reference" />
+        <attr name="view_img_disable_bg" format="reference" />
+        <attr name="view_img_disable" format="boolean" />
     </declare-styleable>
 
 
@@ -88,6 +92,21 @@
     <style name="share_dialog" parent="android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="dialog_animation" parent="@android:style/Animation.Dialog">
+        <!-- 进入时的动画 -->
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <!-- 退出时的动画 -->
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
+    <style name="forward_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowContentOverlay">@null</item>
