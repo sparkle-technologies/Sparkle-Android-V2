@@ -41,6 +41,7 @@ import com.cyberflow.base.util.ViewExt.convertViewToBitmap
 import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.dp2px
 import com.cyberflow.sparkle.DBComponent
+import com.cyberflow.sparkle.DBComponent.loadAvatar
 import com.cyberflow.sparkle.chat.DemoHelper
 import com.cyberflow.sparkle.chat.common.constant.DemoConstant
 import com.cyberflow.sparkle.chat.common.manager.PushAndMessageHelper
@@ -91,6 +92,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
 
         const val SHARE_FROM_PROFILE = 1001
         const val SHARE_FROM_CHAT = 1002
+        const val SHARE_FROM_COMPATIBILITY = 1003
 
         const val USER_AVATAR_URL = "server_img_url"
         const val FROM_ACTIVITY = "from_activity"
@@ -130,6 +132,10 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
             Log.e(TAG, "layChat click")
             dialog?.hideOrShow()
         }
+        mDataBinding.layCompatibility.setOnClickListener {
+            Log.e(TAG, "layCompatibility click")
+            dialog?.hideOrShow()
+        }
         mDataBinding.btnDelete.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 finish()
@@ -137,11 +143,12 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         })
         dialog = ShareDialog(this@ShareAct, object : ShareDialog.Callback {
             override fun onSelected(user: IMConversationCache?, type: Int) {
-//                Log.e(TAG, "onSelected: type=$type  user=$user" )
+                Log.e(TAG, "onSelected: type=$type  user=$user" )
                 when (type) {
                     ShareDialog.TYPE_SHARE -> {
                         isMore = false
                         shareUser = user
+                        Log.e(TAG, "onSelected: isMore=$isMore shareUser=$shareUser" )
                         share()
                     }
 
@@ -170,6 +177,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
      * more: jump to IMForwardListAct   or  just show the ForwardDialog
      */
     private fun share() {
+        Log.e(TAG, "share: imgUri=$imgUri", )
         if (imgUri == null) {
             generateIMShareBitmap()
             return
@@ -177,18 +185,14 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         val msg = EMMessage.createImageSendMessage(imgUri, true, "")
         IMDataManager.instance.setForwardMsg(msg)
         IMDataManager.instance.setForwardImageUri(imgUri)
+        Log.e(TAG, "share: isMore=$isMore" )
+
         if (isMore) {
             TheRouter.build(PageConst.IM.PAGE_IM_FORWARD).withString("forward_msg_id", "").navigation()  // must be empty, clear to know is this a forward msg, or a new created msg?
         } else {
+            Log.e(TAG, "share: shareUser=$shareUser" )
             shareUser?.also {
-                shareTo(
-                    Contact(
-                        name = it.nick,
-                        openUid = it.open_uid,
-                        avatar = it.avatar,
-                        gender = it.gender
-                    )
-                )
+                shareTo(Contact(name = it.nick, openUid = it.open_uid, avatar = it.avatar, gender = it.gender))
             }
         }
     }
@@ -196,24 +200,19 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
     private var sendDialog: ForwardDialog? = null
     private var imgUri: Uri? = null
     private fun shareTo(model: Contact) {
+        Log.e(TAG, "shareTo: model=$model" )
         sendDialog = ForwardDialog(this, model, object : ForwardDialog.Callback {
             override fun onSelected(ok: Boolean) {
                 if (ok) {
                     sendDialog?.onDestroy()
                     LoadingDialogHolder.getLoadingDialog()?.show(this@ShareAct)
-
                     if (from == SHARE_FROM_PROFILE) {
                         val from = CacheUtil.getUserInfo()?.user?.open_uid?.replace("-", "_")
-                        PushAndMessageHelper.sendProfileShareImageMessage(
-                            from,
-                            model.openUid.replace("-", "_"),
-                            imgUri
-                        )
-                    } else {
-                        PushAndMessageHelper.sendImageMessage(
-                            model.openUid.replace("-", "_"),
-                            imgUri
-                        )
+                        PushAndMessageHelper.sendProfileShareImageMessage(from, model.openUid.replace("-", "_"), imgUri)
+                    } else if(from == SHARE_FROM_COMPATIBILITY){
+                        PushAndMessageHelper.sendImageMessage(model.openUid.replace("-", "_"), imgUri)
+                    }else{
+                        PushAndMessageHelper.sendImageMessage(model.openUid.replace("-", "_"), imgUri)
                     }
                 } else {
                     sendDialog?.onDestroy()
@@ -273,13 +272,27 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
             }
         }
 
+        if(from == SHARE_FROM_COMPATIBILITY){
+            showCompatibilityUI()
+        }
+
         setMsgCallBack()
+    }
+
+    private fun showCompatibilityUI() {
+         CacheUtil.getUserInfo()?.user?.also {
+             loadAvatar(mDataBinding.ivCompatibilityAvatar, it.avatar, it.gender)
+             mDataBinding.tvCompatibilityName.text = it.nick
+             generateQRcode("${ConstantGlobal.SHARE_BODY}${it.open_uid}", mDataBinding.ivCompatibilityQr)
+
+         }
     }
 
     private fun hideOrShow() {
         mDataBinding.bg.isVisible = from == SHARE_FROM_PROFILE
         mDataBinding.bgIm.isVisible = from == SHARE_FROM_PROFILE
         mDataBinding.layChat.isVisible = from == SHARE_FROM_CHAT
+        mDataBinding.layCompatibility.isVisible = from == SHARE_FROM_COMPATIBILITY
     }
 
     private fun showChatShareUI(message: EMMessage) {
@@ -457,11 +470,12 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
             lifecycleScope.launch {
                 val bitmap = if (from == SHARE_FROM_PROFILE) {
                     convertViewToBitmap(mDataBinding.bgIm)
-                } else {
-                    val bgBitmap = BitmapFactory.decodeResource(
-                        resources,
-                        com.cyberflow.sparkle.R.drawable.share_bg
-                    )
+                } else if(from == SHARE_FROM_COMPATIBILITY){
+                    val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)
+                    val viewBitmap = convertViewToBitmap(mDataBinding.layCompatibility)
+                    combineBitmap(bgBitmap, viewBitmap)
+                }else{
+                    val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)
                     val viewBitmap = convertViewToBitmap(mDataBinding.layChat)
                     combineBitmap(bgBitmap, viewBitmap)
                 }
@@ -498,6 +512,8 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                 )
                 val viewBitmap = if (from == SHARE_FROM_PROFILE) {
                     convertViewToBitmap(mDataBinding.bg)
+                } else if(from == SHARE_FROM_COMPATIBILITY){
+                    convertViewToBitmap(mDataBinding.layCompatibility)
                 } else {
                     convertViewToBitmap(mDataBinding.layChat)
                 }

@@ -53,7 +53,7 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
 
         mDataBinding.btnInviteTwo.setClickListener(object : ShadowTxtButton.ShadowClickListener {
             override fun clicked(disable: Boolean) {
-                toastSuccess(getString(R.string.coming_soon))
+                ShareAct.go(this@CompatibilityAct, ShareAct.SHARE_FROM_COMPATIBILITY, "")
             }
         })
         mDataBinding.btnInviteList.setClickListener(object : ShadowImgButton.ShadowClickListener {
