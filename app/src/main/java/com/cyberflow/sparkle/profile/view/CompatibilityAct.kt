@@ -33,7 +33,6 @@ import com.drake.net.utils.withMain
 import com.therouter.router.Route
 import com.wuyr.fanlayout.FanLayout
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 @Route(path = PageConst.App.PAGE_COMPATIBILITY)
 class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>() {
@@ -69,12 +68,10 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
 
         CacheUtil.getUserInfo()?.user?.apply {
             mDataBinding.tvA.text = this.nick
-            mDataBinding.fanLayout.bearingView?.findViewById<ImageView>(R.id.iv_avatar)?.also {
-                DBComponent.loadAvatar(it, avatar, gender)
-            }
+            DBComponent.loadAvatar(mDataBinding.ivAvatar, avatar, gender)
         }
         mDataBinding.tvB.text = "?"
-        mDataBinding.tvDetails.text = "Choose a constellation to see how you guys fit."
+        mDataBinding.tvDetails.text = getString(R.string.choose_a_constellation_to_see_how_you_guys_fit)
         mDataBinding.layArrow.isVisible = false
     }
 
@@ -92,6 +89,7 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
                 stopRotateImg()
             }
             setOnItemSelectedListener { item ->
+                Log.e("TAG", "FanLayout onSelected: isFirstSelect=$isFirstSelect ")
                 if(isFirstSelect){
                     isFirstSelect = false
                     return@setOnItemSelectedListener
@@ -185,17 +183,18 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     private fun batchFetch() {
         result.forEach { name ->
             scopeNetLife {
-                val cache = DBManager.instance.db?.compatibilityCacheDao()?.fetch(name)
+                /*val cache = DBManager.instance.db?.compatibilityCacheDao()?.fetch(name)
                 if (cache == null) {
-                    val result = Post<CompatibilityItem>(Api.USER_COMPATIBILITY) {
-                        json("constellation" to name)
-                    }.await()
-                    withIO {
-                        val data = GsonConverter.gson.toJson(result)
-                        data?.also {
-                            DBManager.instance.db?.compatibilityCacheDao()
-                                ?.insert(Compatibility(name, it))
-                        }
+
+                }*/
+                val result = Post<CompatibilityItem>(Api.USER_COMPATIBILITY) {
+                    json("constellation" to name)
+                }.await()
+                withIO {
+                    val data = GsonConverter.gson.toJson(result)
+                    data?.also {
+                        DBManager.instance.db?.compatibilityCacheDao()
+                            ?.insert(Compatibility(name, it))
                     }
                 }
             }
@@ -204,18 +203,18 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
 
     private fun showData(data: CompatibilityItem?) {
         Log.e(TAG, "showData: $data" )
-
 //        mDataBinding.scrollView.fullScroll(View.FOCUS_DOWN)
         mDataBinding.tvB.text = data?.constellation_b
-        data?.content?.also {
+        mDataBinding.tvDetails.text = data?.content
+
+        /* data?.content?.also {
             val maxLength = it.length
             val randomLength = Random.nextInt(1, maxLength + 1) // 随机生成截取的长度
             val startIndex = Random.nextInt(0, it.length - randomLength + 1) // 随机生成截取的起始索引
             val endIndex = startIndex + randomLength // 计算截取的结束索引
             val substring = it.substring(startIndex, endIndex) // 截取字符串的一部分
             mDataBinding.tvDetails.text = substring
-        }
-//        mDataBinding.tvDetails.text = data?.content
+        }*/
     }
 
     private var isFirst = true

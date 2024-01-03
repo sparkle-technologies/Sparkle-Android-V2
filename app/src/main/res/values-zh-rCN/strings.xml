@@ -95,5 +95,7 @@
     <string name="intimacy">亲密</string>
     <string name="rapport">默契</string>
     <string name="commitment">磨练</string>
+    <string name="invite_friends_for_deeper_insights">邀请好友深入合盘</string>
+    <string name="choose_a_constellation_to_see_how_you_guys_fit">选择一个星座，查看合盘分析</string>
 
 </resources>

@@ -97,5 +97,7 @@
     <string name="intimacy">Intimacy</string>
     <string name="rapport">Rapport</string>
     <string name="commitment">Commitment</string>
+    <string name="invite_friends_for_deeper_insights">Invite friends for deeper insights</string>
+    <string name="choose_a_constellation_to_see_how_you_guys_fit">Choose a constellation to see how you guys fit.</string>
 
 </resources>

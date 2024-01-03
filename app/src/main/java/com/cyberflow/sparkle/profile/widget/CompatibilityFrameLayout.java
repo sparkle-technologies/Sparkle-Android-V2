@@ -2,7 +2,6 @@ package com.cyberflow.sparkle.profile.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -73,7 +72,7 @@ public class CompatibilityFrameLayout extends FrameLayout {
 
         if (ev.getRawY() < bottom && ev.getRawY() < top) {
             circle.dispatchTouchEvent(ev);
-            Log.e(TAG, " 被拦截了");
+//            Log.e(TAG, " 被拦截了");
             return true;
         }
 
