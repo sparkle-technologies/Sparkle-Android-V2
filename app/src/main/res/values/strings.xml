@@ -87,5 +87,15 @@
     <string name="oops_image_download_failed">Oops! Image download failed.</string>
     <string name="compatibility">Compatibility</string>
     <string name="no_result_yet">No result yet.</string>
+    <string name="overall">overall</string>
+    <string name="relationship_with_me">Relationship with me</string>
+    <string name="and">and</string>
+    <string name="discover_what_draws_me_to_you">Discover What Draws Me to You</string>
+    <string name="bond">Bond</string>
+    <string name="sparkle">Sparkle</string>
+    <string name="fun">Fun</string>
+    <string name="intimacy">Intimacy</string>
+    <string name="rapport">Rapport</string>
+    <string name="commitment">Commitment</string>
 
 </resources>

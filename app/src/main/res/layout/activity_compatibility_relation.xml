@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/status_bar_height"
             android:fontFamily="@font/poppins_semibold"
-            android:text="Relationship with me"
+            android:text="@string/relationship_with_me"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_16"
             app:layout_constraintLeft_toLeftOf="parent"

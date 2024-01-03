@@ -284,14 +284,16 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
              loadAvatar(mDataBinding.ivCompatibilityAvatar, it.avatar, it.gender)
              mDataBinding.tvCompatibilityName.text = it.nick
              generateQRcode("${ConstantGlobal.SHARE_BODY}${it.open_uid}", mDataBinding.ivCompatibilityQr)
-
          }
     }
 
     private fun hideOrShow() {
         mDataBinding.bg.isVisible = from == SHARE_FROM_PROFILE
         mDataBinding.bgIm.isVisible = from == SHARE_FROM_PROFILE
+
+        mDataBinding.scroll.isVisible = from == SHARE_FROM_CHAT
         mDataBinding.layChat.isVisible = from == SHARE_FROM_CHAT
+
         mDataBinding.layCompatibility.isVisible = from == SHARE_FROM_COMPATIBILITY
     }
 

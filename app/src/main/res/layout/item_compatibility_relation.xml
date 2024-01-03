@@ -75,26 +75,36 @@
             app:layout_constraintLeft_toRightOf="@+id/card_view"
             app:layout_constraintTop_toTopOf="@+id/card_view" />
 
-        <TextView
-            android:id="@+id/tv_relation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/compatibility_relation_text_bg_item"
-            android:fontFamily="@font/poppins_regular"
-            android:layout_marginEnd="@dimen/dp_70"
-            android:gravity="center"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:minHeight="@dimen/dp_20"
-            android:paddingStart="@dimen/dp_10"
-            android:paddingEnd="@dimen/dp_10"
-            tools:text="Love at first sight"
-            android:text="@{m.relation}"
-            android:textColor="@color/color_8B82DB"
-            android:textSize="@dimen/sp_14"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:paddingEnd="@dimen/dp_20"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title"
+            app:layout_constraintRight_toLeftOf="@+id/tv_overall"
             app:layout_constraintBottom_toBottomOf="@+id/card_view"
-            app:layout_constraintLeft_toLeftOf="@+id/tv_title" />
+            app:layout_constraintLeft_toLeftOf="@+id/tv_title">
 
+            <TextView
+                android:id="@+id/tv_relation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@drawable/compatibility_relation_text_bg_item"
+                android:fontFamily="@font/poppins_regular"
+                android:gravity="center"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:minHeight="@dimen/dp_20"
+                android:paddingStart="@dimen/dp_10"
+                android:paddingEnd="@dimen/dp_10"
+                tools:text="Love at first sight"
+                android:text="@{m.relation}"
+                android:textColor="@color/color_8B82DB"
+                android:textSize="@dimen/sp_14"
+                app:layout_constraintBottom_toBottomOf="@+id/card_view"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_title" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_score"

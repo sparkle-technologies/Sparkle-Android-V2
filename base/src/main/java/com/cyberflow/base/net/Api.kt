@@ -33,8 +33,7 @@ object Api {
     const val RELATIONSHIP_FRIEND_LIST = "relationship/user/get_friend_list"
 
     const val USER_COMPATIBILITY = "stars-cipher/user/compatibility"
-    const val BOND_LIST = "stars-cipher/user/bond_list"
-
+    const val BOND_LIST = "ticket/user/bond_list"
 
     const val SITE_MESSAGE = "sparkle-msg-notify/site_message"
 

@@ -63,14 +63,15 @@ class CompatibilityRelationAct : BaseDBAct<CompatibilityViewModel, ActivityCompa
                 mDataBinding.state.showEmpty()
             }else{
                 mDataBinding.state.showContent()
+
                 mDataBinding.rv.models = it.bond_list.map {
                     RelationItem(
                         myurl = user?.avatar.orEmpty(),
                         taurl = it.avatar,
-                        name = "${user?.nick} and ${it.nick}",
+                        name = "${user?.nick} & ${it.nick}",
                         relation = it.title,
                         score = it.score,
-                        overall = "overall"
+                        overall = getString(R.string.overall)
                     )
                 }
             }

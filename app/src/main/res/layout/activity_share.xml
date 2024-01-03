@@ -282,6 +282,7 @@
             android:layout_marginTop="@dimen/dp_13"
             android:layout_marginEnd="@dimen/dp_20"
             android:layout_marginBottom="@dimen/dp_10"
+            android:visibility="gone"
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -605,7 +606,6 @@ Recently, you may feel more impatient and irritable. "
 
         </ScrollView>
 
-
         <LinearLayout
             android:id="@+id/lay_compatibility"
             android:layout_width="300dp"
@@ -702,7 +702,7 @@ Recently, you may feel more impatient and irritable. "
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_bold"
                     android:maxLines="2"
-                    android:text="Discover What Draws Me to You"
+                    android:text="@string/discover_what_draws_me_to_you"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_12"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_bg_title"
@@ -838,7 +838,7 @@ Recently, you may feel more impatient and irritable. "
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Commitment"
+                        android:text="@string/commitment"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp_10" />
 
@@ -865,7 +865,7 @@ Recently, you may feel more impatient and irritable. "
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Bond"
+                        android:text="@string/bond"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp_10" />
 
@@ -892,7 +892,7 @@ Recently, you may feel more impatient and irritable. "
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Sparkle"
+                        android:text="@string/sparkle"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp_10" />
 
@@ -919,7 +919,7 @@ Recently, you may feel more impatient and irritable. "
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Fun"
+                        android:text="@string/fun"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp_10" />
 
@@ -946,7 +946,7 @@ Recently, you may feel more impatient and irritable. "
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Intimacy"
+                        android:text="@string/intimacy"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp_10" />
 
@@ -973,7 +973,7 @@ Recently, you may feel more impatient and irritable. "
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Rapport"
+                        android:text="@string/rapport"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp_10" />
 
@@ -1008,7 +1008,7 @@ Recently, you may feel more impatient and irritable. "
                         android:fontFamily="@font/poppins_bold"
                         android:gravity="center_vertical"
                         android:maxLines="1"
-                        android:text="@string/cora_s_tarot_world"
+                        android:text="@string/compatibility"
                         android:textColor="@color/black"
                         android:textSize="@dimen/sp_15"
                         android:visibility="visible" />

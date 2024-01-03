@@ -79,11 +79,21 @@
     <string name="no_bio">还没有填写个性签名，去</string>
     <string name="has_not_yet_constructed_the_bio">Ta还没有个性签名.</string>
     <string name="join_me_on_starry_book">来小星书，加我为好友！</string>
-    <string name="explore_more_on_starry_book">来小星书，探索更多！</string>
+    <string name="explore_more_on_starry_book">来Starry Book，探索更多！</string>
     <string name="cora_s_tarot_world">Cora的塔罗世界</string>
     <string name="image_successfully_downloaded">图片已成功下载到相册</string>
     <string name="oops_image_download_failed">图片下载失败，请重试</string>
     <string name="compatibility">合盘</string>
     <string name="no_result_yet">没有合盘记录</string>
+    <string name="overall">总分</string>
+    <string name="relationship_with_me">合盘记录</string>
+    <string name="and">和</string>
+    <string name="discover_what_draws_me_to_you">你会被我的什么所吸引?</string>
+    <string name="bond">羁绊</string>
+    <string name="sparkle">火花</string>
+    <string name="fun">玩乐</string>
+    <string name="intimacy">亲密</string>
+    <string name="rapport">默契</string>
+    <string name="commitment">磨练</string>
 
 </resources>
