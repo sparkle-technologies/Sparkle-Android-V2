@@ -12,7 +12,6 @@ import com.cyberflow.sparkle.databinding.ActivityCompatibilityRelationBinding
 import com.cyberflow.sparkle.databinding.ItemCompatibilityRelationBinding
 import com.cyberflow.sparkle.profile.viewmodel.CompatibilityViewModel
 import com.cyberflow.sparkle.widget.ShadowTxtButton
-import com.drake.brv.annotaion.AnimationType
 import com.drake.brv.annotaion.DividerOrientation
 import com.drake.brv.utils.divider
 import com.drake.brv.utils.linear
@@ -41,9 +40,6 @@ class CompatibilityRelationAct : BaseDBAct<CompatibilityViewModel, ActivityCompa
             orientation = DividerOrientation.VERTICAL
             setDivider(16, true)
         }.setup {
-            animationRepeat = true
-            setAnimation(AnimationType.SCALE)
-
             addType<RelationItem>(R.layout.item_compatibility_relation)
             onBind {
                 getBinding<ItemCompatibilityRelationBinding>().apply {

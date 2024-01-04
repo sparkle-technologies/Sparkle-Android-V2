@@ -40,8 +40,6 @@ object ToastDialogHolder {
     fun getDialog(): IToastDialog? {
         return toastDialog
     }
-
-    const val CHAT_ACTIVITY_NOTIFY = "chat_activity_notify"
 }
 
 

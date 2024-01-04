@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.cyberflow.base.act.BaseDBAct
 import com.cyberflow.base.model.Compatibility
@@ -18,7 +17,6 @@ import com.cyberflow.base.net.Api
 import com.cyberflow.base.net.GsonConverter
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.PageConst
-import com.cyberflow.base.util.dp2px
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.DBComponent
 import com.cyberflow.sparkle.R
@@ -46,6 +44,9 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     override fun initView(savedInstanceState: Bundle?) {
+        result.clear()
+        result.addAll(resources.getStringArray(R.array.stars))
+
         mDataBinding.llBack.setOnClickListener {
             finish()
         }
@@ -74,25 +75,40 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
 
         mDataBinding.tvB.text = "?"
         mDataBinding.tvDetails.text = getString(R.string.choose_a_constellation_to_see_how_you_guys_fit)
-        mDataBinding.layArrow.isVisible = false
+
     }
 
+    private var lastIdx = -1
 
     private fun initFanLayout() {
         mDataBinding.fanLayout.apply {
             setOnItemRotateListener { rotation ->
-                Log.e(TAG, "FanLayout: ItemRotateListener rotation=$rotation" )
+//                Log.e(TAG, "FanLayout: ItemRotateListener rotation=$rotation" )
                 initRotation += rotation
                 mDataBinding.ivRotate.rotation = initRotation
+
+                // initRotation  偏移量 + 15
+                val p1 = (-initRotation.toInt() + 15) % 360
+                val p2 = if(p1<0) {
+                     p1 + 360
+                }else{
+                    p1
+                }
+                val p3 = p2 / 30
+//                Log.e(TAG, "initRotation=$initRotation  p1=$p1  p2=$p2  p3=$p3" )
+                if(p3 != lastIdx){
+                    mDataBinding.tvSelected.text = result[p3 % result.size]
+                    lastIdx = p3
+                }
             }
             setOnBearingClickListener { }
             setOnItemClickListener { view, index ->
-                Log.e(TAG, "FanLayout: ItemClickListener index=$index" )
-                stopRotateImg()
+                Log.e(TAG, "FanLayout: ItemClickListener index=$index")
+                startOrStop()
             }
             setOnItemSelectedListener { item ->
                 Log.e("TAG", "FanLayout onSelected: isFirstSelect=$isFirstSelect ")
-                if(isFirstSelect){
+                if (isFirstSelect) {
                     isFirstSelect = false
                     return@setOnItemSelectedListener
                 }
@@ -108,8 +124,11 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
 
             // handle user interaction
 //            mDataBinding.frameLayout.setViews(mDataBinding.scrollView, mDataBinding.ivAnchor, mDataBinding.fanLayout)
-            mDataBinding.frameLayout.setViews(mDataBinding.tvCompatibilityTitle, mDataBinding.ivAnchor, mDataBinding.fanLayout)
-            mDataBinding.frameLayout.setTxtStrict(mDataBinding.layBottom, mDataBinding.tvDetails, dp2px(20f))
+            mDataBinding.frameLayout.setViews(
+                mDataBinding.tvCompatibilityTitle,
+                mDataBinding.ivAnchor,
+                mDataBinding.fanLayout
+            )
         }
     }
 
@@ -130,20 +149,7 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
         R.drawable.ic_11,
     )
 
-    private val result = arrayListOf<String>(
-        "Aries",
-        "Taurus",
-        "Gemini",
-        "Cancer",
-        "Leo",
-        "Virgo",
-        "Libra",
-        "Scorpio",
-        "Sagittarius",
-        "Capricorn",
-        "Aquarius",
-        "Pisces"
-    )
+    private val result = arrayListOf<String>()
 
     private fun getView(): View? {
         val viewGroup = LayoutInflater.from(this).inflate(R.layout.item, null) as ViewGroup
@@ -165,11 +171,7 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     private fun handleSelect(str: String) {
-        Log.e(TAG, "handleSelect: " )
-
-        mDataBinding.tvSelected.text = str
-        mDataBinding.layArrow.isVisible = true
-
+        Log.e(TAG, "handleSelect: ")
         lifecycleScope.launch {
             val cache = DBManager.instance.db?.compatibilityCacheDao()?.fetch(str)
             cache?.also {
@@ -205,26 +207,24 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     private fun showData(data: CompatibilityItem?) {
-        Log.e(TAG, "showData: $data" )
+//        Log.e(TAG, "showData: $data" )
 //        mDataBinding.scrollView.fullScroll(View.FOCUS_DOWN)
         mDataBinding.tvB.text = data?.constellation_b
         mDataBinding.tvDetails.text = data?.content
 
-        /* data?.content?.also {
-            val maxLength = it.length
-            val randomLength = Random.nextInt(1, maxLength + 1) // 随机生成截取的长度
-            val startIndex = Random.nextInt(0, it.length - randomLength + 1) // 随机生成截取的起始索引
-            val endIndex = startIndex + randomLength // 计算截取的结束索引
-            val substring = it.substring(startIndex, endIndex) // 截取字符串的一部分
-            mDataBinding.tvDetails.text = substring
-        }*/
+        if(!mDataBinding.frameLayout.scroll){
+//            mDataBinding.scrollView.scrollTo(0, 0)
+            mDataBinding.barLayout.setExpanded(false)
+            mDataBinding.scrollView.fullScroll(View.FOCUS_DOWN)
+            mDataBinding.frameLayout.canScroll(true)
+        }
     }
 
     private var isFirst = true
     private var stillRotate = false
 
     override fun onResume() {
-        Log.e(TAG, "onResume: ", )
+//        Log.e(TAG, "onResume: ", )
         super.onResume()
         if (isFirst) {
             rotateImg()
@@ -237,7 +237,7 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     override fun onPause() {
-        Log.e(TAG, "onPause: " )
+//        Log.e(TAG, "onPause: " )
         super.onPause()
         stillRotate = (timerTask?.isCancelled == false)
         stopRotateImg()
@@ -247,20 +247,28 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
 
     private var timerTask: TimerTask? = null
     private fun rotateImg() {
-        Log.e(TAG, "rotateImg: ")
-        if(timerTask!=null){
+//        Log.e(TAG, "rotateImg: ")
+        if (timerTask != null) {
             timerTask?.cancel()
             timerTask = null
         }
-        timerTask = TimerTask(100) {
-            Log.e(TAG, "tick rotateImg: ")
-            mDataBinding.fanLayout.rotation(0.6f)
+        timerTask = TimerTask(50) {
+//            Log.e(TAG, "tick rotateImg: ")
+            mDataBinding.fanLayout.rotation(-0.3f)
         }
         timerTask?.start()
     }
 
+    private fun startOrStop() {
+        if ((timerTask?.isCancelled == false)) {
+            stopRotateImg()
+        } else {
+            rotateImg()
+        }
+    }
+
     private fun stopRotateImg() {
-        Log.e(TAG, "stopRotateImg: ")
+//        Log.e(TAG, "stopRotateImg: ")
         timerTask?.cancel()
         timerTask = null
     }

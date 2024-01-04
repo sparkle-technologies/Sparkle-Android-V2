@@ -51,10 +51,8 @@ import com.cyberflow.sparkle.im.viewmodel.Contact
 import com.cyberflow.sparkle.im.widget.ForwardDialog
 import com.cyberflow.sparkle.profile.viewmodel.ShareViewModel
 import com.cyberflow.sparkle.profile.widget.ShareDialog
-import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.PermissionDialog
 import com.cyberflow.sparkle.widget.ShadowImgButton
-import com.cyberflow.sparkle.widget.ToastDialogHolder
 import com.drake.net.Post
 import com.drake.net.utils.scopeNetLife
 import com.drake.net.utils.withMain
@@ -225,12 +223,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
     private fun setMsgCallBack() {
         LiveDataBus.get().with(DemoConstant.MESSAGE_FORWARD, EaseEvent::class.java).observe(this) {
             LoadingDialogHolder.getLoadingDialog()?.hide()
-            LiveDataBus.get().with(ToastDialogHolder.CHAT_ACTIVITY_NOTIFY).postValue(
-                NotificationDialog.ToastBody(
-                    NotificationDialog.TYPE_SUCCESS,
-                    getString(R.string.message_sent)
-                )
-            )
+            toastSuccess(getString(R.string.message_sent))
             finish()
         }
 

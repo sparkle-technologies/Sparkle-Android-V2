@@ -187,11 +187,6 @@ class ChatActivity : BaseDBAct<ChatViewModel, ActivityImChatBinding>(),
                     finish()
                 }
             }
-
-        LiveDataBus.get().with(ToastDialogHolder.CHAT_ACTIVITY_NOTIFY, NotificationDialog.ToastBody::class.java).observe(this){
-            myToast(it.type, it.content)
-        }
-
         setDefaultTitle()
     }
 

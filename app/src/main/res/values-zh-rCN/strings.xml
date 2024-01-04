@@ -98,4 +98,19 @@
     <string name="invite_friends_for_deeper_insights">邀请好友深入合盘</string>
     <string name="choose_a_constellation_to_see_how_you_guys_fit">选择一个星座，查看合盘分析</string>
 
+    <string-array name="stars">
+        <item>白羊座</item>
+        <item>金牛座</item>
+        <item>双子座</item>
+        <item>巨蟹座</item>
+        <item>狮子座</item>
+        <item>处女座</item>
+        <item>天秤座</item>
+        <item>天蝎座</item>
+        <item>射手座</item>
+        <item>摩羯座</item>
+        <item>水瓶座</item>
+        <item>双鱼座</item>
+    </string-array>
+
 </resources>

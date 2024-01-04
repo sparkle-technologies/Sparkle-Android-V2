@@ -100,4 +100,18 @@
     <string name="invite_friends_for_deeper_insights">Invite friends for deeper insights</string>
     <string name="choose_a_constellation_to_see_how_you_guys_fit">Choose a constellation to see how you guys fit.</string>
 
+    <string-array name="stars">
+        <item>Aries</item>
+        <item>Taurus</item>
+        <item>Gemini</item>
+        <item>Cancer</item>
+        <item>Leo</item>
+        <item>Virgo</item>
+        <item>Libra</item>
+        <item>Scorpio</item>
+        <item>Sagittarius</item>
+        <item>Capricorn</item>
+        <item>Aquarius</item>
+        <item>Pisces</item>
+    </string-array>
 </resources>

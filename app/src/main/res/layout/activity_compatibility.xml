@@ -97,6 +97,7 @@
                 app:bearing_color="@color/transparent"
                 app:bearing_gravity="left"
                 app:bearing_offset="270dp"
+                app:item_offset="-50dp"
                 app:bearing_radius="20dp"
                 app:bearing_type="color"
                 app:item_layout_mode="average"
@@ -162,6 +163,7 @@
                     android:paddingStart="@dimen/dp_22"
                     android:paddingEnd="@dimen/dp_22"
                     android:text="Aries"
+                    android:maxLines="1"
                     android:textColor="@color/color_8B82DB"
                     android:textSize="@dimen/sp_16"
                     app:layout_constraintLeft_toLeftOf="@+id/dot"
@@ -228,13 +230,13 @@
                         android:id="@+id/lay_pan"
                         android:layout_width="match_parent"
                         android:layout_height="423dp"
-                        app:layout_scrollFlags="exitUntilCollapsed|scroll|enterAlwaysCollapsed">
+                        app:layout_scrollFlags="scroll|snap">
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="161dp"
+                        android:layout_height="151dp"
                         android:orientation="vertical"
                         app:tabMode="scrollable">
 
@@ -305,13 +307,13 @@
                     android:id="@+id/scroll_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/color_F4F5F5F5"
                     android:scrollbars="none"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/color_F4F5F5F5"
                         android:orientation="vertical"
                         android:paddingStart="@dimen/dp_20"
                         android:paddingTop="@dimen/dp_20"

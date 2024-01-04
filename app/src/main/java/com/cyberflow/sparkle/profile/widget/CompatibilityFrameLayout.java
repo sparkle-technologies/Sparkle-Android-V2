@@ -32,14 +32,13 @@ public class CompatibilityFrameLayout extends FrameLayout {
         this.circle = circle;
     }
 
-    private View bottomView;
-    private View tv;
-    private int gap = 0;
+    private boolean scroll = false;
+    public void canScroll(boolean scrollable) {
+        this.scroll = scrollable;
+    }
 
-    public void setTxtStrict(View bottom, View tv, int gap) {
-        this.bottomView = bottom;
-        this.tv = tv;
-        this.gap = gap;
+    public boolean getScroll() {
+        return scroll;
     }
 
     // 只要手指在 center 的范围内  而且scrollview 没有越过 center 就触发
@@ -76,20 +75,10 @@ public class CompatibilityFrameLayout extends FrameLayout {
             return true;
         }
 
-        if (ev.getAction() == MotionEvent.ACTION_MOVE) {
-            if (ev.getRawY() - startY < 0) {
-                tv.getLocationOnScreen(location);
-                int tvTop = location[1];
-                int tvBottom = tvTop + tv.getMeasuredHeight();
-                bottomView.getLocationOnScreen(location);
-                int bottomViewTop = location[1];
-//                Log.e(TAG, "ACTION_MOVE   tvBottom=" + tvBottom + " gap=" + gap + ",  bottomViewTop=" + bottomViewTop);
-                if ( (bottomViewTop > tvBottom) && (bottomViewTop - tvBottom > gap)) {
-                    ev.setAction(MotionEvent.ACTION_CANCEL);
-                    return super.dispatchTouchEvent(ev);
-                }
-            }
+        if(!scroll){   // 刚进来 没选择  不允许滑动
+            return true;
         }
+
         return super.dispatchTouchEvent(ev);
     }
 
