@@ -25,7 +25,7 @@ import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.Post
-import com.drake.net.utils.scopeNetLife
+import com.drake.net.utils.scopeLife
 import com.drake.net.utils.withIO
 import com.drake.net.utils.withMain
 import com.therouter.router.Route
@@ -185,21 +185,24 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
         }
     }
 
-    private fun batchFetch() {
-        result.forEach { name ->
-            scopeNetLife {
-                /*val cache = DBManager.instance.db?.compatibilityCacheDao()?.fetch(name)
-                if (cache == null) {
 
-                }*/
-                val result = Post<CompatibilityItem>(Api.USER_COMPATIBILITY) {
+    private fun batchFetch() {
+        val lastQuery = CacheUtil.getLong(CacheUtil.COMPATIBILITY_FETCH)
+        if (System.currentTimeMillis() - lastQuery < 1000 * 60 * 60) {   // 1 hour
+            return
+        }
+        result.forEachIndexed { index, name ->
+            scopeLife {
+                val response = Post<CompatibilityItem>(Api.USER_COMPATIBILITY) {
                     json("constellation" to name)
                 }.await()
                 withIO {
-                    val data = GsonConverter.gson.toJson(result)
+                    val data = GsonConverter.gson.toJson(response)
                     data?.also {
-                        DBManager.instance.db?.compatibilityCacheDao()
-                            ?.insert(Compatibility(name, it))
+                        DBManager.instance.db?.compatibilityCacheDao()?.insert(Compatibility(name, it))
+                    }
+                    if(index == result.size - 1){
+                        CacheUtil.saveLong(CacheUtil.COMPATIBILITY_FETCH, System.currentTimeMillis())
                     }
                 }
             }

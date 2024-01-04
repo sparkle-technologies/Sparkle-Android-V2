@@ -25,6 +25,8 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.cyberflow.base.act.BaseDBAct
+import com.cyberflow.base.ext.screenHeight
+import com.cyberflow.base.ext.screenWidth
 import com.cyberflow.base.model.AIOResult
 import com.cyberflow.base.model.IMConversationCache
 import com.cyberflow.base.model.ManyImageData
@@ -462,16 +464,17 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
     private fun generateIMShareBitmap() {
         if (checkIfHasPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_SHARE)) {
             lifecycleScope.launch {
+                val iconBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.ic_app)
                 val bitmap = if (from == SHARE_FROM_PROFILE) {
                     convertViewToBitmap(mDataBinding.bgIm)
                 } else if(from == SHARE_FROM_COMPATIBILITY){
                     val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)
                     val viewBitmap = convertViewToBitmap(mDataBinding.layCompatibility)
-                    combineBitmap(bgBitmap, viewBitmap)
+                    combineBitmap(bgBitmap, viewBitmap, iconBitmap)
                 }else{
                     val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)
                     val viewBitmap = convertViewToBitmap(mDataBinding.layChat)
-                    combineBitmap(bgBitmap, viewBitmap)
+                    combineBitmap(bgBitmap, viewBitmap, iconBitmap)
                 }
                 val storePath = application.getExternalFilesDir(null)!!.absolutePath
                 val appDir = File(storePath)
@@ -500,10 +503,8 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         if (checkIfHasPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_DOWNLOAD)) {
             LoadingDialogHolder.getLoadingDialog()?.show(this@ShareAct)
             lifecycleScope.launch {
-                val bgBitmap = BitmapFactory.decodeResource(
-                    resources,
-                    com.cyberflow.sparkle.R.drawable.share_bg
-                )
+                val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)
+                val iconBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.ic_app)
                 val viewBitmap = if (from == SHARE_FROM_PROFILE) {
                     convertViewToBitmap(mDataBinding.bg)
                 } else if(from == SHARE_FROM_COMPATIBILITY){
@@ -511,7 +512,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                 } else {
                     convertViewToBitmap(mDataBinding.layChat)
                 }
-                val bitmap = combineBitmap(bgBitmap, viewBitmap)
+                val bitmap = combineBitmap(bgBitmap, viewBitmap, iconBitmap)
                 val storePath = application.getExternalFilesDir(null)!!.absolutePath
                 val appDir = File(storePath)
                 if (!appDir.exists()) {
@@ -545,28 +546,43 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         }
     }
 
-    private fun combineBitmap(background: Bitmap, foreground: Bitmap): Bitmap {
+    // 如果图比屏幕小  那么正常显示   在尾部添加一个logo
+    // 如果图比屏幕还大 左右留   上下留  拉长后居中   在尾部添加一个logo
+    // 看图和屏幕  把背景按比例处理
+    private fun combineBitmap(background: Bitmap, content: Bitmap, iconBitmap: Bitmap): Bitmap {
         if (background == null) {
-            return foreground
+            return content
         }
-        val fgW = foreground.width
-        val fgH = foreground.height
-
-        val marginLeft = dp2px(20f).toFloat()
-        val marginTop = dp2px(30f).toFloat()
+        val fgW = content.width
+        val fgH = content.height
 
         // 左右 20  上下30
-        val targetW = fgW + marginLeft * 2
-        val targetH = fgH + marginTop * 2
+        var targetW = screenWidth.toFloat()
+        var targetH = screenHeight.toFloat()
 
-//        val zoomBitmap = zoomImg(background, targetW, targetH)
+        var marginLeft = (screenWidth - fgW)/2f
+        var marginTop = (screenHeight - fgH)/2f
+
+        if(fgH > screenHeight){
+            marginLeft = dp2px(20f).toFloat()
+            marginTop = dp2px(70f).toFloat()
+            targetW = fgW + marginLeft * 2
+            targetH = fgH + marginTop * 2
+        }
+
+        val zoomBitmap = zoomImg(iconBitmap, dp2px(30f).toFloat(), dp2px(30f).toFloat())
+        val iconX = targetW/2 - zoomBitmap.width/2
+        val iconY = targetH - marginTop/2 - zoomBitmap.height/2
 
         val bmOverlay = Bitmap.createBitmap(targetW.toInt(), targetH.toInt(), background.config)
         val canvas = Canvas(bmOverlay)
         canvas.drawBitmap(background, Matrix(), null)
-        canvas.drawBitmap(foreground, marginLeft, marginTop,null)
+        canvas.drawBitmap(content, marginLeft, marginTop,null)
+        canvas.drawBitmap(zoomBitmap, iconX, iconY, null)
         background.recycle()
-        foreground.recycle()
+        content.recycle()
+        iconBitmap.recycle()
+        zoomBitmap.recycle()
         return bmOverlay
     }
 

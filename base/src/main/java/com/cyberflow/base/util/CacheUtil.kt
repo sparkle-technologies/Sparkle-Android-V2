@@ -26,7 +26,7 @@ object CacheUtil {
     const val LOGIN_METHOD = "sparkle_login_method"
 
     const val AVATAR_BIG = "sparkle_avatar_big"
-
+    const val COMPATIBILITY_FETCH = "sparkle_compatibility_last_fetch"
 
     fun getUserInfo(): LoginResponseData? {
         val kv = getMMKV()
@@ -154,6 +154,14 @@ object CacheUtil {
 
     fun getFloat(key: String, defaultValue: Float = 0.0f): Float {
         return getMMKV().decodeFloat(key, defaultValue)
+    }
+
+    fun saveLong(key: String, value: Long): Boolean {
+        return getMMKV().encode(key, value)
+    }
+
+    fun getLong(key: String, defaultValue: Long = 0L): Long {
+        return getMMKV().decodeLong(key, defaultValue)
     }
 
     fun logout() {

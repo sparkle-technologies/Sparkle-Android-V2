@@ -103,6 +103,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             DBManager.instance.db?.imFriendInfoDao()?.deleteAll()
             DBManager.instance.db?.imConversationCacheDao()?.deleteAll()
             DBManager.instance.db?.horoscopeCacheDao()?.deleteAll()
+            DBManager.instance.db?.compatibilityCacheDao()?.deleteAll()
             IMDataManager.instance.clearCache()
             ToastDialog.count = 1
         }
@@ -146,20 +147,20 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
         }
 
         mViewBind.layCompose.setMoveListener {
-            toastError("Please agree to the terms and conditions")
+            toastError(getString(R.string.login_check_agree))
         }
     }
 
     private fun agreed() : Boolean{
         if(!mViewBind.cb.isChecked){
-            toastError("Please agree to the terms and conditions")
+            toastError(getString(R.string.login_check_agree))
         }
         return mViewBind.cb.isChecked
     }
 
     override fun initData() {
         mViewBind.composeView.postDelayed({
-            initWalletConnect()
+//            initWalletConnect()
         }, 1000)
 //        initWeb3Auth()
     }
