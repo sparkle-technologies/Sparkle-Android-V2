@@ -99,6 +99,9 @@
     <string name="commitment">Commitment</string>
     <string name="invite_friends_for_deeper_insights">Invite friends for deeper insights</string>
     <string name="choose_a_constellation_to_see_how_you_guys_fit">Choose a constellation to see how you guys fit.</string>
+    <string name="login_conditiion_hint">I have read, understood, and agreed to the Terms of Use and Privacy Policy of this website.</string>
+    <string name="terms_of_use">Terms of Use</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
     <string-array name="stars">
         <item>Aries</item>

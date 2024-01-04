@@ -373,7 +373,6 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         mDataBinding.tvNameIm.text = user.nick
 //        mDataBinding.tvContent.text = getString(com.cyberflow.sparkle.R.string.join_me_on_starry_book)
 //        setSpan(mDataBinding.tvContent)       // content
-//        generateQRcode("https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf")
         generateQRcode("${ConstantGlobal.SHARE_BODY}${user.open_uid}", mDataBinding.ivQrCode)
     }
 

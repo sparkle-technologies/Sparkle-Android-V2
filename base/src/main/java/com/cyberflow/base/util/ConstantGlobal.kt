@@ -10,7 +10,8 @@ class ConstantGlobal {
         // 1. for Cora open uid
         const val CORA_OPEN_UID_PRO = "d7566fe1-4a39-4484-93f2-8fec3489efbe"
         const val CORA_OPEN_UID_DEV = "eebe94a3-fb8d-403f-9696-6be1a9e43eb3"
-        const val SHARE_BODY = "https://www.sparkle.fun/traveler/"
+        // https://master.sparkle.fun/traveler/57fcd670-d993-4e28-a0dc-81b1c308382a
+        const val SHARE_BODY = "https://master.sparkle.fun/traveler/"
         fun getCoraOpenUid() = if(PRO) CORA_OPEN_UID_PRO else CORA_OPEN_UID_DEV
 
 

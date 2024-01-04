@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/root"
@@ -13,16 +12,48 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/compose_view"
+        <TextView
+            android:id="@+id/tv_condition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_43"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_40"
+            android:fontFamily="@font/poppins_regular"
+            android:text="I have read, understood, and agreed to the Terms of Use and Privacy Policy of this website."
+            android:textColor="@color/color_7d7d80"
+            android:textSize="@dimen/sp_11"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <CheckBox
+            android:id="@+id/cb"
+            style="@style/Widget.AppCompat.CompoundButton.RadioButton"
+            android:layout_width="@dimen/dp_15"
+            android:layout_height="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/login_cb_selector"
+            android:checked="false"
+            android:button="@null"
+            app:layout_constraintRight_toLeftOf="@+id/tv_condition"
+            app:layout_constraintTop_toTopOf="@+id/tv_condition" />
+
+        <com.cyberflow.sparkle.login.widget.TouchFrameLayout
+            android:id="@+id/lay_compose"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_48"
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginEnd="@dimen/dp_20"
-            android:layout_marginBottom="@dimen/dp_46"
+            android:layout_marginBottom="@dimen/dp_100"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent">
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/compose_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.cyberflow.sparkle.login.widget.TouchFrameLayout>
 
 
         <com.cyberflow.sparkle.widget.ShadowImgButton
@@ -30,7 +61,7 @@
             android:layout_width="@dimen/dp_43"
             android:layout_height="@dimen/dp_45"
             android:layout_marginBottom="@dimen/dp_20"
-            app:layout_constraintBottom_toTopOf="@+id/compose_view"
+            app:layout_constraintBottom_toTopOf="@+id/lay_compose"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:view_img_shadow_distance="1dp"

@@ -97,6 +97,9 @@
     <string name="commitment">磨练</string>
     <string name="invite_friends_for_deeper_insights">邀请好友深入合盘</string>
     <string name="choose_a_constellation_to_see_how_you_guys_fit">选择一个星座，查看合盘分析</string>
+    <string name="login_conditiion_hint">登录注册即表示同意用户协议及隐私政策</string>
+    <string name="terms_of_use">用户协议</string>
+    <string name="privacy_policy">隐私政策</string>
 
     <string-array name="stars">
         <item>白羊座</item>

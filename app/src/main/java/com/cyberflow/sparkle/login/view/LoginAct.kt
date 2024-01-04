@@ -4,8 +4,12 @@ import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.style.StyleSpan
+import android.text.style.URLSpan
 import android.util.Log
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import com.auth0.android.jwt.JWT
 import com.cyberflow.base.act.BaseVBAct
@@ -17,6 +21,7 @@ import com.cyberflow.base.util.callback.IMLoginResponse
 import com.cyberflow.base.util.callback.IMV2Callback
 import com.cyberflow.base.viewmodel.BaseViewModel
 import com.cyberflow.sparkle.MyApp
+import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.chat.IMManager
 import com.cyberflow.sparkle.chat.viewmodel.IMDataManager
 import com.cyberflow.sparkle.databinding.ActivityLoginBinding
@@ -30,6 +35,9 @@ import com.drake.net.Post
 import com.drake.net.utils.TipUtils
 import com.drake.net.utils.scopeDialog
 import com.drake.net.utils.withMain
+import com.drake.spannable.movement.ClickableMovementMethod
+import com.drake.spannable.replaceSpan
+import com.drake.spannable.span.ColorSpan
 import com.github.penfeizhou.animation.apng.APNGDrawable
 import com.github.penfeizhou.animation.loader.AssetStreamLoader
 import com.google.firebase.auth.FirebaseAuth
@@ -102,6 +110,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         initAnim()
+        setSpan(mViewBind.tvCondition)
 
         if (CacheUtil.getUserInfo()?.user?.open_uid?.isNotEmpty() == true) {
             imLogin(this)
@@ -113,31 +122,39 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
         mViewBind.btnGoogleLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                toastWarn("coming soon...")
-//                CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "MetaMask")
-//                request("0x73cf3CB3dc0D6872878a316509aFb7510E7cd44d", "MetaMask")
+                toastSuccess(getString(R.string.coming_soon))
             }
         })
 
         mViewBind.btnIgLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                //viewModel.login(LoginWeb3AuthUnipassAct.testAccount[2], "MetaMask")
-                toastWarn("coming soon...")
-
-                // for test
-//                val bundle = Bundle()
-//                bundle.putString("click_time", System.currentTimeMillis().toString())
-//                bundle.putString("where", "LoginAct")
-//                bundle.putString("action", "click_ig_login")
-//                Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle)
+                toastSuccess(getString(R.string.coming_soon))
             }
         })
 
         mViewBind.btnTwitterLogin.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
-                loginTwitter()
+                if(agreed()){
+                    loginTwitter()
+                }
+
             }
         })
+
+        mViewBind.cb.setOnCheckedChangeListener { compoundButton, b ->
+            mViewBind.layCompose.isClickable = b
+        }
+
+        mViewBind.layCompose.setMoveListener {
+            toastError("Please agree to the terms and conditions")
+        }
+    }
+
+    private fun agreed() : Boolean{
+        if(!mViewBind.cb.isChecked){
+            toastError("Please agree to the terms and conditions")
+        }
+        return mViewBind.cb.isChecked
     }
 
     override fun initData() {
@@ -165,6 +182,18 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                  }
              }
           }
+    }
+
+    private fun setSpan(tv: TextView) {
+        val s = getString(R.string.login_conditiion_hint)
+        val h1 = getString(R.string.terms_of_use)
+        val h2 = getString(R.string.privacy_policy)
+        tv.movementMethod = ClickableMovementMethod.getInstance()
+        tv.text = s.replaceSpan(h1) {
+            arrayOf(URLSpan("https://www.sparkle.fun/terms/terms-of-use.html"), ColorSpan("#8B82DB"), StyleSpan(Typeface.BOLD))
+        }.replaceSpan(h2){
+            arrayOf(URLSpan("https://www.sparkle.fun/terms/privacy-policy.html"), ColorSpan("#8B82DB"), StyleSpan(Typeface.BOLD))
+        }
     }
 
     /********************* twitter ******************************/
