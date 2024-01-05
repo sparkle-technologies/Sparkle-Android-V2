@@ -17,6 +17,7 @@ import com.cyberflow.base.model.LoginResponseData
 import com.cyberflow.base.net.Api
 import com.cyberflow.base.util.CacheUtil
 import com.cyberflow.base.util.PageConst
+import com.cyberflow.base.util.bus.LiveDataBus
 import com.cyberflow.base.util.callback.IMLoginResponse
 import com.cyberflow.base.util.callback.IMV2Callback
 import com.cyberflow.base.viewmodel.BaseViewModel
@@ -29,10 +30,10 @@ import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.login.viewmodel.LoginRegisterViewModel
 import com.cyberflow.sparkle.mainv2.view.MainActivityV2
 import com.cyberflow.sparkle.register.view.RegisterAct
+import com.cyberflow.sparkle.widget.NotificationDialog
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ToastDialog
 import com.drake.net.Post
-import com.drake.net.utils.TipUtils
 import com.drake.net.utils.scopeDialog
 import com.drake.net.utils.withMain
 import com.drake.spannable.movement.ClickableMovementMethod
@@ -81,7 +82,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
                             activity.finish()
                         }else{
                             val msg = event.message ?: "IM login failed"
-                            TipUtils.toast(msg)
+                            LiveDataBus.get().with(NotificationDialog.EVENT_ERROR).postValue(msg)
                         }
                     }
                 }
@@ -160,7 +161,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
 
     override fun initData() {
         mViewBind.composeView.postDelayed({
-//            initWalletConnect()
+            initWalletConnect()
         }, 1000)
 //        initWeb3Auth()
     }
@@ -236,8 +237,7 @@ class LoginAct : BaseVBAct<LoginRegisterViewModel, ActivityLoginBinding>() {
             .addOnFailureListener {
                 // Handle failure.
                 it.printStackTrace()
-                TipUtils.toast("twitter login failed, please try again")
-                Log.e(BaseViewModel.TAG, "loginTwitter: fail")
+                toastError(getString(R.string.twitter_login_failed_please_try_again))
             }
     }
 

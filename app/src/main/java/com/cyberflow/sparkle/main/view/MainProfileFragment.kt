@@ -107,6 +107,8 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
             }
         }
 
+        mDatabind.llBack.isVisible = !(mActivity is MainActivityV2)
+
         mDatabind.btnSetting.setClickListener(object : ShadowImgButton.ShadowClickListener {
             override fun clicked() {
                 SettingsActivity.go(requireActivity())
@@ -130,7 +132,7 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
 //                Log.e(TAG, "clicked: action=$action   user=$user  ")
 //                Log.e(TAG, "clicked: openUid=${user?.open_uid}   user.name=${user?.nick}  ")
                 if(isMySelf){
-                    (requireActivity() as? BaseDBAct<*, *>)?.toastWarn(getString(com.cyberflow.sparkle.R.string.coming_soon))
+                    (requireActivity() as? BaseDBAct<*, *>)?.toastSuccess(getString(com.cyberflow.sparkle.R.string.coming_soon))
                 }else{
                     when (action) {
                         CHAT -> {   // go chatActivity   avatar nickName
@@ -270,8 +272,6 @@ class MainProfileFragment : BaseDBFragment<IMViewModel, FragmentMainProfileBindi
         isMySelf = open_uid == cacheUser?.open_uid && open_uid.isNotEmpty()
 
         Log.e(TAG, "loadProfile: isMySelf=$isMySelf")
-
-        mDatabind.llBack.isVisible = !isMySelf
 
         mDatabind.apply {
 //            flutterSynastry.isVisible = false

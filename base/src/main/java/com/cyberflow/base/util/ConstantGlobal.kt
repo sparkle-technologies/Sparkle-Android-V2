@@ -3,8 +3,8 @@ package com.cyberflow.base.util
 class ConstantGlobal {
     companion object{
 
-        //replace im api key   1. module=chat / build.gradle     
-        const val PRO = true   // pro or test version  ↑↑↑↑↑↑
+        //replace im api key   1. module=chat / build.gradle
+        const val PRO = false   // pro or test version  ↑↑↑↑↑↑
 
 
         // 1. for Cora open uid

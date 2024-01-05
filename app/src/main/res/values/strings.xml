@@ -104,6 +104,7 @@
     <string name="login_check_agree">Please agree to the Term of Use and Privacy Policy first</string>
     <string name="please_stay_tuned">Please stay tuned.</string>
     <string name="more_exciting_contents_are_preparing_for_you">More exciting contents are preparing for you....</string>
+    <string name="twitter_login_failed_please_try_again">Twitter login failed, please try again</string>
 
 
     <string-array name="stars">

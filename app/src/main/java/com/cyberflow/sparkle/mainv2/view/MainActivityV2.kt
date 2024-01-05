@@ -198,8 +198,17 @@ class MainActivityV2 : BaseDBAct<MainViewModel, ActivityMainVersionTwoBinding>()
         return super.onKeyDown(keyCode, event)
     }
 
-    fun setUnRead(unreadTotalCount: Int) {
-        mDataBinding.bottomNarBar.setNum(unreadTotalCount)
+    private var conversactionUnreadCount = 0
+    private var friendRequestCount = 0
+
+    fun setConversactionUnRead(unreadTotalCount: Int) {
+        conversactionUnreadCount = unreadTotalCount
+        mDataBinding.bottomNarBar.setNum(conversactionUnreadCount + friendRequestCount)
+    }
+
+    fun setRequestCount(friendCout: Int) {
+        friendRequestCount = friendCout
+        mDataBinding.bottomNarBar.setNum(conversactionUnreadCount + friendRequestCount)
     }
 
     fun setSiteUnRead(unreadTotalCount: Int){

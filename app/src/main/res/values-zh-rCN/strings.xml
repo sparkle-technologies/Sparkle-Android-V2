@@ -104,6 +104,7 @@
     <string name="login_check_agree">请先同意用户协议和隐私政策</string>
     <string name="please_stay_tuned">敬请期待</string>
     <string name="more_exciting_contents_are_preparing_for_you">更多占星内容即将上线</string>
+    <string name="twitter_login_failed_please_try_again">Twitter登陆失败，请重试</string>
 
 
     <string-array name="stars">

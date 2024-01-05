@@ -303,6 +303,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
 
     fun freshFriendRequest(friendReqList: List<IMFriendRequest>?) {
         friendRequestCount = friendReqList?.size ?: 0
+        (requireActivity() as? MainActivityV2)?.setRequestCount(friendRequestCount)
         showFriendRequestNum()
     }
 
@@ -412,7 +413,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                     )
                 }
 
-                (requireActivity() as? MainActivityV2)?.setUnRead(totalUnreadCount)
+                (requireActivity() as? MainActivityV2)?.setConversactionUnRead(totalUnreadCount)
                 showQuestions()
 
                 if (friendMessageList.size <= 6) {
@@ -461,7 +462,7 @@ class MainFriendsFragment : BaseDBFragment<BaseViewModel, FragmentMainFriendsBin
                     )
                 }
 
-                (requireActivity() as? MainActivityV2)?.setUnRead(totalUnreadCount)
+                (requireActivity() as? MainActivityV2)?.setConversactionUnRead(totalUnreadCount)
 
                 if (friendMessageList.size <= 6) {
                     friendMessageList.add(FriendsAddModel())
