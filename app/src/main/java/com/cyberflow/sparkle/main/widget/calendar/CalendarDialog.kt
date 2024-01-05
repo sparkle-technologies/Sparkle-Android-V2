@@ -110,9 +110,7 @@ class CalendarDialog {
         val calendar = Calendar.getInstance()
         val currentYear = calendar.get(Calendar.YEAR)
         val currentMonth = calendar.get(Calendar.MONTH) + 1
-
-        Log.e("TAG", "initData: $birthDate    currentYear=$currentYear  currentMonth=$currentMonth",)
-
+//        Log.e("TAG", "initData: $birthDate    currentYear=$currentYear  currentMonth=$currentMonth",)
         birthDate?.let {  // 从出生日期到去年
             val count = currentYear * 12 + currentMonth - (it.year * 12 + it.month)
 //            Log.e("TAG", "--1---count--: $count", )
@@ -126,7 +124,7 @@ class CalendarDialog {
         val currentIdx = data.size - 1
 //        Log.e("TAG", "after count1    data.size=${data.size}" )
         // 从今年 到  2100 年
-        val count = 2030 * 12 - (currentYear * 12 + currentMonth)
+        val count = 2100 * 12 - (currentYear * 12 + currentMonth)
 //        Log.e("TAG", "---2---:  count=$count" )
 
         for (i in 0 until count) {
@@ -146,7 +144,7 @@ class CalendarDialog {
         }
 
         viewPager2?.apply {
-            offscreenPageLimit = 3
+            offscreenPageLimit = 1
             setCurrentItem(currentIdx + 1, false)
             registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
 

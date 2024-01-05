@@ -30,6 +30,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarView> {
     @NonNull
     @Override
     public CalendarView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+//        Log.e("TAG", "onCreateViewHolder: " );
         return new CalendarView(LayoutInflater.from(parent.getContext()).inflate(R.layout.calender_view, parent, false), callback, weekMode, birthDate, currentDate);
     }
 
