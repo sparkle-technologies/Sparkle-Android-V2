@@ -16,7 +16,7 @@
         android:paddingTop="@dimen/dp_15"
         android:paddingEnd="@dimen/dp_20"
         android:paddingBottom="@dimen/dp_5"
-        android:text="Share to"
+        android:text="@string/share_to"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_18" />
 

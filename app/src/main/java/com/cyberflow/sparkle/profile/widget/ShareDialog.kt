@@ -42,9 +42,9 @@ class ShareDialog {
 
     private fun getActionIconAndName(type: Int): Pair<Int, String>? {
         return when(type){
-            TYPE_MORE -> Pair(R.drawable.share_ic_more, "More")
-            TYPE_COPY_LINK -> Pair(R.drawable.share_ic_copy_link, "Copy link")
-            TYPE_DOWNLOAD -> Pair(R.drawable.share_ic_download, "Download")
+            TYPE_MORE -> Pair(R.drawable.share_ic_more, mContext!!.getString(R.string.more))
+            TYPE_COPY_LINK -> Pair(R.drawable.share_ic_copy_link, mContext!!.getString(com.cyberflow.sparkle.R.string.copy_link))
+            TYPE_DOWNLOAD -> Pair(R.drawable.share_ic_download, mContext!!.getString(com.cyberflow.sparkle.R.string.download))
             else -> null
         }
     }

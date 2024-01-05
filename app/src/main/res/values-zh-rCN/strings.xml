@@ -1,5 +1,6 @@
 <resources>
 
+    <string name="share_to">分享给</string>
     <string name="more">更多</string>
     <string name="copy_link">复制链接</string>
     <string name="download">下载</string>
@@ -101,6 +102,9 @@
     <string name="terms_of_use">用户协议</string>
     <string name="privacy_policy">隐私政策</string>
     <string name="login_check_agree">请先同意用户协议和隐私政策</string>
+    <string name="please_stay_tuned">敬请期待</string>
+    <string name="more_exciting_contents_are_preparing_for_you">更多占星内容即将上线</string>
+
 
     <string-array name="stars">
         <item>白羊座</item>

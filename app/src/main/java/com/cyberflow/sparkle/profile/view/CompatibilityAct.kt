@@ -25,6 +25,7 @@ import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.widget.ShadowImgButton
 import com.cyberflow.sparkle.widget.ShadowTxtButton
 import com.drake.net.Post
+import com.drake.net.utils.scope
 import com.drake.net.utils.scopeLife
 import com.drake.net.utils.withIO
 import com.drake.net.utils.withMain
@@ -44,8 +45,8 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        result.clear()
-        result.addAll(resources.getStringArray(R.array.stars))
+        resultUI.addAll(resources.getStringArray(R.array.stars))
+        result.addAll(resources.getStringArray(R.array.stars_eng))
 
         mDataBinding.llBack.setOnClickListener {
             finish()
@@ -97,7 +98,7 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
                 val p3 = p2 / 30
 //                Log.e(TAG, "initRotation=$initRotation  p1=$p1  p2=$p2  p3=$p3" )
                 if(p3 != lastIdx){
-                    mDataBinding.tvSelected.text = result[p3 % result.size]
+                    mDataBinding.tvSelected.text = resultUI[p3 % resultUI.size]
                     lastIdx = p3
                 }
             }
@@ -149,7 +150,8 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
         R.drawable.ic_11,
     )
 
-    private val result = arrayListOf<String>()
+    private val result = arrayListOf<String>()   // for request data : english only
+    private val resultUI = arrayListOf<String>() // for UI : both english and chinese
 
     private fun getView(): View? {
         val viewGroup = LayoutInflater.from(this).inflate(R.layout.item, null) as ViewGroup
@@ -187,22 +189,25 @@ class CompatibilityAct : BaseDBAct<BaseViewModel, ActivityCompatibilityBinding>(
 
 
     private fun batchFetch() {
-        val lastQuery = CacheUtil.getLong(CacheUtil.COMPATIBILITY_FETCH)
-        if (System.currentTimeMillis() - lastQuery < 1000 * 60 * 60) {   // 1 hour
-            return
-        }
-        result.forEachIndexed { index, name ->
-            scopeLife {
-                val response = Post<CompatibilityItem>(Api.USER_COMPATIBILITY) {
-                    json("constellation" to name)
-                }.await()
-                withIO {
-                    val data = GsonConverter.gson.toJson(response)
-                    data?.also {
-                        DBManager.instance.db?.compatibilityCacheDao()?.insert(Compatibility(name, it))
-                    }
-                    if(index == result.size - 1){
-                        CacheUtil.saveLong(CacheUtil.COMPATIBILITY_FETCH, System.currentTimeMillis())
+        scope {
+            val cache = DBManager.instance.db?.compatibilityCacheDao()?.fetch(result[0])
+            val lastQuery = CacheUtil.getLong(CacheUtil.COMPATIBILITY_FETCH)
+            if ((cache!=null && cache.data.isNotEmpty()) && System.currentTimeMillis() - lastQuery > 1000 * 60 * 60) {   // 1 hour
+                return@scope
+            }
+            result.forEachIndexed { index, name ->
+                scopeLife {
+                    val response = Post<CompatibilityItem>(Api.USER_COMPATIBILITY) {
+                        json("constellation" to name)
+                    }.await()
+                    withIO {
+                        val data = GsonConverter.gson.toJson(response)
+                        data?.also {
+                            DBManager.instance.db?.compatibilityCacheDao()?.insert(Compatibility(name, it))
+                        }
+                        if(index == result.size - 1){
+                            CacheUtil.saveLong(CacheUtil.COMPATIBILITY_FETCH, System.currentTimeMillis())
+                        }
                     }
                 }
             }

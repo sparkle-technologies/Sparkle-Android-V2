@@ -63,6 +63,7 @@ class SettingsActivity : BaseDBAct<BaseViewModel, ActivitySettingBinding>() {
         CacheUtil.savaString(CacheUtil.LOGIN_METHOD, "")
         CacheUtil.savaString(CacheUtil.UNIPASS_PUBK, "")
         CacheUtil.savaString(CacheUtil.UNIPASS_PRIK, "")
+        CacheUtil.saveLong(CacheUtil.COMPATIBILITY_FETCH, 0)
 
         LoginAct.go(this@SettingsActivity)
         finish()
