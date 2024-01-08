@@ -570,9 +570,10 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
             targetH = fgH + marginTop * 2
         }
 
-        val zoomBitmap = zoomImg(iconBitmap, dp2px(30f).toFloat(), dp2px(30f).toFloat())
+//        val zoomBitmap = zoomImg(iconBitmap, dp2px(30f).toFloat(), dp2px(30f).toFloat())
+        val zoomBitmap = Bitmap.createScaledBitmap(iconBitmap, dp2px(30f), dp2px(30f), true)
         val iconX = targetW/2 - zoomBitmap.width/2
-        val iconY = targetH - marginTop/2 - zoomBitmap.height/2
+        val iconY = targetH - dp2px(20f) - zoomBitmap.height
 
         val bmOverlay = Bitmap.createBitmap(targetW.toInt(), targetH.toInt(), background.config)
         val canvas = Canvas(bmOverlay)
