@@ -17,8 +17,8 @@ android {
         applicationId = "com.cyberflow.sparkle"
         minSdk = 24
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -98,6 +98,7 @@ dependencies {
 
     implementation("jp.wasabeef:blurry:4.0.1")
 
+
 //    kapt("cn.therouter:apt:1.2.0-rc1")
 //    implementation("cn.therouter:router:1.2.0-rc1")
 
@@ -113,4 +114,6 @@ dependencies {
 
     implementation(project(mapOf("path" to ":flutter")))
 
+    // for publish aab to google play
+    implementation("com.google.android.play:integrity:1.3.0")
 }

@@ -40,8 +40,8 @@ android {
         buildConfigField("String", "APP_SEND_SMS_FROM_SERVER", "\"/inside/app/sms/send\"")
         buildConfigField("String", "APP_VERIFICATION_CODE", "\"/inside/app/image/\"")
 
-//        manifestPlaceholders["EASEMOB_APPKEY"] = "1183231031159952#sparkle"
-        manifestPlaceholders["EASEMOB_APPKEY"] = "1111230615161307#sparkletest"
+        manifestPlaceholders["EASEMOB_APPKEY"] = "1183231031159952#sparkle"
+//        manifestPlaceholders["EASEMOB_APPKEY"] = "1111230615161307#sparkletest"
     }
 
     buildTypes {
