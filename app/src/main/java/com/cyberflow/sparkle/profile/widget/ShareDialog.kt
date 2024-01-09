@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.cyberflow.base.model.IMConversationCache
@@ -29,9 +30,7 @@ class ShareDialog : BaseDialog {
 
 //    private val TAG = "ShareDialogFragment"
 
-    override fun setLayoutId(): Int {
-        return com.cyberflow.sparkle.R.layout.dialog_share
-    }
+    override fun setLayoutId() = com.cyberflow.sparkle.R.layout.dialog_share
 
     override fun onStart() {
         super.onStart()
@@ -99,6 +98,7 @@ class ShareDialog : BaseDialog {
 
         mContext = context
         mCallback = callback
+        isNormal = false
     }
 
     var rv: RecyclerView? = null
@@ -188,7 +188,7 @@ class ShareDialog : BaseDialog {
         }
     }
 
-    fun show(activity: AppCompatActivity) {
+    fun show(activity: FragmentActivity) {
         activity?.apply {
             if (dialog == null) {
                 show(supportFragmentManager, "ShareDialogFragment")

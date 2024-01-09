@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +18,7 @@ abstract class BaseDialog : DialogFragment() {
     protected var mActivity: Activity? = null
     protected var mRootView: View? = null
     protected var mWindow: Window? = null
+    protected var isNormal = true
     var mWidthAndHeight: Array<Int>? = null
 
     override fun onAttach(context: Context) {
@@ -28,7 +28,11 @@ abstract class BaseDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.MyDialog)  //全屏
+        if(isNormal){
+            setStyle(STYLE_NORMAL, R.style.NormalDialog)
+        }else{
+            setStyle(STYLE_NORMAL, R.style.MyDialog)
+        }
     }
 
     override fun onStart() {

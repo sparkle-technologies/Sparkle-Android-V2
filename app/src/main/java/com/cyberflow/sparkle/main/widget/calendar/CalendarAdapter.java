@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyberflow.sparkle.R;
+import com.cyberflow.sparkle.main.widget.SelectDayDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,10 +18,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarView> {
     private boolean weekMode = false;
     private DateBean birthDate;
     private DateBean currentDate;
-    private CalendarDialog.Callback callback;
+    private SelectDayDialog.Callback callback;
 
 
-    public CalendarAdapter(CalendarDialog.Callback callback, boolean _weekMode, DateBean _birth, DateBean _current) {
+    public CalendarAdapter(SelectDayDialog.Callback callback, boolean _weekMode, DateBean _birth, DateBean _current) {
         this.callback = callback;
         this.weekMode = _weekMode;
         this.birthDate = _birth;

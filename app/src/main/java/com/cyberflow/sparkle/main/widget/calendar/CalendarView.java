@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyberflow.base.util.bus.LiveDataBus;
 import com.cyberflow.sparkle.R;
+import com.cyberflow.sparkle.main.widget.SelectDayDialog;
 import com.cyberflow.sparkle.widget.NotificationDialog;
 
 import java.text.DateFormat;
@@ -31,13 +32,13 @@ public class CalendarView extends RecyclerView.ViewHolder {
     private CalendarDateAdapter calendarDateAdapter;
     private Context context;
 
-    private CalendarDialog.Callback callback;
+    private SelectDayDialog.Callback callback;
     private boolean weekMode = false;
 
     private DateBean birthDate;
     private DateBean currentDate;
 
-    public CalendarView(@NonNull View itemView, CalendarDialog.Callback callback, boolean _weekMode, DateBean _birth, DateBean _current) {
+    public CalendarView(@NonNull View itemView, SelectDayDialog.Callback callback, boolean _weekMode, DateBean _birth, DateBean _current) {
         super(itemView);
         this.callback = callback;
         this.weekMode = _weekMode;

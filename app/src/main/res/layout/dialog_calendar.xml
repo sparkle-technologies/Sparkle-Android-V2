@@ -1,124 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/main_horoscope_calendar_bg_half_16_radius"
-    android:paddingStart="@dimen/dp_30"
-    android:paddingTop="@dimen/dp_40"
-    android:paddingEnd="@dimen/dp_30">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tv_month"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold"
-        android:text="December"
-        android:textColor="@color/black"
-        android:textSize="@dimen/sp_24"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_year"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_regular"
-        android:text="2023"
-        android:textColor="@color/black"
-        android:textSize="@dimen/sp_13"
-        app:layout_constraintLeft_toLeftOf="@+id/tv_month"
-        app:layout_constraintRight_toRightOf="@+id/tv_month"
-        app:layout_constraintTop_toBottomOf="@+id/tv_month" />
-
-
-    <com.cyberflow.sparkle.widget.ShadowImgButton
-        android:id="@+id/btn_previous"
-        android:layout_width="@dimen/dp_40"
-        android:layout_height="@dimen/dp_40"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:view_bg_src="@drawable/main_ic_add_friends_bg"
-        app:view_img_disable="false"
-        app:view_img_disable_bg="@drawable/main_ic_add_friends_bg_disable"
-        app:view_img_disable_src="@drawable/main_ic_calendar_previous_disable"
-        app:view_img_shadow_distance="1dp"
-        app:view_img_src="@drawable/main_ic_calendar_previous" />
-
-
-    <com.cyberflow.sparkle.widget.ShadowImgButton
-        android:id="@+id/btn_next"
-        android:layout_width="@dimen/dp_40"
-        android:layout_height="@dimen/dp_40"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:view_bg_src="@drawable/main_ic_add_friends_bg"
-        app:view_img_disable="false"
-        app:view_img_disable_bg="@drawable/main_ic_add_friends_bg_disable"
-        app:view_img_disable_src="@drawable/main_ic_calendar_next_disable"
-        app:view_img_shadow_distance="1dp"
-        app:view_img_src="@drawable/main_ic_calendar_next" />
-
-    <View
-        android:id="@+id/line_horizon"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_2"
-        android:layout_marginTop="@dimen/dp_18"
-        android:layout_marginBottom="@dimen/dp_10"
-        android:background="@drawable/dash_line_divider_horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/tv_year" />
-
-
-    <LinearLayout
-        android:id="@+id/lay_calendar_title"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_18"
-        android:layout_marginTop="@dimen/dp_20"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/line_horizon">
-
-        <TextView
-            style="@style/horoscope_calendar_title"
-            android:text="@string/sun" />
-
-        <TextView
-            style="@style/horoscope_calendar_title"
-            android:text="@string/mon" />
-
-        <TextView
-            style="@style/horoscope_calendar_title"
-            android:text="@string/tue" />
-
-        <TextView
-            style="@style/horoscope_calendar_title"
-            android:text="@string/wed" />
-
-        <TextView
-            style="@style/horoscope_calendar_title"
-            android:text="@string/thu" />
-
-        <TextView
-            style="@style/horoscope_calendar_title"
-            android:text="@string/fri" />
-
-        <TextView
-            style="@style/horoscope_calendar_title"
-            android:text="@string/sat" />
-
-    </LinearLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vpContainer"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_22"
-        app:layout_constraintTop_toBottomOf="@+id/lay_calendar_title" />
+        android:layout_marginBottom="-2dp"
+        android:background="@drawable/main_horoscope_calendar_bg_half_16_radius"
+        android:paddingStart="@dimen/dp_30"
+        android:paddingTop="@dimen/dp_40"
+        android:paddingEnd="@dimen/dp_30"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <TextView
+            android:id="@+id/tv_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:text="December"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/tv_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:text="2023"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_13"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_month"
+            app:layout_constraintRight_toRightOf="@+id/tv_month"
+            app:layout_constraintTop_toBottomOf="@+id/tv_month" />
+
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_previous"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
+            app:view_img_disable="false"
+            app:view_img_disable_bg="@drawable/main_ic_add_friends_bg_disable"
+            app:view_img_disable_src="@drawable/main_ic_calendar_previous_disable"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/main_ic_calendar_previous" />
+
+
+        <com.cyberflow.sparkle.widget.ShadowImgButton
+            android:id="@+id/btn_next"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:view_bg_src="@drawable/main_ic_add_friends_bg"
+            app:view_img_disable="false"
+            app:view_img_disable_bg="@drawable/main_ic_add_friends_bg_disable"
+            app:view_img_disable_src="@drawable/main_ic_calendar_next_disable"
+            app:view_img_shadow_distance="1dp"
+            app:view_img_src="@drawable/main_ic_calendar_next" />
+
+        <View
+            android:id="@+id/line_horizon"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_2"
+            android:layout_marginTop="@dimen/dp_18"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:background="@drawable/dash_line_divider_horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/tv_year" />
+
+
+        <LinearLayout
+            android:id="@+id/lay_calendar_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_18"
+            android:layout_marginTop="@dimen/dp_20"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/line_horizon">
+
+            <TextView
+                style="@style/horoscope_calendar_title"
+                android:text="@string/sun" />
+
+            <TextView
+                style="@style/horoscope_calendar_title"
+                android:text="@string/mon" />
+
+            <TextView
+                style="@style/horoscope_calendar_title"
+                android:text="@string/tue" />
+
+            <TextView
+                style="@style/horoscope_calendar_title"
+                android:text="@string/wed" />
+
+            <TextView
+                style="@style/horoscope_calendar_title"
+                android:text="@string/thu" />
+
+            <TextView
+                style="@style/horoscope_calendar_title"
+                android:text="@string/fri" />
+
+            <TextView
+                style="@style/horoscope_calendar_title"
+                android:text="@string/sat" />
+
+        </LinearLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vpContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_22"
+            app:layout_constraintTop_toBottomOf="@+id/lay_calendar_title" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

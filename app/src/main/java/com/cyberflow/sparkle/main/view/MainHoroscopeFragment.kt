@@ -17,8 +17,8 @@ import com.cyberflow.sparkle.R
 import com.cyberflow.sparkle.databinding.FragmentMainHoroscopeBinding
 import com.cyberflow.sparkle.im.DBManager
 import com.cyberflow.sparkle.main.widget.SelectMonthDialog
+import com.cyberflow.sparkle.main.widget.SelectDayDialog
 import com.cyberflow.sparkle.main.widget.SelectYearDialog
-import com.cyberflow.sparkle.main.widget.calendar.CalendarDialog
 import com.cyberflow.sparkle.main.widget.calendar.DateBean
 import com.flyco.tablayout.listener.OnTabSelectListener
 import com.youth.banner.Banner
@@ -353,10 +353,10 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 Log.e(TAG, "onSelected: $select" )
 //                ToastUtil.show(requireContext(), "${select?.year}")
                 calendar(select)
-                yearDialog?.onDestroy()
+                yearDialog?.dismiss()
             }
         })
-        yearDialog?.show()
+        yearDialog?.show(requireActivity())
     }
 
     private var monthDialog : SelectMonthDialog? = null
@@ -367,23 +367,23 @@ class MainHoroscopeFragment : BaseDBFragment<BaseViewModel, FragmentMainHoroscop
                 Log.e(TAG, "onSelected: $select" )
 //                ToastUtil.show(requireContext(), "${select?.month}")
                 calendar(select)
-                monthDialog?.onDestroy()
+                monthDialog?.dismiss()
             }
         })
-        monthDialog?.show()
+        monthDialog?.show(requireActivity())
     }
 
-    private var calendarDialog : CalendarDialog? = null
+    private var calendarDialog : SelectDayDialog? = null
     private fun showDailyOrWeekly(isWeek: Boolean){
-        calendarDialog = CalendarDialog(requireActivity(), isWeek, birthDate, currentDate,  object : CalendarDialog.Callback {
+        calendarDialog = SelectDayDialog(requireActivity(), isWeek, birthDate, currentDate,  object : SelectDayDialog.Callback {
             override fun onSelected(select: DateBean??) {
                 Log.e(TAG, "onSelected: $select" )
 //                ToastUtil.show(requireContext(), "${select?.year}-${select?.month}-${select?.day}")
                 calendar(select)
-                calendarDialog?.onDestroy()
+                calendarDialog?.dismiss()
             }
         })
-        calendarDialog?.show()
+        calendarDialog?.show(requireActivity())
     }
 
     private var birthDate : DateBean? = null
