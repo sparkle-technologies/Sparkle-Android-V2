@@ -48,6 +48,7 @@ dependencies {
 
     api("androidx.viewpager2:viewpager2:1.1.0-alpha01")
     api("androidx.recyclerview:recyclerview:1.3.2")
+    api("com.geyifeng.immersionbar:immersionbar:3.2.2")
 
     api(project(mapOf("path" to ":base_resources")))
 }
