@@ -20,7 +20,7 @@ object ImmerUtils {
         if (window == null) {
             return null
         }
-        val integer = arrayOf(2)
+        val integer = arrayOf(0, 0)
         val dm = DisplayMetrics()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             window.windowManager.defaultDisplay.getRealMetrics(dm)

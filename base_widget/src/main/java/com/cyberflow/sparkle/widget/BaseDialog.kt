@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,10 @@ import android.view.Window
 import androidx.fragment.app.DialogFragment
 import com.gyf.immersionbar.ImmersionBar
 
-abstract class BaseDialogFragment : DialogFragment() {
+abstract class BaseDialog : DialogFragment() {
+
+//    private val TAG = "BaseDialog"
+
     protected var mActivity: Activity? = null
     protected var mRootView: View? = null
     protected var mWindow: Window? = null
@@ -30,8 +34,7 @@ abstract class BaseDialogFragment : DialogFragment() {
     override fun onStart() {
         super.onStart()
         val dialog = dialog
-        dialog!!.setCanceledOnTouchOutside(true)  // 点击外部消失
-        mWindow = dialog.window
+        mWindow = dialog!!.window
         mWidthAndHeight = ImmerUtils.getWidthAndHeight(mWindow)
     }
 
@@ -62,11 +65,11 @@ abstract class BaseDialogFragment : DialogFragment() {
         mWidthAndHeight = ImmerUtils.getWidthAndHeight(mWindow)
     }
 
-    protected fun isImmersionBarEnabled(): Boolean {
+    open fun isImmersionBarEnabled(): Boolean {
         return true
     }
 
-    protected fun initImmersionBar() {
+    open fun initImmersionBar() {
         ImmersionBar.with(this).init()
     }
 

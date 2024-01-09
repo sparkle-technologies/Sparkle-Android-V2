@@ -120,11 +120,11 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
 
         mDataBinding.scroll.setOnScrollChangeListener { view, x, y, oldX, oldY ->
 //            Log.e(TAG, "initView: (y-oldY)=${y-oldY}" )
-            if(y - oldY > 3){
+            if (y - oldY > 3) {
                 dialog?.justHide()
             }
 
-            if(oldY - y > 3){
+            if (oldY - y > 3) {
                 dialog?.justShow()
             }
         }
@@ -143,12 +143,12 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         })
         dialog = ShareDialog(this@ShareAct, object : ShareDialog.Callback {
             override fun onSelected(user: IMConversationCache?, type: Int) {
-                Log.e(TAG, "onSelected: type=$type  user=$user" )
+                Log.e(TAG, "onSelected: type=$type  user=$user")
                 when (type) {
                     ShareDialog.TYPE_SHARE -> {
                         isMore = false
                         shareUser = user
-                        Log.e(TAG, "onSelected: isMore=$isMore shareUser=$shareUser" )
+                        Log.e(TAG, "onSelected: isMore=$isMore shareUser=$shareUser")
                         share()
                     }
 
@@ -177,7 +177,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
      * more: jump to IMForwardListAct   or  just show the ForwardDialog
      */
     private fun share() {
-        Log.e(TAG, "share: imgUri=$imgUri", )
+        Log.e(TAG, "share: imgUri=$imgUri")
         if (imgUri == null) {
             generateIMShareBitmap()
             return
@@ -185,14 +185,22 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         val msg = EMMessage.createImageSendMessage(imgUri, true, "")
         IMDataManager.instance.setForwardMsg(msg)
         IMDataManager.instance.setForwardImageUri(imgUri)
-        Log.e(TAG, "share: isMore=$isMore" )
+        Log.e(TAG, "share: isMore=$isMore")
 
         if (isMore) {
-            TheRouter.build(PageConst.IM.PAGE_IM_FORWARD).withString("forward_msg_id", "").navigation()  // must be empty, clear to know is this a forward msg, or a new created msg?
+            TheRouter.build(PageConst.IM.PAGE_IM_FORWARD).withString("forward_msg_id", "")
+                .navigation()  // must be empty, clear to know is this a forward msg, or a new created msg?
         } else {
-            Log.e(TAG, "share: shareUser=$shareUser" )
+            Log.e(TAG, "share: shareUser=$shareUser")
             shareUser?.also {
-                shareTo(Contact(name = it.nick, openUid = it.open_uid, avatar = it.avatar, gender = it.gender))
+                shareTo(
+                    Contact(
+                        name = it.nick,
+                        openUid = it.open_uid,
+                        avatar = it.avatar,
+                        gender = it.gender
+                    )
+                )
             }
         }
     }
@@ -200,7 +208,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
     private var sendDialog: ForwardDialog? = null
     private var imgUri: Uri? = null
     private fun shareTo(model: Contact) {
-        Log.e(TAG, "shareTo: model=$model" )
+        Log.e(TAG, "shareTo: model=$model")
         sendDialog = ForwardDialog(this, model, object : ForwardDialog.Callback {
             override fun onSelected(ok: Boolean) {
                 if (ok) {
@@ -208,11 +216,21 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                     LoadingDialogHolder.getLoadingDialog()?.show(this@ShareAct)
                     if (from == SHARE_FROM_PROFILE) {
                         val from = CacheUtil.getUserInfo()?.user?.open_uid?.replace("-", "_")
-                        PushAndMessageHelper.sendProfileShareImageMessage(from, model.openUid.replace("-", "_"), imgUri)
-                    } else if(from == SHARE_FROM_COMPATIBILITY){
-                        PushAndMessageHelper.sendImageMessage(model.openUid.replace("-", "_"), imgUri)
-                    }else{
-                        PushAndMessageHelper.sendImageMessage(model.openUid.replace("-", "_"), imgUri)
+                        PushAndMessageHelper.sendProfileShareImageMessage(
+                            from,
+                            model.openUid.replace("-", "_"),
+                            imgUri
+                        )
+                    } else if (from == SHARE_FROM_COMPATIBILITY) {
+                        PushAndMessageHelper.sendImageMessage(
+                            model.openUid.replace("-", "_"),
+                            imgUri
+                        )
+                    } else {
+                        PushAndMessageHelper.sendImageMessage(
+                            model.openUid.replace("-", "_"),
+                            imgUri
+                        )
                     }
                 } else {
                     sendDialog?.onDestroy()
@@ -238,7 +256,8 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
 
     private var from: Int = SHARE_FROM_PROFILE
     private var serverImageUrl: String? = null
-    private var qrUrl: String = "https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf"
+    private var qrUrl: String =
+        "https://www.sparkle.fun/traveler/933fb26a-a181-4731-964e-ec2cfee89daf"
 
     override fun initData() {
         from = intent.getIntExtra(FROM_ACTIVITY, SHARE_FROM_PROFILE)
@@ -267,7 +286,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
             }
         }
 
-        if(from == SHARE_FROM_COMPATIBILITY){
+        if (from == SHARE_FROM_COMPATIBILITY) {
             showCompatibilityUI()
         }
 
@@ -275,11 +294,14 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
     }
 
     private fun showCompatibilityUI() {
-         CacheUtil.getUserInfo()?.user?.also {
-             loadAvatarWithCornor(mDataBinding.ivCompatibilityAvatar, it.avatar, it.gender, 16)
-             mDataBinding.tvCompatibilityName.text = it.nick
-             generateQRcode("${ConstantGlobal.SHARE_BODY}${it.open_uid}", mDataBinding.ivCompatibilityQr)
-         }
+        CacheUtil.getUserInfo()?.user?.also {
+            loadAvatarWithCornor(mDataBinding.ivCompatibilityAvatar, it.avatar, it.gender, 16)
+            mDataBinding.tvCompatibilityName.text = it.nick
+            generateQRcode(
+                "${ConstantGlobal.SHARE_BODY}${it.open_uid}",
+                mDataBinding.ivCompatibilityQr
+            )
+        }
     }
 
     private fun hideOrShow() {
@@ -330,7 +352,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
 //            mDataBinding.tvChatExplore.text = getString(com.cyberflow.sparkle.R.string.explore_more_on_starry_book)
 //            setExploreSpan(mDataBinding.tvChatExplore)
             val open_uid = message.to.replace("_", "-")
-            Log.e(TAG, "generateQRcode: open_uid=$open_uid" )
+            Log.e(TAG, "generateQRcode: open_uid=$open_uid")
             generateQRcode("${ConstantGlobal.SHARE_BODY}${open_uid}", mDataBinding.ivChatQr)
         }
     }
@@ -361,9 +383,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
 
     private fun loadBigImg(url: String) {
         val holder = ResourcesCompat.getDrawable(
-            resources,
-            com.cyberflow.sparkle.R.drawable.profile_default_avatar,
-            null
+            resources, com.cyberflow.sparkle.R.drawable.profile_default_avatar, null
         )
         DBComponent.loadImageWithHolder(mDataBinding.ivAvatar, url, holder, 24)
         // the reason I made two same image views is save time under pressure, make sure finish it before Friday
@@ -399,10 +419,10 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
     private fun setSpan(tv: TextView) {
         tv.movementMethod = ClickableMovementMethod.getInstance()
         tv.text = ("Add me on ").setSpan(ColorSpan("#000000")).addSpan(
-                "image", CenterImageSpan(this, R.drawable.share_ic_sparkle).setDrawableSize(
-                    dp2px(12f)
-                ).setMarginHorizontal(dp2px(2f))
-            ).addSpan(" Sparkle").setSpan(ColorSpan("#6A4BFB")).addSpan(" !")
+            "image", CenterImageSpan(this, R.drawable.share_ic_sparkle).setDrawableSize(
+                dp2px(12f)
+            ).setMarginHorizontal(dp2px(2f))
+        ).addSpan(" Sparkle").setSpan(ColorSpan("#6A4BFB")).addSpan(" !")
             .setSpan(ColorSpan("#000000")).replaceSpan("image") {
                 HighlightSpan("#8B82DB") {
 //                    ToastUtil.show(this, "click img, go flutter page ")
@@ -417,10 +437,10 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
     private fun setExploreSpan(tv: TextView) {
         tv.movementMethod = ClickableMovementMethod.getInstance()
         tv.text = ("Explore me in ").setSpan(ColorSpan("#000000")).addSpan(
-                "image", CenterImageSpan(this, R.drawable.share_ic_sparkle).setDrawableSize(
-                    dp2px(12f)
-                ).setMarginHorizontal(dp2px(2f))
-            ).addSpan(" Sparkle").setSpan(ColorSpan("#6A4BFB")).addSpan(" !")
+            "image", CenterImageSpan(this, R.drawable.share_ic_sparkle).setDrawableSize(
+                dp2px(12f)
+            ).setMarginHorizontal(dp2px(2f))
+        ).addSpan(" Sparkle").setSpan(ColorSpan("#6A4BFB")).addSpan(" !")
             .setSpan(ColorSpan("#000000")).replaceSpan("image") {
                 HighlightSpan("#8B82DB") {
 //                    ToastUtil.show(this, "click img, go flutter page ")
@@ -436,12 +456,7 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
 
     override fun onResume() {
         super.onResume()
-        dialog?.show()
-    }
-
-    override fun onDestroy() {
-        dialog?.onDestroy()
-        super.onDestroy()
+        dialog?.show(this@ShareAct)
     }
 
     private fun textCopyThenPost(textCopied: String) {
@@ -464,15 +479,22 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
     private fun generateIMShareBitmap() {
         if (checkIfHasPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_SHARE)) {
             lifecycleScope.launch {
-                val iconBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.ic_app)
+                val iconBitmap =
+                    BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.ic_app)
                 val bitmap = if (from == SHARE_FROM_PROFILE) {
                     convertViewToBitmap(mDataBinding.bgIm)
-                } else if(from == SHARE_FROM_COMPATIBILITY){
-                    val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)
+                } else if (from == SHARE_FROM_COMPATIBILITY) {
+                    val bgBitmap = BitmapFactory.decodeResource(
+                        resources,
+                        com.cyberflow.sparkle.R.drawable.share_bg
+                    )
                     val viewBitmap = convertViewToBitmap(mDataBinding.layCompatibility)
                     combineBitmap(bgBitmap, viewBitmap, iconBitmap)
-                }else{
-                    val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)
+                } else {
+                    val bgBitmap = BitmapFactory.decodeResource(
+                        resources,
+                        com.cyberflow.sparkle.R.drawable.share_bg
+                    )
                     val viewBitmap = convertViewToBitmap(mDataBinding.layChat)
                     combineBitmap(bgBitmap, viewBitmap, iconBitmap)
                 }
@@ -503,11 +525,15 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         if (checkIfHasPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_DOWNLOAD)) {
             LoadingDialogHolder.getLoadingDialog()?.show(this@ShareAct)
             lifecycleScope.launch {
-                val bgBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.share_bg)
-                val iconBitmap = BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.ic_app)
+                val bgBitmap = BitmapFactory.decodeResource(
+                    resources,
+                    com.cyberflow.sparkle.R.drawable.share_bg
+                )
+                val iconBitmap =
+                    BitmapFactory.decodeResource(resources, com.cyberflow.sparkle.R.drawable.ic_app)
                 val viewBitmap = if (from == SHARE_FROM_PROFILE) {
                     convertViewToBitmap(mDataBinding.bg)
-                } else if(from == SHARE_FROM_COMPATIBILITY){
+                } else if (from == SHARE_FROM_COMPATIBILITY) {
                     convertViewToBitmap(mDataBinding.layCompatibility)
                 } else {
                     convertViewToBitmap(mDataBinding.layChat)
@@ -532,7 +558,11 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
                     return@launch
                 }
                 withMain {
-                    DownloadFileUtils.saveLocalFile(this@ShareAct, file.absolutePath, "image/jpeg") { realPath ->
+                    DownloadFileUtils.saveLocalFile(
+                        this@ShareAct,
+                        file.absolutePath,
+                        "image/jpeg"
+                    ) { realPath ->
                         LoadingDialogHolder.getLoadingDialog()?.hide()
                         if (TextUtils.isEmpty(realPath)) {
                             toastError(getString(com.cyberflow.sparkle.R.string.oops_image_download_failed))
@@ -560,10 +590,10 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         var targetW = screenWidth.toFloat()
         var targetH = screenHeight.toFloat()
 
-        var marginLeft = (screenWidth - fgW)/2f
-        var marginTop = (screenHeight - fgH)/2f
+        var marginLeft = (screenWidth - fgW) / 2f
+        var marginTop = (screenHeight - fgH) / 2f
 
-        if(fgH > screenHeight){
+        if (fgH > screenHeight) {
             marginLeft = dp2px(20f).toFloat()
             marginTop = dp2px(70f).toFloat()
             targetW = fgW + marginLeft * 2
@@ -572,13 +602,13 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
 
 //        val zoomBitmap = zoomImg(iconBitmap, dp2px(30f).toFloat(), dp2px(30f).toFloat())
         val zoomBitmap = Bitmap.createScaledBitmap(iconBitmap, dp2px(30f), dp2px(30f), true)
-        val iconX = targetW/2 - zoomBitmap.width/2
+        val iconX = targetW / 2 - zoomBitmap.width / 2
         val iconY = targetH - dp2px(20f) - zoomBitmap.height
 
         val bmOverlay = Bitmap.createBitmap(targetW.toInt(), targetH.toInt(), background.config)
         val canvas = Canvas(bmOverlay)
         canvas.drawBitmap(background, Matrix(), null)
-        canvas.drawBitmap(content, marginLeft, marginTop,null)
+        canvas.drawBitmap(content, marginLeft, marginTop, null)
         canvas.drawBitmap(zoomBitmap, iconX, iconY, null)
         background.recycle()
         content.recycle()
@@ -615,14 +645,14 @@ class ShareAct : BaseDBAct<ShareViewModel, ActivityShareBinding>(),
         var content = ""
         if (requestCode == REQUEST_DOWNLOAD) {
             title = getString(com.cyberflow.sparkle.R.string.unable_to_save_files)
-            content = getString(com.cyberflow.sparkle.R.string.you_have_turned_off_storage_permissions)
+            content =
+                getString(com.cyberflow.sparkle.R.string.you_have_turned_off_storage_permissions)
         }
         showPermissionDialog(title, content, requestCode)
     }
 
     private fun showPermissionDialog(title: String, content: String, requestCode: Int) {
-        val permissionDialog = PermissionDialog(
-            this,
+        val permissionDialog = PermissionDialog(this,
             title,
             content,
             object : PermissionDialog.PermissionClickListener {
